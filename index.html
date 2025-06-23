@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Парикмахерская SvetSalonPro</title>
+  <style>
+    body { font-family: sans-serif; background: #fefefe; margin: 0; padding: 0; }
+    header { background: #222; color: #fff; padding: 1.5rem; text-align: center; }
+    section { padding: 2rem; max-width: 800px; margin: auto; }
+    h2 { color: #444; }
+    .form { background: #f9f9f9; padding: 1rem; border-radius: 8px; }
+    input, select, button {
+      width: 100%; padding: 0.8rem; margin-top: 1rem;
+      border-radius: 6px; border: 1px solid #ccc;
+    }
+    .auth-buttons button {
+      margin-top: 0.5rem;
+      background: #eee; border: none; cursor: pointer;
+    }
+    .gallery img {
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Парикмахерская SvetSalonPro</h1>
+    <p>Запишитесь онлайн и выберите удобное время</p>
+  </header>
+
+  <section>
+    <h2>Запись на стрижку</h2>
+    <form class="form" id="recordForm">
+      <input type="text" id="name" placeholder="Ваше имя" required />
+      <input type="tel" id="phone" placeholder="Номер телефона" required />
+      <input type="date" id="date" required />
+      <select id="service">
+        <option>Женская стрижка</option>
+        <option>Мужская стрижка</option>
+        <option>Окрашивание</option>
+        <option>Укладка</option>
+      </select>
+      <button type="submit">Записаться</button>
+    </form>
+    <script>
+      document.getElementById("recordForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+        const name = document.getElementById("name").value;
+        const phone = document.getElementById("phone").value;
+        const date = document.getElementById("date").value;
+        const service = document.getElementById("service").value;
+
+        fetch("https://script.google.com/macros/s/AKfycbwhOPQxNU_T30fxuSd-guFXb9WvG2qtSIC8N8JNrF5hvtax6tZGhZxqcnhyQDsaZLU/exec", {
+          method: "POST",
+          mode: "no-cors",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ name, phone, date, service }),
+        });
+
+        alert("Заявка отправлена!");
+        document.getElementById("recordForm").reset();
+      });
+    </script>
+  </section>
+
+  <section>
+    <h2>Войти через</h2>
+    <div class="auth-buttons">
+      <button onclick="alert('Заглушка: Вход через Telegram')">Telegram</button>
+      <button onclick="alert('Заглушка: Вход через Google')">Google</button>
+      <button onclick="alert('Заглушка: Вход через Яндекс')">Яндекс</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>Наш салон</h2>
+    <div class="gallery" style="display: flex; flex-wrap: wrap; gap: 10px;">
+      <img src="https://avatars.mds.yandex.net/get-altay/5266691/2a0000017cb967fb6a58cfd3460b91fd7da4/XXXL" alt="Фото 1" width="300">
+      <img src="https://avatars.mds.yandex.net/get-altay/5270085/2a0000017d02a1c6a07b43163c87720bd99c/XXXL" alt="Фото 2" width="300">
+      <img src="https://avatars.mds.yandex.net/get-altay/12190463/2a0000018c296da8701a70f36ed97ac26c80/XXXL" alt="Фото 3" width="300">
+    </div>
+  </section>
+
+  <section>
+    <h2>Контакты</h2>
+    <p><strong>📍 Адрес:</strong> Геленджик, Одесская ул., 3А, корп. 3</p>
+    <p><strong>📞 Телефон:</strong> <a href="tel:+7928280XXXX">+7 (928) 280-XX-XX</a></p>
+    <p><strong>🕓 График:</strong> уточняйте по телефону</p>
+    <p><a href="https://yandex.ru/maps/-/CHck7A3J" target="_blank">📍 Открыть на Яндекс.Картах</a></p>
+    <iframe src="https://yandex.ru/map-widget/v1/?ll=38.056400%2C44.589162&z=16&text=SvetSalonPro&lang=ru_RU" width="100%" height="300" frameborder="0"></iframe>
+  </section>
+</body>
+</html>
