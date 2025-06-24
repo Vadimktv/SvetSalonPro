@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SvetSalonPro - Салон красоты в Геленджике</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-on-scroll {
+            opacity: 0;
+            animation: fadeIn 0.8s ease forwards;
+        }
+        
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        .delay-400 { animation-delay: 0.4s; }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(236, 72, 153, 0.1), 0 10px 10px -5px rgba(236, 72, 153, 0.04);
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(251, 207, 232, 0.7) 100%), url('https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80') center/cover no-repeat;
+        }
+        
+        .nav-link:hover::after {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 2px;
+            background-color: #ec4899;
+            margin-top: 2px;
+        }
+    </style>
+</head>
+<body class="font-sans bg-white text-gray-800">
+    <!-- Header -->
+    <header class="fixed w-full bg-white shadow-sm z-50">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <div class="w-10 h-10 rounded-full bg-pink-500 flex items-center justify-center text-white font-bold mr-3">SSP</div>
+                <h1 class="text-2xl font-bold text-pink-600">SvetSalonPro</h1>
+            </div>
+            <nav class="hidden md:flex space-x-8">
+                <a href="#home" class="nav-link text-gray-700 hover:text-pink-600 transition">Главная</a>
+                <a href="#about" class="nav-link text-gray-700 hover:text-pink-600 transition">О нас</a>
+                <a href="#services" class="nav-link text-gray-700 hover:text-pink-600 transition">Услуги</a>
+                <a href="#masters" class="nav-link text-gray-700 hover:text-pink-600 transition">Мастера</a>
+                <a href="#contact" class="nav-link text-gray-700 hover:text-pink-600 transition">Контакты</a>
+            </nav>
+            <button class="md:hidden text-gray-700">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section pt-32 pb-20 md:pt-40 md:pb-32">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-6xl font-bold text-gray-800 mb-6 animate-on-scroll">SvetSalonPro</h1>
+            <p class="text-xl md:text-2xl text-gray-700 mb-8 max-w-2xl mx-auto animate-on-scroll delay-100">Ваш идеальный образ начинается здесь</p>
+            <div class="animate-on-scroll delay-200">
+                <a href="#booking" class="bg-pink-600 hover:bg-pink-700 text-white px-8 py-3 rounded-full font-medium inline-block transition shadow-lg hover:shadow-xl">Записаться онлайн</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-pink-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-16 text-gray-800 animate-on-scroll">О нашем салоне</h2>
+            
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0 md:pr-10 animate-on-scroll">
+                    <img src="https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=688&q=80" alt="Интерьер салона" class="rounded-lg shadow-xl w-full">
+                </div>
+                <div class="md:w-1/2 animate-on-scroll delay-100">
+                    <h3 class="text-2xl font-bold text-pink-600 mb-4">Наша философия</h3>
+                    <p class="text-gray-700 mb-6 leading-relaxed">SvetSalonPro — это место, где каждая деталь создана для вашего комфорта и красоты. Мы сочетаем последние тенденции индустрии красоты с индивидуальным подходом к каждому клиенту.</p>
+                    <p class="text-gray-700 mb-6 leading-relaxed">Наша миссия — помочь вам раскрыть свою естественную красоту, подчеркнуть индивидуальность и подарить ощущение гармонии и уверенности в себе.</p>
+                    <div class="flex flex-wrap mt-8">
+                        <div class="w-full md:w-1/2 mb-6">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 mr-4">
+                                    <i class="fas fa-spa"></i>
+                                </div>
+                                <span class="font-medium">Премиальные материалы</span>
+                            </div>
+                        </div>
+                        <div class="w-full md:w-1/2 mb-6">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 mr-4">
+                                    <i class="fas fa-award"></i>
+                                </div>
+                                <span class="font-medium">Опытные мастера</span>
+                            </div>
+                        </div>
+                        <div class="w-full md:w-1/2 mb-6">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 mr-4">
+                                    <i class="fas fa-heart"></i>
+                                </div>
+                                <span class="font-medium">Индивидуальный подход</span>
+                            </div>
+                        </div>
+                        <div class="w-full md:w-1/2 mb-6">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 mr-4">
+                                    <i class="fas fa-leaf"></i>
+                                </div>
+                                <span class="font-medium">Экологичные продукты</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-20">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-4 text-gray-800 animate-on-scroll">Наши услуги</h2>
+            <p class="text-center text-gray-600 mb-16 max-w-2xl mx-auto animate-on-scroll delay-100">Мы предлагаем полный спектр услуг для вашей красоты и ухода</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Service 1 -->
+                <div class="service-card bg-white rounded-lg shadow-md p-6 transition duration-300 animate-on-scroll">
+                    <div class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center text-pink-600 mb-4">
+                        <i class="fas fa-cut text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Стрижка</h3>
+                    <p class="text-gray-600 mb-4">Профессиональная стрижка с учетом особенностей вашего типа волос и формы лица.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-pink-600 font-bold">от 1500 ₽</span>
+                        <a href="#booking" class="text-pink-600 hover:text-pink-700 font-medium">Записаться</a>
+                    </div>
+                </div>
+                
+                <!-- Service 2 -->
+                <div class="service-card bg-white rounded-lg shadow-md p-6 transition duration-300 animate-on-scroll delay-100">
+                    <div class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center text-pink-600 mb-4">
+                        <i class="fas fa-paint-brush text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Окрашивание</h3>
+                    <p class="text-gray-600 mb-4">Современные техники окрашивания с использованием премиальных красок.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-pink-600 font-bold">от 3000 ₽</span>
+                        <a href="#booking" class="text-pink-600 hover:text-pink-700 font-medium">Записаться</a>
+                    </div>
+                </div>
+                
+                <!-- Service 3 -->
+                <div class="service-card bg-white rounded-lg shadow-md p-6 transition duration-300 animate-on-scroll delay-200">
+                    <div class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center text-pink-600 mb-4">
+                        <i class="fas fa-wind text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Укладка</h3>
+                    <p class="text-gray-600 mb-4">Создание идеальной укладки для любого случая с профессиональными средствами.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-pink-600 font-bold">от 1200 ₽</span>
+                        <a href="#booking" class="text-pink-600 hover:text-pink-700 font-medium">Записаться</a>
+                    </div>
+                </div>
+                
+                <!-- Service 4 -->
+                <div class="service-card bg-white rounded-lg shadow-md p-6 transition duration-300 animate-on-scroll">
+                    <div class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center text-pink-600 mb-4">
+                        <i class="fas fa-hand-sparkles text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Маникюр</h3>
+                    <p class="text-gray-600 mb-4">Комплексный уход за руками и ногтями с покрытием премиальными лаками.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-pink-600 font-bold">от 1800 ₽</span>
+                        <a href="#booking" class="text-pink-600 hover:text-pink-700 font-medium">Записаться</a>
+                    </div>
+                </div>
+                
+                <!-- Service 5 -->
+                <div class="service-card bg-white rounded-lg shadow-md p-6 transition duration-300 animate-on-scroll delay-100">
+                    <div class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center text-pink-600 mb-4">
+                        <i class="fas fa-socks text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Педикюр</h3>
+                    <p class="text-gray-600 mb-4">Профессиональный уход за стопами и ногтями для идеального состояния.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-pink-600 font-bold">от 2200 ₽</span>
+                        <a href="#booking" class="text-pink-600 hover:text-pink-700 font-medium">Записаться</a>
+                    </div>
+                </div>
+                
+                <!-- Service 6 -->
+                <div class="service-card bg-white rounded-lg shadow-md p-6 transition duration-300 animate-on-scroll delay-200">
+                    <div class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center text-pink-600 mb-4">
+                        <i class="fas fa-spa text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Уход за волосами</h3>
+                    <p class="text-gray-600 mb-4">Восстановительные и лечебные процедуры для здоровья и блеска волос.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-pink-600 font-bold">от 2500 ₽</span>
+                        <a href="#booking" class="text-pink-600 hover:text-pink-700 font-medium">Записаться</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Masters Section -->
+    <section id="masters" class="py-20 bg-pink-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-4 text-gray-800 animate-on-scroll">Наши мастера</h2>
+            <p class="text-center text-gray-600 mb-16 max-w-2xl mx-auto animate-on-scroll delay-100">Профессионалы с большим опытом, которые помогут вам выглядеть безупречно</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Master 1 -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden animate-on-scroll">
+                    <img src="https://images.unsplash.com/photo-1554151228-14d9def656e4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=686&q=80" alt="Мастер Светлана" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-1">Светлана</h3>
+                        <p class="text-pink-600 mb-3">Топ-стилист</p>
+                        <p class="text-gray-600 text-sm">Опыт работы 12 лет. Специализация: сложное окрашивание, креативные стрижки.</p>
+                    </div>
+                </div>
+                
+                <!-- Master 2 -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden animate-on-scroll delay-100">
+                    <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=761&q=80" alt="Мастер Анна" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-1">Анна</h3>
+                        <p class="text-pink-600 mb-3">Визажист-стилист</p>
+                        <p class="text-gray-600 text-sm">Опыт работы 8 лет. Специализация: вечерние и свадебные образы, уход за кожей.</p>
+                    </div>
+                </div>
+                
+                <!-- Master 3 -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden animate-on-scroll delay-200">
+                    <img src="https://images.unsplash.com/photo-1562788869-4ed32648eb72?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" alt="Мастер Ольга" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-1">Ольга</h3>
+                        <p class="text-pink-600 mb-3">Мастер маникюра</p>
+                        <p class="text-gray-600 text-sm">Опыт работы 6 лет. Специализация: аппаратный маникюр, дизайн ногтей.</p>
+                    </div>
+                </div>
+                
+                <!-- Master 4 -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden animate-on-scroll delay-300">
+                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5cd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=688&q=80" alt="Мастер Елена" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-1">Елена</h3>
+                        <p class="text-pink-600 mb-3">Косметолог</p>
+                        <p class="text-gray-600 text-sm">Опыт работы 10 лет. Специализация: уходовые процедуры, anti-age программы.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Section -->
+    <section id="booking" class="py-20">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-xl overflow-hidden">
+                <div class="md:flex">
+                    <div class="md:w-1/2 bg-pink-600 text-white p-10 flex flex-col justify-center">
+                        <h2 class="text-3xl font-bold mb-6 animate-on-scroll">Запись онлайн</h2>
+                        <p class="mb-6 animate-on-scroll delay-100">Оставьте свои данные, и наш администратор свяжется с вами для подтверждения записи в течение 15 минут.</p>
+                        <div class="animate-on-scroll delay-200">
+                            <div class="flex items-center mb-4">
+                                <div class="w-10 h-10 rounded-full bg-pink-500 flex items-center justify-center mr-4">
+                                    <i class="fas fa-phone"></i>
+                                </div>
+                                <div>
+                                    <p class="font-bold">+7 928 280 62 94</p>
+                                    <p class="text-sm text-pink-100">Звоните с 9:00 до 21:00</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-pink-500 flex items-center justify-center mr-4">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div>
+                                    <p class="font-bold">my@SvetSalonPro.ru</p>
+                                    <p class="text-sm text-pink-100">Пишите в любое время</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2 p-10">
+                        <form class="animate-on-scroll">
+                            <div class="mb-6">
+                                <label for="name" class="block text-gray-700 font-medium mb-2">Ваше имя</label>
+                                <input type="text" id="name" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" placeholder="Иван Иванов" required>
+                            </div>
+                            <div class="mb-6">
+                                <label for="phone" class="block text-gray-700 font-medium mb-2">Телефон</label>
+                                <input type="tel" id="phone" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" placeholder="+7 (___) ___-__-__" required>
+                            </div>
+                            <div class="mb-6">
+                                <label for="date" class="block text-gray-700 font-medium mb-2">Дата визита</label>
+                                <input type="date" id="date" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" required>
+                            </div>
+                            <div class="mb-8">
+                                <label for="service" class="block text-gray-700 font-medium mb-2">Услуга</label>
+                                <select id="service" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" required>
+                                    <option value="" disabled selected>Выберите услугу</option>
+                                    <option value="haircut">Стрижка (от 1500 ₽)</option>
+                                    <option value="coloring">Окрашивание (от 3000 ₽)</option>
+                                    <option value="styling">Укладка (от 1200 ₽)</option>
+                                    <option value="manicure">Маникюр (от 1800 ₽)</option>
+                                    <option value="pedicure">Педикюр (от 2200 ₽)</option>
+                                    <option value="haircare">Уход за волосами (от 2500 ₽)</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-medium py-3 px-6 rounded-lg transition shadow-md hover:shadow-lg">Записаться</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-16 text-gray-800 animate-on-scroll">Контакты</h2>
+            
+            <div class="flex flex-col md:flex-row">
+                <div class="md:w-1/2 mb-10 md:mb-0 md:pr-10 animate-on-scroll">
+                    <div class="bg-white p-8 rounded-xl shadow-md mb-8">
+                        <h3 class="text-xl font-bold text-pink-600 mb-6">Контактная информация</h3>
+                        <div class="space-y-6">
+                            <div class="flex items-start">
+                                <div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 mr-4 mt-1">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div>
+                                    <p class="font-medium">Адрес</p>
+                                    <p class="text-gray-600">г. Геленджик, ул. Курортная, 123</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 mr-4 mt-1">
+                                    <i class="fas fa-phone"></i>
+                                </div>
+                                <div>
+                                    <p class="font-medium">Телефон</p>
+                                    <p class="text-gray-600">+7 928 280 62 94</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 mr-4 mt-1">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div>
+                                    <p class="font-medium">Email</p>
+                                    <p class="text-gray-600">my@SvetSalonPro.ru</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 mr-4 mt-1">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div>
+                                    <p class="font-medium">Часы работы</p>
+                                    <p class="text-gray-600">Пн-Пт: 9:00 - 21:00</p>
+                                    <p class="text-gray-600">Сб-Вс: 10:00 - 20:00</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-8 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold text-pink-600 mb-6">Мы в социальных сетях</h3>
+                        <div class="flex space-x-4">
+                            <a href="#" class="w-12 h-12 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 hover:bg-pink-600 hover:text-white transition">
+                                <i class="fab fa-instagram text-xl"></i>
+                            </a>
+                            <a href="#" class="w-12 h-12 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 hover:bg-pink-600 hover:text-white transition">
+                                <i class="fab fa-vk text-xl"></i>
+                            </a>
+                            <a href="#" class="w-12 h-12 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 hover:bg-pink-600 hover:text-white transition">
+                                <i class="fab fa-telegram text-xl"></i>
+                            </a>
+                            <a href="#" class="w-12 h-12 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 hover:bg-pink-600 hover:text-white transition">
+                                <i class="fab fa-whatsapp text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="md:w-1/2 animate-on-scroll delay-100">
+                    <div class="bg-white p-4 rounded-xl shadow-md h-full">
+                        <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3A8a3c0b0c3d5c7c4b5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5&amp;source=constructor" width="100%" height="500" frameborder="0" class="rounded-lg"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 rounded-full bg-pink-600 flex items-center justify-center text-white font-bold mr-3">SSP</div>
+                        <h2 class="text-2xl font-bold">SvetSalonPro</h2>
+                    </div>
+                    <p class="text-gray-400 mt-2">Салон красоты премиум-класса в Геленджике</p>
+                </div>
+                
+                <div class="flex space-x-6 mb-6 md:mb-0">
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <i class="fab fa-instagram text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <i class="fab fa-vk text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <i class="fab fa-telegram text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <i class="fab fa-whatsapp text-xl"></i>
+                    </a>
+                </div>
+                
+                <div class="text-gray-400 text-sm">
+                    <p>© 2023 SvetSalonPro. Все права защищены.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="fixed bottom-8 right-8 w-12 h-12 bg-pink-600 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-pink-700 transition opacity-0 invisible">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // Animation on scroll
+        const animateOnScroll = () => {
+            const elements = document.querySelectorAll('.animate-on-scroll');
+            
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.2;
+                
+                if (elementPosition < screenPosition) {
+                    element.style.opacity = '1';
+                }
+            });
+        };
+        
+        window.addEventListener('scroll', animateOnScroll);
+        window.addEventListener('load', animateOnScroll);
+        
+        // Back to top button
+        const backToTopButton = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.remove('opacity-0', 'invisible');
+                backToTopButton.classList.add('opacity-100', 'visible');
+            } else {
+                backToTopButton.classList.remove('opacity-100', 'visible');
+                backToTopButton.classList.add('opacity-0', 'invisible');
+            }
+        });
+        
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // Mobile menu toggle
+        const mobileMenuButton = document.querySelector('.md\\:hidden');
+        const mobileMenu = document.querySelector('nav');
+        
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            mobileMenu.classList.toggle('flex');
+            mobileMenu.classList.toggle('flex-col');
+            mobileMenu.classList.toggle('absolute');
+            mobileMenu.classList.toggle('top-16');
+            mobileMenu.classList.toggle('left-0');
+            mobileMenu.classList.toggle('right-0');
+            mobileMenu.classList.toggle('bg-white');
+            mobileMenu.classList.toggle('p-4');
+            mobileMenu.classList.toggle('shadow-md');
+            mobileMenu.classList.toggle('space-y-4');
+            mobileMenu.classList.toggle('space-x-8');
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Close mobile menu if open
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                        mobileMenu.classList.remove('flex');
+                    }
+                }
+            });
+        });
+        
+        // Phone input mask
+        const phoneInput = document.getElementById('phone');
+        
+        if (phoneInput) {
+            phoneInput.addEventListener('input', function(e) {
+                let x = e.target.value.replace(/\D/g, '').match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
+                e.target.value = !x[2] ? '+7' : '+7 (' + x[2] + (x[3] ? ') ' + x[3] : '') + (x[4] ? '-' + x[4] : '') + (x[5] ? '-' + x[5] : '');
+            });
+        }
+    </script>
+</body>
+</html>
