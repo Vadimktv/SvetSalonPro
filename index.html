@@ -229,36 +229,6 @@
                         <p class="text-gray-600 text-sm">Опыт работы 12 лет. Специализация: сложное окрашивание, креативные стрижки.</p>
                     </div>
                 </div>
-                
-                <!-- Master 2 -->
-                <div class="bg-white rounded-lg shadow-md overflow-hidden animate-on-scroll delay-100">
-                    <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=761&q=80" alt="Мастер Анна" class="w-full h-64 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-1">Анна</h3>
-                        <p class="text-pink-600 mb-3">Визажист-стилист</p>
-                        <p class="text-gray-600 text-sm">Опыт работы 8 лет. Специализация: вечерние и свадебные образы, уход за кожей.</p>
-                    </div>
-                </div>
-                
-                <!-- Master 3 -->
-                <div class="bg-white rounded-lg shadow-md overflow-hidden animate-on-scroll delay-200">
-                    <img src="https://images.unsplash.com/photo-1562788869-4ed32648eb72?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" alt="Мастер Ольга" class="w-full h-64 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-1">Ольга</h3>
-                        <p class="text-pink-600 mb-3">Мастер маникюра</p>
-                        <p class="text-gray-600 text-sm">Опыт работы 6 лет. Специализация: аппаратный маникюр, дизайн ногтей.</p>
-                    </div>
-                </div>
-                
-                <!-- Master 4 -->
-                <div class="bg-white rounded-lg shadow-md overflow-hidden animate-on-scroll delay-300">
-                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5cd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=688&q=80" alt="Мастер Елена" class="w-full h-64 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-1">Елена</h3>
-                        <p class="text-pink-600 mb-3">Косметолог</p>
-                        <p class="text-gray-600 text-sm">Опыт работы 10 лет. Специализация: уходовые процедуры, anti-age программы.</p>
-                    </div>
-                </div>
             </div>
         </div>
     </section>
@@ -293,7 +263,48 @@
                         </div>
                     </div>
                     <div class="md:w-1/2 p-10">
-                        <form class="animate-on-scroll">
+                        <script>
+                          function sendToTelegram(event) {
+                            event.preventDefault();
+                            
+                            const name = document.getElementById('name').value;
+                            const phone = document.getElementById('phone').value;
+                            const date = document.getElementById('date').value;
+                            const service = document.getElementById('service').value;
+                            
+                            const message = `
+💇‍♀️ Новая заявка на запись:
+Имя: ${name}
+Телефон: ${phone}
+Дата визита: ${date}
+Услуга: ${service}
+                            `;
+                            
+                            const botToken = "7811248285:AAHfspwV_mA-PF298Bac28LBkEeehX_ql70";
+                            const chatId = "339033504";
+                            
+                            fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                              method: "POST",
+                              headers: { "Content-Type": "application/json" },
+                              body: JSON.stringify({
+                                chat_id: chatId,
+                                text: message,
+                                parse_mode: "HTML"
+                              })
+                            }).then(response => {
+                              if (response.ok) {
+                                alert("Заявка успешно отправлена!");
+                                event.target.reset();
+                              } else {
+                                alert("Ошибка при отправке. Попробуйте позже.");
+                              }
+                            }).catch(error => {
+                              alert("Сетевая ошибка. Попробуйте позже.");
+                              console.error(error);
+                            });
+                          }
+                        </script>
+                        <form class="animate-on-scroll" onsubmit="sendToTelegram(event)">
                             <div class="mb-6">
                                 <label for="name" class="block text-gray-700 font-medium mb-2">Ваше имя</label>
                                 <input type="text" id="name" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" placeholder="Иван Иванов" required>
@@ -342,7 +353,13 @@
                                 </div>
                                 <div>
                                     <p class="font-medium">Адрес</p>
-                                    <p class="text-gray-600">г. Геленджик, ул. Курортная, 123</p>
+                                    <a href="https://yandex.ru/maps/?text=Геленджик, Одесская 3А корпус 3" target="_blank" class="text-pink-600 hover:underline">
+                                        г. Геленджик, ул. Одесская, 3А, корпус 3
+                                    </a>
+                                    <br>
+                                    <a href="https://yandex.ru/maps/-/CHck7A3J" target="_blank" class="inline-block mt-2 bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700 transition">
+                                        Проложить маршрут
+                                    </a>
                                 </div>
                             </div>
                             <div class="flex items-start">
@@ -351,7 +368,7 @@
                                 </div>
                                 <div>
                                     <p class="font-medium">Телефон</p>
-                                    <p class="text-gray-600">+7 928 280 62 94</p>
+                                    <a href="tel:+79282806294" class="text-pink-600 hover:underline">+7 928 280 62 94</a>
                                 </div>
                             </div>
                             <div class="flex items-start">
@@ -360,7 +377,7 @@
                                 </div>
                                 <div>
                                     <p class="font-medium">Email</p>
-                                    <p class="text-gray-600">my@SvetSalonPro.ru</p>
+                                    <a href="mailto:my@SvetSalonPro.ru" class="text-pink-600 hover:underline">my@SvetSalonPro.ru</a>
                                 </div>
                             </div>
                             <div class="flex items-start">
@@ -369,8 +386,15 @@
                                 </div>
                                 <div>
                                     <p class="font-medium">Часы работы</p>
-                                    <p class="text-gray-600">Пн-Пт: 9:00 - 21:00</p>
-                                    <p class="text-gray-600">Сб-Вс: 10:00 - 20:00</p>
+                                    <ul class="text-gray-600">
+                                        <li>Понедельник: 11:00 – 18:00</li>
+                                        <li>Вторник: 11:00 – 18:00</li>
+                                        <li>Среда: 11:00 – 18:00</li>
+                                        <li>Четверг: 11:00 – 18:00</li>
+                                        <li>Пятница: 11:00 – 18:00</li>
+                                        <li>Суббота: Выходной</li>
+                                        <li>Воскресенье: Выходной</li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -385,10 +409,10 @@
                             <a href="#" class="w-12 h-12 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 hover:bg-pink-600 hover:text-white transition">
                                 <i class="fab fa-vk text-xl"></i>
                             </a>
-                            <a href="#" class="w-12 h-12 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 hover:bg-pink-600 hover:text-white transition">
+                            <a href="https://t.me/SvetSalonPro" target="_blank" class="w-12 h-12 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 hover:bg-pink-600 hover:text-white transition">
                                 <i class="fab fa-telegram text-xl"></i>
                             </a>
-                            <a href="#" class="w-12 h-12 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 hover:bg-pink-600 hover:text-white transition">
+                            <a href="https://wa.me/79282806294" target="_blank" class="w-12 h-12 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 hover:bg-pink-600 hover:text-white transition">
                                 <i class="fab fa-whatsapp text-xl"></i>
                             </a>
                         </div>
@@ -397,7 +421,7 @@
                 
                 <div class="md:w-1/2 animate-on-scroll delay-100">
                     <div class="bg-white p-4 rounded-xl shadow-md h-full">
-                        <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3A8a3c0b0c3d5c7c4b5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5&amp;source=constructor" width="100%" height="500" frameborder="0" class="rounded-lg"></iframe>
+                        <iframe src="https://yandex.ru/map-widget/v1/-/CHck7A3J" width="100%" height="500" frameborder="0" class="rounded-lg"></iframe>
                     </div>
                 </div>
             </div>
@@ -423,10 +447,10 @@
                     <a href="#" class="text-gray-400 hover:text-white transition">
                         <i class="fab fa-vk text-xl"></i>
                     </a>
-                    <a href="#" class="text-gray-400 hover:text-white transition">
+                    <a href="https://t.me/SvetSalonPro" target="_blank" class="text-gray-400 hover:text-white transition">
                         <i class="fab fa-telegram text-xl"></i>
                     </a>
-                    <a href="#" class="text-gray-400 hover:text-white transition">
+                    <a href="https://wa.me/79282806294" target="_blank" class="text-gray-400 hover:text-white transition">
                         <i class="fab fa-whatsapp text-xl"></i>
                     </a>
                 </div>
