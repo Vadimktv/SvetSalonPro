@@ -291,7 +291,8 @@
                                 </div>
                                 <div>
                                     <p class="font-medium">Адрес</p>
-                                    <a href="https://yandex.ru/maps/?text=Геленджик, Одесская 3А корпус 3" target="_blank" class="text-pink-600 hover:underline">
+                                    <a href="https://yandex.ru/maps/?text=Геленджик, Одесская 3А корпус 3" target="_blank" rel="noopener noreferrer"
+                                       onclick="event.stopPropagation();" class="text-pink-600 hover:underline">
                                         г. Геленджик, ул. Одесская, 3А, корпус 3
                                     </a>
                                     <br>
@@ -423,7 +424,7 @@
       <div class="container mx-auto px-4">
         <h2 class="text-3xl font-bold text-center mb-8 text-gray-800">Отзывы клиентов</h2>
         <div class="bg-white rounded-xl shadow-md p-4">
-          <iframe src="https://yandex.ru/maps/-/CHck7A3J"
+          <iframe src="https://yandex.ru/maps/-/CHck7A3J" loading="lazy"
                   width="100%" height="500" frameborder="0" allowfullscreen="true" class="rounded-lg">
           </iframe>
         </div>
