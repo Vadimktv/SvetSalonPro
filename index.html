@@ -74,16 +74,24 @@
         </div>
     </header>
 
-    <!-- Telegram Login Button -->
-    <div style="text-align: center; margin: 20px 0;">
-      <script async src="https://telegram.org/js/telegram-widget.js?7"
-              data-telegram-login="svetproauth"
-              data-size="large"
-              data-userpic="true"
-              data-request-access="write"
-              data-on-auth="onTelegramAuth">
-      </script>
+    <!-- Auth Buttons -->
+    <div class="text-center mt-24 mb-6">
+      <a href="#auth" class="bg-pink-600 hover:bg-pink-700 text-white px-6 py-2 rounded-lg mr-4 shadow transition">Вход</a>
+      <a href="#auth" class="bg-gray-100 hover:bg-gray-200 text-pink-600 px-6 py-2 rounded-lg shadow transition">Регистрация</a>
     </div>
+
+    <!-- Telegram Login Section -->
+    <section id="auth" class="py-10">
+      <div style="text-align: center;">
+        <script async src="https://telegram.org/js/telegram-widget.js?7"
+                data-telegram-login="svetproauth"
+                data-size="large"
+                data-userpic="true"
+                data-request-access="write"
+                data-on-auth="onTelegramAuth">
+        </script>
+      </div>
+    </section>
 
     <script>
       function onTelegramAuth(user) {
@@ -543,6 +551,8 @@
                 const targetId = this.getAttribute('href');
                 const targetElement = document.querySelector(targetId);
                 
+                // Prevent scroll to iframe if anchor is #reviews
+                if (targetId === '#reviews') return;
                 if (targetElement) {
                     window.scrollTo({
                         top: targetElement.offsetTop - 80,
