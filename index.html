@@ -67,6 +67,7 @@
                 <a href="#services" class="nav-link text-gray-700 hover:text-pink-600 transition">Услуги</a>
                 <a href="#masters" class="nav-link text-gray-700 hover:text-pink-600 transition">Мастера</a>
                 <a href="#contact" class="nav-link text-gray-700 hover:text-pink-600 transition">Контакты</a>
+                <a href="#profile" class="nav-link text-gray-700 hover:text-pink-600 transition">Личный кабинет</a>
             </nav>
             <button class="md:hidden text-gray-700">
                 <i class="fas fa-bars text-2xl"></i>
@@ -74,25 +75,7 @@
         </div>
     </header>
 
-    <!-- Auth Buttons -->
-    <div class="text-center mt-24 mb-6">
-      <a href="#auth" class="bg-pink-600 hover:bg-pink-700 text-white px-6 py-2 rounded-lg mr-4 shadow transition">Вход</a>
-      <a href="#auth" class="bg-gray-100 hover:bg-gray-200 text-pink-600 px-6 py-2 rounded-lg shadow transition">Регистрация</a>
-    </div>
-
-    <!-- Telegram Login Section -->
-    <section id="auth" class="py-10">
-      <div style="text-align: center;">
-        <script async src="https://telegram.org/js/telegram-widget.js?7"
-                data-telegram-login="svetproauth"
-                data-size="large"
-                data-userpic="true"
-                data-request-access="write"
-                data-on-auth="onTelegramAuth">
-        </script>
-      </div>
-    </section>
-
+    <!-- Telegram Login Button -->
     <script>
       function onTelegramAuth(user) {
         alert("Добро пожаловать, " + user.first_name + "!\nВаш ID: " + user.id);
@@ -551,8 +534,6 @@
                 const targetId = this.getAttribute('href');
                 const targetElement = document.querySelector(targetId);
                 
-                // Prevent scroll to iframe if anchor is #reviews
-                if (targetId === '#reviews') return;
                 if (targetElement) {
                     window.scrollTo({
                         top: targetElement.offsetTop - 80,
@@ -631,5 +612,22 @@
       });
     });
     </script>
+</section>
+
+    <!-- Личный кабинет с Telegram-виджетом -->
+    <section id="profile" class="py-20">
+      <div class="container mx-auto px-4 text-center">
+        <h2 class="text-3xl font-bold text-gray-800 mb-6">Личный кабинет</h2>
+        <div style="text-align: center; margin: 20px 0;">
+          <script async src="https://telegram.org/js/telegram-widget.js?7"
+                  data-telegram-login="svetproauth"
+                  data-size="large"
+                  data-userpic="true"
+                  data-request-access="write"
+                  data-on-auth="onTelegramAuth">
+          </script>
+        </div>
+      </div>
+    </section>
 </body>
 </html>
