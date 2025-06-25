@@ -288,8 +288,8 @@
                                 <input type="tel" id="phone" name="phone" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" placeholder="+7 (___) ___-__-__" required>
                             </div>
                             <div class="mb-6">
-                                <label for="date" class="block text-gray-700 font-medium mb-2">Дата визита</label>
-                                <input type="date" id="date" name="date" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" required>
+                                <label for="datetime" class="block text-gray-700 font-medium mb-2">Дата и время визита</label>
+                                <input type="datetime-local" id="datetime" name="datetime" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" required>
                             </div>
                             <div class="mb-8">
                                 <label for="service" class="block text-gray-700 font-medium mb-2">Услуга</label>
@@ -541,9 +541,11 @@
 
         const name = form.querySelector('input[name="name"]').value;
         const phone = form.querySelector('input[name="phone"]').value;
-        const date = form.querySelector('input[name="date"]').value;
+        const date = form.querySelector('input[name="datetime"]').value;
+        // TODO: Проверить доступность выбранного слота по дате и времени
+        // Если занято — подсветить поле и не отправлять форму
 
-        const text = `💬 Новая запись:\n👤 Имя: ${name}\n📞 Телефон: ${phone}\n📅 Дата визита: ${date}`;
+        const text = `💬 Новая запись:\n👤 Имя: ${name}\n📞 Телефон: ${phone}\n📅 Дата и время: ${date}`;
 
         fetch("https://api.telegram.org/bot7811248285:AAHfspwV_mA-PF298Bac28LBkEeehX_ql70/sendMessage", {
           method: "POST",
