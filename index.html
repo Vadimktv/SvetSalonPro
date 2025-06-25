@@ -67,12 +67,21 @@
                 <a href="#services" class="nav-link text-gray-700 hover:text-pink-600 transition">Услуги</a>
                 <a href="#masters" class="nav-link text-gray-700 hover:text-pink-600 transition">Мастера</a>
                 <a href="#contact" class="nav-link text-gray-700 hover:text-pink-600 transition">Контакты</a>
+                <a href="#profile" class="nav-link text-gray-700 hover:text-pink-600 transition">Личный кабинет</a>
             </nav>
             <button class="md:hidden text-gray-700">
                 <i class="fas fa-bars text-2xl"></i>
             </button>
         </div>
     </header>
+
+    <!-- Telegram Login Button -->
+    <script>
+      function onTelegramAuth(user) {
+        alert("Добро пожаловать, " + user.first_name + "!\nВаш ID: " + user.id);
+        console.log(user);
+      }
+    </script>
 
     <!-- Booking Section -->
     <section id="booking" class="py-20">
@@ -409,6 +418,18 @@
         </div>
     </section>
 
+    <!-- Reviews Section -->
+    <section id="reviews" class="py-20 bg-gray-100">
+      <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-8 text-gray-800">Отзывы клиентов</h2>
+        <div class="bg-white rounded-xl shadow-md p-4">
+          <iframe src="https://yandex.ru/maps/-/CHck7A3J"
+                  width="100%" height="500" frameborder="0" allowfullscreen="true" class="rounded-lg">
+          </iframe>
+        </div>
+      </div>
+    </section>
+
     <!-- Footer -->
     <footer class="bg-gray-900 text-white py-12">
         <div class="container mx-auto px-4">
@@ -591,5 +612,22 @@
       });
     });
     </script>
+</section>
+
+    <!-- Личный кабинет с Telegram-виджетом -->
+    <section id="profile" class="py-20">
+      <div class="container mx-auto px-4 text-center">
+        <h2 class="text-3xl font-bold text-gray-800 mb-6">Личный кабинет</h2>
+        <div style="text-align: center; margin: 20px 0;">
+          <script async src="https://telegram.org/js/telegram-widget.js?7"
+                  data-telegram-login="svetproauth"
+                  data-size="large"
+                  data-userpic="true"
+                  data-request-access="write"
+                  data-on-auth="onTelegramAuth">
+          </script>
+        </div>
+      </div>
+    </section>
 </body>
 </html>
