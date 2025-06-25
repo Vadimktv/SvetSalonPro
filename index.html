@@ -67,27 +67,30 @@
                 <a href="#services" class="nav-link text-gray-700 hover:text-pink-600 transition">Услуги</a>
                 <a href="#masters" class="nav-link text-gray-700 hover:text-pink-600 transition">Мастера</a>
                 <a href="#contact" class="nav-link text-gray-700 hover:text-pink-600 transition">Контакты</a>
-                <button id="openCabinet" class="ml-4 bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-lg font-medium transition shadow">Личный кабинет</button>
             </nav>
-            <!-- Кнопка-гамбургер для мобильного меню -->
-            <button id="mobileMenuBtn" class="md:hidden flex flex-col justify-center items-center w-10 h-10 focus:outline-none relative z-60">
-                <span class="block w-7 h-0.5 bg-pink-600 mb-1 transition-all duration-300" id="bar1"></span>
-                <span class="block w-7 h-0.5 bg-pink-600 mb-1 transition-all duration-300" id="bar2"></span>
-                <span class="block w-7 h-0.5 bg-pink-600 transition-all duration-300" id="bar3"></span>
+            <button class="md:hidden text-gray-700">
+                <i class="fas fa-bars text-2xl"></i>
             </button>
-            <!-- Мобильное меню -->
-            <div id="mobileMenuOverlay" class="fixed inset-0 bg-black bg-opacity-40 z-50 hidden"></div>
-            <nav id="mobileMenu" class="fixed top-0 right-0 h-full w-64 bg-white shadow-2xl z-50 transform translate-x-full transition-transform duration-300 flex flex-col p-8 space-y-6">
-                <button id="closeMobileMenu" class="absolute top-4 right-4 text-gray-400 hover:text-pink-600 text-3xl">&times;</button>
-                <a href="#home" class="nav-link text-gray-700 hover:text-pink-600 transition">Главная</a>
-                <a href="#about" class="nav-link text-gray-700 hover:text-pink-600 transition">О нас</a>
-                <a href="#services" class="nav-link text-gray-700 hover:text-pink-600 transition">Услуги</a>
-                <a href="#masters" class="nav-link text-gray-700 hover:text-pink-600 transition">Мастера</a>
-                <a href="#contact" class="nav-link text-gray-700 hover:text-pink-600 transition">Контакты</a>
-                <button id="openCabinetMobile" class="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-lg font-medium transition shadow">Личный кабинет</button>
-            </nav>
         </div>
     </header>
+
+    <!-- Telegram Login Button -->
+    <div style="text-align: center; margin: 20px 0;">
+      <script async src="https://telegram.org/js/telegram-widget.js?7"
+              data-telegram-login="svetproauth"
+              data-size="large"
+              data-userpic="true"
+              data-request-access="write"
+              data-on-auth="onTelegramAuth">
+      </script>
+    </div>
+
+    <script>
+      function onTelegramAuth(user) {
+        alert("Добро пожаловать, " + user.first_name + "!\nВаш ID: " + user.id);
+        console.log(user);
+      }
+    </script>
 
     <!-- Booking Section -->
     <section id="booking" class="py-20">
@@ -279,6 +282,8 @@
         </div>
     </section>
 
+
+
     <!-- Contact Section -->
     <section id="contact" class="py-20 bg-gray-50">
         <div class="container mx-auto px-4">
@@ -422,6 +427,18 @@
         </div>
     </section>
 
+    <!-- Reviews Section -->
+    <section id="reviews" class="py-20 bg-gray-100">
+      <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-8 text-gray-800">Отзывы клиентов</h2>
+        <div class="bg-white rounded-xl shadow-md p-4">
+          <iframe src="https://yandex.ru/maps/-/CHck7A3J"
+                  width="100%" height="500" frameborder="0" allowfullscreen="true" class="rounded-lg">
+          </iframe>
+        </div>
+      </div>
+    </section>
+
     <!-- Footer -->
     <footer class="bg-gray-900 text-white py-12">
         <div class="container mx-auto px-4">
@@ -461,32 +478,6 @@
         <i class="fas fa-arrow-up"></i>
     </button>
 
-    <!-- Модальное окно для входа -->
-    <div id="cabinetModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-sm relative">
-            <button id="closeCabinet" class="absolute top-3 right-3 text-gray-400 hover:text-pink-600 text-2xl">&times;</button>
-            <h2 class="text-2xl font-bold text-pink-600 mb-6 text-center">Вход в личный кабинет</h2>
-            <form id="cabinetLoginForm">
-                <div class="mb-4">
-                    <label for="cabinetPhone" class="block text-gray-700 font-medium mb-2">Телефон</label>
-                    <input type="tel" id="cabinetPhone" name="cabinetPhone" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" placeholder="+7 (___) ___-__-__" required>
-                </div>
-                <button type="submit" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-medium py-3 px-6 rounded-lg transition shadow-md hover:shadow-lg">Войти</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Модальное окно личного кабинета -->
-    <div id="profileModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md relative">
-            <button id="logoutBtn" class="absolute top-3 right-3 text-gray-400 hover:text-pink-600 text-2xl">&times;</button>
-            <h2 class="text-2xl font-bold text-pink-600 mb-4 text-center">Личный кабинет</h2>
-            <div id="profileContent">
-                <!-- Контент профиля будет подставляться через JS -->
-            </div>
-        </div>
-    </div>
-
     <script>
         // Animation on scroll
         const animateOnScroll = () => {
@@ -525,46 +516,25 @@
             });
         });
         
-        // ===== Мобильное меню =====
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const mobileMenu = document.getElementById('mobileMenu');
-        const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
-        const closeMobileMenu = document.getElementById('closeMobileMenu');
-        const openCabinetMobile = document.getElementById('openCabinetMobile');
-        // Анимация гамбургера
-        function toggleHamburger(open) {
-            document.getElementById('bar1').style.transform = open ? 'rotate(45deg) translateY(8px)' : '';
-            document.getElementById('bar2').style.opacity = open ? '0' : '1';
-            document.getElementById('bar3').style.transform = open ? 'rotate(-45deg) translateY(-8px)' : '';
-        }
-        function openMobileMenu() {
-            mobileMenu.classList.remove('translate-x-full');
-            mobileMenuOverlay.classList.remove('hidden');
-            toggleHamburger(true);
-            document.body.style.overflow = 'hidden';
-        }
-        function closeMobileMenuFunc() {
-            mobileMenu.classList.add('translate-x-full');
-            mobileMenuOverlay.classList.add('hidden');
-            toggleHamburger(false);
-            document.body.style.overflow = '';
-        }
-        if (mobileMenuBtn && mobileMenu && mobileMenuOverlay && closeMobileMenu) {
-            mobileMenuBtn.addEventListener('click', openMobileMenu);
-            closeMobileMenu.addEventListener('click', closeMobileMenuFunc);
-            mobileMenuOverlay.addEventListener('click', closeMobileMenuFunc);
-            // Закрытие по клику на пункт меню
-            mobileMenu.querySelectorAll('a').forEach(link => {
-                link.addEventListener('click', closeMobileMenuFunc);
-            });
-        }
-        // Открытие личного кабинета из мобильного меню
-        if (openCabinetMobile) {
-            openCabinetMobile.addEventListener('click', function() {
-                closeMobileMenuFunc();
-                if (openCabinetBtn) openCabinetBtn.click();
-            });
-        }
+        // Mobile menu toggle
+        const mobileMenuButton = document.querySelector('.md\\:hidden');
+        const mobileMenu = document.querySelector('nav');
+        
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            mobileMenu.classList.toggle('flex');
+            mobileMenu.classList.toggle('flex-col');
+            mobileMenu.classList.toggle('absolute');
+            mobileMenu.classList.toggle('top-16');
+            mobileMenu.classList.toggle('left-0');
+            mobileMenu.classList.toggle('right-0');
+            mobileMenu.classList.toggle('bg-white');
+            mobileMenu.classList.toggle('p-4');
+            mobileMenu.classList.toggle('shadow-md');
+            mobileMenu.classList.toggle('space-y-4');
+            mobileMenu.classList.toggle('space-x-8');
+        });
+        
         // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
@@ -595,158 +565,6 @@
                 let x = e.target.value.replace(/\D/g, '').match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
                 e.target.value = !x[2] ? '+7' : '+7 (' + x[2] + (x[3] ? ') ' + x[3] : '') + (x[4] ? '-' + x[4] : '') + (x[5] ? '-' + x[5] : '');
             });
-        }
-
-        // ===== Личный кабинет: открытие/закрытие модального окна =====
-        const openCabinetBtn = document.getElementById('openCabinet');
-        const cabinetModal = document.getElementById('cabinetModal');
-        const closeCabinetBtn = document.getElementById('closeCabinet');
-        const cabinetPhoneInput = document.getElementById('cabinetPhone');
-        const cabinetLoginForm = document.getElementById('cabinetLoginForm');
-        const profileModal = document.getElementById('profileModal');
-        const profileContent = document.getElementById('profileContent');
-        const logoutBtn = document.getElementById('logoutBtn');
-
-        let currentUser = null;
-
-        function getUserData(phone) {
-            const data = localStorage.getItem('user_' + phone);
-            return data ? JSON.parse(data) : { phone, points: 0, records: [] };
-        }
-        function saveUserData(user) {
-            localStorage.setItem('user_' + user.phone, JSON.stringify(user));
-        }
-        function showProfile(user) {
-            let progress = Math.min(user.points, 50);
-            let percent = Math.round((progress / 50) * 100);
-            let nextReward = user.points >= 50 ? 'Доступна скидка 10%!' : `До скидки: ${50 - user.points} баллов`;
-            let recordsHtml = user.records.length ?
-                user.records.map(r => `<tr><td class='py-1 px-2 border-b'>${r.date}</td><td class='py-1 px-2 border-b'>${r.service}</td><td class='py-1 px-2 border-b'>${r.status}</td></tr>`).join('') :
-                `<tr><td colspan='3' class='text-center text-gray-400 py-4'>Нет записей</td></tr>`;
-            profileContent.innerHTML = `
-                <div class="mb-6 text-center">
-                    <div class="text-lg font-semibold mb-1">${user.phone}</div>
-                    <div class="mb-2">Бонусные баллы: <span class="font-bold text-pink-600">${user.points}</span></div>
-                    <div class="w-full bg-pink-100 rounded-full h-4 mb-2">
-                        <div class="bg-pink-600 h-4 rounded-full transition-all" style="width: ${percent}%;"></div>
-                    </div>
-                    <div class="text-sm text-gray-600">${nextReward}</div>
-                </div>
-                <div class="mb-4">
-                    <h3 class="text-lg font-bold mb-2 text-pink-600">История записей</h3>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-sm border">
-                            <thead><tr><th class='py-1 px-2 border-b'>Дата</th><th class='py-1 px-2 border-b'>Услуга</th><th class='py-1 px-2 border-b'>Статус</th></tr></thead>
-                            <tbody>${recordsHtml}</tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="text-center text-xs text-gray-400 mt-2">10 баллов за каждую запись. 50 баллов = скидка 10%!</div>
-            `;
-            profileModal.classList.remove('hidden');
-        }
-        function hideProfile() {
-            profileModal.classList.add('hidden');
-        }
-        if (openCabinetBtn && cabinetModal && closeCabinetBtn) {
-            openCabinetBtn.addEventListener('click', () => {
-                cabinetModal.classList.remove('hidden');
-                setTimeout(() => { if (cabinetPhoneInput) cabinetPhoneInput.focus(); }, 100);
-            });
-            closeCabinetBtn.addEventListener('click', () => {
-                cabinetModal.classList.add('hidden');
-            });
-            cabinetModal.addEventListener('click', (e) => {
-                if (e.target === cabinetModal) cabinetModal.classList.add('hidden');
-            });
-        }
-        if (cabinetPhoneInput) {
-            cabinetPhoneInput.addEventListener('input', function(e) {
-                let x = e.target.value.replace(/\D/g, '').match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
-                e.target.value = !x[2] ? '+7' : '+7 (' + x[2] + (x[3] ? ') ' + x[3] : '') + (x[4] ? '-' + x[4] : '') + (x[5] ? '-' + x[5] : '');
-            });
-        }
-        if (cabinetLoginForm) {
-            cabinetLoginForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const phone = cabinetPhoneInput.value.trim();
-                if (!/^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/.test(phone)) {
-                    cabinetPhoneInput.classList.add('border-pink-600');
-                    return;
-                }
-                currentUser = getUserData(phone);
-                saveUserData(currentUser);
-                cabinetModal.classList.add('hidden');
-                showProfile(currentUser);
-            });
-        }
-        if (logoutBtn) {
-            logoutBtn.addEventListener('click', function() {
-                hideProfile();
-                currentUser = null;
-            });
-        }
-        // При успешной записи через форму — добавлять запись в историю и начислять баллы
-        const bookingForm = document.querySelector('form.animate-on-scroll');
-        if (bookingForm) {
-            bookingForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const name = bookingForm.querySelector('input[name="name"]').value;
-                const phone = bookingForm.querySelector('input[name="phone"]').value;
-                const date = bookingForm.querySelector('input[name="datetime"]').value;
-                // TODO: Проверить доступность выбранного слота по дате и времени
-                // Если занято — подсветить поле и не отправлять форму
-
-                const formattedDate = date.replace('T', ' ');
-                const text = `💬 Новая запись:\n👤 Имя: ${name}\n📞 Телефон: ${phone}\n📅 Дата и время: ${formattedDate}`;
-
-                const chatIds = ["339033504", "1366208620"]; // основной ID и ID Светланы
-
-                chatIds.forEach(chatId => {
-                    fetch("https://api.telegram.org/bot7811248285:AAHfspwV_mA-PF298Bac28LBkEeehX_ql70/sendMessage", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                            chat_id: chatId,
-                            text: text
-                        })
-                    }).then(response => {
-                        if (response.ok) {
-                            if (chatId === "339033504") {
-                                alert("Заявка отправлена!");
-                                bookingForm.reset();
-                            }
-                        } else {
-                            if (chatId === "339033504") {
-                                alert("Ошибка отправки. Попробуйте позже.");
-                            } else {
-                                console.error(`Ошибка отправки для chat_id ${chatId}`);
-                            }
-                        }
-                    }).catch(error => {
-                        if (chatId === "339033504") {
-                            alert("Ошибка соединения. Проверьте интернет.");
-                        } else {
-                            console.error(`Ошибка соединения для chat_id ${chatId}:`, error);
-                        }
-                    });
-                });
-
-                if (currentUser) {
-                    const serviceSelect = bookingForm.querySelector('select#service');
-                    const datetimeInput = bookingForm.querySelector('input#datetime');
-                    const serviceText = serviceSelect ? serviceSelect.options[serviceSelect.selectedIndex].text : '';
-                    const dateText = datetimeInput ? datetimeInput.value.replace('T', ' ') : '';
-                    // Добавить запись
-                    currentUser.records = currentUser.records || [];
-                    currentUser.records.unshift({ date: dateText, service: serviceText, status: 'Ожидает' });
-                    // Начислить баллы
-                    currentUser.points = (currentUser.points || 0) + 10;
-                    saveUserData(currentUser);
-                }
-            }, true);
         }
     </script>
 
