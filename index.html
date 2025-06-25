@@ -466,13 +466,14 @@
         <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-sm relative">
             <button id="closeCabinet" class="absolute top-3 right-3 text-gray-400 hover:text-pink-600 text-2xl">&times;</button>
             <h2 class="text-2xl font-bold text-pink-600 mb-6 text-center">Вход в личный кабинет</h2>
-            <form id="cabinetLoginForm">
-                <div class="mb-4">
-                    <label for="cabinetPhone" class="block text-gray-700 font-medium mb-2">Телефон</label>
-                    <input type="tel" id="cabinetPhone" name="cabinetPhone" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" placeholder="+7 (___) ___-__-__" required>
-                </div>
-                <button type="submit" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-medium py-3 px-6 rounded-lg transition shadow-md hover:shadow-lg">Войти</button>
-            </form>
+            <div id="telegram-login-container" class="flex justify-center my-2"></div>
+            <script async src="https://telegram.org/js/telegram-widget.js?7"
+                data-telegram-login="SvetSalonProSSP_bot"
+                data-size="large"
+                data-userpic="false"
+                data-radius="8"
+                data-request-access="write"
+                data-onauth="onTelegramAuth(user)"></script>
         </div>
     </div>
 
@@ -748,6 +749,18 @@
                 }
             }, true);
         }
+
+        // Telegram Login обработчик
+        window.onTelegramAuth = function(user) {
+            // Сохраняем пользователя в localStorage
+            localStorage.setItem('tg_user', JSON.stringify(user));
+            // Формируем профиль для личного кабинета
+            currentUser = getUserData('tg_' + user.id);
+            currentUser.tg = user;
+            saveUserData(currentUser);
+            cabinetModal.classList.add('hidden');
+            showProfile(currentUser);
+        };
     </script>
 
     <script>
