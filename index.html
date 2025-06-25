@@ -796,6 +796,7 @@
                     currentUser = getUserData('tg_' + user.id);
                     currentUser.tg = user;
                     saveUserData(currentUser);
+                    cabinetModal.classList.add('hidden');
                     showProfile(currentUser);
                 } catch (e) {
                     localStorage.removeItem('tg_user');
