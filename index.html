@@ -1,96 +1,852 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Парикмахерская SvetSalonPro</title>
-  <style>
-    body { font-family: sans-serif; background: #fefefe; margin: 0; padding: 0; }
-    header { background: #222; color: #fff; padding: 1.5rem; text-align: center; }
-    section { padding: 2rem; max-width: 800px; margin: auto; }
-    h2 { color: #444; }
-    .form { background: #f9f9f9; padding: 1rem; border-radius: 8px; }
-    input, select, button {
-      width: 100%; padding: 0.8rem; margin-top: 1rem;
-      border-radius: 6px; border: 1px solid #ccc;
-    }
-    .auth-buttons button {
-      margin-top: 0.5rem;
-      background: #eee; border: none; cursor: pointer;
-    }
-    .gallery img {
-      border-radius: 6px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SvetSalonPro - Салон красоты в Геленджике</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .logo-image {
+            height: 40px;
+            width: 40px;
+            object-fit: cover;
+            border-radius: 9999px;
+            background-color: #ec4899;
+            padding: 4px;
+            transition: transform 0.3s ease;
+        }
+        .logo-image:hover {
+            transform: scale(1.05);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-on-scroll {
+            opacity: 0;
+            animation: fadeIn 0.8s ease forwards;
+        }
+        
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        .delay-400 { animation-delay: 0.4s; }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(236, 72, 153, 0.1), 0 10px 10px -5px rgba(236, 72, 153, 0.04);
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(251, 207, 232, 0.7) 100%), url('https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80') center/cover no-repeat;
+        }
+        
+        .nav-link:hover::after {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 2px;
+            background-color: #ec4899;
+            margin-top: 2px;
+        }
+        
+        .site-shift {
+            /* Сдвиг на ширину меню (max 70vw, 256px) */
+            transform: translateX(min(70vw, 256px));
+            transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+        }
+        #mobileMenu {
+            width: min(70vw, 256px);
+            min-width: 0;
+            max-width: 256px;
+            padding: 2rem 1.5rem;
+            align-items: flex-start;
+        }
+        #mobileMenu button,
+        #mobileMenu a {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 0.75rem 1rem;
+            margin: 0.25rem 0;
+            border-radius: 0.75rem;
+            font-size: 1.1rem;
+            color: #ec4899;
+            background: #f9fafb;
+            font-weight: 500;
+            transition: background 0.2s, color 0.2s;
+        }
+        #mobileMenu button:hover,
+        #mobileMenu a:hover {
+            background: #ec4899;
+            color: #fff;
+        }
+        #closeMobileMenu {
+            top: 8px;
+            right: 8px;
+            position: absolute;
+            background: none;
+            color: #aaa;
+            font-size: 2rem;
+            width: 32px;
+            height: 32px;
+        }
+    </style>
 </head>
-<body>
-  <header>
-    <h1>Парикмахерская SvetSalonPro</h1>
-    <p>Запишитесь онлайн и выберите удобное время</p>
-  </header>
+<body class="font-sans bg-white text-gray-800">
+    <!-- Header -->
+    <header class="fixed w-full bg-white shadow-sm z-50">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <!-- Кнопка-гамбургер слева -->
+                <button id="mobileMenuBtn" class="md:hidden flex flex-col justify-center items-center w-10 h-10 focus:outline-none mr-3 relative z-60">
+                    <span class="block w-7 h-0.5 bg-pink-600 mb-1 transition-all duration-300" id="bar1"></span>
+                    <span class="block w-7 h-0.5 bg-pink-600 mb-1 transition-all duration-300" id="bar2"></span>
+                    <span class="block w-7 h-0.5 bg-pink-600 transition-all duration-300" id="bar3"></span>
+                </button>
+                <img src="images/logo.png" alt="SvetSalonPro" class="logo-image mr-3 rounded-full bg-pink-600 p-1">
+                <h1 class="text-2xl font-bold text-pink-600">SvetSalonPro</h1>
+            </div>
+            <nav class="hidden md:flex space-x-8">
+                <a href="#home" class="nav-link text-gray-700 hover:text-pink-600 transition">Главная</a>
+                <a href="#about" class="nav-link text-gray-700 hover:text-pink-600 transition">О нас</a>
+                <a href="#services" class="nav-link text-gray-700 hover:text-pink-600 transition">Услуги</a>
+                <a href="#masters" class="nav-link text-gray-700 hover:text-pink-600 transition">Мастера</a>
+                <a href="#contact" class="nav-link text-gray-700 hover:text-pink-600 transition">Контакты</a>
+                <button id="openCabinet" class="ml-4 bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-lg font-medium transition shadow">Личный кабинет</button>
+            </nav>
+            <!-- Мобильное меню -->
+            <div id="mobileMenuOverlay" class="fixed inset-0 bg-black bg-opacity-40 z-50 hidden"></div>
+            <nav id="mobileMenu" class="fixed top-0 left-0 h-full w-64 bg-white shadow-2xl z-50 transform -translate-x-full transition-transform duration-300 flex flex-col p-8 space-y-2">
+                <button id="closeMobileMenu">&times;</button>
+                <button id="openCabinetMobile">Мой профиль</button>
+                <a href="#home">Главная</a>
+                <a href="#about">О нас</a>
+                <a href="#services">Услуги</a>
+                <a href="#masters">Мастера</a>
+                <a href="#contact">Контакты</a>
+            </nav>
+        </div>
+    </header>
 
-  <section>
-    <h2>Запись на стрижку</h2>
-    <form class="form" id="recordForm">
-      <input type="text" id="name" placeholder="Ваше имя" required />
-      <input type="tel" id="phone" placeholder="Номер телефона" required />
-      <input type="date" id="date" required />
-      <select id="service">
-        <option>Женская стрижка</option>
-        <option>Мужская стрижка</option>
-        <option>Окрашивание</option>
-        <option>Укладка</option>
-      </select>
-      <button type="submit">Записаться</button>
-    </form>
+    <!-- Booking Section -->
+    <section id="booking" class="py-20">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-xl overflow-hidden">
+                <div class="md:flex">
+                    <div class="md:w-1/2 bg-pink-600 text-white p-10 flex flex-col justify-center">
+                        <h2 class="text-3xl font-bold mb-6 animate-on-scroll">Запись онлайн</h2>
+                        <p class="mb-6 animate-on-scroll delay-100">Оставьте свои данные, и наш администратор свяжется с вами для подтверждения записи в течение 15 минут.</p>
+                        <div class="animate-on-scroll delay-200">
+                            <div class="flex items-center mb-4">
+                                <div class="w-10 h-10 rounded-full bg-pink-500 flex items-center justify-center mr-4">
+                                    <i class="fas fa-phone"></i>
+                                </div>
+                                <div>
+                                    <p class="font-bold">+7 928 280 62 94</p>
+                                    <p class="text-sm text-pink-100">Звоните с 9:00 до 21:00</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-pink-500 flex items-center justify-center mr-4">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div>
+                                    <p class="font-bold">my@SvetSalonPro.ru</p>
+                                    <p class="text-sm text-pink-100">Пишите в любое время</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2 p-10">
+                        <!--
+                        <script>
+                          function sendToTelegram(event) {
+                            event.preventDefault();
+                            // Старая отправка формы отключена
+                          }
+                        </script>
+                        -->
+                        <form class="animate-on-scroll">
+                            <div class="mb-6">
+                                <label for="name" class="block text-gray-700 font-medium mb-2">Ваше имя</label>
+                                <input type="text" id="name" name="name" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" placeholder="Иван Иванов" required>
+                            </div>
+                            <div class="mb-6">
+                                <label for="phone" class="block text-gray-700 font-medium mb-2">Телефон</label>
+                                <input type="tel" id="phone" name="phone" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" placeholder="+7 (___) ___-__-__" required>
+                            </div>
+                            <div class="mb-6">
+                                <label for="datetime" class="block text-gray-700 font-medium mb-2">Дата и время визита</label>
+                                <input type="datetime-local" id="datetime" name="datetime" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" required>
+                            </div>
+                            <div class="mb-8">
+                                <label for="service" class="block text-gray-700 font-medium mb-2">Услуга</label>
+                                <select id="service" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" required>
+                                    <option value="" disabled selected>Выберите услугу</option>
+                                    <option value="haircut">Стрижка (от 1500 ₽)</option>
+                                    <option value="coloring">Окрашивание (от 3000 ₽)</option>
+                                    <option value="styling">Укладка (от 1200 ₽)</option>
+                                    <option value="manicure">Маникюр (от 1800 ₽)</option>
+                                    <option value="pedicure">Педикюр (от 2200 ₽)</option>
+                                    <option value="haircare">Уход за волосами (от 2500 ₽)</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-medium py-3 px-6 rounded-lg transition shadow-md hover:shadow-lg">Записаться</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section pt-32 pb-20 md:pt-40 md:pb-32">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-6xl font-bold text-gray-800 mb-6 animate-on-scroll">SvetSalonPro</h1>
+            <p class="text-xl md:text-2xl text-gray-700 mb-8 max-w-2xl mx-auto animate-on-scroll delay-100">Ваш идеальный образ начинается здесь</p>
+            <div class="animate-on-scroll delay-200">
+                <a href="#booking" class="bg-pink-600 hover:bg-pink-700 text-white px-8 py-3 rounded-full font-medium inline-block transition shadow-lg hover:shadow-xl">Записаться онлайн</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-20">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-4 text-gray-800 animate-on-scroll">Наши услуги</h2>
+            <p class="text-center text-gray-600 mb-16 max-w-2xl mx-auto animate-on-scroll delay-100">Мы предлагаем полный спектр услуг для вашей красоты и ухода</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Service 1 -->
+                <div class="service-card bg-white rounded-lg shadow-md p-6 transition duration-300 animate-on-scroll">
+                    <div class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center text-pink-600 mb-4">
+                        <i class="fas fa-cut text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Стрижка</h3>
+                    <p class="text-gray-600 mb-4">Профессиональная стрижка с учетом особенностей вашего типа волос и формы лица.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-pink-600 font-bold">от 1500 ₽</span>
+                        <a href="#booking" class="text-pink-600 hover:text-pink-700 font-medium">Записаться</a>
+                    </div>
+                </div>
+                
+                <!-- Service 2 -->
+                <div class="service-card bg-white rounded-lg shadow-md p-6 transition duration-300 animate-on-scroll delay-100">
+                    <div class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center text-pink-600 mb-4">
+                        <i class="fas fa-paint-brush text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Окрашивание</h3>
+                    <p class="text-gray-600 mb-4">Современные техники окрашивания с использованием премиальных красок.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-pink-600 font-bold">от 3000 ₽</span>
+                        <a href="#booking" class="text-pink-600 hover:text-pink-700 font-medium">Записаться</a>
+                    </div>
+                </div>
+                
+                <!-- Service 3 -->
+                <div class="service-card bg-white rounded-lg shadow-md p-6 transition duration-300 animate-on-scroll delay-200">
+                    <div class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center text-pink-600 mb-4">
+                        <i class="fas fa-wind text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Укладка</h3>
+                    <p class="text-gray-600 mb-4">Создание идеальной укладки для любого случая с профессиональными средствами.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-pink-600 font-bold">от 1200 ₽</span>
+                        <a href="#booking" class="text-pink-600 hover:text-pink-700 font-medium">Записаться</a>
+                    </div>
+                </div>
+                
+                <!-- Service 4 -->
+                <div class="service-card bg-white rounded-lg shadow-md p-6 transition duration-300 animate-on-scroll">
+                    <div class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center text-pink-600 mb-4">
+                        <i class="fas fa-hand-sparkles text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Маникюр</h3>
+                    <p class="text-gray-600 mb-4">Комплексный уход за руками и ногтями с покрытием премиальными лаками.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-pink-600 font-bold">от 1800 ₽</span>
+                        <a href="#booking" class="text-pink-600 hover:text-pink-700 font-medium">Записаться</a>
+                    </div>
+                </div>
+                
+                <!-- Service 5 -->
+                <div class="service-card bg-white rounded-lg shadow-md p-6 transition duration-300 animate-on-scroll delay-100">
+                    <div class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center text-pink-600 mb-4">
+                        <i class="fas fa-socks text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Педикюр</h3>
+                    <p class="text-gray-600 mb-4">Профессиональный уход за стопами и ногтями для идеального состояния.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-pink-600 font-bold">от 2200 ₽</span>
+                        <a href="#booking" class="text-pink-600 hover:text-pink-700 font-medium">Записаться</a>
+                    </div>
+                </div>
+                
+                <!-- Service 6 -->
+                <div class="service-card bg-white rounded-lg shadow-md p-6 transition duration-300 animate-on-scroll delay-200">
+                    <div class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center text-pink-600 mb-4">
+                        <i class="fas fa-spa text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Уход за волосами</h3>
+                    <p class="text-gray-600 mb-4">Восстановительные и лечебные процедуры для здоровья и блеска волос.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-pink-600 font-bold">от 2500 ₽</span>
+                        <a href="#booking" class="text-pink-600 hover:text-pink-700 font-medium">Записаться</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Masters Section -->
+    <section id="masters" class="py-20 bg-pink-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-4 text-gray-800 animate-on-scroll">Наши мастера</h2>
+            <p class="text-center text-gray-600 mb-16 max-w-2xl mx-auto animate-on-scroll delay-100">Профессионалы с большим опытом, которые помогут вам выглядеть безупречно</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Master 1 -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden animate-on-scroll">
+                    <img src="images/XXXL.webp" alt="Мастер Светлана" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-1">Светлана</h3>
+                        <p class="text-pink-600 mb-3">Топ-стилист</p>
+                        <p class="text-gray-600 text-sm">Опыт работы 12 лет. Специализация: сложное окрашивание, креативные стрижки.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-16 text-gray-800 animate-on-scroll">Контакты</h2>
+            
+            <div class="flex flex-col md:flex-row">
+                <div class="md:w-1/2 mb-10 md:mb-0 md:pr-10 animate-on-scroll">
+                    <div class="bg-white p-8 rounded-xl shadow-md mb-8">
+                        <h3 class="text-xl font-bold text-pink-600 mb-6">Контактная информация</h3>
+                        <div class="space-y-6">
+                            <div class="flex items-start">
+                                <div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 mr-4 mt-1">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div>
+                                    <p class="font-medium">Адрес</p>
+                                    <a href="https://yandex.ru/maps/?text=Геленджик, Одесская 3А корпус 3" target="_blank" class="text-pink-600 hover:underline">
+                                        г. Геленджик, ул. Одесская, 3А, корпус 3
+                                    </a>
+                                    <br>
+                                    <a href="https://yandex.ru/maps/-/CHck7A3J" target="_blank" class="inline-block mt-2 bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700 transition">
+                                        Проложить маршрут
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 mr-4 mt-1">
+                                    <i class="fas fa-phone"></i>
+                                </div>
+                                <div>
+                                    <p class="font-medium">Телефон</p>
+                                    <a href="tel:+79282806294" class="text-pink-600 hover:underline">+7 928 280 62 94</a>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 mr-4 mt-1">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div>
+                                    <p class="font-medium">Email</p>
+                                    <a href="mailto:my@SvetSalonPro.ru" class="text-pink-600 hover:underline">my@SvetSalonPro.ru</a>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 mr-4 mt-1">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div>
+                                    <p class="font-medium">Часы работы</p>
+                                    <ul class="text-gray-600">
+                                        <li>Понедельник: 11:00 – 18:00</li>
+                                        <li>Вторник: 11:00 – 18:00</li>
+                                        <li>Среда: 11:00 – 18:00</li>
+                                        <li>Четверг: 11:00 – 18:00</li>
+                                        <li>Пятница: 11:00 – 18:00</li>
+                                        <li>Суббота: Выходной</li>
+                                        <li>Воскресенье: Выходной</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-8 rounded-xl shadow-md">
+                        <h3 class="text-xl font-bold text-pink-600 mb-6">Мы в социальных сетях</h3>
+                        <div class="flex space-x-4">
+                            <a href="#" class="w-12 h-12 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 hover:bg-pink-600 hover:text-white transition">
+                                <i class="fab fa-instagram text-xl"></i>
+                            </a>
+                            <a href="#" class="w-12 h-12 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 hover:bg-pink-600 hover:text-white transition">
+                                <i class="fab fa-vk text-xl"></i>
+                            </a>
+                            <a href="https://t.me/SvetSalonPro" target="_blank" class="w-12 h-12 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 hover:bg-pink-600 hover:text-white transition">
+                                <i class="fab fa-telegram text-xl"></i>
+                            </a>
+                            <a href="https://wa.me/79282806294" target="_blank" class="w-12 h-12 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 hover:bg-pink-600 hover:text-white transition">
+                                <i class="fab fa-whatsapp text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="md:w-1/2 animate-on-scroll delay-100">
+                    <div class="bg-white p-4 rounded-xl shadow-md h-full">
+                        <iframe src="https://yandex.ru/map-widget/v1/-/CHck7A3J" width="100%" height="500" frameborder="0" class="rounded-lg"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-pink-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-16 text-gray-800 animate-on-scroll">О нашем салоне</h2>
+            
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0 md:pr-10 animate-on-scroll">
+                    <img src="https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=688&q=80" alt="Интерьер салона" class="rounded-lg shadow-xl w-full">
+                </div>
+                <div class="md:w-1/2 animate-on-scroll delay-100">
+                    <h3 class="text-2xl font-bold text-pink-600 mb-4">Наша философия</h3>
+                    <p class="text-gray-700 mb-6 leading-relaxed">SvetSalonPro — это место, где каждая деталь создана для вашего комфорта и красоты. Мы сочетаем последние тенденции индустрии красоты с индивидуальным подходом к каждому клиенту.</p>
+                    <p class="text-gray-700 mb-6 leading-relaxed">Наша миссия — помочь вам раскрыть свою естественную красоту, подчеркнуть индивидуальность и подарить ощущение гармонии и уверенности в себе.</p>
+                    <div class="flex flex-wrap mt-8">
+                        <div class="w-full md:w-1/2 mb-6">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 mr-4">
+                                    <i class="fas fa-spa"></i>
+                                </div>
+                                <span class="font-medium">Премиальные материалы</span>
+                            </div>
+                        </div>
+                        <div class="w-full md:w-1/2 mb-6">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 mr-4">
+                                    <i class="fas fa-award"></i>
+                                </div>
+                                <span class="font-medium">Опытные мастера</span>
+                            </div>
+                        </div>
+                        <div class="w-full md:w-1/2 mb-6">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 mr-4">
+                                    <i class="fas fa-heart"></i>
+                                </div>
+                                <span class="font-medium">Индивидуальный подход</span>
+                            </div>
+                        </div>
+                        <div class="w-full md:w-1/2 mb-6">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 mr-4">
+                                    <i class="fas fa-leaf"></i>
+                                </div>
+                                <span class="font-medium">Экологичные продукты</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 rounded-full bg-pink-600 flex items-center justify-center text-white font-bold mr-3">SSP</div>
+                        <h2 class="text-2xl font-bold">SvetSalonPro</h2>
+                    </div>
+                    <p class="text-gray-400 mt-2">Салон красоты премиум-класса в Геленджике</p>
+                </div>
+                
+                <div class="flex space-x-6 mb-6 md:mb-0">
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <i class="fab fa-instagram text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <i class="fab fa-vk text-xl"></i>
+                    </a>
+                    <a href="https://t.me/SvetSalonPro" target="_blank" class="text-gray-400 hover:text-white transition">
+                        <i class="fab fa-telegram text-xl"></i>
+                    </a>
+                    <a href="https://wa.me/79282806294" target="_blank" class="text-gray-400 hover:text-white transition">
+                        <i class="fab fa-whatsapp text-xl"></i>
+                    </a>
+                </div>
+                
+                <div class="text-gray-400 text-sm">
+                    <p>© 2023 SvetSalonPro. Все права защищены.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="fixed bottom-8 right-8 w-12 h-12 bg-pink-600 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-pink-700 transition opacity-0 invisible">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Модальное окно для входа -->
+    <div id="cabinetModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-sm relative">
+            <button id="closeCabinet" class="absolute top-3 right-3 text-gray-400 hover:text-pink-600 text-2xl">&times;</button>
+            <h2 class="text-2xl font-bold text-pink-600 mb-6 text-center">Вход в личный кабинет</h2>
+            <form id="cabinetLoginForm">
+                <div class="mb-4">
+                    <label for="cabinetPhone" class="block text-gray-700 font-medium mb-2">Телефон</label>
+                    <input type="tel" id="cabinetPhone" name="cabinetPhone" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" placeholder="+7 (___) ___-__-__" required>
+                </div>
+                <button type="submit" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-medium py-3 px-6 rounded-lg transition shadow-md hover:shadow-lg">Войти</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Модальное окно личного кабинета -->
+    <div id="profileModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md relative">
+            <button id="logoutBtn" class="absolute top-3 right-3 text-gray-400 hover:text-pink-600 text-2xl">&times;</button>
+            <h2 class="text-2xl font-bold text-pink-600 mb-4 text-center">Личный кабинет</h2>
+            <div id="profileContent">
+                <!-- Контент профиля будет подставляться через JS -->
+            </div>
+        </div>
+    </div>
+
     <script>
-      document.getElementById("recordForm").addEventListener("submit", function (e) {
-        e.preventDefault();
-        const name = document.getElementById("name").value;
-        const phone = document.getElementById("phone").value;
-        const date = document.getElementById("date").value;
-        const service = document.getElementById("service").value;
-
-        fetch("https://script.google.com/macros/s/AKfycbwhOPQxNU_T30fxuSd-guFXb9WvG2qtSIC8N8JNrF5hvtax6tZGhZxqcnhyQDsaZLU/exec", {
-          method: "POST",
-          mode: "no-cors",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ name, phone, date, service }),
+        // Animation on scroll
+        const animateOnScroll = () => {
+            const elements = document.querySelectorAll('.animate-on-scroll');
+            
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.2;
+                
+                if (elementPosition < screenPosition) {
+                    element.style.opacity = '1';
+                }
+            });
+        };
+        
+        window.addEventListener('scroll', animateOnScroll);
+        window.addEventListener('load', animateOnScroll);
+        
+        // Back to top button
+        const backToTopButton = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.remove('opacity-0', 'invisible');
+                backToTopButton.classList.add('opacity-100', 'visible');
+            } else {
+                backToTopButton.classList.remove('opacity-100', 'visible');
+                backToTopButton.classList.add('opacity-0', 'invisible');
+            }
         });
+        
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // ===== Мобильное меню =====
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+        const closeMobileMenu = document.getElementById('closeMobileMenu');
+        const openCabinetMobile = document.getElementById('openCabinetMobile');
+        const siteContainer = document.body;
+        // Анимация гамбургера
+        function toggleHamburger(open) {
+            document.getElementById('bar1').style.transform = open ? 'rotate(45deg) translateY(8px)' : '';
+            document.getElementById('bar2').style.opacity = open ? '0' : '1';
+            document.getElementById('bar3').style.transform = open ? 'rotate(-45deg) translateY(-8px)' : '';
+        }
+        function openMobileMenu() {
+            mobileMenu.classList.remove('-translate-x-full');
+            mobileMenuOverlay.classList.remove('hidden');
+            toggleHamburger(true);
+            siteContainer.classList.add('site-shift');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeMobileMenuFunc() {
+            mobileMenu.classList.add('-translate-x-full');
+            mobileMenuOverlay.classList.add('hidden');
+            toggleHamburger(false);
+            siteContainer.classList.remove('site-shift');
+            document.body.style.overflow = '';
+        }
+        if (mobileMenuBtn && mobileMenu && mobileMenuOverlay && closeMobileMenu) {
+            mobileMenuBtn.addEventListener('click', openMobileMenu);
+            closeMobileMenu.addEventListener('click', closeMobileMenuFunc);
+            mobileMenuOverlay.addEventListener('click', closeMobileMenuFunc);
+            // Закрытие по клику на пункт меню
+            mobileMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', closeMobileMenuFunc);
+            });
+        }
+        // Открытие личного кабинета из мобильного меню
+        if (openCabinetMobile) {
+            openCabinetMobile.addEventListener('click', function() {
+                closeMobileMenuFunc();
+                if (openCabinetBtn) openCabinetBtn.click();
+            });
+        }
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Close mobile menu if open
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                        mobileMenu.classList.remove('flex');
+                    }
+                }
+            });
+        });
+        
+        // Phone input mask
+        const phoneInput = document.getElementById('phone');
+        if (phoneInput) {
+            phoneInput.addEventListener('input', function(e) {
+                let x = e.target.value.replace(/\D/g, '').match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
+                e.target.value = !x[2] ? '+7' : '+7 (' + x[2] + (x[3] ? ') ' + x[3] : '') + (x[4] ? '-' + x[4] : '') + (x[5] ? '-' + x[5] : '');
+            });
+        }
 
-        alert("Заявка отправлена!");
-        document.getElementById("recordForm").reset();
-      });
+        // ===== Личный кабинет: открытие/закрытие модального окна =====
+        const openCabinetBtn = document.getElementById('openCabinet');
+        const cabinetModal = document.getElementById('cabinetModal');
+        const closeCabinetBtn = document.getElementById('closeCabinet');
+        const cabinetPhoneInput = document.getElementById('cabinetPhone');
+        const cabinetLoginForm = document.getElementById('cabinetLoginForm');
+        const profileModal = document.getElementById('profileModal');
+        const profileContent = document.getElementById('profileContent');
+        const logoutBtn = document.getElementById('logoutBtn');
+
+        let currentUser = null;
+
+        function getUserData(phone) {
+            const data = localStorage.getItem('user_' + phone);
+            return data ? JSON.parse(data) : { phone, points: 0, records: [] };
+        }
+        function saveUserData(user) {
+            localStorage.setItem('user_' + user.phone, JSON.stringify(user));
+        }
+        function showProfile(user) {
+            let progress = Math.min(user.points, 50);
+            let percent = Math.round((progress / 50) * 100);
+            let nextReward = user.points >= 50 ? 'Доступна скидка 10%!' : `До скидки: ${50 - user.points} баллов`;
+            let recordsHtml = user.records.length ?
+                user.records.map(r => `<tr><td class='py-1 px-2 border-b'>${r.date}</td><td class='py-1 px-2 border-b'>${r.service}</td><td class='py-1 px-2 border-b'>${r.status}</td></tr>`).join('') :
+                `<tr><td colspan='3' class='text-center text-gray-400 py-4'>Нет записей</td></tr>`;
+            profileContent.innerHTML = `
+                <div class="mb-6 text-center">
+                    <div class="text-lg font-semibold mb-1">${user.phone}</div>
+                    <div class="mb-2">Бонусные баллы: <span class="font-bold text-pink-600">${user.points}</span></div>
+                    <div class="w-full bg-pink-100 rounded-full h-4 mb-2">
+                        <div class="bg-pink-600 h-4 rounded-full transition-all" style="width: ${percent}%;"></div>
+                    </div>
+                    <div class="text-sm text-gray-600">${nextReward}</div>
+                </div>
+                <div class="mb-4">
+                    <h3 class="text-lg font-bold mb-2 text-pink-600">История записей</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm border">
+                            <thead><tr><th class='py-1 px-2 border-b'>Дата</th><th class='py-1 px-2 border-b'>Услуга</th><th class='py-1 px-2 border-b'>Статус</th></tr></thead>
+                            <tbody>${recordsHtml}</tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="text-center text-xs text-gray-400 mt-2">10 баллов за каждую запись. 50 баллов = скидка 10%!</div>
+            `;
+            profileModal.classList.remove('hidden');
+        }
+        function hideProfile() {
+            profileModal.classList.add('hidden');
+        }
+        if (openCabinetBtn && cabinetModal && closeCabinetBtn) {
+            openCabinetBtn.addEventListener('click', () => {
+                cabinetModal.classList.remove('hidden');
+                setTimeout(() => { if (cabinetPhoneInput) cabinetPhoneInput.focus(); }, 100);
+            });
+            closeCabinetBtn.addEventListener('click', () => {
+                cabinetModal.classList.add('hidden');
+            });
+            cabinetModal.addEventListener('click', (e) => {
+                if (e.target === cabinetModal) cabinetModal.classList.add('hidden');
+            });
+        }
+        if (cabinetPhoneInput) {
+            cabinetPhoneInput.addEventListener('input', function(e) {
+                let x = e.target.value.replace(/\D/g, '').match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
+                e.target.value = !x[2] ? '+7' : '+7 (' + x[2] + (x[3] ? ') ' + x[3] : '') + (x[4] ? '-' + x[4] : '') + (x[5] ? '-' + x[5] : '');
+            });
+        }
+        if (cabinetLoginForm) {
+            cabinetLoginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const phone = cabinetPhoneInput.value.trim();
+                if (!/^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/.test(phone)) {
+                    cabinetPhoneInput.classList.add('border-pink-600');
+                    return;
+                }
+                currentUser = getUserData(phone);
+                saveUserData(currentUser);
+                cabinetModal.classList.add('hidden');
+                showProfile(currentUser);
+            });
+        }
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', function() {
+                hideProfile();
+                currentUser = null;
+            });
+        }
+        // При успешной записи через форму — добавлять запись в историю и начислять баллы
+        const bookingForm = document.querySelector('form.animate-on-scroll');
+        if (bookingForm) {
+            bookingForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const name = bookingForm.querySelector('input[name="name"]').value;
+                const phone = bookingForm.querySelector('input[name="phone"]').value;
+                const date = bookingForm.querySelector('input[name="datetime"]').value;
+                // TODO: Проверить доступность выбранного слота по дате и времени
+                // Если занято — подсветить поле и не отправлять форму
+
+                const formattedDate = date.replace('T', ' ');
+                const text = `💬 Новая запись:\n👤 Имя: ${name}\n📞 Телефон: ${phone}\n📅 Дата и время: ${formattedDate}`;
+
+                const chatIds = ["339033504", "1366208620"]; // основной ID и ID Светланы
+
+                chatIds.forEach(chatId => {
+                    fetch("https://api.telegram.org/bot7811248285:AAHfspwV_mA-PF298Bac28LBkEeehX_ql70/sendMessage", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            chat_id: chatId,
+                            text: text
+                        })
+                    }).then(response => {
+                        if (response.ok) {
+                            if (chatId === "339033504") {
+                                alert("Заявка отправлена!");
+                                bookingForm.reset();
+                            }
+                        } else {
+                            if (chatId === "339033504") {
+                                alert("Ошибка отправки. Попробуйте позже.");
+                            } else {
+                                console.error(`Ошибка отправки для chat_id ${chatId}`);
+                            }
+                        }
+                    }).catch(error => {
+                        if (chatId === "339033504") {
+                            alert("Ошибка соединения. Проверьте интернет.");
+                        } else {
+                            console.error(`Ошибка соединения для chat_id ${chatId}:`, error);
+                        }
+                    });
+                });
+
+                if (currentUser) {
+                    const serviceSelect = bookingForm.querySelector('select#service');
+                    const datetimeInput = bookingForm.querySelector('input#datetime');
+                    const serviceText = serviceSelect ? serviceSelect.options[serviceSelect.selectedIndex].text : '';
+                    const dateText = datetimeInput ? datetimeInput.value.replace('T', ' ') : '';
+                    // Добавить запись
+                    currentUser.records = currentUser.records || [];
+                    currentUser.records.unshift({ date: dateText, service: serviceText, status: 'Ожидает' });
+                    // Начислить баллы
+                    currentUser.points = (currentUser.points || 0) + 10;
+                    saveUserData(currentUser);
+                }
+            }, true);
+        }
     </script>
-  </section>
 
-  <section>
-    <h2>Войти через</h2>
-    <div class="auth-buttons">
-      <button onclick="alert('Заглушка: Вход через Telegram')">Telegram</button>
-      <button onclick="alert('Заглушка: Вход через Google')">Google</button>
-      <button onclick="alert('Заглушка: Вход через Яндекс')">Яндекс</button>
-    </div>
-  </section>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const form = document.querySelector('form');
+      if (!form) return;
 
-  <section>
-    <h2>Наш салон</h2>
-    <div class="gallery" style="display: flex; flex-wrap: wrap; gap: 10px;">
-      <img src="https://avatars.mds.yandex.net/get-altay/5266691/2a0000017cb967fb6a58cfd3460b91fd7da4/XXXL" alt="Фото 1" width="300">
-      <img src="https://avatars.mds.yandex.net/get-altay/5270085/2a0000017d02a1c6a07b43163c87720bd99c/XXXL" alt="Фото 2" width="300">
-      <img src="https://avatars.mds.yandex.net/get-altay/12190463/2a0000018c296da8701a70f36ed97ac26c80/XXXL" alt="Фото 3" width="300">
-    </div>
-  </section>
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
 
-  <section>
-    <h2>Контакты</h2>
-    <p><strong>📍 Адрес:</strong> Геленджик, Одесская ул., 3А, корп. 3</p>
-    <p><strong>📞 Телефон:</strong> <a href="tel:+7928280XXXX">+7 (928) 280-XX-XX</a></p>
-    <p><strong>🕓 График:</strong> уточняйте по телефону</p>
-    <p><a href="https://yandex.ru/maps/-/CHck7A3J" target="_blank">📍 Открыть на Яндекс.Картах</a></p>
-    <iframe src="https://yandex.ru/map-widget/v1/?ll=38.056400%2C44.589162&z=16&text=SvetSalonPro&lang=ru_RU" width="100%" height="300" frameborder="0"></iframe>
-  </section>
+        const name = form.querySelector('input[name="name"]').value;
+        const phone = form.querySelector('input[name="phone"]').value;
+        const date = form.querySelector('input[name="datetime"]').value;
+        // TODO: Проверить доступность выбранного слота по дате и времени
+        // Если занято — подсветить поле и не отправлять форму
+
+        const formattedDate = date.replace('T', ' ');
+        const text = `💬 Новая запись:\n👤 Имя: ${name}\n📞 Телефон: ${phone}\n📅 Дата и время: ${formattedDate}`;
+
+        const chatIds = ["339033504", "1366208620"]; // основной ID и ID Светланы
+
+        chatIds.forEach(chatId => {
+          fetch("https://api.telegram.org/bot7811248285:AAHfspwV_mA-PF298Bac28LBkEeehX_ql70/sendMessage", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              chat_id: chatId,
+              text: text
+            })
+          }).then(response => {
+            if (response.ok) {
+              if (chatId === "339033504") {
+                alert("Заявка отправлена!");
+                form.reset();
+              }
+            } else {
+              if (chatId === "339033504") {
+                alert("Ошибка отправки. Попробуйте позже.");
+              } else {
+                console.error(`Ошибка отправки для chat_id ${chatId}`);
+              }
+            }
+          }).catch(error => {
+            if (chatId === "339033504") {
+              alert("Ошибка соединения. Проверьте интернет.");
+            } else {
+              console.error(`Ошибка соединения для chat_id ${chatId}:`, error);
+            }
+          });
+        });
+      });
+    });
+    </script>
 </body>
 </html>
