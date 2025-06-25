@@ -709,6 +709,7 @@
             logoutBtn.addEventListener('click', function() {
                 hideProfile();
                 currentUser = null;
+                localStorage.removeItem('tg_user');
             });
         }
         // При успешной записи через форму — добавлять запись в историю и начислять баллы
@@ -785,6 +786,22 @@
             cabinetModal.classList.add('hidden');
             showProfile(currentUser);
         };
+
+        // Автоматическая авторизация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function () {
+            const tgUser = localStorage.getItem('tg_user');
+            if (tgUser) {
+                try {
+                    const user = JSON.parse(tgUser);
+                    currentUser = getUserData('tg_' + user.id);
+                    currentUser.tg = user;
+                    saveUserData(currentUser);
+                    showProfile(currentUser);
+                } catch (e) {
+                    localStorage.removeItem('tg_user');
+                }
+            }
+        });
     </script>
 
     <script>
