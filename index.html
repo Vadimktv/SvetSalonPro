@@ -9,6 +9,11 @@
     <style>
         .logo-image {
             height: 40px;
+            width: 40px;
+            object-fit: cover;
+            border-radius: 9999px;
+            background-color: #ec4899;
+            padding: 4px;
             transition: transform 0.3s ease;
         }
         .logo-image:hover {
@@ -53,7 +58,7 @@
     <header class="fixed w-full bg-white shadow-sm z-50">
         <div class="container mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center">
-                <img src="images/logo.png" alt="SvetSalonPro" class="logo-image mr-3">
+                <img src="images/logo.png" alt="SvetSalonPro" class="logo-image mr-3 rounded-full bg-pink-600 p-1">
                 <h1 class="text-2xl font-bold text-pink-600">SvetSalonPro</h1>
             </div>
             <nav class="hidden md:flex space-x-8">
