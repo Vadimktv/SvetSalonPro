@@ -69,9 +69,23 @@
                 <a href="#contact" class="nav-link text-gray-700 hover:text-pink-600 transition">Контакты</a>
                 <button id="openCabinet" class="ml-4 bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-lg font-medium transition shadow">Личный кабинет</button>
             </nav>
-            <button class="md:hidden text-gray-700">
-                <i class="fas fa-bars text-2xl"></i>
+            <!-- Кнопка-гамбургер для мобильного меню -->
+            <button id="mobileMenuBtn" class="md:hidden flex flex-col justify-center items-center w-10 h-10 focus:outline-none relative z-60">
+                <span class="block w-7 h-0.5 bg-pink-600 mb-1 transition-all duration-300" id="bar1"></span>
+                <span class="block w-7 h-0.5 bg-pink-600 mb-1 transition-all duration-300" id="bar2"></span>
+                <span class="block w-7 h-0.5 bg-pink-600 transition-all duration-300" id="bar3"></span>
             </button>
+            <!-- Мобильное меню -->
+            <div id="mobileMenuOverlay" class="fixed inset-0 bg-black bg-opacity-40 z-50 hidden"></div>
+            <nav id="mobileMenu" class="fixed top-0 right-0 h-full w-64 bg-white shadow-2xl z-50 transform translate-x-full transition-transform duration-300 flex flex-col p-8 space-y-6">
+                <button id="closeMobileMenu" class="absolute top-4 right-4 text-gray-400 hover:text-pink-600 text-3xl">&times;</button>
+                <a href="#home" class="nav-link text-gray-700 hover:text-pink-600 transition">Главная</a>
+                <a href="#about" class="nav-link text-gray-700 hover:text-pink-600 transition">О нас</a>
+                <a href="#services" class="nav-link text-gray-700 hover:text-pink-600 transition">Услуги</a>
+                <a href="#masters" class="nav-link text-gray-700 hover:text-pink-600 transition">Мастера</a>
+                <a href="#contact" class="nav-link text-gray-700 hover:text-pink-600 transition">Контакты</a>
+                <button id="openCabinetMobile" class="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-lg font-medium transition shadow">Личный кабинет</button>
+            </nav>
         </div>
     </header>
 
@@ -511,25 +525,46 @@
             });
         });
         
-        // Mobile menu toggle
-        const mobileMenuButton = document.querySelector('.md\\:hidden');
-        const mobileMenu = document.querySelector('nav');
-        
-        mobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-            mobileMenu.classList.toggle('flex');
-            mobileMenu.classList.toggle('flex-col');
-            mobileMenu.classList.toggle('absolute');
-            mobileMenu.classList.toggle('top-16');
-            mobileMenu.classList.toggle('left-0');
-            mobileMenu.classList.toggle('right-0');
-            mobileMenu.classList.toggle('bg-white');
-            mobileMenu.classList.toggle('p-4');
-            mobileMenu.classList.toggle('shadow-md');
-            mobileMenu.classList.toggle('space-y-4');
-            mobileMenu.classList.toggle('space-x-8');
-        });
-        
+        // ===== Мобильное меню =====
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+        const closeMobileMenu = document.getElementById('closeMobileMenu');
+        const openCabinetMobile = document.getElementById('openCabinetMobile');
+        // Анимация гамбургера
+        function toggleHamburger(open) {
+            document.getElementById('bar1').style.transform = open ? 'rotate(45deg) translateY(8px)' : '';
+            document.getElementById('bar2').style.opacity = open ? '0' : '1';
+            document.getElementById('bar3').style.transform = open ? 'rotate(-45deg) translateY(-8px)' : '';
+        }
+        function openMobileMenu() {
+            mobileMenu.classList.remove('translate-x-full');
+            mobileMenuOverlay.classList.remove('hidden');
+            toggleHamburger(true);
+            document.body.style.overflow = 'hidden';
+        }
+        function closeMobileMenuFunc() {
+            mobileMenu.classList.add('translate-x-full');
+            mobileMenuOverlay.classList.add('hidden');
+            toggleHamburger(false);
+            document.body.style.overflow = '';
+        }
+        if (mobileMenuBtn && mobileMenu && mobileMenuOverlay && closeMobileMenu) {
+            mobileMenuBtn.addEventListener('click', openMobileMenu);
+            closeMobileMenu.addEventListener('click', closeMobileMenuFunc);
+            mobileMenuOverlay.addEventListener('click', closeMobileMenuFunc);
+            // Закрытие по клику на пункт меню
+            mobileMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', closeMobileMenuFunc);
+            });
+        }
+        // Открытие личного кабинета из мобильного меню
+        if (openCabinetMobile) {
+            openCabinetMobile.addEventListener('click', function() {
+                closeMobileMenuFunc();
+                if (openCabinetBtn) openCabinetBtn.click();
+            });
+        }
         // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
