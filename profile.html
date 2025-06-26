@@ -23,6 +23,8 @@
                     <button class="py-2 px-4 font-medium text-pink-600 border-b-2 border-pink-600" data-tab="profile">Профиль</button>
                     <button class="py-2 px-4 font-medium text-gray-500" data-tab="records">Мои записи</button>
                     <button class="py-2 px-4 font-medium text-gray-500" data-tab="points">Мои баллы</button>
+                    <button class="py-2 px-4 font-medium text-gray-500" data-tab="login">Вход</button>
+                    <button class="py-2 px-4 font-medium text-gray-500" data-tab="register">Регистрация</button>
                 </div>
 
                 <!-- Profile Content -->
@@ -46,9 +48,7 @@
                             <input type="text" value="Активный" class="w-full px-3 py-2 border rounded-md" readonly>
                         </div>
                     </div>
-                    <button class="mt-6 w-full bg-pink-600 text-white py-2 px-4 rounded-md hover:bg-pink-700 transition">
-                        Редактировать профиль
-                    </button>
+                    <button id="logout-btn" class="mt-6 w-full bg-gray-200 text-pink-600 py-2 px-4 rounded-md hover:bg-gray-300 transition">Выйти</button>
                 </div>
                 <!-- Records Content -->
                 <div class="p-6 hidden" id="tab-content-records">
@@ -198,16 +198,18 @@
             const tabPoints = document.querySelector('#tabs button[data-tab="points"]');
             if (isAuth) {
                 tabProfile.classList.remove('hidden');
-                tabLogin.classList.add('hidden');
-                tabRegister.classList.add('hidden');
                 tabRecords.classList.remove('hidden');
                 tabPoints.classList.remove('hidden');
+                tabLogin.classList.add('hidden');
+                tabRegister.classList.add('hidden');
+                document.getElementById('logout-btn').classList.remove('hidden');
             } else {
                 tabProfile.classList.add('hidden');
-                tabLogin.classList.remove('hidden');
-                tabRegister.classList.remove('hidden');
                 tabRecords.classList.add('hidden');
                 tabPoints.classList.add('hidden');
+                tabLogin.classList.remove('hidden');
+                tabRegister.classList.remove('hidden');
+                document.getElementById('logout-btn').classList.add('hidden');
             }
         }
         document.addEventListener('DOMContentLoaded', function() {
@@ -287,15 +289,10 @@
                 updateTabsVisibility(true);
             });
             // --- Выход ---
-            const profileBlock = contents.profile;
-            let logoutBtn = document.createElement('button');
-            logoutBtn.textContent = 'Выйти';
-            logoutBtn.className = 'mt-4 w-full bg-gray-200 text-pink-600 py-2 px-4 rounded-md hover:bg-gray-300 transition';
-            logoutBtn.onclick = function() {
+            document.getElementById('logout-btn').onclick = function() {
                 logout();
                 updateTabsVisibility(false);
             };
-            profileBlock.appendChild(logoutBtn);
         });
         // --- ДОБАВЛЯЕМ ЛОГИКУ ЗАПИСЕЙ И БАЛЛОВ ---
         function getRecords(email) {
