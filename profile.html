@@ -26,7 +26,6 @@
         <div class="container mx-auto flex justify-between items-center">
             <h1 class="text-2xl font-bold text-pink-600">SvetSalonPro</h1>
             <a href="index.html" class="flex items-center gap-1 text-pink-600 hover:underline px-2 py-1 text-sm rounded transition"><span class="material-icons" style="font-size:18px;">home</span>Главная</a>
-            <a id="profile-link" href="profile.html" class="text-pink-600 hover:underline hidden">Профиль</a>
         </div>
     </header>
 
@@ -150,7 +149,6 @@
         function logout() {
             localStorage.removeItem('sspro_current');
             showTab('login');
-            document.getElementById('profile-link').classList.add('hidden');
         }
         function showTab(tab) {
             const tabs = document.querySelectorAll('#tabs button');
@@ -201,8 +199,6 @@
                 if (idx !== -1) { users[idx].emoji = emoji; saveUsers(users); }
             }
             document.getElementById('profile-emoji').textContent = emoji;
-            // Показываем ссылку "Профиль" в шапке
-            document.getElementById('profile-link').classList.remove('hidden');
         }
         // --- ДОБАВЛЯЕМ ЛОГИКУ ДЛЯ СКРЫТИЯ ВКЛАДОК ---
         function updateTabsVisibility(isAuth) {
