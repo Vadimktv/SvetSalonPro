@@ -73,6 +73,10 @@
                         <li>500 баллов — скидка 10%</li>
                         <li>1000 баллов — бесплатная укладка или уход</li>
                     </ul>
+                    <div id="points-actions" class="mt-4 flex flex-col gap-2">
+                        <button onclick="spendPoints('discount')" class="bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700 transition">Потратить 500 баллов на скидку 10%</button>
+                        <button onclick="spendPoints('free')" class="bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700 transition">Потратить 1000 баллов на бесплатную услугу</button>
+                    </div>
                 </div>
                 <!-- Login Content -->
                 <div class="p-6 hidden" id="tab-content-login">
@@ -219,6 +223,10 @@
             tabs.forEach(tab => {
                 tab.addEventListener('click', function() {
                     showTab(this.getAttribute('data-tab'));
+                    // Рендерим записи и баллы при переходе на вкладки
+                    const email = getCurrentUser();
+                    if (this.getAttribute('data-tab') === 'records' && email) renderRecords(email);
+                    if (this.getAttribute('data-tab') === 'points' && email) renderPoints(email);
                 });
             });
             // --- Проверка входа ---
@@ -324,6 +332,18 @@
         }
         function renderPoints(email) {
             document.getElementById('points-balance').textContent = getPoints(email);
+            // Добавляем кнопки для траты баллов
+            let pointsActions = document.getElementById('points-actions');
+            if (!pointsActions) {
+                pointsActions = document.createElement('div');
+                pointsActions.id = 'points-actions';
+                pointsActions.className = 'mt-4 flex flex-col gap-2';
+                document.getElementById('tab-content-points').appendChild(pointsActions);
+            }
+            pointsActions.innerHTML = `
+                <button onclick="spendPoints('discount')" class="bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700 transition">Потратить 500 баллов на скидку 10%</button>
+                <button onclick="spendPoints('free')" class="bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700 transition">Потратить 1000 баллов на бесплатную услугу</button>
+            `;
         }
         // --- Подтверждение записи (для теста) ---
         window.confirmRecord = function(id) {
@@ -354,6 +374,30 @@
         // Вызвать afterAuth(email) после showTab('profile') и updateTabsVisibility(true)
         // ... existing code ...
         // Вызвать afterAuth(email) после успешного входа/регистрации
+        // --- Потратить баллы ---
+        function spendPoints(type) {
+            const email = getCurrentUser();
+            let points = getPoints(email);
+            if (type === 'discount') {
+                if (points >= 500) {
+                    points -= 500;
+                    localStorage.setItem('sspro_points_' + email, points);
+                    renderPoints(email);
+                    alert('Вы успешно потратили 500 баллов и получили скидку 10%!');
+                } else {
+                    alert('Недостаточно баллов для скидки.');
+                }
+            } else if (type === 'free') {
+                if (points >= 1000) {
+                    points -= 1000;
+                    localStorage.setItem('sspro_points_' + email, points);
+                    renderPoints(email);
+                    alert('Вы успешно потратили 1000 баллов и получили бесплатную услугу!');
+                } else {
+                    alert('Недостаточно баллов для бесплатной услуги.');
+                }
+            }
+        }
     </script>
 </body>
 </html>
