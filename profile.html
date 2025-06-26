@@ -11,6 +11,7 @@
         <div class="container mx-auto flex justify-between items-center">
             <h1 class="text-2xl font-bold text-pink-600">SvetSalonPro</h1>
             <a href="index.html" class="text-pink-600 hover:underline">← Назад на главную</a>
+            <a id="profile-link" href="profile.html" class="text-pink-600 hover:underline hidden">Профиль</a>
         </div>
     </header>
 
@@ -27,7 +28,7 @@
                 <!-- Profile Content -->
                 <div class="p-6" id="tab-content-profile">
                     <div class="flex flex-col items-center mb-6">
-                        <img src="https://via.placeholder.com/100" alt="Profile" class="rounded-full w-24 h-24 mb-4">
+                        <div id="profile-emoji" class="rounded-full w-24 h-24 mb-4 flex items-center justify-center text-5xl bg-pink-100"></div>
                         <h3 class="text-xl font-bold">Иван Иванов</h3>
                         <p class="text-gray-500">+7 (123) 456-78-90</p>
                     </div>
@@ -90,6 +91,7 @@
     </main>
     <script>
         // --- ЛОКАЛЬНАЯ АВТОРИЗАЦИЯ ---
+        const EMOJIS = ['😃','🦄','🐱','👩‍🎨','🧑‍💻','🦊','🐶','🐻','🐼','🦁','🐯','🐸','🐵','👩‍🚀','👨‍🚀','👩‍🔬','👨‍🔬','🧑‍🎤','🧑‍🏫','🧑‍🍳','🧑‍🔧','🧑‍🚒','🧑‍✈️','🧑‍🌾','🧑‍🎨'];
         function getUsers() {
             return JSON.parse(localStorage.getItem('sspro_users') || '[]');
         }
@@ -105,6 +107,7 @@
         function logout() {
             localStorage.removeItem('sspro_current');
             showTab('login');
+            document.getElementById('profile-link').classList.add('hidden');
         }
         function showTab(tab) {
             const tabs = document.querySelectorAll('#tabs button');
@@ -136,6 +139,19 @@
             document.querySelector('#tab-content-profile input[type=email]').value = user.email;
             document.querySelector('#tab-content-profile input[type=text]').value = user.date || '';
             document.querySelector('#tab-content-profile input[readonly][value="Активный"]').value = 'Активный';
+            // Случайный эмодзи-аватар
+            let emoji = user.emoji;
+            if (!emoji) {
+                emoji = EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
+                user.emoji = emoji;
+                // Сохраняем эмодзи для пользователя
+                let users = getUsers();
+                let idx = users.findIndex(u => u.email === user.email);
+                if (idx !== -1) { users[idx].emoji = emoji; saveUsers(users); }
+            }
+            document.getElementById('profile-emoji').textContent = emoji;
+            // Показываем ссылку "Профиль" в шапке
+            document.getElementById('profile-link').classList.remove('hidden');
         }
         document.addEventListener('DOMContentLoaded', function() {
             const tabs = document.querySelectorAll('#tabs button');
