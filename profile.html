@@ -5,6 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Личный кабинет - SvetSalonPro</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .tab-fade {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.4s, transform 0.4s;
+        }
+        .tab-fade.tab-fade-active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .tab-btn:active {
+            transform: scale(0.96);
+            filter: brightness(0.95);
+        }
+    </style>
 </head>
 <body class="bg-gray-100 text-gray-800">
     <header class="bg-white shadow p-4">
@@ -20,15 +35,15 @@
             <div class="bg-white rounded-lg shadow-md overflow-hidden">
                 <!-- Tabs -->
                 <div class="flex border-b" id="tabs">
-                    <button class="py-2 px-4 font-medium text-pink-600 border-b-2 border-pink-600" data-tab="profile">Профиль</button>
-                    <button class="py-2 px-4 font-medium text-gray-500" data-tab="records">Мои записи</button>
-                    <button class="py-2 px-4 font-medium text-gray-500" data-tab="points">Мои баллы</button>
-                    <button class="py-2 px-4 font-medium text-gray-500" data-tab="login">Вход</button>
-                    <button class="py-2 px-4 font-medium text-gray-500" data-tab="register">Регистрация</button>
+                    <button class="py-2 px-4 font-medium text-pink-600 border-b-2 border-pink-600 tab-btn" data-tab="profile">Профиль</button>
+                    <button class="py-2 px-4 font-medium text-gray-500 tab-btn" data-tab="records">Мои записи</button>
+                    <button class="py-2 px-4 font-medium text-gray-500 tab-btn" data-tab="points">Мои баллы</button>
+                    <button class="py-2 px-4 font-medium text-gray-500 tab-btn" data-tab="login">Вход</button>
+                    <button class="py-2 px-4 font-medium text-gray-500 tab-btn" data-tab="register">Регистрация</button>
                 </div>
 
                 <!-- Profile Content -->
-                <div class="p-6" id="tab-content-profile">
+                <div class="p-6 tab-fade" id="tab-content-profile">
                     <div class="flex flex-col items-center mb-6">
                         <div id="profile-emoji" class="rounded-full w-24 h-24 mb-4 flex items-center justify-center text-5xl bg-pink-100"></div>
                         <h3 class="text-xl font-bold">Иван Иванов</h3>
@@ -51,12 +66,12 @@
                     <button id="logout-btn" class="mt-6 w-full bg-gray-200 text-pink-600 py-2 px-4 rounded-md hover:bg-gray-300 transition">Выйти</button>
                 </div>
                 <!-- Records Content -->
-                <div class="p-6 hidden" id="tab-content-records">
+                <div class="p-6 hidden tab-fade" id="tab-content-records">
                     <h3 class="text-xl font-bold mb-4">Мои записи</h3>
                     <div id="records-list" class="space-y-4"></div>
                 </div>
                 <!-- Points Content -->
-                <div class="p-6 hidden" id="tab-content-points">
+                <div class="p-6 hidden tab-fade" id="tab-content-points">
                     <h3 class="text-xl font-bold mb-4">Мои баллы</h3>
                     <div class="mb-4">
                         <span class="text-3xl font-bold text-pink-600" id="points-balance">0</span> <span class="text-lg">баллов</span>
@@ -79,7 +94,7 @@
                     </div>
                 </div>
                 <!-- Login Content -->
-                <div class="p-6 hidden" id="tab-content-login">
+                <div class="p-6 hidden tab-fade" id="tab-content-login">
                     <form class="space-y-4">
                         <div>
                             <label class="block text-gray-700 mb-1">Email</label>
@@ -93,7 +108,7 @@
                     </form>
                 </div>
                 <!-- Register Content -->
-                <div class="p-6 hidden" id="tab-content-register">
+                <div class="p-6 hidden tab-fade" id="tab-content-register">
                     <form class="space-y-4">
                         <div>
                             <label class="block text-gray-700 mb-1">Имя</label>
@@ -150,24 +165,24 @@
                 t.classList.remove('text-pink-600', 'border-pink-600');
                 t.classList.add('text-gray-500');
             });
-            if (tab === 'profile') {
-                tabs[0].classList.add('text-pink-600', 'border-pink-600');
-                tabs[0].classList.remove('text-gray-500');
-            } else if (tab === 'login') {
-                tabs[1].classList.add('text-pink-600', 'border-pink-600');
-                tabs[1].classList.remove('text-gray-500');
-            } else if (tab === 'register') {
-                tabs[2].classList.add('text-pink-600', 'border-pink-600');
-                tabs[2].classList.remove('text-gray-500');
-            } else if (tab === 'records') {
-                tabs[3].classList.add('text-pink-600', 'border-pink-600');
-                tabs[3].classList.remove('text-gray-500');
-            } else {
-                tabs[4].classList.add('text-pink-600', 'border-pink-600');
-                tabs[4].classList.remove('text-gray-500');
+            // Анимация кнопки
+            const activeTab = Array.from(tabs).find(t => t.getAttribute('data-tab') === tab);
+            if (activeTab) {
+                activeTab.classList.add('text-pink-600', 'border-pink-600');
+                activeTab.classList.remove('text-gray-500');
             }
-            Object.values(contents).forEach(c => c.classList.add('hidden'));
-            contents['tab-content-' + tab] ? contents['tab-content-' + tab].classList.remove('hidden') : contents[tab].classList.remove('hidden');
+            // Анимация контента
+            Object.values(contents).forEach(c => {
+                c.classList.add('hidden');
+                c.classList.remove('tab-fade-active');
+            });
+            const showContent = contents['tab-content-' + tab] ? contents['tab-content-' + tab] : contents[tab];
+            if (showContent) {
+                showContent.classList.remove('hidden');
+                setTimeout(() => {
+                    showContent.classList.add('tab-fade-active');
+                }, 10);
+            }
         }
         function renderProfile(user) {
             document.querySelector('#tab-content-profile h3').textContent = user.name;
