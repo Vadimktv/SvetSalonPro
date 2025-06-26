@@ -162,13 +162,13 @@
                 points: document.getElementById('tab-content-points')
             };
             tabs.forEach(t => {
-                t.classList.remove('text-pink-600', 'border-pink-600');
+                t.classList.remove('text-pink-600', 'border-pink-600', 'border-b-2');
                 t.classList.add('text-gray-500');
             });
-            // Анимация кнопки
+            // Анимация кнопки и чёрточка
             const activeTab = Array.from(tabs).find(t => t.getAttribute('data-tab') === tab);
             if (activeTab) {
-                activeTab.classList.add('text-pink-600', 'border-pink-600');
+                activeTab.classList.add('text-pink-600', 'border-pink-600', 'border-b-2');
                 activeTab.classList.remove('text-gray-500');
             }
             // Анимация контента
