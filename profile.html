@@ -21,8 +21,8 @@
                 <!-- Tabs -->
                 <div class="flex border-b" id="tabs">
                     <button class="py-2 px-4 font-medium text-pink-600 border-b-2 border-pink-600" data-tab="profile">Профиль</button>
-                    <button class="py-2 px-4 font-medium text-gray-500" data-tab="login">Вход</button>
-                    <button class="py-2 px-4 font-medium text-gray-500" data-tab="register">Регистрация</button>
+                    <button class="py-2 px-4 font-medium text-gray-500" data-tab="records">Мои записи</button>
+                    <button class="py-2 px-4 font-medium text-gray-500" data-tab="points">Мои баллы</button>
                 </div>
 
                 <!-- Profile Content -->
@@ -49,6 +49,30 @@
                     <button class="mt-6 w-full bg-pink-600 text-white py-2 px-4 rounded-md hover:bg-pink-700 transition">
                         Редактировать профиль
                     </button>
+                </div>
+                <!-- Records Content -->
+                <div class="p-6 hidden" id="tab-content-records">
+                    <h3 class="text-xl font-bold mb-4">Мои записи</h3>
+                    <div id="records-list" class="space-y-4"></div>
+                </div>
+                <!-- Points Content -->
+                <div class="p-6 hidden" id="tab-content-points">
+                    <h3 class="text-xl font-bold mb-4">Мои баллы</h3>
+                    <div class="mb-4">
+                        <span class="text-3xl font-bold text-pink-600" id="points-balance">0</span> <span class="text-lg">баллов</span>
+                    </div>
+                    <div class="mb-2 font-medium">Как получить баллы:</div>
+                    <ul class="list-disc pl-6 text-gray-700 text-sm mb-4">
+                        <li>Стрижка — 100 баллов</li>
+                        <li>Окрашивание — 150 баллов</li>
+                        <li>Маникюр/Педикюр — 80 баллов</li>
+                        <li>Другая услуга — 50 баллов</li>
+                    </ul>
+                    <div class="mb-2 font-medium">На что можно потратить баллы:</div>
+                    <ul class="list-disc pl-6 text-gray-700 text-sm">
+                        <li>500 баллов — скидка 10%</li>
+                        <li>1000 баллов — бесплатная укладка или уход</li>
+                    </ul>
                 </div>
                 <!-- Login Content -->
                 <div class="p-6 hidden" id="tab-content-login">
@@ -114,7 +138,9 @@
             const contents = {
                 profile: document.getElementById('tab-content-profile'),
                 login: document.getElementById('tab-content-login'),
-                register: document.getElementById('tab-content-register')
+                register: document.getElementById('tab-content-register'),
+                records: document.getElementById('tab-content-records'),
+                points: document.getElementById('tab-content-points')
             };
             tabs.forEach(t => {
                 t.classList.remove('text-pink-600', 'border-pink-600');
@@ -126,9 +152,15 @@
             } else if (tab === 'login') {
                 tabs[1].classList.add('text-pink-600', 'border-pink-600');
                 tabs[1].classList.remove('text-gray-500');
-            } else {
+            } else if (tab === 'register') {
                 tabs[2].classList.add('text-pink-600', 'border-pink-600');
                 tabs[2].classList.remove('text-gray-500');
+            } else if (tab === 'records') {
+                tabs[3].classList.add('text-pink-600', 'border-pink-600');
+                tabs[3].classList.remove('text-gray-500');
+            } else {
+                tabs[4].classList.add('text-pink-600', 'border-pink-600');
+                tabs[4].classList.remove('text-gray-500');
             }
             Object.values(contents).forEach(c => c.classList.add('hidden'));
             contents['tab-content-' + tab] ? contents['tab-content-' + tab].classList.remove('hidden') : contents[tab].classList.remove('hidden');
@@ -158,14 +190,20 @@
             const tabProfile = document.querySelector('#tabs button[data-tab="profile"]');
             const tabLogin = document.querySelector('#tabs button[data-tab="login"]');
             const tabRegister = document.querySelector('#tabs button[data-tab="register"]');
+            const tabRecords = document.querySelector('#tabs button[data-tab="records"]');
+            const tabPoints = document.querySelector('#tabs button[data-tab="points"]');
             if (isAuth) {
                 tabProfile.classList.remove('hidden');
                 tabLogin.classList.add('hidden');
                 tabRegister.classList.add('hidden');
+                tabRecords.classList.remove('hidden');
+                tabPoints.classList.remove('hidden');
             } else {
                 tabProfile.classList.add('hidden');
                 tabLogin.classList.remove('hidden');
                 tabRegister.classList.remove('hidden');
+                tabRecords.classList.add('hidden');
+                tabPoints.classList.add('hidden');
             }
         }
         document.addEventListener('DOMContentLoaded', function() {
@@ -173,7 +211,9 @@
             const contents = {
                 profile: document.getElementById('tab-content-profile'),
                 login: document.getElementById('tab-content-login'),
-                register: document.getElementById('tab-content-register')
+                register: document.getElementById('tab-content-register'),
+                records: document.getElementById('tab-content-records'),
+                points: document.getElementById('tab-content-points')
             };
             // --- Переключение вкладок ---
             tabs.forEach(tab => {
@@ -249,6 +289,71 @@
             };
             profileBlock.appendChild(logoutBtn);
         });
+        // --- ДОБАВЛЯЕМ ЛОГИКУ ЗАПИСЕЙ И БАЛЛОВ ---
+        function getRecords(email) {
+            return JSON.parse(localStorage.getItem('sspro_records_' + email) || '[]');
+        }
+        function saveRecords(email, records) {
+            localStorage.setItem('sspro_records_' + email, JSON.stringify(records));
+        }
+        function getPoints(email) {
+            return parseInt(localStorage.getItem('sspro_points_' + email) || '0', 10);
+        }
+        function addPoints(email, amount) {
+            let points = getPoints(email) + amount;
+            localStorage.setItem('sspro_points_' + email, points);
+        }
+        function renderRecords(email) {
+            const list = document.getElementById('records-list');
+            list.innerHTML = '';
+            const records = getRecords(email);
+            if (records.length === 0) {
+                list.innerHTML = '<div class="text-gray-500">У вас пока нет записей.</div>';
+                return;
+            }
+            records.forEach((rec, idx) => {
+                const div = document.createElement('div');
+                div.className = 'p-4 bg-gray-100 rounded-md flex flex-col md:flex-row md:items-center md:justify-between';
+                div.innerHTML = `<div><b>${rec.service}</b><br><span class='text-gray-500 text-sm'>${rec.date}</span></div>
+                    <div class='mt-2 md:mt-0'>
+                        <span class='px-2 py-1 rounded ${rec.status==='Выполнено'?'bg-green-200 text-green-800':'bg-yellow-100 text-yellow-700'}'>${rec.status}</span>
+                        ${rec.status!=='Выполнено'?'<button class="ml-2 px-3 py-1 bg-pink-600 text-white rounded hover:bg-pink-700 transition" onclick="confirmRecord(\''+rec.id+'\')">Подтвердить</button>':''}
+                    </div>`;
+                list.appendChild(div);
+            });
+        }
+        function renderPoints(email) {
+            document.getElementById('points-balance').textContent = getPoints(email);
+        }
+        // --- Подтверждение записи (для теста) ---
+        window.confirmRecord = function(id) {
+            const email = getCurrentUser();
+            let records = getRecords(email);
+            let rec = records.find(r => r.id === id);
+            if (rec && rec.status !== 'Выполнено') {
+                rec.status = 'Выполнено';
+                // Начисляем баллы по услуге
+                let points = 0;
+                if (/стрижка/i.test(rec.service)) points = 100;
+                else if (/окрашив/i.test(rec.service)) points = 150;
+                else if (/маникюр|педикюр/i.test(rec.service)) points = 80;
+                else points = 50;
+                addPoints(email, points);
+                saveRecords(email, records);
+                renderRecords(email);
+                renderPoints(email);
+                alert('Услуга подтверждена, баллы начислены!');
+            }
+        }
+        // --- При входе/регистрации рендерим записи и баллы ---
+        function afterAuth(email) {
+            renderRecords(email);
+            renderPoints(email);
+        }
+        // --- Вызов afterAuth после входа/регистрации/подтверждения ---
+        // Вызвать afterAuth(email) после showTab('profile') и updateTabsVisibility(true)
+        // ... existing code ...
+        // Вызвать afterAuth(email) после успешного входа/регистрации
     </script>
 </body>
 </html>
