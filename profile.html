@@ -153,6 +153,21 @@
             // Показываем ссылку "Профиль" в шапке
             document.getElementById('profile-link').classList.remove('hidden');
         }
+        // --- ДОБАВЛЯЕМ ЛОГИКУ ДЛЯ СКРЫТИЯ ВКЛАДОК ---
+        function updateTabsVisibility(isAuth) {
+            const tabProfile = document.querySelector('#tabs button[data-tab="profile"]');
+            const tabLogin = document.querySelector('#tabs button[data-tab="login"]');
+            const tabRegister = document.querySelector('#tabs button[data-tab="register"]');
+            if (isAuth) {
+                tabProfile.classList.remove('hidden');
+                tabLogin.classList.add('hidden');
+                tabRegister.classList.add('hidden');
+            } else {
+                tabProfile.classList.add('hidden');
+                tabLogin.classList.remove('hidden');
+                tabRegister.classList.remove('hidden');
+            }
+        }
         document.addEventListener('DOMContentLoaded', function() {
             const tabs = document.querySelectorAll('#tabs button');
             const contents = {
@@ -174,11 +189,14 @@
                 if (user) {
                     renderProfile(user);
                     showTab('profile');
+                    updateTabsVisibility(true);
                 } else {
                     showTab('login');
+                    updateTabsVisibility(false);
                 }
             } else {
                 showTab('login');
+                updateTabsVisibility(false);
             }
             // --- Вход ---
             contents.login.querySelector('form').addEventListener('submit', function(e) {
@@ -191,6 +209,7 @@
                     setCurrentUser(email);
                     renderProfile(user);
                     showTab('profile');
+                    updateTabsVisibility(true);
                 } else {
                     alert('Неверный email или пароль');
                 }
@@ -217,6 +236,7 @@
                 setCurrentUser(email);
                 renderProfile({ name, email, phone, date });
                 showTab('profile');
+                updateTabsVisibility(true);
             });
             // --- Выход ---
             const profileBlock = contents.profile;
@@ -225,6 +245,7 @@
             logoutBtn.className = 'mt-4 w-full bg-gray-200 text-pink-600 py-2 px-4 rounded-md hover:bg-gray-300 transition';
             logoutBtn.onclick = function() {
                 logout();
+                updateTabsVisibility(false);
             };
             profileBlock.appendChild(logoutBtn);
         });
