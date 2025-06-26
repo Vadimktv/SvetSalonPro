@@ -141,12 +141,15 @@
                                         <label for="service" class="block text-gray-700 font-medium mb-2">Услуга</label>
                                         <select id="service" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" required>
                                             <option value="" disabled selected>Выберите услугу</option>
-                                            <option value="haircut">Стрижка (от 1500 ₽)</option>
-                                            <option value="coloring">Окрашивание (от 3000 ₽)</option>
-                                            <option value="styling">Укладка (от 1200 ₽)</option>
-                                            <option value="manicure">Маникюр (от 1800 ₽)</option>
-                                            <option value="pedicure">Педикюр (от 2200 ₽)</option>
-                                            <option value="haircare">Уход за волосами (от 2500 ₽)</option>
+                                            <option value="spa">SPA процедуры (от 800 ₽)</option>
+                                            <option value="womens_haircut">Женская стрижка (от 700 ₽)</option>
+                                            <option value="mens_haircut">Мужская стрижка (от 700 ₽)</option>
+                                            <option value="mens_machine">Мужская стрижка под машинку (от 600 ₽)</option>
+                                            <option value="coloring">Окрашивание волос (от 800 ₽)</option>
+                                            <option value="highlighting">Мелирование волос (1200 ₽)</option>
+                                            <option value="lamination">Ламинирование волос (1000 ₽)</option>
+                                            <option value="coloristics">Колористика волос (от 2800 ₽)</option>
+                                            <option value="gel">Укрепление гелем (1300 ₽)</option>
                                         </select>
                                     </div>
                                     <button type="submit" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-medium py-3 px-6 rounded-lg transition shadow-md hover:shadow-lg">Записаться</button>
@@ -425,6 +428,95 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section id="reviews" class="py-20 bg-pink-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800 animate-on-scroll">Отзывы клиентов</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white rounded-lg shadow-md p-6 animate-on-scroll">
+                    <div class="font-bold text-pink-600 mb-2">Анна, Геленджик</div>
+                    <div class="text-gray-700 mb-2">Очень понравился сервис и атмосфера! Мастер учёл все мои пожелания. Приду ещё!</div>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6 animate-on-scroll">
+                    <div class="font-bold text-pink-600 mb-2">Мария, Краснодар</div>
+                    <div class="text-gray-700 mb-2">Потрясающий салон! Делала окрашивание — результат превзошёл ожидания.</div>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6 animate-on-scroll">
+                    <div class="font-bold text-pink-600 mb-2">Екатерина, Москва</div>
+                    <div class="text-gray-700 mb-2">Очень уютно, чисто и профессионально. Спасибо мастеру Светлане!</div>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6 animate-on-scroll">
+                    <div class="font-bold text-pink-600 mb-2">Ольга, Геленджик</div>
+                    <div class="text-gray-700 mb-2">Маникюр держится уже 3 недели! Очень довольна качеством услуг.</div>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6 animate-on-scroll">
+                    <div class="font-bold text-pink-600 mb-2">Светлана, Новороссийск</div>
+                    <div class="text-gray-700 mb-2">Делала стрижку и укладку — всё на высшем уровне. Рекомендую!</div>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6 animate-on-scroll">
+                    <div class="font-bold text-pink-600 mb-2">Ирина, Анапа</div>
+                    <div class="text-gray-700 mb-2">Очень понравился подход мастеров и приятная атмосфера в салоне.</div>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6 animate-on-scroll">
+                    <div class="font-bold text-pink-600 mb-2">Татьяна, Геленджик</div>
+                    <div class="text-gray-700 mb-2">Записалась онлайн, всё быстро и удобно. Спасибо за сервис!</div>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6 animate-on-scroll">
+                    <div class="font-bold text-pink-600 mb-2">Виктория, Сочи</div>
+                    <div class="text-gray-700 mb-2">Лучший салон в городе! Всегда выхожу с отличным настроением.</div>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6 animate-on-scroll">
+                    <div class="font-bold text-pink-600 mb-2">Александра, Геленджик</div>
+                    <div class="text-gray-700 mb-2">Делала ламинирование волос — волосы блестят и выглядят шикарно!</div>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6 animate-on-scroll">
+                    <div class="font-bold text-pink-600 mb-2">Елена, Краснодар</div>
+                    <div class="text-gray-700 mb-2">Очень понравился педикюр, мастер очень аккуратная и внимательная.</div>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6 animate-on-scroll">
+                    <div class="font-bold text-pink-600 mb-2">Дарья, Москва</div>
+                    <div class="text-gray-700 mb-2">Записалась на SPA-процедуры — получила море удовольствия и релакса!</div>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6 animate-on-scroll">
+                    <div class="font-bold text-pink-600 mb-2">Юлия, Геленджик</div>
+                    <div class="text-gray-700 mb-2">Очень понравился результат окрашивания, цвет получился идеальным.</div>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6 animate-on-scroll">
+                    <div class="font-bold text-pink-600 mb-2">Валентина, Ростов-на-Дону</div>
+                    <div class="text-gray-700 mb-2">Делала маникюр и педикюр — всё стерильно и красиво. Спасибо!</div>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6 animate-on-scroll">
+                    <div class="font-bold text-pink-600 mb-2">Анастасия, Геленджик</div>
+                    <div class="text-gray-700 mb-2">Очень понравился сервис, мастера — настоящие профессионалы!</div>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6 animate-on-scroll">
+                    <div class="font-bold text-pink-600 mb-2">Маргарита, Сочи</div>
+                    <div class="text-gray-700 mb-2">Делала колористику — результат просто вау! Спасибо!</div>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6 animate-on-scroll">
+                    <div class="font-bold text-pink-600 mb-2">Полина, Анапа</div>
+                    <div class="text-gray-700 mb-2">Очень понравился уход за волосами, волосы стали мягкими и блестящими.</div>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6 animate-on-scroll">
+                    <div class="font-bold text-pink-600 mb-2">Ксения, Геленджик</div>
+                    <div class="text-gray-700 mb-2">Записалась на стрижку — всё быстро, качественно и по доступной цене.</div>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6 animate-on-scroll">
+                    <div class="font-bold text-pink-600 mb-2">София, Москва</div>
+                    <div class="text-gray-700 mb-2">Очень понравился салон, обязательно приду ещё!</div>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6 animate-on-scroll">
+                    <div class="font-bold text-pink-600 mb-2">Вероника, Краснодар</div>
+                    <div class="text-gray-700 mb-2">Мастера очень внимательные, всегда советуют лучший уход.</div>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6 animate-on-scroll">
+                    <div class="font-bold text-pink-600 mb-2">Алиса, Геленджик</div>
+                    <div class="text-gray-700 mb-2">Спасибо за отличный сервис и индивидуальный подход!</div>
                 </div>
             </div>
         </div>
