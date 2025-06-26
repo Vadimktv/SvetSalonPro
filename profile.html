@@ -89,6 +89,54 @@
         </div>
     </main>
     <script>
+        // --- ЛОКАЛЬНАЯ АВТОРИЗАЦИЯ ---
+        function getUsers() {
+            return JSON.parse(localStorage.getItem('sspro_users') || '[]');
+        }
+        function saveUsers(users) {
+            localStorage.setItem('sspro_users', JSON.stringify(users));
+        }
+        function setCurrentUser(email) {
+            localStorage.setItem('sspro_current', email);
+        }
+        function getCurrentUser() {
+            return localStorage.getItem('sspro_current');
+        }
+        function logout() {
+            localStorage.removeItem('sspro_current');
+            showTab('login');
+        }
+        function showTab(tab) {
+            const tabs = document.querySelectorAll('#tabs button');
+            const contents = {
+                profile: document.getElementById('tab-content-profile'),
+                login: document.getElementById('tab-content-login'),
+                register: document.getElementById('tab-content-register')
+            };
+            tabs.forEach(t => {
+                t.classList.remove('text-pink-600', 'border-pink-600');
+                t.classList.add('text-gray-500');
+            });
+            if (tab === 'profile') {
+                tabs[0].classList.add('text-pink-600', 'border-pink-600');
+                tabs[0].classList.remove('text-gray-500');
+            } else if (tab === 'login') {
+                tabs[1].classList.add('text-pink-600', 'border-pink-600');
+                tabs[1].classList.remove('text-gray-500');
+            } else {
+                tabs[2].classList.add('text-pink-600', 'border-pink-600');
+                tabs[2].classList.remove('text-gray-500');
+            }
+            Object.values(contents).forEach(c => c.classList.add('hidden'));
+            contents['tab-content-' + tab] ? contents['tab-content-' + tab].classList.remove('hidden') : contents[tab].classList.remove('hidden');
+        }
+        function renderProfile(user) {
+            document.querySelector('#tab-content-profile h3').textContent = user.name;
+            document.querySelector('#tab-content-profile p').textContent = user.phone;
+            document.querySelector('#tab-content-profile input[type=email]').value = user.email;
+            document.querySelector('#tab-content-profile input[type=text]').value = user.date || '';
+            document.querySelector('#tab-content-profile input[readonly][value="Активный"]').value = 'Активный';
+        }
         document.addEventListener('DOMContentLoaded', function() {
             const tabs = document.querySelectorAll('#tabs button');
             const contents = {
@@ -96,23 +144,73 @@
                 login: document.getElementById('tab-content-login'),
                 register: document.getElementById('tab-content-register')
             };
+            // --- Переключение вкладок ---
             tabs.forEach(tab => {
                 tab.addEventListener('click', function() {
-                    // Remove active class from all tabs
-                    tabs.forEach(t => {
-                        t.classList.remove('text-pink-600', 'border-pink-600');
-                        t.classList.add('text-gray-500');
-                    });
-                    // Add active class to clicked tab
-                    this.classList.add('text-pink-600', 'border-pink-600');
-                    this.classList.remove('text-gray-500');
-                    // Hide all contents
-                    Object.values(contents).forEach(c => c.classList.add('hidden'));
-                    // Show selected content
-                    const tabName = this.getAttribute('data-tab');
-                    contents[tabName].classList.remove('hidden');
+                    showTab(this.getAttribute('data-tab'));
                 });
             });
+            // --- Проверка входа ---
+            const current = getCurrentUser();
+            if (current) {
+                const users = getUsers();
+                const user = users.find(u => u.email === current);
+                if (user) {
+                    renderProfile(user);
+                    showTab('profile');
+                } else {
+                    showTab('login');
+                }
+            } else {
+                showTab('login');
+            }
+            // --- Вход ---
+            contents.login.querySelector('form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = this.querySelector('input[type=email]').value.trim();
+                const password = this.querySelector('input[type=password]').value;
+                const users = getUsers();
+                const user = users.find(u => u.email === email && u.password === password);
+                if (user) {
+                    setCurrentUser(email);
+                    renderProfile(user);
+                    showTab('profile');
+                } else {
+                    alert('Неверный email или пароль');
+                }
+            });
+            // --- Регистрация ---
+            contents.register.querySelector('form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const name = this.querySelector('input[type=text]').value.trim();
+                const email = this.querySelector('input[type=email]').value.trim();
+                const phone = this.querySelector('input[type=tel]').value.trim();
+                const password = this.querySelector('input[type=password]').value;
+                if (!name || !email || !phone || !password) {
+                    alert('Пожалуйста, заполните все поля');
+                    return;
+                }
+                let users = getUsers();
+                if (users.find(u => u.email === email)) {
+                    alert('Пользователь с таким email уже зарегистрирован');
+                    return;
+                }
+                const date = new Date().toLocaleDateString('ru-RU');
+                users.push({ name, email, phone, password, date });
+                saveUsers(users);
+                setCurrentUser(email);
+                renderProfile({ name, email, phone, date });
+                showTab('profile');
+            });
+            // --- Выход ---
+            const profileBlock = contents.profile;
+            let logoutBtn = document.createElement('button');
+            logoutBtn.textContent = 'Выйти';
+            logoutBtn.className = 'mt-4 w-full bg-gray-200 text-pink-600 py-2 px-4 rounded-md hover:bg-gray-300 transition';
+            logoutBtn.onclick = function() {
+                logout();
+            };
+            profileBlock.appendChild(logoutBtn);
         });
     </script>
 </body>
