@@ -79,6 +79,40 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        /* Кнопки */
+        .btn, .bg-pink-600, .bg-pink-700 {
+            transition: background 0.3s, box-shadow 0.3s, transform 0.2s;
+        }
+        .btn:hover, .bg-pink-600:hover, .bg-pink-700:hover {
+            filter: brightness(0.95);
+            box-shadow: 0 8px 24px 0 rgba(236,72,153,0.15);
+            transform: translateY(-2px) scale(1.03);
+        }
+        /* Ссылки */
+        .link, .nav-link {
+            transition: color 0.3s, text-shadow 0.3s;
+        }
+        .link:hover, .nav-link:hover {
+            color: #ec4899 !important;
+            text-shadow: 0 2px 8px rgba(236,72,153,0.08);
+        }
+        /* Изображения */
+        .img-hover, .service-card img, .bg-white img, .rounded-lg img {
+            transition: transform 0.4s cubic-bezier(.4,0,.2,1), box-shadow 0.3s;
+        }
+        .img-hover:hover, .service-card img:hover, .bg-white img:hover, .rounded-lg img:hover {
+            transform: scale(1.05) rotate(-1deg);
+            box-shadow: 0 8px 24px 0 rgba(236,72,153,0.10);
+        }
+        /* Карточки */
+        .card-hover, .service-card, .bg-white.rounded-lg.shadow-md, .bg-white.p-8.rounded-xl.shadow-md {
+            transition: box-shadow 0.3s, transform 0.3s;
+        }
+        .card-hover:hover, .service-card:hover, .bg-white.rounded-lg.shadow-md:hover, .bg-white.p-8.rounded-xl.shadow-md:hover {
+            box-shadow: 0 16px 32px 0 rgba(236,72,153,0.18);
+            transform: translateY(-6px) scale(1.02);
+        }
     </style>
 </head>
 <body class="font-sans bg-white text-gray-800">
