@@ -114,6 +114,32 @@
             box-shadow: 0 16px 32px 0 rgba(236,72,153,0.18);
             transform: translateY(-6px) scale(1.02);
         }
+        body {
+            background: linear-gradient(90deg, #fdf2f8, #f3e8ff, #f0fdfa, #fdf2f8);
+            background-size: 400% 400%;
+            animation: gradientBG 12s ease infinite;
+        }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .hero-gradient-decor {
+            position: absolute;
+            z-index: 0;
+            pointer-events: none;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.5;
+        }
+        .footer-gradient-decor {
+            position: absolute;
+            z-index: 0;
+            pointer-events: none;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+        }
     </style>
 </head>
 <body class="font-sans bg-white text-gray-800">
@@ -150,7 +176,9 @@
     </script>
 
     <!-- Hero Section -->
-    <section id="home" class="hero-section pt-32 pb-20 md:pt-40 md:pb-32" data-aos="fade-up">
+    <section id="home" class="hero-section pt-32 pb-20 md:pt-40 md:pb-32 relative" data-aos="fade-up">
+        <div class="hero-gradient-decor" style="width: 420px; height: 420px; top: -120px; left: -120px; background: radial-gradient(circle, #f3e8ff 0%, #fdf2f8 80%, transparent 100%);"></div>
+        <div class="hero-gradient-decor" style="width: 320px; height: 320px; bottom: -80px; right: -80px; background: radial-gradient(circle, #f0fdfa 0%, #fdf2f8 80%, transparent 100%);"></div>
         <div class="container mx-auto px-4 text-center">
             <!-- Booking Section (moved here) -->
             <section id="booking" class="py-20">
@@ -589,7 +617,9 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-12">
+    <footer class="bg-gray-900 text-white py-12 relative">
+        <div class="footer-gradient-decor" style="width: 320px; height: 320px; left: -100px; bottom: -100px; background: radial-gradient(circle, #f3e8ff 0%, #fdf2f8 80%, transparent 100%);"></div>
+        <div class="footer-gradient-decor" style="width: 220px; height: 220px; right: -60px; top: -60px; background: radial-gradient(circle, #f0fdfa 0%, #fdf2f8 80%, transparent 100%);"></div>
         <div class="container mx-auto px-4">
             <div class="flex flex-col md:flex-row justify-between items-center">
                 <div class="mb-6 md:mb-0">
