@@ -16,8 +16,6 @@
             width: 40px;
             object-fit: cover;
             border-radius: 9999px;
-            background-color: #ec4899;
-            padding: 4px;
             transition: transform 0.3s ease;
         }
         .logo-image:hover {
@@ -155,6 +153,11 @@
             background: rgba(255, 255, 255, 0.35);
             transform: translateY(-8px) scale(1.03);
         }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeInUp { animation: fadeInUp 0.4s cubic-bezier(.4,0,.2,1) both; }
     </style>
 </head>
 <body class="font-sans bg-white text-gray-800">
@@ -165,7 +168,7 @@
     <header class="fixed w-full bg-white shadow-sm z-50">
         <div class="container mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center">
-                <img src="images/logo.png" alt="SvetSalonPro" class="logo-image mr-3 rounded-full bg-pink-600 p-1">
+                <a href="#" class="logo-link"><img src="images/logo.png" alt="SvetSalonPro" class="logo-image mr-3"></a>
                 <h1 class="text-2xl font-bold text-pink-600">SvetSalonPro</h1>
             </div>
             <nav class="hidden md:flex space-x-8">
@@ -235,30 +238,24 @@
                                 <form class="animate-on-scroll" action="/api/register" method="POST">
                                     <div class="mb-6">
                                         <label for="name" class="block text-gray-700 font-medium mb-2">Ваше имя</label>
-                                        <input type="text" id="name" name="name" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" placeholder="Иван Иванов" required>
+                                        <input type="text" id="name" name="name" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" placeholder="" required oninput="if(this.value.length>0){this.value=this.value.charAt(0).toUpperCase()+this.value.slice(1);} ">
                                     </div>
                                     <div class="mb-6">
                                         <label for="phone" class="block text-gray-700 font-medium mb-2">Телефон</label>
-                                        <input type="tel" id="phone" name="phone" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" placeholder="+7 (___) ___-__-__" required>
+                                        <input type="tel" id="phone" name="phone" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" placeholder="+7 (___) ___-__-__" value="+7 " oninput="if(!this.value.startsWith('+7'))this.value='+7 ';" required>
                                     </div>
                                     <div class="mb-6">
-                                        <label for="datetime" class="block text-gray-700 font-medium mb-2">Дата и время визита</label>
-                                        <input type="datetime-local" id="datetime" name="datetime" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" required>
+                                        <label for="date" class="block text-gray-700 font-medium mb-2">Дата визита</label>
+                                        <input type="date" id="date" name="date" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent mb-4" required>
                                     </div>
-                                    <div class="mb-8">
+                                    <div class="mb-6">
+                                        <label for="time" class="block text-gray-700 font-medium mb-2">Время визита</label>
+                                        <input type="time" id="time" name="time" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" required>
+                                    </div>
+                                    <div class="mb-8 relative">
                                         <label for="service" class="block text-gray-700 font-medium mb-2">Услуга</label>
-                                        <select id="service" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" required>
-                                            <option value="" disabled selected>Выберите услугу</option>
-                                            <option value="spa">SPA процедуры (от 800 ₽)</option>
-                                            <option value="womens_haircut">Женская стрижка (от 700 ₽)</option>
-                                            <option value="mens_haircut">Мужская стрижка (от 700 ₽)</option>
-                                            <option value="mens_machine">Мужская стрижка под машинку (от 600 ₽)</option>
-                                            <option value="coloring">Окрашивание волос (от 800 ₽)</option>
-                                            <option value="highlighting">Мелирование волос (1200 ₽)</option>
-                                            <option value="lamination">Ламинирование волос (1000 ₽)</option>
-                                            <option value="coloristics">Колористика волос (от 2800 ₽)</option>
-                                            <option value="gel">Укрепление гелем (1300 ₽)</option>
-                                        </select>
+                                        <input type="text" id="serviceDisplay" name="serviceDisplay" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent cursor-pointer bg-white" placeholder="Выберите услугу" readonly required onclick="openServiceModal()">
+                                        <input type="hidden" id="service" name="service" required>
                                     </div>
                                     <button type="submit" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-medium py-3 px-6 rounded-lg transition shadow-md hover:shadow-lg">Записаться</button>
                                 </form>
@@ -583,10 +580,10 @@
             <div class="flex flex-col md:flex-row justify-between items-center">
                 <div class="mb-6 md:mb-0">
                     <div class="flex items-center">
-                        <div class="w-10 h-10 rounded-full bg-pink-600 flex items-center justify-center text-white font-bold mr-3">SSP</div>
+                        <a href="#" class="logo-link"><img src="images/logo.png" alt="SvetSalonPro" class="logo-image mr-3"></a>
                         <h2 class="text-2xl font-bold">SvetSalonPro</h2>
                     </div>
-                    <p class="text-gray-400 mt-2">Салон красоты премиум-класса в Геленджике</p>
+                    <p class="text-gray-400 mt-2">Салон красоты в Геленджике Одесская 3А корпус 10</p>
                 </div>
                 
                 <div class="flex space-x-6 mb-6 md:mb-0">
@@ -716,12 +713,22 @@
 
         const name = form.querySelector('input[name="name"]').value;
         const phone = form.querySelector('input[name="phone"]').value;
-        const date = form.querySelector('input[name="datetime"]').value;
+        const date = form.querySelector('input[name="date"]').value;
+        const time = form.querySelector('input[name="time"]').value;
+        if (!date || !time) {
+          alert('Пожалуйста, выберите дату и время визита!');
+          return;
+        }
         // TODO: Проверить доступность выбранного слота по дате и времени
         // Если занято — подсветить поле и не отправлять форму
 
-        const formattedDate = date.replace('T', ' ');
-        const text = `💬 Новая запись:\n👤 Имя: ${name}\n📞 Телефон: ${phone}\n📅 Дата и время: ${formattedDate}`;
+        // Форматируем дату в ДД.ММ
+        var parts = date.split('-');
+        let formattedDate = '';
+        if (parts.length === 3) {
+          formattedDate = parts[2] + '.' + parts[1];
+        }
+        const text = `💬 Новая запись:\n👤 Имя: ${name}\n📞 Телефон: ${phone}\n📅 Дата и время: ${formattedDate} ${time}`;
 
         const chatIds = ["339033504", "1366208620"]; // основной ID и ID Светланы
 
@@ -797,6 +804,57 @@
         768: { slidesPerView: 2 },
         1024: { slidesPerView: 3 }
       }
+    });
+    </script>
+
+    <script>
+    document.querySelectorAll('.logo-link').forEach(function(logo) {
+      logo.addEventListener('click', function(e) {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+    </script>
+
+    <!-- Модальное окно выбора услуги -->
+    <div id="serviceModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden" style="backdrop-filter: blur(2px);">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md animate-fadeInUp">
+            <h3 class="text-xl font-bold mb-6 text-center">Выберите услугу</h3>
+            <div id="serviceOptions" class="space-y-3">
+                <button type="button" class="service-option w-full text-left px-6 py-3 rounded-lg border border-gray-200 hover:bg-pink-100 transition" data-value="spa">SPA процедуры (от 800 ₽)</button>
+                <button type="button" class="service-option w-full text-left px-6 py-3 rounded-lg border border-gray-200 hover:bg-pink-100 transition" data-value="womens_haircut">Женская стрижка (от 700 ₽)</button>
+                <button type="button" class="service-option w-full text-left px-6 py-3 rounded-lg border border-gray-200 hover:bg-pink-100 transition" data-value="mens_haircut">Мужская стрижка (от 700 ₽)</button>
+                <button type="button" class="service-option w-full text-left px-6 py-3 rounded-lg border border-gray-200 hover:bg-pink-100 transition" data-value="mens_machine">Мужская стрижка под машинку (от 600 ₽)</button>
+                <button type="button" class="service-option w-full text-left px-6 py-3 rounded-lg border border-gray-200 hover:bg-pink-100 transition" data-value="coloring">Окрашивание волос (от 800 ₽)</button>
+                <button type="button" class="service-option w-full text-left px-6 py-3 rounded-lg border border-gray-200 hover:bg-pink-100 transition" data-value="highlighting">Мелирование волос (1200 ₽)</button>
+                <button type="button" class="service-option w-full text-left px-6 py-3 rounded-lg border border-gray-200 hover:bg-pink-100 transition" data-value="lamination">Ламинирование волос (1000 ₽)</button>
+                <button type="button" class="service-option w-full text-left px-6 py-3 rounded-lg border border-gray-200 hover:bg-pink-100 transition" data-value="coloristics">Колористика волос (от 2800 ₽)</button>
+                <button type="button" class="service-option w-full text-left px-6 py-3 rounded-lg border border-gray-200 hover:bg-pink-100 transition" data-value="gel">Укрепление гелем (1300 ₽)</button>
+            </div>
+            <button type="button" onclick="closeServiceModal()" class="mt-8 w-full py-2 rounded-lg bg-gray-200 hover:bg-gray-300 transition">Отмена</button>
+        </div>
+    </div>
+
+    <script>
+    function openServiceModal() {
+        document.getElementById('serviceModal').classList.remove('hidden');
+    }
+    function closeServiceModal() {
+        document.getElementById('serviceModal').classList.add('hidden');
+    }
+    document.querySelectorAll('.service-option').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.getElementById('serviceDisplay').value = this.textContent;
+            document.getElementById('service').value = this.getAttribute('data-value');
+            closeServiceModal();
+        });
+    });
+    // Закрытие по клику вне окна
+    window.addEventListener('click', function(e) {
+        const modal = document.getElementById('serviceModal');
+        if (!modal.classList.contains('hidden') && e.target === modal) {
+            closeServiceModal();
+        }
     });
     </script>
 </body>
