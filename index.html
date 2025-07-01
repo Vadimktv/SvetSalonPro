@@ -141,6 +141,20 @@
             filter: blur(80px);
             opacity: 0.4;
         }
+        .glass-card, .service-card, .bg-white.rounded-lg.shadow-md, .bg-white.p-8.rounded-xl.shadow-md {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(236, 72, 153, 0.12), 0 1.5px 6px rgba(236, 72, 153, 0.08);
+            transition: box-shadow 0.3s, transform 0.3s, background 0.3s;
+        }
+        .glass-card:hover, .service-card:hover, .bg-white.rounded-lg.shadow-md:hover, .bg-white.p-8.rounded-xl.shadow-md:hover {
+            box-shadow: 0 16px 48px rgba(236, 72, 153, 0.18), 0 3px 12px rgba(236, 72, 153, 0.12);
+            background: rgba(255, 255, 255, 0.35);
+            transform: translateY(-8px) scale(1.03);
+        }
     </style>
 </head>
 <body class="font-sans bg-white text-gray-800">
