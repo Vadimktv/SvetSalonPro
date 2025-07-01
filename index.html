@@ -53,9 +53,38 @@
             background-color: #ec4899;
             margin-top: 2px;
         }
+
+        #page-preloader {
+            position: fixed;
+            left: 0; top: 0; right: 0; bottom: 0;
+            background: #fff;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease;
+        }
+        #page-preloader.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+        #page-preloader .spinner {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: spin 1.2s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body class="font-sans bg-white text-gray-800">
+    <div id="page-preloader">
+        <div class="spinner"><img src="images/logo.png" alt="Loading..." style="width:64px;height:64px;"></div>
+    </div>
     <!-- Header -->
     <header class="fixed w-full bg-white shadow-sm z-50">
         <div class="container mx-auto px-4 py-4 flex justify-between items-center">
@@ -706,7 +735,17 @@
       });
     });
     </script>
-</section>
 
+    <script>
+    window.addEventListener('load', function () {
+      const preloader = document.getElementById('page-preloader');
+      if (preloader) {
+        preloader.classList.add('hide');
+        setTimeout(() => {
+          preloader.style.display = 'none';
+        }, 600);
+      }
+    });
+    </script>
 </body>
 </html>
