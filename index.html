@@ -258,7 +258,7 @@
                                   }
                                 </script>
                                 -->
-                                <form class="animate-on-scroll" action="/api/register" method="POST">
+                                <form class="animate-on-scroll" id="bookingForm" onsubmit="handleFormSubmit(event)">
                                     <div class="mb-6">
                                         <label for="name" class="block text-gray-700 font-medium mb-2">Ваше имя</label>
                                         <input type="text" id="name" name="name" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" placeholder="" required oninput="if(this.value.length>0){this.value=this.value.charAt(0).toUpperCase()+this.value.slice(1);} ">
@@ -933,6 +933,83 @@
     document.addEventListener('DOMContentLoaded', function() {
         updateServiceOptions();
     });
+
+    // Обработка отправки формы
+    async function handleFormSubmit(event) {
+        event.preventDefault();
+        
+        const form = event.target;
+        const submitButton = form.querySelector('button[type="submit"]');
+        const originalText = submitButton.textContent;
+        
+        // Проверяем, что выбрана услуга
+        const serviceSelect = document.getElementById('service');
+        if (!serviceSelect.value) {
+            alert('Пожалуйста, выберите услугу');
+            return;
+        }
+        
+        // Блокируем кнопку и показываем загрузку
+        submitButton.disabled = true;
+        submitButton.textContent = 'Отправляем...';
+        
+        try {
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData);
+            
+            const response = await fetch('/api/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                // Показываем успешное сообщение
+                showNotification(result.message, 'success');
+                form.reset();
+                updateServiceOptions(); // Сбрасываем выбор услуг
+            } else {
+                // Показываем ошибку
+                showNotification(result.message || 'Произошла ошибка при отправке', 'error');
+            }
+        } catch (error) {
+            console.error('Ошибка:', error);
+            showNotification('Произошла ошибка при отправке. Попробуйте позже.', 'error');
+        } finally {
+            // Восстанавливаем кнопку
+            submitButton.disabled = false;
+            submitButton.textContent = originalText;
+        }
+    }
+
+    // Функция показа уведомлений
+    function showNotification(message, type = 'info') {
+        // Создаем элемент уведомления
+        const notification = document.createElement('div');
+        notification.className = `fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 max-w-sm ${
+            type === 'success' ? 'bg-green-500 text-white' : 
+            type === 'error' ? 'bg-red-500 text-white' : 
+            'bg-blue-500 text-white'
+        }`;
+        notification.textContent = message;
+        
+        // Добавляем на страницу
+        document.body.appendChild(notification);
+        
+        // Автоматически скрываем через 5 секунд
+        setTimeout(() => {
+            notification.remove();
+        }, 5000);
+        
+        // Возможность закрыть вручную
+        notification.addEventListener('click', () => {
+            notification.remove();
+        });
+    }
     </script>
 </body>
 </html>
