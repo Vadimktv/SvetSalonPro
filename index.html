@@ -215,27 +215,65 @@
             -webkit-tap-highlight-color: transparent;
         }
         
+        /* Оптимизация прокрутки */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Убираем задержки при прокрутке */
+        .animate-on-scroll {
+            will-change: auto;
+        }
+        
+        /* Оптимизация для мобильных устройств */
+        @media (max-width: 768px) {
+            html {
+                scroll-behavior: auto;
+            }
+            
+            /* Убираем все анимации при прокрутке */
+            .animate-on-scroll {
+                will-change: auto;
+                transform: none !important;
+                opacity: 1 !important;
+            }
+            
+            /* Отключаем все CSS анимации */
+            *, *::before, *::after {
+                animation-duration: 0s !important;
+                animation-delay: 0s !important;
+                transition-duration: 0s !important;
+                transition-delay: 0s !important;
+            }
+            
+            /* Убираем сложные эффекты */
+            .glass-card, .service-card {
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
+                filter: none !important;
+            }
+        }
+        
         /* Оптимизация анимаций для мобильных */
         @media (max-width: 768px) {
-            .animate-on-scroll {
+            /* Отключаем все анимации для лучшей производительности */
+            .animate-on-scroll,
+            .service-card,
+            [data-aos],
+            .swiper-slide,
+            .hero-gradient-decor,
+            .footer-gradient-decor {
                 animation: none !important;
+                transition: none !important;
+                transform: none !important;
                 opacity: 1 !important;
-                transform: none !important;
             }
             
-            .service-card {
-                transform: none !important;
-            }
-            
-            .service-card:hover {
-                transform: none !important;
-            }
-            
-            /* Убираем сложные анимации на мобильных */
-            [data-aos] {
+            /* Отключаем градиентный фон на мобильных */
+            body {
+                background: #fdf2f8 !important;
+                background-size: auto !important;
                 animation: none !important;
-                opacity: 1 !important;
-                transform: none !important;
             }
             
             /* Исправляем размеры карточек услуг */
@@ -243,6 +281,7 @@
                 width: 100% !important;
                 max-width: 100% !important;
                 margin: 0 auto 1rem auto !important;
+                transform: none !important;
             }
             
             /* Убираем фиксированную ширину */
@@ -265,6 +304,13 @@
             .py-16 {
                 padding-top: 2rem !important;
                 padding-bottom: 2rem !important;
+            }
+            
+            /* Убираем сложные эффекты */
+            .glass-card {
+                background: rgba(255, 255, 255, 0.95) !important;
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
             }
         }
         
@@ -398,6 +444,13 @@
                                         </select>
                                     </div>
                                     <button type="submit" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-medium py-3 px-6 rounded-lg transition shadow-md hover:shadow-lg">Записаться</button>
+                                    
+                                    <!-- Отладочная информация (убрать после исправления) -->
+                                    <div id="debug-info" class="mt-4 p-3 bg-gray-100 rounded text-xs text-gray-600 hidden">
+                                        <p><strong>Отладка:</strong></p>
+                                        <p>Категория: <span id="debug-category">-</span></p>
+                                        <p>Услуга: <span id="debug-service">-</span></p>
+                                    </div>
                                 </form>
                             </div>
                         </div>
@@ -1020,6 +1073,7 @@
         if (selectedCategory === '') {
             serviceSelect.innerHTML = '<option value="">Сначала выберите категорию</option>';
             serviceSelect.disabled = true;
+            updateDebugInfo();
             return;
         }
         
@@ -1035,7 +1089,32 @@
             option.textContent = `${service.name} (${service.price})`;
             serviceSelect.appendChild(option);
         });
+        
+        updateDebugInfo();
     }
+    
+    // Функция обновления отладочной информации
+    function updateDebugInfo() {
+        const categorySelect = document.getElementById('serviceCategory');
+        const serviceSelect = document.getElementById('service');
+        const debugInfo = document.getElementById('debug-info');
+        const debugCategory = document.getElementById('debug-category');
+        const debugService = document.getElementById('debug-service');
+        
+        if (categorySelect.value) {
+            debugInfo.classList.remove('hidden');
+            debugCategory.textContent = categorySelect.options[categorySelect.selectedIndex].text;
+            debugService.textContent = serviceSelect.value ? serviceSelect.options[serviceSelect.selectedIndex].text : '-';
+        } else {
+            debugInfo.classList.add('hidden');
+        }
+    }
+    
+    // Обновляем отладочную информацию при изменении услуги
+    document.addEventListener('DOMContentLoaded', function() {
+        const serviceSelect = document.getElementById('service');
+        serviceSelect.addEventListener('change', updateDebugInfo);
+    });
 
     // Инициализация при загрузке страницы
     document.addEventListener('DOMContentLoaded', function() {
@@ -1049,6 +1128,19 @@
         const form = event.target;
         const submitButton = form.querySelector('button[type="submit"]');
         const originalText = submitButton.textContent;
+        
+        // Проверяем все поля формы
+        const name = document.getElementById('name').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const date = document.getElementById('date').value;
+        const time = document.getElementById('time').value;
+        const serviceCategory = document.getElementById('serviceCategory').value;
+        const service = document.getElementById('service').value;
+        
+        if (!name || !phone || !date || !time || !serviceCategory || !service) {
+            alert('Пожалуйста, заполните все поля формы');
+            return;
+        }
         
         // Проверяем, что выбрана услуга
         const serviceSelect = document.getElementById('service');
@@ -1065,6 +1157,9 @@
             const formData = new FormData(form);
             const data = Object.fromEntries(formData);
             
+            // Логируем данные для отладки
+            console.log('Отправляемые данные:', data);
+            
             const response = await fetch('/api/register', {
                 method: 'POST',
                 headers: {
@@ -1073,7 +1168,14 @@
                 body: JSON.stringify(data)
             });
             
+            console.log('Статус ответа:', response.status);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
             const result = await response.json();
+            console.log('Ответ сервера:', result);
             
             if (result.success) {
                 // Показываем успешное сообщение
@@ -1085,7 +1187,7 @@
                 showNotification(result.message || 'Произошла ошибка при отправке', 'error');
             }
         } catch (error) {
-            console.error('Ошибка:', error);
+            console.error('Ошибка при отправке формы:', error);
             showNotification('Произошла ошибка при отправке. Попробуйте позже.', 'error');
         } finally {
             // Восстанавливаем кнопку

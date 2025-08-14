@@ -3,14 +3,27 @@ export default async function handler(req, res) {
     return res.status(405).json({ message: 'Method Not Allowed' });
   }
 
+  // Логируем входящие данные для отладки
+  console.log('Получены данные:', req.body);
+
   const { name, phone, date, time, serviceCategory, service } = req.body;
 
   if (!name || !phone || !date || !time || !serviceCategory || !service) {
+    console.log('Отсутствуют обязательные поля:', { name, phone, date, time, serviceCategory, service });
     return res.status(400).json({ message: 'Пожалуйста, заполните все поля.' });
   }
 
   const token = process.env.BOT_TOKEN;
   const chatId = 339033504; // Telegram chat ID пользователя @VadimKtv
+  
+  // Проверяем наличие токена
+  if (!token) {
+    console.error('Отсутствует BOT_TOKEN в переменных окружения');
+    return res.status(500).json({ 
+      success: false,
+      message: 'Ошибка конфигурации сервера. Свяжитесь с администратором.' 
+    });
+  }
 
   // Получаем названия категорий и услуг
   const categoryNames = {
@@ -36,6 +49,10 @@ export default async function handler(req, res) {
   const categoryName = categoryNames[serviceCategory] || 'Неизвестная категория';
   const serviceName = serviceNames[service] || 'Неизвестная услуга';
 
+  // Логируем названия для отладки
+  console.log('Категория:', serviceCategory, '->', categoryName);
+  console.log('Услуга:', service, '->', serviceName);
+
   const message = `
 🎉 Новая запись на сайте SvetSalonPro!
 
@@ -51,6 +68,10 @@ export default async function handler(req, res) {
   `;
 
   try {
+    console.log('Отправляем в Telegram...');
+    console.log('Токен:', token ? 'Есть' : 'Отсутствует');
+    console.log('Chat ID:', chatId);
+    
     const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -62,6 +83,7 @@ export default async function handler(req, res) {
     });
 
     const data = await response.json();
+    console.log('Ответ Telegram API:', data);
 
     if (!data.ok) {
       throw new Error(data.description || 'Ошибка при отправке в Telegram');
@@ -73,9 +95,18 @@ export default async function handler(req, res) {
     });
   } catch (error) {
     console.error('Ошибка при отправке в Telegram:', error);
+    
+    // Возвращаем более подробную информацию об ошибке
     return res.status(500).json({ 
       success: false,
-      message: 'Ошибка при отправке заявки. Попробуйте позже или свяжитесь с нами по телефону.' 
+      message: 'Ошибка при отправке заявки. Попробуйте позже или свяжитесь с нами по телефону.',
+      error: error.message,
+      details: {
+        token: token ? 'Есть' : 'Отсутствует',
+        chatId: chatId,
+        serviceCategory: serviceCategory,
+        service: service
+      }
     });
   }
 }
