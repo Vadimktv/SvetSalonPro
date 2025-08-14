@@ -97,6 +97,29 @@
             color: #ec4899 !important;
             text-shadow: 0 2px 8px rgba(236,72,153,0.08);
         }
+        
+        /* Стили для формы записи */
+        .form-select:focus {
+            border-color: #ec4899;
+            box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
+        }
+        
+        .form-select:disabled {
+            background-color: #f9fafb;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        
+        /* Анимация для выпадающих списков */
+        .form-select option {
+            padding: 8px;
+            transition: background-color 0.2s ease;
+        }
+        
+        .form-select option:hover {
+            background-color: #fdf2f8;
+        }
+        
         /* Изображения */
         .img-hover, .service-card img, .bg-white img, .rounded-lg img {
             transition: transform 0.4s cubic-bezier(.4,0,.2,1), box-shadow 0.3s;
@@ -252,10 +275,19 @@
                                         <label for="time" class="block text-gray-700 font-medium mb-2">Время визита</label>
                                         <input type="time" id="time" name="time" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" required>
                                     </div>
+                                    <div class="mb-6">
+                                        <label for="serviceCategory" class="block text-gray-700 font-medium mb-2">Категория услуг</label>
+                                        <select id="serviceCategory" name="serviceCategory" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent form-select" required onchange="updateServiceOptions()">
+                                            <option value="">Выберите категорию</option>
+                                            <option value="hair">✂️ Парикмахерские услуги</option>
+                                            <option value="manicure">💅 Услуги маникюра</option>
+                                        </select>
+                                    </div>
                                     <div class="mb-8 relative">
                                         <label for="service" class="block text-gray-700 font-medium mb-2">Услуга</label>
-                                        <input type="text" id="serviceDisplay" name="serviceDisplay" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent cursor-pointer bg-white" placeholder="Выберите услугу" readonly required onclick="openServiceModal()">
-                                        <input type="hidden" id="service" name="service" required>
+                                        <select id="service" name="service" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent form-select" required disabled>
+                                            <option value="">Сначала выберите категорию</option>
+                                        </select>
                                     </div>
                                     <button type="submit" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-medium py-3 px-6 rounded-lg transition shadow-md hover:shadow-lg">Записаться</button>
                                 </form>
@@ -279,95 +311,117 @@
             <h2 class="text-3xl md:text-4xl font-bold text-center mb-4 text-gray-800 animate-on-scroll">Наши услуги</h2>
             <p class="text-center text-gray-600 mb-16 max-w-2xl mx-auto animate-on-scroll delay-100">Мы предлагаем полный спектр услуг для вашей красоты и ухода. Наш адрес: Одесская 3А корпус 10, Геленджик</p>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- SPA процедуры -->
-                <div class="service-card bg-white rounded-lg shadow-md flex flex-col items-center justify-center w-80 h-96 mx-auto text-center animate-on-scroll" data-aos="zoom-in">
-                    <img src="images/SPA процедуры.JPG" alt="SPA процедуры" class="w-40 h-40 object-cover rounded-lg mb-3 mt-4">
-                    <h3 class="text-xl font-bold mb-1">SPA процедуры</h3>
-                    <div class="text-pink-600 font-bold mb-2">от 800 ₽</div>
-                    <p class="text-gray-600 text-sm mb-2">Расслабляющие и оздоравливающие процедуры для волос и кожи головы.</p>
-                    <div class="mt-auto w-full">
-                        <a href="#booking" class="block bg-pink-600 hover:bg-pink-700 text-white font-medium py-2 px-4 rounded-lg transition shadow-md hover:shadow-lg">Записаться</a>
+            <!-- Парикмахерские услуги -->
+            <div class="mb-20">
+                <h3 class="text-2xl md:text-3xl font-bold text-center mb-8 text-gray-800 animate-on-scroll delay-200">✂️ Парикмахерские услуги</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- SPA процедуры -->
+                    <div class="service-card bg-white rounded-lg shadow-md flex flex-col items-center justify-center w-80 h-96 mx-auto text-center animate-on-scroll" data-aos="zoom-in">
+                        <img src="images/SPA процедуры.JPG" alt="SPA процедуры" class="w-40 h-40 object-cover rounded-lg mb-3 mt-4">
+                        <h3 class="text-xl font-bold mb-1">SPA процедуры</h3>
+                        <div class="text-pink-600 font-bold mb-2">от 800 ₽</div>
+                        <p class="text-gray-600 text-sm mb-2">Расслабляющие и оздоравливающие процедуры для волос и кожи головы.</p>
+                        <div class="mt-auto w-full">
+                            <a href="#booking" class="block bg-pink-600 hover:bg-pink-700 text-white font-medium py-2 px-4 rounded-lg transition shadow-md hover:shadow-lg">Записаться</a>
+                        </div>
+                    </div>
+                    <!-- Женская стрижка -->
+                    <div class="service-card bg-white rounded-lg shadow-md flex flex-col items-center justify-center w-80 h-96 mx-auto text-center animate-on-scroll" data-aos="zoom-in">
+                        <img src="images/Женская стрижка.JPG" alt="Женская стрижка" class="w-40 h-40 object-cover rounded-lg mb-3 mt-4">
+                        <h3 class="text-xl font-bold mb-1">Женская стрижка</h3>
+                        <div class="text-pink-600 font-bold mb-2">от 700 ₽</div>
+                        <p class="text-gray-600 text-sm mb-2">Современные женские стрижки любой сложности с учетом ваших пожеланий.</p>
+                        <div class="mt-auto w-full">
+                            <a href="#booking" class="block bg-pink-600 hover:bg-pink-700 text-white font-medium py-2 px-4 rounded-lg transition shadow-md hover:shadow-lg">Записаться</a>
+                        </div>
+                    </div>
+                    <!-- Мужская стрижка -->
+                    <div class="service-card bg-white rounded-lg shadow-md flex flex-col items-center justify-center w-80 h-96 mx-auto text-center animate-on-scroll" data-aos="zoom-in">
+                        <img src="images/Мужская стрижка.JPG" alt="Мужская стрижка" class="w-40 h-40 object-cover rounded-lg mb-3 mt-4">
+                        <h3 class="text-xl font-bold mb-1">Мужская стрижка</h3>
+                        <div class="text-pink-600 font-bold mb-2">от 700 ₽</div>
+                        <p class="text-gray-600 text-sm mb-2">Классические и современные мужские стрижки для любого стиля.</p>
+                        <div class="mt-auto w-full">
+                            <a href="#booking" class="block bg-pink-600 hover:bg-pink-700 text-white font-medium py-2 px-4 rounded-lg transition shadow-md hover:shadow-lg">Записаться</a>
+                        </div>
+                    </div>
+                    <!-- Мужская стрижка под машинку -->
+                    <div class="service-card bg-white rounded-lg shadow-md flex flex-col items-center justify-center w-80 h-96 mx-auto text-center animate-on-scroll" data-aos="zoom-in">
+                        <img src="images/Мужская стрижка под машинку.JPG" alt="Мужская стрижка под машинку" class="w-40 h-40 object-cover rounded-lg mb-3 mt-4">
+                        <h3 class="text-xl font-bold mb-1">Мужская стрижка под машинку</h3>
+                        <div class="text-pink-600 font-bold mb-2">от 600 ₽</div>
+                        <p class="text-gray-600 text-sm mb-2">Быстрая и аккуратная стрижка под машинку для мужчин и детей.</p>
+                        <div class="mt-auto w-full">
+                            <a href="#booking" class="block bg-pink-600 hover:bg-pink-700 text-white font-medium py-2 px-4 rounded-lg transition shadow-md hover:shadow-lg">Записаться</a>
+                        </div>
+                    </div>
+                    <!-- Окрашивание волос -->
+                    <div class="service-card bg-white rounded-lg shadow-md flex flex-col items-center justify-center w-80 h-96 mx-auto text-center animate-on-scroll" data-aos="zoom-in">
+                        <img src="images/Окрашивание волос.JPG" alt="Окрашивание волос" class="w-40 h-40 object-cover rounded-lg mb-3 mt-4">
+                        <h3 class="text-xl font-bold mb-1">Окрашивание волос</h3>
+                        <div class="text-pink-600 font-bold mb-2">от 800 ₽</div>
+                        <p class="text-gray-600 text-sm mb-2">Профессиональное окрашивание с использованием премиальных красок.</p>
+                        <div class="mt-auto w-full">
+                            <a href="#booking" class="block bg-pink-600 hover:bg-pink-700 text-white font-medium py-2 px-4 rounded-lg transition shadow-md hover:shadow-lg">Записаться</a>
+                        </div>
+                    </div>
+                    <!-- Мелирование волос -->
+                    <div class="service-card bg-white rounded-lg shadow-md flex flex-col items-center justify-center w-80 h-96 mx-auto text-center animate-on-scroll" data-aos="zoom-in">
+                        <img src="images/Мелирование волос.JPG" alt="Мелирование волос" class="w-40 h-40 object-cover rounded-lg mb-3 mt-4">
+                        <h3 class="text-xl font-bold mb-1">Мелирование волос</h3>
+                        <div class="text-pink-600 font-bold mb-2">1200 ₽</div>
+                        <p class="text-gray-600 text-sm mb-2">Мелирование для создания ярких и естественных акцентов в прическе.</p>
+                        <div class="mt-auto w-full">
+                            <a href="#booking" class="block bg-pink-600 hover:bg-pink-700 text-white font-medium py-2 px-4 rounded-lg transition shadow-md hover:shadow-lg">Записаться</a>
+                        </div>
+                    </div>
+                    <!-- Ламинирования волос -->
+                    <div class="service-card bg-white rounded-lg shadow-md flex flex-col items-center justify-center w-80 h-96 mx-auto text-center animate-on-scroll" data-aos="zoom-in">
+                        <img src="images/Ламинирования волос.JPG" alt="Ламинирования волос" class="w-40 h-40 object-cover rounded-lg mb-3 mt-4">
+                        <h3 class="text-xl font-bold mb-1">Ламинирование волос</h3>
+                        <div class="text-pink-600 font-bold mb-2">1000 ₽</div>
+                        <p class="text-gray-600 text-sm mb-2">Процедура для гладкости, блеска и защиты волос от повреждений.</p>
+                        <div class="mt-auto w-full">
+                            <a href="#booking" class="block bg-pink-600 hover:bg-pink-700 text-white font-medium py-2 px-4 rounded-lg transition shadow-md hover:shadow-lg">Записаться</a>
+                        </div>
+                    </div>
+                    <!-- Колористика волос -->
+                    <div class="service-card bg-white rounded-lg shadow-md flex flex-col items-center justify-center w-80 h-96 mx-auto text-center animate-on-scroll" data-aos="zoom-in">
+                        <img src="images/Колористика волос.JPG" alt="Колористика волос" class="w-40 h-40 object-cover rounded-lg mb-3 mt-4">
+                        <h3 class="text-xl font-bold mb-1">Колористика волос</h3>
+                        <div class="text-pink-600 font-bold mb-2">от 2800 ₽</div>
+                        <p class="text-gray-600 text-sm mb-2">Сложные техники окрашивания и подбор идеального оттенка.</p>
+                        <div class="mt-auto w-full">
+                            <a href="#booking" class="block bg-pink-600 hover:bg-pink-700 text-white font-medium py-2 px-4 rounded-lg transition shadow-md hover:shadow-lg">Записаться</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Укрепление гелем -->
+                    <div class="service-card bg-white rounded-lg shadow-md flex flex-col items-center justify-center w-80 h-96 mx-auto text-center animate-on-scroll" data-aos="zoom-in">
+                        <img src="images/Укрепление гелем 00.37.43.JPG" alt="Укрепление гелем" class="w-40 h-40 object-cover rounded-lg mb-3 mt-4">
+                        <h3 class="text-xl font-bold mb-1">Укрепление гелем</h3>
+                        <div class="text-pink-600 font-bold mb-2">1300 ₽</div>
+                        <p class="text-gray-600 text-sm mb-2">Укрепление и восстановление структуры волос с помощью геля.</p>
+                        <div class="mt-auto w-full">
+                            <a href="#booking" class="block bg-pink-600 hover:bg-pink-700 text-white font-medium py-2 px-4 rounded-lg transition shadow-md hover:shadow-lg">Записаться</a>
+                        </div>
                     </div>
                 </div>
-                <!-- Женская стрижка -->
-                <div class="service-card bg-white rounded-lg shadow-md flex flex-col items-center justify-center w-80 h-96 mx-auto text-center animate-on-scroll" data-aos="zoom-in">
-                    <img src="images/Женская стрижка.JPG" alt="Женская стрижка" class="w-40 h-40 object-cover rounded-lg mb-3 mt-4">
-                    <h3 class="text-xl font-bold mb-1">Женская стрижка</h3>
-                    <div class="text-pink-600 font-bold mb-2">от 700 ₽</div>
-                    <p class="text-gray-600 text-sm mb-2">Современные женские стрижки любой сложности с учетом ваших пожеланий.</p>
-                    <div class="mt-auto w-full">
-                        <a href="#booking" class="block bg-pink-600 hover:bg-pink-700 text-white font-medium py-2 px-4 rounded-lg transition shadow-md hover:shadow-lg">Записаться</a>
-                    </div>
-                </div>
-                <!-- Мужская стрижка -->
-                <div class="service-card bg-white rounded-lg shadow-md flex flex-col items-center justify-center w-80 h-96 mx-auto text-center animate-on-scroll" data-aos="zoom-in">
-                    <img src="images/Мужская стрижка.JPG" alt="Мужская стрижка" class="w-40 h-40 object-cover rounded-lg mb-3 mt-4">
-                    <h3 class="text-xl font-bold mb-1">Мужская стрижка</h3>
-                    <div class="text-pink-600 font-bold mb-2">от 700 ₽</div>
-                    <p class="text-gray-600 text-sm mb-2">Классические и современные мужские стрижки для любого стиля.</p>
-                    <div class="mt-auto w-full">
-                        <a href="#booking" class="block bg-pink-600 hover:bg-pink-700 text-white font-medium py-2 px-4 rounded-lg transition shadow-md hover:shadow-lg">Записаться</a>
-                    </div>
-                </div>
-                <!-- Мужская стрижка под машинку -->
-                <div class="service-card bg-white rounded-lg shadow-md flex flex-col items-center justify-center w-80 h-96 mx-auto text-center animate-on-scroll" data-aos="zoom-in">
-                    <img src="images/Мужская стрижка под машинку.JPG" alt="Мужская стрижка под машинку" class="w-40 h-40 object-cover rounded-lg mb-3 mt-4">
-                    <h3 class="text-xl font-bold mb-1">Мужская стрижка под машинку</h3>
-                    <div class="text-pink-600 font-bold mb-2">от 600 ₽</div>
-                    <p class="text-gray-600 text-sm mb-2">Быстрая и аккуратная стрижка под машинку для мужчин и детей.</p>
-                    <div class="mt-auto w-full">
-                        <a href="#booking" class="block bg-pink-600 hover:bg-pink-700 text-white font-medium py-2 px-4 rounded-lg transition shadow-md hover:shadow-lg">Записаться</a>
-                    </div>
-                </div>
-                <!-- Окрашивание волос -->
-                <div class="service-card bg-white rounded-lg shadow-md flex flex-col items-center justify-center w-80 h-96 mx-auto text-center animate-on-scroll" data-aos="zoom-in">
-                    <img src="images/Окрашивание волос.JPG" alt="Окрашивание волос" class="w-40 h-40 object-cover rounded-lg mb-3 mt-4">
-                    <h3 class="text-xl font-bold mb-1">Окрашивание волос</h3>
-                    <div class="text-pink-600 font-bold mb-2">от 800 ₽</div>
-                    <p class="text-gray-600 text-sm mb-2">Профессиональное окрашивание с использованием премиальных красок.</p>
-                    <div class="mt-auto w-full">
-                        <a href="#booking" class="block bg-pink-600 hover:bg-pink-700 text-white font-medium py-2 px-4 rounded-lg transition shadow-md hover:shadow-lg">Записаться</a>
-                    </div>
-                </div>
-                <!-- Мелирование волос -->
-                <div class="service-card bg-white rounded-lg shadow-md flex flex-col items-center justify-center w-80 h-96 mx-auto text-center animate-on-scroll" data-aos="zoom-in">
-                    <img src="images/Мелирование волос.JPG" alt="Мелирование волос" class="w-40 h-40 object-cover rounded-lg mb-3 mt-4">
-                    <h3 class="text-xl font-bold mb-1">Мелирование волос</h3>
-                    <div class="text-pink-600 font-bold mb-2">1200 ₽</div>
-                    <p class="text-gray-600 text-sm mb-2">Мелирование для создания ярких и естественных акцентов в прическе.</p>
-                    <div class="mt-auto w-full">
-                        <a href="#booking" class="block bg-pink-600 hover:bg-pink-700 text-white font-medium py-2 px-4 rounded-lg transition shadow-md hover:shadow-lg">Записаться</a>
-                    </div>
-                </div>
-                <!-- Ламинирования волос -->
-                <div class="service-card bg-white rounded-lg shadow-md flex flex-col items-center justify-center w-80 h-96 mx-auto text-center animate-on-scroll" data-aos="zoom-in">
-                    <img src="images/Ламинирования волос.JPG" alt="Ламинирования волос" class="w-40 h-40 object-cover rounded-lg mb-3 mt-4">
-                    <h3 class="text-xl font-bold mb-1">Ламинирование волос</h3>
-                    <div class="text-pink-600 font-bold mb-2">1000 ₽</div>
-                    <p class="text-gray-600 text-sm mb-2">Процедура для гладкости, блеска и защиты волос от повреждений.</p>
-                    <div class="mt-auto w-full">
-                        <a href="#booking" class="block bg-pink-600 hover:bg-pink-700 text-white font-medium py-2 px-4 rounded-lg transition shadow-md hover:shadow-lg">Записаться</a>
-                    </div>
-                </div>
-                <!-- Колористика волос -->
-                <div class="service-card bg-white rounded-lg shadow-md flex flex-col items-center justify-center w-80 h-96 mx-auto text-center animate-on-scroll" data-aos="zoom-in">
-                    <img src="images/Колористика волос.JPG" alt="Колористика волос" class="w-40 h-40 object-cover rounded-lg mb-3 mt-4">
-                    <h3 class="text-xl font-bold mb-1">Колористика волос</h3>
-                    <div class="text-pink-600 font-bold mb-2">от 2800 ₽</div>
-                    <p class="text-gray-600 text-sm mb-2">Сложные техники окрашивания и подбор идеального оттенка.</p>
-                    <div class="mt-auto w-full">
-                        <a href="#booking" class="block bg-pink-600 hover:bg-pink-700 text-white font-medium py-2 px-4 rounded-lg transition shadow-md hover:shadow-lg">Записаться</a>
-                    </div>
-                </div>
-                <!-- Укрепление гелем -->
-                <div class="service-card bg-white rounded-lg shadow-md flex flex-col items-center justify-center w-80 h-96 mx-auto text-center animate-on-scroll" data-aos="zoom-in">
-                    <img src="images/Укрепление гелем 00.37.43.JPG" alt="Укрепление гелем" class="w-40 h-40 object-cover rounded-lg mb-3 mt-4">
-                    <h3 class="text-xl font-bold mb-1">Укрепление гелем</h3>
-                    <div class="text-pink-600 font-bold mb-2">1300 ₽</div>
-                    <p class="text-gray-600 text-sm mb-2">Укрепление и восстановление структуры ногтей с помощью геля.</p>
-                    <div class="mt-auto w-full">
-                        <a href="#booking" class="block bg-pink-600 hover:bg-pink-700 text-white font-medium py-2 px-4 rounded-lg transition shadow-md hover:shadow-lg">Записаться</a>
+            </div>
+            
+            <!-- Услуги маникюра -->
+            <div>
+                <h3 class="text-2xl md:text-3xl font-bold text-center mb-8 text-gray-800 animate-on-scroll delay-300">💅 Услуги маникюра</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Комбинированный маникюр укрепление ногтевой пластины -->
+                    <div class="service-card bg-white rounded-lg shadow-md flex flex-col items-center justify-center w-80 h-96 mx-auto text-center animate-on-scroll" data-aos="zoom-in">
+                        <img src="images/Комбинированный маникюр.jpg" alt="Комбинированный маникюр укрепление ногтевой пластины" class="w-40 h-40 object-cover rounded-lg mb-3 mt-4">
+                        <h3 class="text-xl font-bold mb-1">Комбинированный маникюр</h3>
+                        <div class="text-pink-600 font-bold mb-2">1500 ₽</div>
+                        <p class="text-gray-600 text-sm mb-2">Комбинированный маникюр с укреплением ногтевой пластины для здоровых и красивых ногтей.</p>
+                        <div class="mt-auto w-full">
+                            <a href="#booking" class="block bg-pink-600 hover:bg-pink-700 text-white font-medium py-2 px-4 rounded-lg transition shadow-md hover:shadow-lg">Записаться</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -388,6 +442,17 @@
                         <h3 class="text-xl font-bold mb-1">Светлана</h3>
                         <p class="text-pink-600 mb-3">Топ-стилист</p>
                         <p class="text-gray-600 text-sm">Опыт работы 12 лет. Специализация: сложное окрашивание, креативные стрижки.</p>
+                    </div>
+                </div>
+                
+                <!-- Master 2 -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden animate-on-scroll delay-100">
+                    <img src="images/Анна.webp" alt="Мастер Анна" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-1">Анна</h3>
+                        <p class="text-pink-600 mb-3">Мастер по маникюру</p>
+                        <p class="text-gray-600 text-sm mb-3">Стажер. Специализация: классический маникюр, гель-лак, дизайн ногтей.</p>
+                        <p class="text-gray-600 text-sm">Обучается у опытных мастеров салона. Внимательная к деталям, использует качественные материалы. Создает аккуратные и стильные образы для ваших ногтей.</p>
                     </div>
                 </div>
             </div>
@@ -816,45 +881,57 @@
     });
     </script>
 
-    <!-- Модальное окно выбора услуги -->
-    <div id="serviceModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden" style="backdrop-filter: blur(2px);">
-        <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md animate-fadeInUp">
-            <h3 class="text-xl font-bold mb-6 text-center">Выберите услугу</h3>
-            <div id="serviceOptions" class="space-y-3">
-                <button type="button" class="service-option w-full text-left px-6 py-3 rounded-lg border border-gray-200 hover:bg-pink-100 transition" data-value="spa">SPA процедуры (от 800 ₽)</button>
-                <button type="button" class="service-option w-full text-left px-6 py-3 rounded-lg border border-gray-200 hover:bg-pink-100 transition" data-value="womens_haircut">Женская стрижка (от 700 ₽)</button>
-                <button type="button" class="service-option w-full text-left px-6 py-3 rounded-lg border border-gray-200 hover:bg-pink-100 transition" data-value="mens_haircut">Мужская стрижка (от 700 ₽)</button>
-                <button type="button" class="service-option w-full text-left px-6 py-3 rounded-lg border border-gray-200 hover:bg-pink-100 transition" data-value="mens_machine">Мужская стрижка под машинку (от 600 ₽)</button>
-                <button type="button" class="service-option w-full text-left px-6 py-3 rounded-lg border border-gray-200 hover:bg-pink-100 transition" data-value="coloring">Окрашивание волос (от 800 ₽)</button>
-                <button type="button" class="service-option w-full text-left px-6 py-3 rounded-lg border border-gray-200 hover:bg-pink-100 transition" data-value="highlighting">Мелирование волос (1200 ₽)</button>
-                <button type="button" class="service-option w-full text-left px-6 py-3 rounded-lg border border-gray-200 hover:bg-pink-100 transition" data-value="lamination">Ламинирование волос (1000 ₽)</button>
-                <button type="button" class="service-option w-full text-left px-6 py-3 rounded-lg border border-gray-200 hover:bg-pink-100 transition" data-value="coloristics">Колористика волос (от 2800 ₽)</button>
-                <button type="button" class="service-option w-full text-left px-6 py-3 rounded-lg border border-gray-200 hover:bg-pink-100 transition" data-value="gel">Укрепление гелем (1300 ₽)</button>
-            </div>
-            <button type="button" onclick="closeServiceModal()" class="mt-8 w-full py-2 rounded-lg bg-gray-200 hover:bg-gray-300 transition">Отмена</button>
-        </div>
-    </div>
-
     <script>
-    function openServiceModal() {
-        document.getElementById('serviceModal').classList.remove('hidden');
-    }
-    function closeServiceModal() {
-        document.getElementById('serviceModal').classList.add('hidden');
-    }
-    document.querySelectorAll('.service-option').forEach(btn => {
-        btn.addEventListener('click', function() {
-            document.getElementById('serviceDisplay').value = this.textContent;
-            document.getElementById('service').value = this.getAttribute('data-value');
-            closeServiceModal();
-        });
-    });
-    // Закрытие по клику вне окна
-    window.addEventListener('click', function(e) {
-        const modal = document.getElementById('serviceModal');
-        if (!modal.classList.contains('hidden') && e.target === modal) {
-            closeServiceModal();
+    // Данные об услугах
+    const services = {
+        hair: [
+            { value: 'spa', name: 'SPA процедуры', price: 'от 800 ₽' },
+            { value: 'womens_haircut', name: 'Женская стрижка', price: 'от 700 ₽' },
+            { value: 'mens_haircut', name: 'Мужская стрижка', price: 'от 700 ₽' },
+            { value: 'mens_machine', name: 'Мужская стрижка под машинку', price: 'от 600 ₽' },
+            { value: 'coloring', name: 'Окрашивание волос', price: 'от 800 ₽' },
+            { value: 'highlighting', name: 'Мелирование волос', price: '1200 ₽' },
+            { value: 'lamination', name: 'Ламинирование волос', price: '1000 ₽' },
+            { value: 'coloristics', name: 'Колористика волос', price: 'от 2800 ₽' },
+            { value: 'gel', name: 'Укрепление гелем', price: '1300 ₽' }
+        ],
+        manicure: [
+            { value: 'combo_manicure', name: 'Комбинированный маникюр', price: '1500 ₽' }
+        ]
+    };
+
+    // Функция обновления списка услуг при выборе категории
+    function updateServiceOptions() {
+        const categorySelect = document.getElementById('serviceCategory');
+        const serviceSelect = document.getElementById('service');
+        const selectedCategory = categorySelect.value;
+        
+        // Очищаем текущие опции
+        serviceSelect.innerHTML = '';
+        
+        if (selectedCategory === '') {
+            serviceSelect.innerHTML = '<option value="">Сначала выберите категорию</option>';
+            serviceSelect.disabled = true;
+            return;
         }
+        
+        // Добавляем опцию по умолчанию
+        serviceSelect.innerHTML = '<option value="">Выберите услугу</option>';
+        serviceSelect.disabled = false;
+        
+        // Добавляем услуги выбранной категории
+        const categoryServices = services[selectedCategory];
+        categoryServices.forEach(service => {
+            const option = document.createElement('option');
+            option.value = service.value;
+            option.textContent = `${service.name} (${service.price})`;
+            serviceSelect.appendChild(option);
+        });
+    }
+
+    // Инициализация при загрузке страницы
+    document.addEventListener('DOMContentLoaded', function() {
+        updateServiceOptions();
     });
     </script>
 </body>
