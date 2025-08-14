@@ -1208,32 +1208,31 @@
             // Логируем данные для отладки
             console.log('Отправляемые данные:', data);
             
-            const response = await fetch('/api/register', {
+            // Отправляем напрямую в Telegram
+            const categoryEl = document.getElementById('serviceCategory');
+            const serviceEl = document.getElementById('service');
+            const categoryText = categoryEl.options[categoryEl.selectedIndex].text;
+            const serviceText = serviceEl.options[serviceEl.selectedIndex].text;
+
+            const formattedMessage = `\nНовая запись через сайт SvetSalonPro:\n\n👤 Имя: ${name}\n📱 Телефон: ${phone}\n📅 Дата: ${date}\n🕐 Время: ${time}\n📋 Категория: ${categoryText}\n✨ Услуга: ${serviceText}`;
+
+            const token = '7811248285:AAHfspwV_mA-PF298Bac28LBkEeehX_ql70';
+            const chatIds = ['339033504','1366208620'];
+            const sendRequests = chatIds.map(cid => fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data)
-            });
-            
-            console.log('Статус ответа:', response.status);
-            
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: cid, text: formattedMessage })
+            }));
+
+            const responses = await Promise.all(sendRequests);
+            const allOk = responses.every(r => r.ok);
+            if (!allOk) {
+                throw new Error('Telegram API error');
             }
-            
-            const result = await response.json();
-            console.log('Ответ сервера:', result);
-            
-            if (result.success) {
-                // Показываем успешное сообщение
-                showNotification(result.message, 'success');
-                form.reset();
-                updateServiceOptions(); // Сбрасываем выбор услуг
-            } else {
-                // Показываем ошибку
-                showNotification(result.message || 'Произошла ошибка при отправке', 'error');
-            }
+
+            showNotification('Заявка отправлена! Мы свяжемся с вами в ближайшее время.', 'success');
+            form.reset();
+            updateServiceOptions();
         } catch (error) {
             console.error('Ошибка при отправке формы:', error);
             showNotification('Произошла ошибка при отправке. Попробуйте позже.', 'error');
