@@ -215,73 +215,151 @@
             -webkit-tap-highlight-color: transparent;
         }
         
+        /* Убираем эффект отскока на всех устройствах */
+        html {
+            overscroll-behavior: none;
+            -webkit-overscroll-behavior: none;
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            overscroll-behavior: none;
+            -webkit-overscroll-behavior: none;
+        }
+        
+        /* Убираем отскок для конкретных элементов */
+        .container, .service-card, .bg-white {
+            overscroll-behavior: none;
+            -webkit-overscroll-behavior: none;
+        }
+        
+        /* Дополнительные CSS свойства для iOS */
+        @supports (-webkit-touch-callout: none) {
+            html, body {
+                -webkit-overflow-scrolling: touch;
+                overscroll-behavior: none;
+                -webkit-overscroll-behavior: none;
+            }
+            
+            /* Убираем отскок на iOS */
+            .container, .service-card, .bg-white, section {
+                -webkit-overflow-scrolling: touch;
+                overscroll-behavior: none;
+                -webkit-overscroll-behavior: none;
+            }
+        }
+        
         /* Оптимизация прокрутки */
         html {
             scroll-behavior: smooth;
         }
         
-        /* Убираем задержки при прокрутке */
+        /* Плавные анимации при прокрутке */
         .animate-on-scroll {
-            will-change: auto;
+            will-change: transform, opacity;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        /* Анимации появления элементов */
+        .animate-on-scroll.delay-100 {
+            animation-delay: 0.1s;
+        }
+        
+        .animate-on-scroll.delay-200 {
+            animation-delay: 0.2s;
+        }
+        
+        .animate-on-scroll.delay-300 {
+            animation-delay: 0.3s;
+        }
+        
+        .animate-on-scroll.delay-400 {
+            animation-delay: 0.4s;
+        }
+        
+        /* Анимация появления */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animate-on-scroll {
+            animation: fadeInUp 0.8s ease forwards;
+        }
+        
+        /* Анимации для карточек услуг */
+        .service-card {
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(236, 72, 153, 0.2);
+        }
+        
+        /* Анимации для кнопок */
+        .btn, .bg-pink-600, .bg-pink-700 {
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover, .bg-pink-600:hover, .bg-pink-700:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(236, 72, 153, 0.3);
+        }
+        
+        /* Анимации для ссылок */
+        .nav-link {
+            transition: color 0.3s ease, transform 0.2s ease;
+        }
+        
+        .nav-link:hover {
+            transform: translateY(-1px);
         }
         
         /* Оптимизация для мобильных устройств */
         @media (max-width: 768px) {
             html {
-                scroll-behavior: auto;
+                scroll-behavior: smooth;
+                -webkit-overflow-scrolling: touch;
             }
             
-            /* Убираем все анимации при прокрутке */
-            .animate-on-scroll {
-                will-change: auto;
-                transform: none !important;
-                opacity: 1 !important;
-            }
-            
-            /* Отключаем все CSS анимации */
-            *, *::before, *::after {
-                animation-duration: 0s !important;
-                animation-delay: 0s !important;
-                transition-duration: 0s !important;
-                transition-delay: 0s !important;
-            }
-            
-            /* Убираем сложные эффекты */
-            .glass-card, .service-card {
-                backdrop-filter: none !important;
-                -webkit-backdrop-filter: none !important;
-                filter: none !important;
-            }
-        }
-        
-        /* Оптимизация анимаций для мобильных */
-        @media (max-width: 768px) {
-            /* Отключаем все анимации для лучшей производительности */
-            .animate-on-scroll,
-            .service-card,
-            [data-aos],
-            .swiper-slide,
-            .hero-gradient-decor,
-            .footer-gradient-decor {
-                animation: none !important;
-                transition: none !important;
-                transform: none !important;
-                opacity: 1 !important;
-            }
-            
-            /* Отключаем градиентный фон на мобильных */
+            /* Убираем эффект отскока на iOS */
             body {
-                background: #fdf2f8 !important;
-                background-size: auto !important;
-                animation: none !important;
+                -webkit-overflow-scrolling: touch;
+                overscroll-behavior: none;
+                -webkit-overscroll-behavior: none;
             }
             
-            /* Исправляем размеры карточек услуг */
+            /* Плавные анимации для мобильных */
+            .animate-on-scroll {
+                will-change: transform, opacity;
+                transition: opacity 0.6s ease, transform 0.6s ease;
+            }
+            
+            /* Оптимизированные анимации */
             .service-card {
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
                 width: 100% !important;
                 max-width: 100% !important;
                 margin: 0 auto 1rem auto !important;
-                transform: none !important;
+            }
+            
+            .service-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 25px rgba(236, 72, 153, 0.15);
+            }
+            
+            /* Убираем сложные эффекты, но оставляем базовые */
+            .glass-card {
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(8px);
+                -webkit-backdrop-filter: blur(8px);
             }
             
             /* Убираем фиксированную ширину */
@@ -304,13 +382,6 @@
             .py-16 {
                 padding-top: 2rem !important;
                 padding-bottom: 2rem !important;
-            }
-            
-            /* Убираем сложные эффекты */
-            .glass-card {
-                background: rgba(255, 255, 255, 0.95) !important;
-                backdrop-filter: none !important;
-                -webkit-backdrop-filter: none !important;
             }
         }
         
@@ -799,9 +870,9 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-12 relative">
-        <div class="footer-gradient-decor" style="width: 320px; height: 320px; left: -100px; bottom: -100px; background: radial-gradient(circle, #f3e8ff 0%, #fdf2f8 80%, transparent 100%);"></div>
-        <div class="footer-gradient-decor" style="width: 220px; height: 220px; right: -60px; top: -60px; background: radial-gradient(circle, #f0fdfa 0%, #fdf2f8 80%, transparent 100%);"></div>
+    <footer class="bg-gray-900 text-white py-12 relative overflow-hidden">
+        <div class="footer-gradient-decor" style="width: 360px; height: 360px; left: -120px; bottom: -140px; background: radial-gradient(60% 60% at 50% 50%, rgba(243,232,255,0.5) 0%, rgba(253,242,248,0.25) 60%, rgba(255,255,255,0) 100%);"></div>
+        <div class="footer-gradient-decor" style="width: 260px; height: 260px; right: -80px; top: -80px; background: radial-gradient(60% 60% at 50% 50%, rgba(240,253,250,0.5) 0%, rgba(253,242,248,0.25) 60%, rgba(255,255,255,0) 100%);"></div>
         <div class="container mx-auto px-4">
             <div class="flex flex-col md:flex-row justify-between items-center">
                 <div class="mb-6 md:mb-0">
@@ -929,69 +1000,7 @@
         }
     </script>
 
-    <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const form = document.querySelector('form');
-      if (!form) return;
-
-      form.addEventListener('submit', function (e) {
-        e.preventDefault();
-
-        const name = form.querySelector('input[name="name"]').value;
-        const phone = form.querySelector('input[name="phone"]').value;
-        const date = form.querySelector('input[name="date"]').value;
-        const time = form.querySelector('input[name="time"]').value;
-        if (!date || !time) {
-          alert('Пожалуйста, выберите дату и время визита!');
-          return;
-        }
-        // TODO: Проверить доступность выбранного слота по дате и времени
-        // Если занято — подсветить поле и не отправлять форму
-
-        // Форматируем дату в ДД.ММ
-        var parts = date.split('-');
-        let formattedDate = '';
-        if (parts.length === 3) {
-          formattedDate = parts[2] + '.' + parts[1];
-        }
-        const text = `💬 Новая запись:\n👤 Имя: ${name}\n📞 Телефон: ${phone}\n📅 Дата и время: ${formattedDate} ${time}`;
-
-        const chatIds = ["339033504", "1366208620"]; // основной ID и ID Светланы
-
-        chatIds.forEach(chatId => {
-          fetch("https://api.telegram.org/bot7811248285:AAHfspwV_mA-PF298Bac28LBkEeehX_ql70/sendMessage", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              chat_id: chatId,
-              text: text
-            })
-          }).then(response => {
-            if (response.ok) {
-              if (chatId === "339033504") {
-                alert("Заявка отправлена!");
-                form.reset();
-              }
-            } else {
-              if (chatId === "339033504") {
-                alert("Ошибка отправки. Попробуйте позже.");
-              } else {
-                console.error(`Ошибка отправки для chat_id ${chatId}`);
-              }
-            }
-          }).catch(error => {
-            if (chatId === "339033504") {
-              alert("Ошибка соединения. Проверьте интернет.");
-            } else {
-              console.error(`Ошибка соединения для chat_id ${chatId}:`, error);
-            }
-          });
-        });
-      });
-    });
-    </script>
+    
 
     <script>
     window.addEventListener('load', function () {
@@ -1119,7 +1128,46 @@
     // Инициализация при загрузке страницы
     document.addEventListener('DOMContentLoaded', function() {
         updateServiceOptions();
+        
+        // Предотвращаем отскок на мобильных устройствах
+        preventBounce();
     });
+    
+    // Функция для предотвращения отскока
+    function preventBounce() {
+        let startY = 0;
+        let startScrollTop = 0;
+        
+        // Предотвращаем отскок на touch устройствах
+        document.addEventListener('touchstart', function(e) {
+            startY = e.touches[0].pageY;
+            startScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        }, { passive: true });
+        
+        document.addEventListener('touchmove', function(e) {
+            const currentY = e.touches[0].pageY;
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            // Если пытаемся скроллить за пределы страницы, предотвращаем
+            if ((scrollTop <= 0 && currentY > startY) || 
+                (scrollTop + window.innerHeight >= document.documentElement.scrollHeight && currentY < startY)) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+        
+        // Убираем отскок на wheel событиях
+        document.addEventListener('wheel', function(e) {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight;
+            const clientHeight = document.documentElement.clientHeight;
+            
+            // Если пытаемся скроллить за пределы страницы, предотвращаем
+            if ((scrollTop <= 0 && e.deltaY < 0) || 
+                (scrollTop + clientHeight >= scrollHeight && e.deltaY > 0)) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+    }
 
     // Обработка отправки формы
     async function handleFormSubmit(event) {
