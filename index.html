@@ -2,7 +2,10 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <title>SvetSalonPro - Салон красоты в Геленджике</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -177,6 +180,111 @@
             transform: translateY(-8px) scale(1.03);
         }
         @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Исправления для мобильной версии */
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+            max-width: 100%;
+        }
+        
+        /* Убираем белый отступ внизу */
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Исправляем горизонтальный скролл */
+        .container {
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        
+        /* Улучшаем производительность на мобильных */
+        * {
+            -webkit-overflow-scrolling: touch;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        /* Оптимизация анимаций для мобильных */
+        @media (max-width: 768px) {
+            .animate-on-scroll {
+                animation: none !important;
+                opacity: 1 !important;
+                transform: none !important;
+            }
+            
+            .service-card {
+                transform: none !important;
+            }
+            
+            .service-card:hover {
+                transform: none !important;
+            }
+            
+            /* Убираем сложные анимации на мобильных */
+            [data-aos] {
+                animation: none !important;
+                opacity: 1 !important;
+                transform: none !important;
+            }
+            
+            /* Исправляем размеры карточек услуг */
+            .service-card {
+                width: 100% !important;
+                max-width: 100% !important;
+                margin: 0 auto 1rem auto !important;
+            }
+            
+            /* Убираем фиксированную ширину */
+            .w-80 {
+                width: 100% !important;
+            }
+            
+            /* Исправляем сетку */
+            .grid {
+                grid-template-columns: 1fr !important;
+                gap: 1rem !important;
+            }
+            
+            /* Убираем лишние отступы */
+            .py-20 {
+                padding-top: 3rem !important;
+                padding-bottom: 3rem !important;
+            }
+            
+            .py-16 {
+                padding-top: 2rem !important;
+                padding-bottom: 2rem !important;
+            }
+        }
+        
+        /* Дополнительные исправления для очень маленьких экранов */
+        @media (max-width: 480px) {
+            .px-4 {
+                padding-left: 0.5rem !important;
+                padding-right: 0.5rem !important;
+            }
+            
+            .text-3xl {
+                font-size: 1.75rem !important;
+            }
+            
+            .text-2xl {
+                font-size: 1.5rem !important;
+            }
+        }
+        
+        @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(40px); }
             to { opacity: 1; transform: translateY(0); }
         }
@@ -314,9 +422,9 @@
             <!-- Парикмахерские услуги -->
             <div class="mb-20">
                 <h3 class="text-2xl md:text-3xl font-bold text-center mb-8 text-gray-800 animate-on-scroll delay-200">✂️ Парикмахерские услуги</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
                     <!-- SPA процедуры -->
-                    <div class="service-card bg-white rounded-lg shadow-md flex flex-col items-center justify-center w-80 h-96 mx-auto text-center animate-on-scroll" data-aos="zoom-in">
+                    <div class="service-card bg-white rounded-lg shadow-md flex flex-col items-center justify-center w-full max-w-sm h-auto min-h-80 mx-auto text-center animate-on-scroll" data-aos="zoom-in">
                         <img src="images/SPA процедуры.JPG" alt="SPA процедуры" class="w-40 h-40 object-cover rounded-lg mb-3 mt-4">
                         <h3 class="text-xl font-bold mb-1">SPA процедуры</h3>
                         <div class="text-pink-600 font-bold mb-2">от 800 ₽</div>
@@ -326,7 +434,7 @@
                         </div>
                     </div>
                     <!-- Женская стрижка -->
-                    <div class="service-card bg-white rounded-lg shadow-md flex flex-col items-center justify-center w-80 h-96 mx-auto text-center animate-on-scroll" data-aos="zoom-in">
+                    <div class="service-card bg-white rounded-lg shadow-md flex flex-col items-center justify-center w-full max-w-sm h-auto min-h-80 mx-auto text-center animate-on-scroll" data-aos="zoom-in">
                         <img src="images/Женская стрижка.JPG" alt="Женская стрижка" class="w-40 h-40 object-cover rounded-lg mb-3 mt-4">
                         <h3 class="text-xl font-bold mb-1">Женская стрижка</h3>
                         <div class="text-pink-600 font-bold mb-2">от 700 ₽</div>
@@ -336,7 +444,7 @@
                         </div>
                     </div>
                     <!-- Мужская стрижка -->
-                    <div class="service-card bg-white rounded-lg shadow-md flex flex-col items-center justify-center w-80 h-96 mx-auto text-center animate-on-scroll" data-aos="zoom-in">
+                    <div class="service-card bg-white rounded-lg shadow-md flex flex-col items-center justify-center w-full max-w-sm h-auto min-h-80 mx-auto text-center animate-on-scroll" data-aos="zoom-in">
                         <img src="images/Мужская стрижка.JPG" alt="Мужская стрижка" class="w-40 h-40 object-cover rounded-lg mb-3 mt-4">
                         <h3 class="text-xl font-bold mb-1">Мужская стрижка</h3>
                         <div class="text-pink-600 font-bold mb-2">от 700 ₽</div>
@@ -346,7 +454,7 @@
                         </div>
                     </div>
                     <!-- Мужская стрижка под машинку -->
-                    <div class="service-card bg-white rounded-lg shadow-md flex flex-col items-center justify-center w-80 h-96 mx-auto text-center animate-on-scroll" data-aos="zoom-in">
+                    <div class="service-card bg-white rounded-lg shadow-md flex flex-col items-center justify-center w-full max-w-sm h-auto min-h-80 mx-auto text-center animate-on-scroll" data-aos="zoom-in">
                         <img src="images/Мужская стрижка под машинку.JPG" alt="Мужская стрижка под машинку" class="w-40 h-40 object-cover rounded-lg mb-3 mt-4">
                         <h3 class="text-xl font-bold mb-1">Мужская стрижка под машинку</h3>
                         <div class="text-pink-600 font-bold mb-2">от 600 ₽</div>
@@ -356,7 +464,7 @@
                         </div>
                     </div>
                     <!-- Окрашивание волос -->
-                    <div class="service-card bg-white rounded-lg shadow-md flex flex-col items-center justify-center w-80 h-96 mx-auto text-center animate-on-scroll" data-aos="zoom-in">
+                    <div class="service-card bg-white rounded-lg shadow-md flex flex-col items-center justify-center w-full max-w-sm h-auto min-h-80 mx-auto text-center animate-on-scroll" data-aos="zoom-in">
                         <img src="images/Окрашивание волос.JPG" alt="Окрашивание волос" class="w-40 h-40 object-cover rounded-lg mb-3 mt-4">
                         <h3 class="text-xl font-bold mb-1">Окрашивание волос</h3>
                         <div class="text-pink-600 font-bold mb-2">от 800 ₽</div>
@@ -366,7 +474,7 @@
                         </div>
                     </div>
                     <!-- Мелирование волос -->
-                    <div class="service-card bg-white rounded-lg shadow-md flex flex-col items-center justify-center w-80 h-96 mx-auto text-center animate-on-scroll" data-aos="zoom-in">
+                    <div class="service-card bg-white rounded-lg shadow-md flex flex-col items-center justify-center w-full max-w-sm h-auto min-h-80 mx-auto text-center animate-on-scroll" data-aos="zoom-in">
                         <img src="images/Мелирование волос.JPG" alt="Мелирование волос" class="w-40 h-40 object-cover rounded-lg mb-3 mt-4">
                         <h3 class="text-xl font-bold mb-1">Мелирование волос</h3>
                         <div class="text-pink-600 font-bold mb-2">1200 ₽</div>
@@ -376,7 +484,7 @@
                         </div>
                     </div>
                     <!-- Ламинирования волос -->
-                    <div class="service-card bg-white rounded-lg shadow-md flex flex-col items-center justify-center w-80 h-96 mx-auto text-center animate-on-scroll" data-aos="zoom-in">
+                    <div class="service-card bg-white rounded-lg shadow-md flex flex-col items-center justify-center w-full max-w-sm h-auto min-h-80 mx-auto text-center animate-on-scroll" data-aos="zoom-in">
                         <img src="images/Ламинирования волос.JPG" alt="Ламинирования волос" class="w-40 h-40 object-cover rounded-lg mb-3 mt-4">
                         <h3 class="text-xl font-bold mb-1">Ламинирование волос</h3>
                         <div class="text-pink-600 font-bold mb-2">1000 ₽</div>
@@ -386,7 +494,7 @@
                         </div>
                     </div>
                     <!-- Колористика волос -->
-                    <div class="service-card bg-white rounded-lg shadow-md flex flex-col items-center justify-center w-80 h-96 mx-auto text-center animate-on-scroll" data-aos="zoom-in">
+                    <div class="service-card bg-white rounded-lg shadow-md flex flex-col items-center justify-center w-full max-w-sm h-auto min-h-80 mx-auto text-center animate-on-scroll" data-aos="zoom-in">
                         <img src="images/Колористика волос.JPG" alt="Колористика волос" class="w-40 h-40 object-cover rounded-lg mb-3 mt-4">
                         <h3 class="text-xl font-bold mb-1">Колористика волос</h3>
                         <div class="text-pink-600 font-bold mb-2">от 2800 ₽</div>
@@ -397,7 +505,7 @@
                     </div>
                     
                     <!-- Укрепление гелем -->
-                    <div class="service-card bg-white rounded-lg shadow-md flex flex-col items-center justify-center w-80 h-96 mx-auto text-center animate-on-scroll" data-aos="zoom-in">
+                    <div class="service-card bg-white rounded-lg shadow-md flex flex-col items-center justify-center w-full max-w-sm h-auto min-h-80 mx-auto text-center animate-on-scroll" data-aos="zoom-in">
                         <img src="images/Укрепление гелем 00.37.43.JPG" alt="Укрепление гелем" class="w-40 h-40 object-cover rounded-lg mb-3 mt-4">
                         <h3 class="text-xl font-bold mb-1">Укрепление гелем</h3>
                         <div class="text-pink-600 font-bold mb-2">1300 ₽</div>
@@ -412,9 +520,9 @@
             <!-- Услуги маникюра -->
             <div>
                 <h3 class="text-2xl md:text-3xl font-bold text-center mb-8 text-gray-800 animate-on-scroll delay-300">💅 Услуги маникюра</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
                     <!-- Комбинированный маникюр укрепление ногтевой пластины -->
-                    <div class="service-card bg-white rounded-lg shadow-md flex flex-col items-center justify-center w-80 h-96 mx-auto text-center animate-on-scroll" data-aos="zoom-in">
+                    <div class="service-card bg-white rounded-lg shadow-md flex flex-col items-center justify-center w-full max-w-sm h-auto min-h-80 mx-auto text-center animate-on-scroll" data-aos="zoom-in">
                         <img src="images/Комбинированный маникюр.jpg" alt="Комбинированный маникюр укрепление ногтевой пластины" class="w-40 h-40 object-cover rounded-lg mb-3 mt-4">
                         <h3 class="text-xl font-bold mb-1">Комбинированный маникюр</h3>
                         <div class="text-pink-600 font-bold mb-2">1500 ₽</div>
