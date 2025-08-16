@@ -1287,11 +1287,21 @@
 
     // Функция для открытия административной панели
     function openAdminModal() {
-        document.getElementById('adminModal').classList.remove('hidden');
-        document.getElementById('adminLogin').classList.remove('hidden');
-        document.getElementById('adminPanel').classList.add('hidden');
-        document.getElementById('adminPassword').value = '';
-        document.getElementById('adminPassword').focus();
+        const modal = document.getElementById('adminModal');
+        const login = document.getElementById('adminLogin');
+        const panel = document.getElementById('adminPanel');
+        const password = document.getElementById('adminPassword');
+        
+        if (!modal || !login || !panel || !password) {
+            alert('Ошибка: административная панель не загружена');
+            return;
+        }
+        
+        modal.classList.remove('hidden');
+        login.classList.remove('hidden');
+        panel.classList.add('hidden');
+        password.value = '';
+        password.focus();
     }
 
     // Функция для закрытия административной панели
@@ -1363,25 +1373,29 @@
 
         // Добавляем обработчик для административной панели
         const adminTrigger = document.getElementById('admin-trigger');
-        adminTrigger.addEventListener('click', function() {
-            adminClickCount++;
-            
-            // Сбрасываем таймер при каждом клике
-            if (adminClickTimer) {
-                clearTimeout(adminClickTimer);
-            }
-            
-            // Если нажали 5 раз, открываем панель
-            if (adminClickCount >= 5) {
-                openAdminModal();
-                adminClickCount = 0;
-            } else {
-                // Устанавливаем таймер на сброс счетчика
-                adminClickTimer = setTimeout(() => {
+        if (adminTrigger) {
+            adminTrigger.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                adminClickCount++;
+                
+                // Сбрасываем таймер при каждом клике
+                if (adminClickTimer) {
+                    clearTimeout(adminClickTimer);
+                }
+                
+                // Если нажали 5 раз, открываем панель
+                if (adminClickCount >= 5) {
+                    openAdminModal();
                     adminClickCount = 0;
-                }, 2000); // 2 секунды на 5 кликов
-            }
-        });
+                } else {
+                    // Устанавливаем таймер на сброс счетчика
+                    adminClickTimer = setTimeout(() => {
+                        adminClickCount = 0;
+                    }, 3000); // 3 секунды на 5 кликов
+                }
+            });
+        }
 
         // Обработчик Enter для поля пароля
         document.getElementById('adminPassword').addEventListener('keypress', function(e) {
