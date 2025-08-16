@@ -1,3 +1,5 @@
+import { bookTimeSlot } from './booked-times.js';
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method Not Allowed' });
@@ -11,6 +13,15 @@ export default async function handler(req, res) {
   if (!name || !phone || !date || !time || !serviceCategory || !service) {
     console.log('Отсутствуют обязательные поля:', { name, phone, date, time, serviceCategory, service });
     return res.status(400).json({ message: 'Пожалуйста, заполните все поля.' });
+  }
+
+  // Проверяем доступность времени
+  const bookingResult = bookTimeSlot(date, time, name, phone, service);
+  if (!bookingResult.success) {
+    return res.status(400).json({ 
+      success: false,
+      message: bookingResult.message 
+    });
   }
 
   const token = process.env.BOT_TOKEN;
@@ -41,9 +52,12 @@ export default async function handler(req, res) {
     highlighting: 'Мелирование волос (1200 ₽)',
     lamination: 'Ламинирование волос (1000 ₽)',
     coloristics: 'Колористика волос (от 2800 ₽)',
-    gel: 'Укрепление гелем (1300 ₽)',
     // Услуги маникюра
-    combo_manicure: 'Комбинированный маникюр (1500 ₽)'
+    combo_manicure: 'Комбинированный маникюр (1500 ₽)',
+    classic_manicure: 'Классический маникюр (700 ₽)',
+    nail_repair: 'Ремонт одного ногтя (300 ₽)',
+    base_biogell: 'Укрепление базой или биогелем (800 ₽)',
+    removal: 'Снятие покрытия (400 ₽)'
   };
 
   const categoryName = categoryNames[serviceCategory] || 'Неизвестная категория';
