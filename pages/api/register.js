@@ -45,19 +45,20 @@ export default async function handler(req, res) {
   const serviceNames = {
     // Парикмахерские услуги
     spa: 'SPA процедуры (от 800 ₽)',
-    womens_haircut: 'Женская стрижка (от 700 ₽)',
-    mens_haircut: 'Мужская стрижка (от 700 ₽)',
-    mens_machine: 'Мужская стрижка под машинку (от 600 ₽)',
-    coloring: 'Окрашивание волос (от 800 ₽)',
-    highlighting: 'Мелирование волос (1200 ₽)',
-    lamination: 'Ламинирование волос (1000 ₽)',
-    coloristics: 'Колористика волос (от 2800 ₽)',
+    female_haircut: 'Женская стрижка (от 700 ₽)',
+    male_haircut: 'Мужская стрижка (от 700 ₽)',
+    machine_haircut: 'Мужская стрижка под машинку (от 600 ₽)',
+    hair_coloring: 'Окрашивание волос (от 800 ₽)',
+    hair_highlighting: 'Мелирование волос (1200 ₽)',
+    hair_laminating: 'Ламинирование волос (1000 ₽)',
+    hair_coloristics: 'Колористика волос (от 2800 ₽)',
+    hair_gel_strengthening: 'Укрепление гелем (1300 ₽)',
     // Услуги маникюра
-    combo_manicure: 'Комбинированный маникюр (1500 ₽)',
+    combined_manicure: 'Комбинированный маникюр (1500 ₽)',
     classic_manicure: 'Классический маникюр (700 ₽)',
     nail_repair: 'Ремонт одного ногтя (300 ₽)',
-    base_biogell: 'Укрепление базой или биогелем (800 ₽)',
-    removal: 'Снятие покрытия (400 ₽)'
+    nail_strengthening: 'Укрепление базой или биогелем (800 ₽)',
+    coating_removal: 'Снятие покрытия (400 ₽)'
   };
 
   const categoryName = categoryNames[serviceCategory] || 'Неизвестная категория';
