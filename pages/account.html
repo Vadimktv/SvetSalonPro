@@ -412,6 +412,17 @@
                     loadBookings();
                 } else {
                     console.log('Пользователь не найден, показываем форму входа');
+                    showAuth();
+                }
+                
+                // Проверяем сессию в URL (для Magic Link)
+                const { data: { session } } = await client.auth.getSession();
+                if (session) {
+                    console.log('Сессия найдена в URL:', session);
+                    currentUser = session.user;
+                    showProfile();
+                    loadUserProfile();
+                    loadBookings();
                 }
                 
                 console.log('=== ИНИЦИАЛИЗАЦИЯ SUPABASE ЗАВЕРШЕНА УСПЕШНО ===');
@@ -420,12 +431,36 @@
                 console.log('Настраиваем форму входа...');
                 setupLoginForm();
                 
+                // Настраиваем обработчик изменения состояния аутентификации
+                console.log('Настраиваем обработчик аутентификации...');
+                setupAuthStateChange();
+                
             } catch (error) {
                 console.error('=== ОШИБКА ИНИЦИАЛИЗАЦИИ SUPABASE ===');
                 console.error('Error initializing Supabase:', error);
                 console.error('Stack trace:', error.stack);
                 alert('Ошибка инициализации: ' + error.message);
             }
+        }
+
+        // Setup auth state change listener
+        function setupAuthStateChange() {
+            const client = window.supabaseClient || supabaseClient;
+            client.auth.onAuthStateChange(async (event, session) => {
+                console.log('Auth state changed:', event, session);
+                
+                if (event === 'SIGNED_IN' && session) {
+                    console.log('Пользователь вошел в систему:', session.user);
+                    currentUser = session.user;
+                    showProfile();
+                    loadUserProfile();
+                    loadBookings();
+                } else if (event === 'SIGNED_OUT') {
+                    console.log('Пользователь вышел из системы');
+                    currentUser = null;
+                    showAuth();
+                }
+            });
         }
 
         // Handle login form submission
@@ -461,7 +496,7 @@
                         const { error } = await client.auth.signInWithOtp({
                             email: email,
                             options: {
-                                emailRedirectTo: window.location.origin + '/pages/account.html'
+                                emailRedirectTo: 'https://svetsalonpro.ru/pages/account.html'
                             }
                         });
                         
@@ -489,7 +524,8 @@
         // Handle logout
         document.getElementById('logoutBtn').addEventListener('click', async () => {
             try {
-                await supabase.auth.signOut();
+                const client = window.supabaseClient || supabaseClient;
+                await client.auth.signOut();
                 currentUser = null;
                 showAuth();
             } catch (error) {
@@ -514,7 +550,8 @@
             if (!currentUser) return;
             
             try {
-                const { data: profile, error } = await supabase
+                const client = window.supabaseClient || supabaseClient;
+                const { data: profile, error } = await client
                     .from('profiles')
                     .select('*')
                     .eq('id', currentUser.id)
@@ -540,7 +577,8 @@
         // Create user profile
         async function createUserProfile() {
             try {
-                const { error } = await supabase
+                const client = window.supabaseClient || supabaseClient;
+                const { error } = await client
                     .from('profiles')
                     .insert({
                         id: currentUser.id,
@@ -563,7 +601,8 @@
             if (!currentUser) return;
             
             try {
-                const { data: bookings, error } = await supabase
+                const client = window.supabaseClient || supabaseClient;
+                const { data: bookings, error } = await client
                     .from('bookings')
                     .select(`
                         *,
