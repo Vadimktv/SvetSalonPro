@@ -382,6 +382,9 @@
                 
                 console.log('Инициализация Supabase завершена успешно!');
                 
+                // Настраиваем форму входа
+                setupLoginForm();
+                
             } catch (error) {
                 console.error('Error initializing Supabase:', error);
                 alert('Ошибка инициализации: ' + error.message);
@@ -389,51 +392,62 @@
         }
 
         // Handle login form submission
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const email = document.getElementById('email').value;
-            const loginBtn = document.getElementById('loginBtn');
-            const loginBtnText = document.getElementById('loginBtnText');
-            const loginBtnLoading = document.getElementById('loginBtnLoading');
-            
-            try {
-                // Проверяем, что Supabase инициализирован
-                const client = window.supabaseClient || supabaseClient;
-                if (!client || !client.auth) {
-                    throw new Error('Supabase не инициализирован. Попробуйте обновить страницу.');
-                }
-                
-                console.log('Используем Supabase клиент:', client);
-                
-                // Show loading state
-                loginBtn.disabled = true;
-                loginBtnText.classList.add('hidden');
-                loginBtnLoading.classList.remove('hidden');
-                
-                // Send magic link
-                const { error } = await client.auth.signInWithOtp({
-                    email: email,
-                    options: {
-                        emailRedirectTo: window.location.origin + '/pages/account.html'
+        function setupLoginForm() {
+            const loginForm = document.getElementById('loginForm');
+            if (loginForm) {
+                console.log('Настраиваем форму входа...');
+                loginForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    console.log('Форма отправлена!');
+                    
+                    const email = document.getElementById('email').value;
+                    const loginBtn = document.getElementById('loginBtn');
+                    const loginBtnText = document.getElementById('loginBtnText');
+                    const loginBtnLoading = document.getElementById('loginBtnLoading');
+                    
+                    try {
+                        // Проверяем, что Supabase инициализирован
+                        const client = window.supabaseClient || supabaseClient;
+                        if (!client || !client.auth) {
+                            throw new Error('Supabase не инициализирован. Попробуйте обновить страницу.');
+                        }
+                        
+                        console.log('Используем Supabase клиент:', client);
+                        console.log('Email для входа:', email);
+                        
+                        // Show loading state
+                        loginBtn.disabled = true;
+                        loginBtnText.classList.add('hidden');
+                        loginBtnLoading.classList.remove('hidden');
+                        
+                        // Send magic link
+                        const { error } = await client.auth.signInWithOtp({
+                            email: email,
+                            options: {
+                                emailRedirectTo: window.location.origin + '/pages/account.html'
+                            }
+                        });
+                        
+                        if (error) throw error;
+                        
+                        // Show success message
+                        alert('Ссылка для входа отправлена на ваш email!');
+                        
+                    } catch (error) {
+                        console.error('Login error:', error);
+                        alert('Ошибка входа: ' + error.message);
+                    } finally {
+                        // Reset button state
+                        loginBtn.disabled = false;
+                        loginBtnText.classList.remove('hidden');
+                        loginBtnLoading.classList.add('hidden');
                     }
                 });
-                
-                if (error) throw error;
-                
-                // Show success message
-                alert('Ссылка для входа отправлена на ваш email!');
-                
-            } catch (error) {
-                console.error('Login error:', error);
-                alert('Ошибка входа: ' + error.message);
-            } finally {
-                // Reset button state
-                loginBtn.disabled = false;
-                loginBtnText.classList.remove('hidden');
-                loginBtnLoading.classList.add('hidden');
+                console.log('Форма входа настроена успешно!');
+            } else {
+                console.error('Форма входа не найдена!');
             }
-        });
+        }
 
         // Handle logout
         document.getElementById('logoutBtn').addEventListener('click', async () => {
