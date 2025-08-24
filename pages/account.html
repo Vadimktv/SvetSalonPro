@@ -1427,11 +1427,11 @@
                 // Закрываем модальное окно
                 document.getElementById('photoSelectionModal').classList.add('hidden');
                 
-                alert(`Выбрана аватарка ${index + 1}!`);
+                showNotification('success', 'Аватарка выбрана!', `Выбрана аватарка ${index + 1}`);
                 
             } catch (error) {
                 console.error('Error selecting standard photo:', error);
-                alert('Ошибка при выборе аватарки: ' + error.message);
+                showNotification('error', 'Ошибка выбора аватарки', error.message);
             }
         }
 

@@ -527,9 +527,113 @@
             to { opacity: 1; transform: translateY(0); }
         }
         .animate-fadeInUp { animation: fadeInUp 0.4s cubic-bezier(.4,0,.2,1) both; }
+
+        /* Custom Notification Styles */
+        .notification {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            padding: 16px 20px;
+            margin-bottom: 8px;
+            max-width: 400px;
+            border-left: 4px solid;
+            transform: translateX(100%);
+            opacity: 0;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        
+        .notification.success {
+            border-left-color: #10b981;
+            background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+        }
+        
+        .notification.error {
+            border-left-color: #ef4444;
+            background: linear-gradient(135deg, #fef2f2 0%, #fef2f2 100%);
+        }
+        
+        .notification.warning {
+            border-left-color: #f59e0b;
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+        }
+        
+        .notification.info {
+            border-left-color: #3b82f6;
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+        }
+        
+        .notification-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .notification.success .notification-icon {
+            background: #10b981;
+            color: white;
+        }
+        
+        .notification.error .notification-icon {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .notification.warning .notification-icon {
+            background: #f59e0b;
+            color: white;
+        }
+        
+        .notification.info .notification-icon {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .notification-content {
+            flex: 1;
+        }
+        
+        .notification-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #1f2937;
+        }
+        
+        .notification-message {
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        
+        .notification-close {
+            background: none;
+            border: none;
+            color: #9ca3af;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: color 0.2s;
+        }
+        
+        .notification-close:hover {
+            color: #6b7280;
+        }
     </style>
 </head>
 <body class="font-sans bg-white text-gray-800">
+    <!-- Custom Notification System -->
+    <div id="notificationContainer" class="fixed top-4 right-4 z-50 space-y-2"></div>
     <div id="page-preloader">
         <div class="spinner"><img src="images/logo.png" alt="Loading..." style="width:64px;height:64px;"></div>
     </div>
@@ -569,7 +673,46 @@
     <!-- Telegram Login Button -->
     <script>
       function onTelegramAuth(user) {
-        alert("Добро пожаловать, " + user.first_name + "!\nВаш ID: " + user.id);
+        // Создаем временное уведомление
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          background: #10b981;
+          color: white;
+          padding: 16px 20px;
+          border-radius: 12px;
+          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+          z-index: 9999;
+          transform: translateX(100%);
+          transition: transform 0.3s ease;
+        `;
+        notification.innerHTML = `
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <i class="fas fa-check" style="font-size: 18px;"></i>
+            <div>
+              <div style="font-weight: 600; margin-bottom: 4px;">Добро пожаловать!</div>
+              <div style="font-size: 14px;">${user.first_name}, ID: ${user.id}</div>
+            </div>
+            <button onclick="this.parentElement.parentElement.remove()" style="background: none; border: none; color: white; cursor: pointer; padding: 4px;">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        `;
+        document.body.appendChild(notification);
+        
+        // Анимация появления
+        setTimeout(() => {
+          notification.style.transform = 'translateX(0)';
+        }, 100);
+        
+        // Автоматическое удаление через 5 секунд
+        setTimeout(() => {
+          notification.style.transform = 'translateX(100%)';
+          setTimeout(() => notification.remove(), 300);
+        }, 5000);
+        
         console.log(user);
       }
     </script>
@@ -1092,6 +1235,52 @@
     </button>
 
     <script>
+        // Custom Notification System
+        function showNotification(type, title, message, duration = 5000) {
+            const container = document.getElementById('notificationContainer');
+            const notification = document.createElement('div');
+            
+            const icons = {
+                success: 'fas fa-check',
+                error: 'fas fa-exclamation-triangle',
+                warning: 'fas fa-exclamation-circle',
+                info: 'fas fa-info-circle'
+            };
+            
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <div class="notification-icon">
+                    <i class="${icons[type]}"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">${title}</div>
+                    <div class="notification-message">${message}</div>
+                </div>
+                <button class="notification-close" onclick="this.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            container.appendChild(notification);
+            
+            // Анимация появления
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+            
+            // Автоматическое удаление
+            if (duration > 0) {
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                    setTimeout(() => {
+                        if (notification.parentElement) {
+                            notification.remove();
+                        }
+                    }, 300);
+                }, duration);
+            }
+        }
+
         // Animation on scroll
         const animateOnScroll = () => {
             const elements = document.querySelectorAll('.animate-on-scroll');
@@ -1409,7 +1598,7 @@
         const bookedTimes = getBookedTimes();
         
         if (bookedTimes.length === 0) {
-            alert('Нет забронированного времени');
+            showNotification('info', 'Информация', 'Нет забронированного времени');
             return;
         }
         
@@ -1434,7 +1623,7 @@
             });
         }
         
-        alert(message);
+                    showNotification('info', 'Информация', message);
     }
 
     // Функция для очистки старых записей (старше 30 дней)
@@ -1466,7 +1655,7 @@
         const password = document.getElementById('adminPassword');
         
         if (!modal || !login || !panel || !password) {
-            alert('Ошибка: административная панель не загружена');
+            showNotification('error', 'Ошибка', 'Административная панель не загружена');
             return;
         }
         
@@ -1490,7 +1679,7 @@
             document.getElementById('adminLogin').classList.add('hidden');
             document.getElementById('adminPanel').classList.remove('hidden');
         } else {
-            alert('Неверный пароль!');
+            showNotification('error', 'Ошибка', 'Неверный пароль!');
             document.getElementById('adminPassword').value = '';
             document.getElementById('adminPassword').focus();
         }
@@ -1500,7 +1689,7 @@
     function clearAllBookings() {
         if (confirm('Вы уверены, что хотите удалить ВСЕ записи? Это действие нельзя отменить!')) {
             localStorage.removeItem('bookedTimes');
-            alert('Все записи удалены!');
+            showNotification('success', 'Успешно!', 'Все записи удалены!');
             closeAdminModal();
         }
     }
@@ -1509,7 +1698,7 @@
     function exportBookings() {
         const bookedTimes = getBookedTimes();
         if (bookedTimes.length === 0) {
-            alert('Нет записей для экспорта');
+            showNotification('info', 'Информация', 'Нет записей для экспорта');
             return;
         }
         
@@ -1638,7 +1827,7 @@
         const service = document.getElementById('service').value;
         
         if (!name || !phone || !date || !time || !serviceCategory || !service) {
-            alert('Пожалуйста, заполните все поля формы');
+            showNotification('warning', 'Внимание', 'Пожалуйста, заполните все поля формы');
             return;
         }
         
@@ -1647,7 +1836,7 @@
         // Проверяем, что выбрана услуга
         const serviceSelect = document.getElementById('service');
         if (!serviceSelect.value) {
-            alert('Пожалуйста, выберите услугу');
+            showNotification('warning', 'Внимание', 'Пожалуйста, выберите услугу');
             return;
         }
         
