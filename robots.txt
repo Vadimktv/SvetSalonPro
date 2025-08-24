@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+
+# Запрещаем индексацию служебных страниц
+Disallow: /pages/account.html
+Disallow: /supabase-config.js
+Disallow: /SUPABASE_SETUP.md
+Disallow: /DEPLOYMENT.md
+Disallow: /README.md
+
+# Разрешаем индексацию изображений
+Allow: /images/
+
+# Указываем расположение sitemap
+Sitemap: https://svetsalonpro.ru/sitemap.xml
+
+# Настройки для поисковых роботов
+Crawl-delay: 1

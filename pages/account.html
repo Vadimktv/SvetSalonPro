@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>Личный кабинет - SvetSalonPro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="../images/logo.png">
+    <link rel="shortcut icon" type="image/png" href="../images/logo.png">
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="../supabase-config.js"></script>
+    <style>
+        .logo-image {
+            height: 40px;
+            width: 40px;
+            object-fit: cover;
+            border-radius: 9999px;
+            transition: transform 0.3s ease;
+        }
+        .logo-image:hover {
+            transform: scale(1.05);
+        }
+        
+        .nav-link:hover::after {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 2px;
+            background-color: #ec4899;
+            margin-top: 2px;
+        }
+
+        .form-input:focus {
+            border-color: #ec4899;
+            box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px 0 rgba(236,72,153,0.3);
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(236, 72, 153, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px 0 rgba(236,72,153,0.15);
+        }
+
+        .auth-form {
+            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(251, 207, 232, 0.1) 100%);
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="font-sans bg-gradient-to-br from-pink-50 to-white text-gray-800 min-h-screen">
+    <!-- Header -->
+    <header class="fixed w-full bg-white shadow-sm z-50">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <a href="../index.html" class="logo-link"><img src="../images/logo.png" alt="SvetSalonPro" class="logo-image mr-3"></a>
+                <h1 class="text-2xl font-bold text-pink-600">SvetSalonPro</h1>
+            </div>
+            <nav class="hidden md:flex space-x-8">
+                <a href="../index.html#home" class="nav-link text-gray-700 hover:text-pink-600 transition">Главная</a>
+                <a href="../index.html#about" class="nav-link text-gray-700 hover:text-pink-600 transition">О нас</a>
+                <a href="../index.html#services" class="nav-link text-gray-700 hover:text-pink-600 transition">Услуги</a>
+                <a href="../index.html#masters" class="nav-link text-gray-700 hover:text-pink-600 transition">Мастера</a>
+                <a href="../index.html#contact" class="nav-link text-gray-700 hover:text-pink-600 transition">Контакты</a>
+                <a href="account.html" class="nav-link text-pink-600 font-semibold">Личный кабинет</a>
+            </nav>
+            <button class="md:hidden text-gray-700">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="pt-32 pb-20">
+        <div class="container mx-auto px-4">
+            <!-- Auth Section -->
+            <div id="authSection" class="max-w-md mx-auto mb-8 fade-in">
+                <div class="card rounded-xl p-8 text-center">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-6">Вход в личный кабинет</h2>
+                    
+                    <!-- Login Form -->
+                    <form id="loginForm" class="space-y-4">
+                        <div>
+                            <label for="email" class="block text-gray-700 font-medium mb-2 text-left">Email</label>
+                            <input type="email" id="email" name="email" required 
+                                   class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none"
+                                   placeholder="your@email.com">
+                        </div>
+                        
+                        <button type="submit" class="btn-primary w-full py-3 px-6 rounded-lg text-white font-semibold">
+                            <span id="loginBtnText">Войти</span>
+                            <span id="loginBtnLoading" class="loading hidden"></span>
+                        </button>
+                    </form>
+                    
+                    <div class="mt-6 text-sm text-gray-600">
+                        <p>Мы отправим ссылку для входа на ваш email</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Section -->
+            <div id="profileSection" class="hidden max-w-4xl mx-auto fade-in">
+                <div class="grid md:grid-cols-3 gap-8">
+                    <!-- Profile Info -->
+                    <div class="md:col-span-1">
+                        <div class="card rounded-xl p-6">
+                            <div class="text-center mb-6">
+                                <div class="w-24 h-24 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <i class="fas fa-user text-3xl text-pink-600"></i>
+                                </div>
+                                <h3 id="userName" class="text-xl font-semibold text-gray-800">Загрузка...</h3>
+                                <p id="userEmail" class="text-gray-600">loading@email.com</p>
+                                <p id="userPhone" class="text-gray-600">+7 (___) ___-__-__</p>
+                            </div>
+                            
+                            <button id="logoutBtn" class="w-full py-2 px-4 border border-pink-300 text-pink-600 rounded-lg hover:bg-pink-50 transition">
+                                Выйти
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Bookings -->
+                    <div class="md:col-span-2">
+                        <div class="card rounded-xl p-6">
+                            <div class="flex justify-between items-center mb-6">
+                                <h3 class="text-2xl font-semibold text-gray-800">Мои записи</h3>
+                                <button id="newBookingBtn" class="btn-primary py-2 px-4 rounded-lg text-white font-semibold">
+                                    Новая запись
+                                </button>
+                            </div>
+                            
+                            <div id="bookingsList" class="space-y-4">
+                                <!-- Bookings will be loaded here -->
+                            </div>
+                            
+                            <div id="noBookings" class="hidden text-center py-12">
+                                <i class="fas fa-calendar-times text-4xl text-gray-300 mb-4"></i>
+                                <p class="text-gray-500">У вас пока нет записей</p>
+                                <button id="bookFirstBtn" class="btn-primary mt-4 py-2 px-6 rounded-lg text-white font-semibold">
+                                    Записаться на услугу
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- New Booking Modal -->
+            <div id="bookingModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+                <div class="bg-white rounded-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-xl font-semibold text-gray-800">Новая запись</h3>
+                            <button id="closeModalBtn" class="text-gray-400 hover:text-gray-600">
+                                <i class="fas fa-times text-xl"></i>
+                            </button>
+                        </div>
+                        
+                        <form id="newBookingForm" class="space-y-4">
+                            <div>
+                                <label for="serviceSelect" class="block text-gray-700 font-medium mb-2">Услуга</label>
+                                <select id="serviceSelect" name="service" required 
+                                        class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none">
+                                    <option value="">Выберите услугу</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label for="dateSelect" class="block text-gray-700 font-medium mb-2">Дата</label>
+                                <input type="date" id="dateSelect" name="date" required 
+                                       class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none">
+                            </div>
+                            
+                            <div>
+                                <label for="timeSelect" class="block text-gray-700 font-medium mb-2">Время</label>
+                                <select id="timeSelect" name="time" required 
+                                        class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none">
+                                    <option value="">Выберите время</option>
+                                </select>
+                            </div>
+                            
+                            <div class="flex space-x-3 pt-4">
+                                <button type="button" id="cancelBookingBtn" 
+                                        class="flex-1 py-2 px-4 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition">
+                                    Отмена
+                                </button>
+                                <button type="submit" class="flex-1 btn-primary py-2 px-4 rounded-lg text-white font-semibold">
+                                    Записаться
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script>
+        // Supabase configuration
+        let supabase;
+        let currentUser = null;
+
+        // Initialize Supabase
+        async function initSupabase() {
+            try {
+                supabase = initSupabaseClient();
+                if (!supabase) {
+                    throw new Error('Не удалось инициализировать Supabase клиент');
+                }
+                
+                // Check if user is already logged in
+                const { data: { user } } = await supabase.auth.getUser();
+                if (user) {
+                    currentUser = user;
+                    showProfile();
+                    loadUserProfile();
+                    loadBookings();
+                }
+            } catch (error) {
+                console.error('Error initializing Supabase:', error);
+            }
+        }
+
+        // Handle login form submission
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const loginBtn = document.getElementById('loginBtn');
+            const loginBtnText = document.getElementById('loginBtnText');
+            const loginBtnLoading = document.getElementById('loginBtnLoading');
+            
+            try {
+                // Show loading state
+                loginBtn.disabled = true;
+                loginBtnText.classList.add('hidden');
+                loginBtnLoading.classList.remove('hidden');
+                
+                // Send magic link
+                const { error } = await supabase.auth.signInWithOtp({
+                    email: email,
+                    options: {
+                        emailRedirectTo: window.location.origin + '/pages/account.html'
+                    }
+                });
+                
+                if (error) throw error;
+                
+                // Show success message
+                alert('Ссылка для входа отправлена на ваш email!');
+                
+            } catch (error) {
+                console.error('Login error:', error);
+                alert('Ошибка входа: ' + error.message);
+            } finally {
+                // Reset button state
+                loginBtn.disabled = false;
+                loginBtnText.classList.remove('hidden');
+                loginBtnLoading.classList.add('hidden');
+            }
+        });
+
+        // Handle logout
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            try {
+                await supabase.auth.signOut();
+                currentUser = null;
+                showAuth();
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        });
+
+        // Show auth section
+        function showAuth() {
+            document.getElementById('authSection').classList.remove('hidden');
+            document.getElementById('profileSection').classList.add('hidden');
+        }
+
+        // Show profile section
+        function showProfile() {
+            document.getElementById('authSection').classList.add('hidden');
+            document.getElementById('profileSection').classList.remove('hidden');
+        }
+
+        // Load user profile
+        async function loadUserProfile() {
+            if (!currentUser) return;
+            
+            try {
+                const { data: profile, error } = await supabase
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', currentUser.id)
+                    .single();
+                
+                if (error && error.code !== 'PGRST116') {
+                    throw error;
+                }
+                
+                if (profile) {
+                    document.getElementById('userName').textContent = profile.full_name || 'Пользователь';
+                    document.getElementById('userEmail').textContent = profile.email || currentUser.email;
+                    document.getElementById('userPhone').textContent = profile.phone || 'Не указан';
+                } else {
+                    // Create profile if doesn't exist
+                    await createUserProfile();
+                }
+            } catch (error) {
+                console.error('Error loading profile:', error);
+            }
+        }
+
+        // Create user profile
+        async function createUserProfile() {
+            try {
+                const { error } = await supabase
+                    .from('profiles')
+                    .insert({
+                        id: currentUser.id,
+                        email: currentUser.email,
+                        full_name: currentUser.user_metadata?.full_name || 'Пользователь',
+                        created_at: new Date().toISOString()
+                    });
+                
+                if (error) throw error;
+                
+                // Reload profile
+                loadUserProfile();
+            } catch (error) {
+                console.error('Error creating profile:', error);
+            }
+        }
+
+        // Load user bookings
+        async function loadBookings() {
+            if (!currentUser) return;
+            
+            try {
+                const { data: bookings, error } = await supabase
+                    .from('bookings')
+                    .select(`
+                        *,
+                        services(name, price),
+                        slots(date, time)
+                    `)
+                    .eq('user_id', currentUser.id)
+                    .order('created_at', { ascending: false });
+                
+                if (error) throw error;
+                
+                displayBookings(bookings || []);
+            } catch (error) {
+                console.error('Error loading bookings:', error);
+            }
+        }
+
+        // Display bookings
+        function displayBookings(bookings) {
+            const bookingsList = document.getElementById('bookingsList');
+            const noBookings = document.getElementById('noBookings');
+            
+            if (bookings.length === 0) {
+                bookingsList.classList.add('hidden');
+                noBookings.classList.remove('hidden');
+                return;
+            }
+            
+            bookingsList.classList.remove('hidden');
+            noBookings.classList.add('hidden');
+            
+            bookingsList.innerHTML = bookings.map(booking => `
+                <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h4 class="font-semibold text-gray-800">${booking.services?.name || 'Услуга'}</h4>
+                            <p class="text-gray-600 text-sm">${new Date(booking.slots?.date).toLocaleDateString('ru-RU')} в ${booking.slots?.time}</p>
+                            <p class="text-gray-500 text-sm">Статус: ${getStatusText(booking.status)}</p>
+                        </div>
+                        <div class="flex space-x-2">
+                            ${booking.status === 'confirmed' ? `
+                                <button onclick="cancelBooking('${booking.id}')" 
+                                        class="px-3 py-1 text-sm border border-red-300 text-red-600 rounded hover:bg-red-50 transition">
+                                    Отменить
+                                </button>
+                                <button onclick="rescheduleBooking('${booking.id}')" 
+                                        class="px-3 py-1 text-sm border border-blue-300 text-blue-600 rounded hover:bg-blue-50 transition">
+                                    Перенести
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Get status text
+        function getStatusText(status) {
+            const statuses = {
+                'pending': 'Ожидает подтверждения',
+                'confirmed': 'Подтверждено',
+                'cancelled': 'Отменено',
+                'completed': 'Завершено'
+            };
+            return statuses[status] || status;
+        }
+
+        // Cancel booking
+        async function cancelBooking(bookingId) {
+            if (!confirm('Вы уверены, что хотите отменить запись?')) return;
+            
+            try {
+                const { error } = await supabase
+                    .from('bookings')
+                    .update({ status: 'cancelled' })
+                    .eq('id', bookingId);
+                
+                if (error) throw error;
+                
+                alert('Запись отменена');
+                loadBookings();
+            } catch (error) {
+                console.error('Error cancelling booking:', error);
+                alert('Ошибка при отмене записи');
+            }
+        }
+
+        // Reschedule booking
+        function rescheduleBooking(bookingId) {
+            alert('Функция переноса записи будет доступна в ближайшее время');
+        }
+
+        // Modal controls
+        document.getElementById('newBookingBtn').addEventListener('click', () => {
+            document.getElementById('bookingModal').classList.remove('hidden');
+            loadServices();
+        });
+
+        document.getElementById('closeModalBtn').addEventListener('click', () => {
+            document.getElementById('bookingModal').classList.add('hidden');
+        });
+
+        document.getElementById('cancelBookingBtn').addEventListener('click', () => {
+            document.getElementById('bookingModal').classList.add('hidden');
+        });
+
+        // Load services for booking
+        async function loadServices() {
+            try {
+                const { data: services, error } = await supabase
+                    .from('services')
+                    .select('*')
+                    .order('name');
+                
+                if (error) throw error;
+                
+                const serviceSelect = document.getElementById('serviceSelect');
+                serviceSelect.innerHTML = '<option value="">Выберите услугу</option>' +
+                    services.map(service => `<option value="${service.id}">${service.name} - ${service.price}₽</option>`).join('');
+            } catch (error) {
+                console.error('Error loading services:', error);
+            }
+        }
+
+        // Handle new booking form
+        document.getElementById('newBookingForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const serviceId = formData.get('service');
+            const date = formData.get('date');
+            const time = formData.get('time');
+            
+            try {
+                // Create slot
+                const { data: slot, error: slotError } = await supabase
+                    .from('slots')
+                    .insert({
+                        date: date,
+                        time: time,
+                        available: false
+                    })
+                    .select()
+                    .single();
+                
+                if (slotError) throw slotError;
+                
+                // Create booking
+                const { error: bookingError } = await supabase
+                    .from('bookings')
+                    .insert({
+                        user_id: currentUser.id,
+                        service_id: serviceId,
+                        slot_id: slot.id,
+                        status: 'pending'
+                    });
+                
+                if (bookingError) throw bookingError;
+                
+                alert('Запись создана! Ожидайте подтверждения от администратора.');
+                document.getElementById('bookingModal').classList.add('hidden');
+                e.target.reset();
+                loadBookings();
+                
+            } catch (error) {
+                console.error('Error creating booking:', error);
+                alert('Ошибка при создании записи: ' + error.message);
+            }
+        });
+
+        // Initialize date and time inputs
+        function initializeDateTimeInputs() {
+            const dateInput = document.getElementById('dateSelect');
+            const timeSelect = document.getElementById('timeSelect');
+            
+            // Set minimum date to today
+            const today = new Date().toISOString().split('T')[0];
+            dateInput.min = today;
+            
+            // Generate time slots
+            const timeSlots = [];
+            for (let hour = 9; hour <= 20; hour++) {
+                timeSlots.push(`${hour.toString().padStart(2, '0')}:00`);
+                if (hour < 20) timeSlots.push(`${hour.toString().padStart(2, '0')}:30`);
+            }
+            
+            timeSelect.innerHTML = '<option value="">Выберите время</option>' +
+                timeSlots.map(time => `<option value="${time}">${time}</option>`).join('');
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            initSupabase();
+            initializeDateTimeInputs();
+        });
+
+        // Handle auth state changes
+        supabase?.auth.onAuthStateChange(async (event, session) => {
+            if (event === 'SIGNED_IN' && session?.user) {
+                currentUser = session.user;
+                showProfile();
+                loadUserProfile();
+                loadBookings();
+            } else if (event === 'SIGNED_OUT') {
+                currentUser = null;
+                showAuth();
+            }
+        });
+    </script>
+</body>
+</html>
