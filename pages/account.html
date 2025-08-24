@@ -288,10 +288,18 @@
         // Initialize Supabase
         async function initSupabase() {
             try {
-                supabase = initSupabaseClient();
-                if (!supabase) {
-                    throw new Error('Не удалось инициализировать Supabase клиент');
+                // Проверяем, что Supabase SDK загружен
+                if (typeof supabase === 'undefined') {
+                    throw new Error('Supabase SDK не загружен');
                 }
+                
+                // Создаем клиент
+                supabase = supabase.createClient(
+                    'https://iaezefurqmtgubdgqakt.supabase.co',
+                    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlhZXplZnVycW1tZ3ViZGdxYWt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU5NTk3NjQsImV4cCI6MjA3MTUzNTc2NH0.-Puoiddwu_xIx9BaHM0BBfbsULdU0Ljzh6uQleVToBQ'
+                );
+                
+                console.log('Supabase клиент инициализирован:', supabase);
                 
                 // Check if user is already logged in
                 const { data: { user } } = await supabase.auth.getUser();
@@ -303,6 +311,7 @@
                 }
             } catch (error) {
                 console.error('Error initializing Supabase:', error);
+                alert('Ошибка инициализации: ' + error.message);
             }
         }
 
