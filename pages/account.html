@@ -105,9 +105,21 @@
                 <a href="../index.html#contact" class="nav-link text-gray-700 hover:text-pink-600 transition">Контакты</a>
                 <a href="account.html" class="nav-link text-pink-600 font-semibold">Личный кабинет</a>
             </nav>
-            <button class="md:hidden text-gray-700">
+            <button id="mobileMenuBtn" class="md:hidden text-gray-700">
                 <i class="fas fa-bars text-2xl"></i>
             </button>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="md:hidden hidden bg-white border-t border-gray-200">
+            <div class="px-4 py-6 space-y-4">
+                <a href="../index.html#home" class="block text-gray-700 hover:text-pink-600 transition py-2">Главная</a>
+                <a href="../index.html#about" class="block text-gray-700 hover:text-pink-600 transition py-2">О нас</a>
+                <a href="../index.html#services" class="block text-gray-700 hover:text-pink-600 transition py-2">Услуги</a>
+                <a href="../index.html#masters" class="block text-gray-700 hover:text-pink-600 transition py-2">Мастера</a>
+                <a href="../index.html#contact" class="block text-gray-700 hover:text-pink-600 transition py-2">Контакты</a>
+                <a href="account.html" class="block text-pink-600 font-semibold py-2">Личный кабинет</a>
+            </div>
         </div>
     </header>
 
@@ -128,7 +140,7 @@
                                    placeholder="your@email.com">
                         </div>
                         
-                        <button type="submit" class="btn-primary w-full py-3 px-6 rounded-lg text-white font-semibold">
+                        <button type="submit" id="loginBtn" class="btn-primary w-full py-3 px-6 rounded-lg text-white font-semibold">
                             <span id="loginBtnText">Войти</span>
                             <span id="loginBtnLoading" class="loading hidden"></span>
                         </button>
@@ -570,6 +582,35 @@
             timeSelect.innerHTML = '<option value="">Выберите время</option>' +
                 timeSlots.map(time => `<option value="${time}">${time}</option>`).join('');
         }
+
+        // Mobile menu functionality
+        document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const icon = document.querySelector('#mobileMenuBtn i');
+            
+            if (mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.remove('hidden');
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                mobileMenu.classList.add('hidden');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            
+            if (!mobileMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                mobileMenu.classList.add('hidden');
+                const icon = document.querySelector('#mobileMenuBtn i');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
 
         // Initialize page
         document.addEventListener('DOMContentLoaded', () => {

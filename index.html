@@ -548,9 +548,21 @@
                 <a href="#contact" class="nav-link text-gray-700 hover:text-pink-600 transition">Контакты</a>
                 <a href="pages/account.html" class="nav-link text-gray-700 hover:text-pink-600 transition">Личный кабинет</a>
             </nav>
-            <button class="md:hidden text-gray-700">
+            <button id="mobileMenuBtn" class="md:hidden text-gray-700">
                 <i class="fas fa-bars text-2xl"></i>
             </button>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="md:hidden hidden bg-white border-t border-gray-200">
+            <div class="px-4 py-6 space-y-4">
+                <a href="#home" class="block text-gray-700 hover:text-pink-600 transition py-2">Главная</a>
+                <a href="#about" class="block text-gray-700 hover:text-pink-600 transition py-2">О нас</a>
+                <a href="#services" class="block text-gray-700 hover:text-pink-600 transition py-2">Услуги</a>
+                <a href="#masters" class="block text-gray-700 hover:text-pink-600 transition py-2">Мастера</a>
+                <a href="#contact" class="block text-gray-700 hover:text-pink-600 transition py-2">Контакты</a>
+                <a href="pages/account.html" class="block text-gray-700 hover:text-pink-600 transition py-2">Личный кабинет</a>
+            </div>
         </div>
     </header>
 
@@ -1368,6 +1380,38 @@
         }
     }
     
+    // Мобильное меню
+    document.addEventListener('DOMContentLoaded', function() {
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        if (mobileMenuBtn && mobileMenu) {
+            mobileMenuBtn.addEventListener('click', () => {
+                const icon = mobileMenuBtn.querySelector('i');
+                
+                if (mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.remove('hidden');
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-times');
+                } else {
+                    mobileMenu.classList.add('hidden');
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            });
+            
+            // Закрытие меню при клике вне его
+            document.addEventListener('click', (e) => {
+                if (!mobileMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                    mobileMenu.classList.add('hidden');
+                    const icon = mobileMenuBtn.querySelector('i');
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            });
+        }
+    });
+
     // Обновляем отладочную информацию при изменении услуги
     document.addEventListener('DOMContentLoaded', function() {
         const serviceSelect = document.getElementById('service');
