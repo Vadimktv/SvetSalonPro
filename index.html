@@ -654,7 +654,7 @@
 
         /* iOS Style Side Menu */
         #sideMenu {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         #sideMenu.open {
@@ -670,18 +670,29 @@
             transform: translateX(0);
         }
         
+        /* Prevent body scroll when menu is open */
+        body.menu-open {
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+        }
+        
         /* Menu Items */
         .menu-item {
             display: flex;
             align-items: center;
-            padding: 12px 16px;
-            border-radius: 12px;
+            padding: 16px 20px;
+            border-radius: 16px;
             text-decoration: none;
             color: #374151;
             font-weight: 500;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 16px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
+            cursor: pointer;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
         
         .menu-item::before {
@@ -691,10 +702,10 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(135deg, rgba(236, 72, 153, 0.1) 0%, rgba(236, 72, 153, 0.05) 100%);
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.15) 0%, rgba(236, 72, 153, 0.08) 100%);
             opacity: 0;
-            transition: opacity 0.2s ease;
-            border-radius: 12px;
+            transition: all 0.3s ease;
+            border-radius: 16px;
         }
         
         .menu-item:hover::before {
@@ -702,43 +713,54 @@
         }
         
         .menu-item:hover {
-            transform: translateX(4px);
+            transform: translateX(8px);
             color: #ec4899;
         }
         
         .menu-item:active {
-            transform: translateX(4px) scale(0.98);
+            transform: translateX(8px) scale(0.95);
+        }
+        
+        .menu-item:active::before {
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.25) 0%, rgba(236, 72, 153, 0.15) 100%);
         }
         
         /* Menu Icons */
         .menu-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            background: linear-gradient(135deg, rgba(236, 72, 153, 0.1) 0%, rgba(236, 72, 153, 0.05) 100%);
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.12) 0%, rgba(236, 72, 153, 0.06) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 12px;
-            transition: all 0.2s ease;
+            margin-right: 16px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(236, 72, 153, 0.1);
+            border: 1px solid rgba(236, 72, 153, 0.15);
+            flex-shrink: 0;
         }
         
         .menu-item:hover .menu-icon {
-            background: linear-gradient(135deg, rgba(236, 72, 153, 0.2) 0%, rgba(236, 72, 153, 0.1) 100%);
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.25) 0%, rgba(236, 72, 153, 0.15) 100%);
+            transform: scale(1.08);
+            box-shadow: 0 6px 20px rgba(236, 72, 153, 0.25);
+            border-color: rgba(236, 72, 153, 0.3);
+        }
+        
+        .menu-item:active .menu-icon {
             transform: scale(1.05);
-            box-shadow: 0 4px 12px rgba(236, 72, 153, 0.2);
+            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3);
         }
         
         .menu-icon i {
-            font-size: 18px;
+            font-size: 20px;
             color: #ec4899;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
         }
         
         .menu-item:hover .menu-icon i {
-            transform: scale(1.1);
+            transform: scale(1.15);
         }
         
         /* iOS Haptic Feedback Simulation */
@@ -764,6 +786,7 @@
         #menuContainer {
             scrollbar-width: thin;
             scrollbar-color: rgba(236, 72, 153, 0.3) transparent;
+            -webkit-overflow-scrolling: touch;
         }
         
         #menuContainer::-webkit-scrollbar {
@@ -782,6 +805,26 @@
         #menuContainer::-webkit-scrollbar-thumb:hover {
             background: rgba(236, 72, 153, 0.5);
         }
+        
+        /* Touch improvements */
+        .menu-item, #iosMenuBtn, #closeMenuBtn {
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+        
+        /* Prevent text selection */
+        #sideMenu {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        /* Better focus states */
+        .menu-item:focus, #iosMenuBtn:focus, #closeMenuBtn:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.3);
+        }
     </style>
 </head>
 <body class="font-sans bg-white text-gray-800">
@@ -793,10 +836,10 @@
     <!-- iOS Style Side Menu -->
     <div id="sideMenu" class="fixed inset-0 z-50 pointer-events-none">
         <!-- Backdrop -->
-        <div id="menuBackdrop" class="absolute inset-0 bg-black/20 backdrop-blur-sm opacity-0 transition-opacity duration-300 pointer-events-none"></div>
+        <div id="menuBackdrop" class="absolute inset-0 bg-black/40 backdrop-blur-md opacity-0 transition-all duration-500 ease-out pointer-events-none"></div>
         
         <!-- Menu Container -->
-        <div id="menuContainer" class="absolute top-0 right-0 h-full w-80 bg-white/80 backdrop-blur-2xl border-l border-white/20 shadow-2xl transform translate-x-full transition-transform duration-300 ease-out">
+        <div id="menuContainer" class="absolute top-0 right-0 h-full w-full md:w-96 bg-white/90 backdrop-blur-2xl border-l border-white/30 shadow-2xl transform translate-x-full transition-all duration-500 ease-out">
             <!-- Menu Header -->
             <div class="flex items-center justify-between p-6 border-b border-white/10">
                 <div class="flex items-center space-x-3">
@@ -920,8 +963,8 @@
                     </div>
                 </button>
                 <!-- iOS Style Menu Button -->
-                <button id="iosMenuBtn" class="md:hidden text-gray-700 hover:text-pink-600 transition-colors duration-200">
-                    <div class="w-10 h-10 bg-gray-100/50 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-gray-200/50 transition-all duration-200">
+                <button id="iosMenuBtn" class="md:hidden text-gray-700 hover:text-pink-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 rounded-full">
+                    <div class="w-12 h-12 bg-gray-100/50 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-gray-200/50 active:bg-gray-300/50 transition-all duration-200 transform hover:scale-105 active:scale-95">
                         <i class="fas fa-bars text-lg"></i>
                     </div>
                 </button>
@@ -1838,10 +1881,12 @@
         }
 
         // iOS Style Menu Handlers
+        let isMenuOpen = false;
         const iosMenuBtn = document.getElementById('iosMenuBtn');
         const sideMenu = document.getElementById('sideMenu');
         const closeMenuBtn = document.getElementById('closeMenuBtn');
         const menuBackdrop = document.getElementById('menuBackdrop');
+        const menuContainer = document.getElementById('menuContainer');
 
         // Haptic feedback function
         function triggerHapticFeedback() {
@@ -1855,51 +1900,95 @@
             }, 100);
         }
 
-        // Open menu
+        // Open menu function
+        function openMenu() {
+            if (isMenuOpen) return;
+            
+            triggerHapticFeedback();
+            isMenuOpen = true;
+            sideMenu.classList.add('open');
+            document.body.classList.add('menu-open');
+            
+            // Prevent any background interactions
+            setTimeout(() => {
+                sideMenu.style.pointerEvents = 'all';
+            }, 50);
+        }
+
+        // Close menu function
+        function closeMenu() {
+            if (!isMenuOpen) return;
+            
+            triggerHapticFeedback();
+            isMenuOpen = false;
+            sideMenu.classList.remove('open');
+            document.body.classList.remove('menu-open');
+            sideMenu.style.pointerEvents = 'none';
+            
+            // Reset any transform
+            if (menuContainer) {
+                menuContainer.style.transform = '';
+            }
+        }
+
+        // Event listeners
         if (iosMenuBtn) {
-            iosMenuBtn.addEventListener('click', () => {
-                triggerHapticFeedback();
-                sideMenu.classList.add('open');
-                document.body.style.overflow = 'hidden';
+            iosMenuBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                openMenu();
             });
         }
 
-        // Close menu
         if (closeMenuBtn) {
-            closeMenuBtn.addEventListener('click', () => {
-                triggerHapticFeedback();
-                sideMenu.classList.remove('open');
-                document.body.style.overflow = '';
+            closeMenuBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                closeMenu();
             });
         }
 
-        // Close menu on backdrop click
         if (menuBackdrop) {
-            menuBackdrop.addEventListener('click', () => {
-                triggerHapticFeedback();
-                sideMenu.classList.remove('open');
-                document.body.style.overflow = '';
+            menuBackdrop.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                closeMenu();
             });
         }
 
         // Close menu on escape key
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && sideMenu.classList.contains('open')) {
-                triggerHapticFeedback();
-                sideMenu.classList.remove('open');
-                document.body.style.overflow = '';
+            if (e.key === 'Escape' && isMenuOpen) {
+                closeMenu();
             }
         });
 
-        // Menu item click handlers with haptic feedback
+        // Menu item click handlers
         document.querySelectorAll('.menu-item').forEach(item => {
-            item.addEventListener('click', () => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
                 triggerHapticFeedback();
-                // Close menu after a short delay to show the feedback
-                setTimeout(() => {
-                    sideMenu.classList.remove('open');
-                    document.body.style.overflow = '';
-                }, 150);
+                
+                // Get the href and navigate
+                const href = item.getAttribute('href');
+                if (href) {
+                    setTimeout(() => {
+                        closeMenu();
+                        // Small delay to show feedback before navigation
+                        setTimeout(() => {
+                            if (href.startsWith('#')) {
+                                // Smooth scroll to section
+                                const target = document.querySelector(href);
+                                if (target) {
+                                    target.scrollIntoView({ behavior: 'smooth' });
+                                }
+                            } else {
+                                // Navigate to page
+                                window.location.href = href;
+                            }
+                        }, 100);
+                    }, 150);
+                }
             });
         });
 
@@ -1908,36 +1997,37 @@
         let currentX = 0;
         let isDragging = false;
 
-        sideMenu.addEventListener('touchstart', (e) => {
-            startX = e.touches[0].clientX;
-            isDragging = true;
-        });
+        if (sideMenu) {
+            sideMenu.addEventListener('touchstart', (e) => {
+                if (!isMenuOpen) return;
+                startX = e.touches[0].clientX;
+                isDragging = true;
+            }, { passive: true });
 
-        sideMenu.addEventListener('touchmove', (e) => {
-            if (!isDragging) return;
-            currentX = e.touches[0].clientX;
-            const diffX = currentX - startX;
-            
-            if (diffX > 0) { // Swipe right to close
-                const translateX = Math.min(diffX, 100);
-                menuContainer.style.transform = `translateX(${translateX}px)`;
-            }
-        });
+            sideMenu.addEventListener('touchmove', (e) => {
+                if (!isDragging || !isMenuOpen) return;
+                currentX = e.touches[0].clientX;
+                const diffX = currentX - startX;
+                
+                if (diffX > 0) { // Swipe right to close
+                    const translateX = Math.min(diffX, 100);
+                    menuContainer.style.transform = `translateX(${translateX}px)`;
+                }
+            }, { passive: true });
 
-        sideMenu.addEventListener('touchend', (e) => {
-            if (!isDragging) return;
-            isDragging = false;
-            
-            const diffX = currentX - startX;
-            if (diffX > 50) { // Swipe threshold
-                triggerHapticFeedback();
-                sideMenu.classList.remove('open');
-                document.body.style.overflow = '';
-            } else {
-                // Reset position
-                menuContainer.style.transform = '';
-            }
-        });
+            sideMenu.addEventListener('touchend', (e) => {
+                if (!isDragging || !isMenuOpen) return;
+                isDragging = false;
+                
+                const diffX = currentX - startX;
+                if (diffX > 50) { // Swipe threshold
+                    closeMenu();
+                } else {
+                    // Reset position
+                    menuContainer.style.transform = '';
+                }
+            }, { passive: true });
+        }
 
 
     });
