@@ -720,6 +720,14 @@
             try {
                 console.log('=== НАЧАЛО ИНИЦИАЛИЗАЦИИ SUPABASE ===');
                 
+                // Проверяем, что DOM загружен
+                if (document.readyState !== 'complete') {
+                    console.log('DOM еще не загружен, ждем...');
+                    await new Promise(resolve => {
+                        document.addEventListener('DOMContentLoaded', resolve);
+                    });
+                }
+                
                 // Проверяем, что Supabase SDK загружен
                 console.log('Проверяем window.supabase:', typeof window.supabase);
                 console.log('Проверяем глобальную переменную supabase:', typeof supabase);
@@ -769,7 +777,6 @@
                     showProfile();
                     loadUserProfile();
                     loadBookings();
-                    loadServices();
                 } else {
                     console.log('Пользователь не найден, показываем форму входа');
                     showAuth();
@@ -783,7 +790,6 @@
                     showProfile();
                     loadUserProfile();
                     loadBookings();
-                    loadServices();
                 }
                 
                 console.log('=== ИНИЦИАЛИЗАЦИЯ SUPABASE ЗАВЕРШЕНА УСПЕШНО ===');
@@ -878,22 +884,57 @@
 
         // Show auth section
         function showAuth() {
-            document.getElementById('authSection').classList.remove('hidden');
-            document.getElementById('profileSection').classList.add('hidden');
+            try {
+                const authSection = document.getElementById('authSection');
+                const profileSection = document.getElementById('profileSection');
+                
+                if (!authSection || !profileSection) {
+                    console.error('Не найдены секции auth или profile');
+                    return;
+                }
+                
+                authSection.classList.remove('hidden');
+                profileSection.classList.add('hidden');
+                console.log('Форма входа показана успешно');
+            } catch (error) {
+                console.error('Ошибка при показе формы входа:', error);
+            }
         }
 
         // Show profile section
         function showProfile() {
-            document.getElementById('authSection').classList.add('hidden');
-            document.getElementById('profileSection').classList.remove('hidden');
+            try {
+                const authSection = document.getElementById('authSection');
+                const profileSection = document.getElementById('profileSection');
+                
+                if (!authSection || !profileSection) {
+                    console.error('Не найдены секции auth или profile');
+                    return;
+                }
+                
+                authSection.classList.add('hidden');
+                profileSection.classList.remove('hidden');
+                console.log('Профиль показан успешно');
+            } catch (error) {
+                console.error('Ошибка при показе профиля:', error);
+            }
         }
 
         // Load user profile
         async function loadUserProfile() {
-            if (!currentUser) return;
+            if (!currentUser) {
+                console.log('Нет текущего пользователя для загрузки профиля');
+                return;
+            }
             
             try {
+                console.log('Загружаем профиль для пользователя:', currentUser.id);
                 const client = window.supabaseClient || supabaseClient;
+                
+                if (!client) {
+                    throw new Error('Supabase клиент не инициализирован');
+                }
+                
                 const { data: profile, error } = await client
                     .from('profiles')
                     .select('*')
@@ -905,15 +946,22 @@
                 }
                 
                 if (profile) {
+                    console.log('Профиль найден:', profile);
                     document.getElementById('userName').textContent = profile.full_name || 'Пользователь';
                     document.getElementById('userEmail').textContent = profile.email || currentUser.email;
                     document.getElementById('userPhone').textContent = profile.phone || 'Не указан';
                 } else {
+                    console.log('Профиль не найден, создаем новый');
                     // Create profile if doesn't exist
                     await createUserProfile();
                 }
             } catch (error) {
                 console.error('Error loading profile:', error);
+                // Показываем базовую информацию пользователя
+                document.getElementById('userName').textContent = currentUser.user_metadata?.full_name || 'Пользователь';
+                document.getElementById('userEmail').textContent = currentUser.email || 'loading@email.com';
+                document.getElementById('userPhone').textContent = 'Не указан';
+                showNotification('warning', 'Внимание', 'Не удалось загрузить полный профиль, но вы можете продолжить работу');
             }
         }
 
@@ -941,10 +989,19 @@
 
         // Load user bookings
         async function loadBookings() {
-            if (!currentUser) return;
+            if (!currentUser) {
+                console.log('Нет текущего пользователя для загрузки записей');
+                return;
+            }
             
             try {
+                console.log('Загружаем записи для пользователя:', currentUser.id);
                 const client = window.supabaseClient || supabaseClient;
+                
+                if (!client) {
+                    throw new Error('Supabase клиент не инициализирован');
+                }
+                
                 const { data: bookings, error } = await client
                     .from('bookings')
                     .select(`
@@ -957,9 +1014,13 @@
                 
                 if (error) throw error;
                 
+                console.log('Записи загружены:', bookings);
                 displayBookings(bookings || []);
             } catch (error) {
                 console.error('Error loading bookings:', error);
+                // Показываем пустой список записей
+                displayBookings([]);
+                showNotification('warning', 'Внимание', 'Не удалось загрузить записи, но вы можете создать новые');
             }
         }
 
@@ -1447,7 +1508,6 @@
                         showProfile();
                         loadUserProfile();
                         loadBookings();
-                        loadServices();
                     } else if (event === 'SIGNED_OUT') {
                         currentUser = null;
                         showAuth();
