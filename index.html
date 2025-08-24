@@ -668,20 +668,7 @@
         
         #sideMenu.open #menuContainer {
             transform: translateX(0);
-            animation: menuBounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: -20px 0 40px rgba(0, 0, 0, 0.15);
-        }
-        
-        @keyframes menuBounce {
-            0% {
-                transform: translateX(100%);
-            }
-            50% {
-                transform: translateX(-12px);
-            }
-            100% {
-                transform: translateX(0);
-            }
+            box-shadow: -15px 0 30px rgba(0, 0, 0, 0.12);
         }
         
         /* Prevent body scroll when menu is open */
@@ -733,12 +720,12 @@
         .menu-item {
             display: flex;
             align-items: center;
-            padding: 12px 16px;
-            border-radius: 12px;
+            padding: 10px 12px;
+            border-radius: 10px;
             text-decoration: none;
             color: #374151;
             font-weight: 500;
-            font-size: 15px;
+            font-size: 14px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
@@ -779,14 +766,14 @@
         
         /* Menu Icons */
         .menu-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
             background: linear-gradient(135deg, rgba(236, 72, 153, 0.12) 0%, rgba(236, 72, 153, 0.06) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 12px;
+            margin-right: 10px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(236, 72, 153, 0.15);
@@ -888,28 +875,28 @@
     <!-- iOS Style Side Menu -->
     <div id="sideMenu" class="fixed inset-0 z-50 pointer-events-none">
         <!-- Backdrop -->
-        <div id="menuBackdrop" class="absolute inset-0 bg-black/40 backdrop-blur-md opacity-0 transition-all duration-500 ease-out pointer-events-none"></div>
+        <div id="menuBackdrop" class="absolute inset-0 bg-black/30 backdrop-blur-sm opacity-0 transition-all duration-250 ease-out pointer-events-none"></div>
         
         <!-- Menu Container -->
-        <div id="menuContainer" class="absolute top-4 right-4 h-[calc(100vh-2rem)] w-[calc(100vw-2rem)] md:w-80 bg-white/95 backdrop-blur-2xl rounded-3xl shadow-2xl transform translate-x-full transition-all duration-500 ease-out border border-white/40">
+        <div id="menuContainer" class="absolute top-4 right-4 h-auto max-h-[80vh] w-72 bg-white/98 backdrop-blur-3xl rounded-2xl shadow-2xl transform translate-x-full transition-all duration-250 ease-out border border-white/50">
             <!-- Menu Header -->
-            <div class="flex items-center justify-between p-4 border-b border-white/10">
-                <div class="flex items-center space-x-3">
-                    <img src="images/logo.png" alt="SvetSalonPro" class="w-10 h-10 rounded-full">
+            <div class="flex items-center justify-between p-3 border-b border-white/10">
+                <div class="flex items-center space-x-2">
+                    <img src="images/logo.png" alt="SvetSalonPro" class="w-8 h-8 rounded-full">
                     <div>
-                        <h2 class="text-lg font-semibold text-gray-800">SvetSalonPro</h2>
-                        <p class="text-sm text-gray-600">Салон красоты</p>
+                        <h2 class="text-base font-semibold text-gray-800">SvetSalonPro</h2>
+                        <p class="text-xs text-gray-600">Салон красоты</p>
                     </div>
                 </div>
-                <button id="closeMenuBtn" class="w-10 h-10 rounded-full bg-gray-100/50 backdrop-blur-sm flex items-center justify-center hover:bg-gray-200/50 active:bg-gray-300/50 transition-all duration-200 transform hover:scale-105 active:scale-95 cursor-pointer">
-                    <i class="fas fa-times text-gray-600 text-lg"></i>
+                <button id="closeMenuBtn" class="w-8 h-8 rounded-full bg-gray-100/50 backdrop-blur-sm flex items-center justify-center hover:bg-gray-200/50 active:bg-gray-300/50 transition-all duration-200 transform hover:scale-105 active:scale-95 cursor-pointer">
+                    <i class="fas fa-times text-gray-600 text-sm"></i>
                 </button>
             </div>
             
             <!-- Menu Content -->
             <div class="flex-1 overflow-y-auto">
                 <!-- Navigation Links -->
-                <div class="p-3 space-y-1">
+                <div class="p-2 space-y-0.5">
                     <a href="#home" class="menu-item group">
                         <div class="menu-icon">
                             <i class="fas fa-home"></i>
@@ -950,7 +937,7 @@
                 <div class="mx-4 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
                 
                 <!-- Profile Section -->
-                <div class="p-3">
+                <div class="p-2">
                     <a href="pages/account.html" class="menu-item group">
                         <div class="menu-icon">
                             <i class="fas fa-user"></i>
@@ -960,24 +947,24 @@
                 </div>
                 
                 <!-- Contact Info -->
-                <div class="p-3 mt-3">
-                    <div class="bg-gradient-to-r from-pink-500 to-pink-600 rounded-2xl p-4 text-white">
-                        <div class="flex items-center space-x-3 mb-3">
-                            <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-                                <i class="fas fa-envelope"></i>
+                <div class="p-2 mt-2">
+                    <div class="bg-gradient-to-r from-pink-500 to-pink-600 rounded-xl p-3 text-white">
+                        <div class="flex items-center space-x-2 mb-2">
+                            <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                                <i class="fas fa-envelope text-sm"></i>
                             </div>
                             <div>
-                                <p class="font-semibold">my@SvetSalonPro.ru</p>
-                                <p class="text-sm text-pink-100">Пишите в любое время</p>
+                                <p class="font-semibold text-sm">my@SvetSalonPro.ru</p>
+                                <p class="text-xs text-pink-100">Пишите в любое время</p>
                             </div>
                         </div>
-                        <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-                                <i class="fas fa-phone"></i>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                                <i class="fas fa-phone text-sm"></i>
                             </div>
                             <div>
-                                <p class="font-semibold">+7 928 280 62 94</p>
-                                <p class="text-sm text-pink-100">Звоните с 9:00 до 21:00</p>
+                                <p class="font-semibold text-sm">+7 928 280 62 94</p>
+                                <p class="text-xs text-pink-100">Звоните с 9:00 до 21:00</p>
                             </div>
                         </div>
                     </div>
