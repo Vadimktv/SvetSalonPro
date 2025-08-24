@@ -38,6 +38,36 @@
             border-color: #ec4899;
             box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
         }
+        
+        /* Улучшенные стили для полей ввода */
+        .form-input {
+            padding: 0.75rem 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+            background-color: #ffffff;
+        }
+        
+        .form-input:hover {
+            border-color: #9ca3af;
+        }
+        
+        /* Специальные стили для полей даты и времени */
+        input[type="date"], input[type="time"], select {
+            padding: 0.625rem 0.875rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            background-color: #ffffff;
+            transition: all 0.2s ease;
+        }
+        
+        input[type="date"]:focus, input[type="time"]:focus, select:focus {
+            border-color: #ec4899;
+            box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
+            outline: none;
+        }
 
         .btn-primary {
             background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
@@ -136,7 +166,7 @@
                         <div>
                             <label for="email" class="block text-gray-700 font-medium mb-2 text-left">Email</label>
                             <input type="email" id="email" name="email" required 
-                                   class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none"
+                                   class="form-input w-full"
                                    placeholder="your@email.com">
                         </div>
                         
@@ -213,22 +243,22 @@
                         <form id="newBookingForm" class="space-y-4">
                             <div>
                                 <label for="serviceSelect" class="block text-gray-700 font-medium mb-2">Услуга</label>
-                                <select id="serviceSelect" name="service" required 
-                                        class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none">
+                                                                    <select id="serviceSelect" name="service" required 
+                                            class="form-input w-full">
                                     <option value="">Выберите услугу</option>
                                 </select>
                             </div>
                             
                             <div>
                                 <label for="dateSelect" class="block text-gray-700 font-medium mb-2">Дата</label>
-                                <input type="date" id="dateSelect" name="date" required 
-                                       class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none">
+                                                                    <input type="date" id="dateSelect" name="date" required 
+                                           class="form-input w-full">
                             </div>
                             
                             <div>
                                 <label for="timeSelect" class="block text-gray-700 font-medium mb-2">Время</label>
-                                <select id="timeSelect" name="time" required 
-                                        class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none">
+                                                                    <select id="timeSelect" name="time" required 
+                                            class="form-input w-full">
                                     <option value="">Выберите время</option>
                                 </select>
                             </div>
@@ -613,23 +643,28 @@
         });
 
         // Initialize page
-        document.addEventListener('DOMContentLoaded', () => {
-            initSupabase();
+        document.addEventListener('DOMContentLoaded', async () => {
+            await initSupabase();
+            setupAuthStateChange();
             initializeDateTimeInputs();
         });
 
         // Handle auth state changes
-        supabase?.auth.onAuthStateChange(async (event, session) => {
-            if (event === 'SIGNED_IN' && session?.user) {
-                currentUser = session.user;
-                showProfile();
-                loadUserProfile();
-                loadBookings();
-            } else if (event === 'SIGNED_OUT') {
-                currentUser = null;
-                showAuth();
+        function setupAuthStateChange() {
+            if (supabase) {
+                supabase.auth.onAuthStateChange(async (event, session) => {
+                    if (event === 'SIGNED_IN' && session?.user) {
+                        currentUser = session.user;
+                        showProfile();
+                        loadUserProfile();
+                        loadBookings();
+                    } else if (event === 'SIGNED_OUT') {
+                        currentUser = null;
+                        showAuth();
+                    }
+                });
             }
-        });
+        }
     </script>
 </body>
 </html>
