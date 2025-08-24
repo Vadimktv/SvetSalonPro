@@ -629,6 +629,28 @@
         .notification-close:hover {
             color: #6b7280;
         }
+
+        /* Profile Button Styles */
+        #profileBtn, #desktopProfileBtn {
+            transition: all 0.3s ease;
+        }
+        
+        #profileBtn:hover, #desktopProfileBtn:hover {
+            transform: scale(1.1);
+        }
+        
+        #profileBtn:active, #desktopProfileBtn:active {
+            transform: scale(0.95);
+        }
+        
+        #profileBtn .w-8, #desktopProfileBtn .w-8 {
+            transition: all 0.3s ease;
+        }
+        
+        #profileBtn:hover .w-8, #desktopProfileBtn:hover .w-8 {
+            background-color: #ec4899 !important;
+            box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3);
+        }
     </style>
 </head>
 <body class="font-sans bg-white text-gray-800">
@@ -644,17 +666,32 @@
                 <a href="#" class="logo-link"><img src="images/logo.png" alt="SvetSalonPro" class="logo-image mr-3"></a>
                 <h1 class="text-2xl font-bold text-pink-600">SvetSalonPro</h1>
             </div>
-            <nav class="hidden md:flex space-x-8">
+            <nav class="hidden md:flex items-center space-x-8">
                 <a href="#home" class="nav-link text-gray-700 hover:text-pink-600 transition">Главная</a>
                 <a href="#about" class="nav-link text-gray-700 hover:text-pink-600 transition">О нас</a>
                 <a href="#services" class="nav-link text-gray-700 hover:text-pink-600 transition">Услуги</a>
                 <a href="#masters" class="nav-link text-gray-700 hover:text-pink-600 transition">Мастера</a>
                 <a href="#contact" class="nav-link text-gray-700 hover:text-pink-600 transition">Контакты</a>
                 <a href="pages/account.html" class="nav-link text-gray-700 hover:text-pink-600 transition">Личный кабинет</a>
+                <!-- Desktop Profile Icon -->
+                <button id="desktopProfileBtn" class="text-gray-700 hover:text-pink-600 transition-colors duration-200">
+                    <div class="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center">
+                        <i class="fas fa-user text-white text-sm"></i>
+                    </div>
+                </button>
             </nav>
-            <button id="mobileMenuBtn" class="md:hidden text-gray-700">
-                <i class="fas fa-bars text-2xl"></i>
-            </button>
+            <div class="flex items-center space-x-4">
+                <!-- Profile Icon -->
+                <button id="profileBtn" class="text-gray-700 hover:text-pink-600 transition-colors duration-200">
+                    <div class="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center">
+                        <i class="fas fa-user text-white text-sm"></i>
+                    </div>
+                </button>
+                <!-- Mobile Menu Button -->
+                <button id="mobileMenuBtn" class="md:hidden text-gray-700">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
         </div>
         
         <!-- Mobile Menu -->
@@ -1560,6 +1597,22 @@
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileMenu = document.getElementById('mobileMenu');
         
+        // Profile button handlers
+        const profileBtn = document.getElementById('profileBtn');
+        const desktopProfileBtn = document.getElementById('desktopProfileBtn');
+        
+        if (profileBtn) {
+            profileBtn.addEventListener('click', () => {
+                window.location.href = 'pages/account.html';
+            });
+        }
+        
+        if (desktopProfileBtn) {
+            desktopProfileBtn.addEventListener('click', () => {
+                window.location.href = 'pages/account.html';
+            });
+        }
+
         if (mobileMenuBtn && mobileMenu) {
             mobileMenuBtn.addEventListener('click', () => {
                 const icon = mobileMenuBtn.querySelector('i');
