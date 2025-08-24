@@ -313,7 +313,7 @@
 </head>
 <body class="font-sans bg-gradient-to-br from-pink-50 to-white text-gray-800 min-h-screen">
     <!-- Custom Notification System -->
-    <div id="notificationContainer" class="fixed top-4 right-4 z-50 space-y-2"></div>
+    <div id="notificationContainer" class="fixed top-20 left-4 right-4 z-50 space-y-2 max-w-sm mx-auto"></div>
     <!-- Header -->
     <header class="fixed w-full bg-white shadow-sm z-50">
         <div class="container mx-auto px-4 py-4 flex justify-between items-center">
@@ -642,7 +642,8 @@
                     <div>
                         <label for="customPhotoUpload" class="block text-gray-700 font-medium mb-2">Загрузить свое фото</label>
                         <input type="file" id="customPhotoUpload" name="photo" accept="image/*" 
-                               class="form-input w-full">
+                               class="form-input w-full" onchange="handleCustomPhotoUpload(event)">
+                        <p class="text-sm text-gray-500 mt-1">Поддерживаются форматы: JPG, PNG, WebP (макс. 5MB)</p>
                     </div>
                     
                     <div>
@@ -955,6 +956,10 @@
                     // Create profile if doesn't exist
                     await createUserProfile();
                 }
+                
+                // Восстанавливаем выбранную аватарку
+                restoreSelectedAvatar();
+                
             } catch (error) {
                 console.error('Error loading profile:', error);
                 // Показываем базовую информацию пользователя
@@ -962,6 +967,87 @@
                 document.getElementById('userEmail').textContent = currentUser.email || 'loading@email.com';
                 document.getElementById('userPhone').textContent = 'Не указан';
                 showNotification('warning', 'Внимание', 'Не удалось загрузить полный профиль, но вы можете продолжить работу');
+                
+                // Восстанавливаем выбранную аватарку даже при ошибке
+                restoreSelectedAvatar();
+            }
+        }
+        
+        // Restore selected avatar from localStorage
+        function restoreSelectedAvatar() {
+            try {
+                const savedAvatar = localStorage.getItem('selectedAvatar');
+                if (!savedAvatar) return;
+                
+                console.log('Восстанавливаем аватарку:', savedAvatar);
+                
+                const profileImage = document.getElementById('profileImage');
+                const defaultIcon = document.getElementById('defaultProfileIcon');
+                
+                if (!profileImage || !defaultIcon) return;
+                
+                if (savedAvatar.startsWith('icon-')) {
+                    // Это иконка
+                    profileImage.classList.add('hidden');
+                    defaultIcon.classList.remove('hidden');
+                    
+                    const iconIndex = parseInt(savedAvatar.split('-')[1]);
+                    const iconClasses = [
+                        'fas fa-user', 'fas fa-user-tie', 'fas fa-user-graduate', 'fas fa-user-ninja',
+                        'fas fa-user-astronaut', 'fas fa-user-cowboy', 'fas fa-user-doctor', 'fas fa-user-nurse',
+                        'fas fa-user-secret', 'fas fa-user-tag', 'fas fa-user-check', 'fas fa-user-clock'
+                    ];
+                    const iconColors = [
+                        'text-pink-600', 'text-blue-600', 'text-green-600', 'text-purple-600',
+                        'text-indigo-600', 'text-yellow-600', 'text-red-600', 'text-teal-600',
+                        'text-gray-600', 'text-orange-600', 'text-emerald-600', 'text-cyan-600'
+                    ];
+                    
+                    if (iconIndex < iconClasses.length) {
+                        defaultIcon.className = `${iconClasses[iconIndex]} text-3xl ${iconColors[iconIndex]}`;
+                    }
+                    
+                    // Обновляем основное фото профиля
+                    const mainProfileImage = document.querySelector('#profileSection #profileImagePreview img');
+                    const mainDefaultIcon = document.querySelector('#profileSection #profileImagePreview i');
+                    
+                    if (mainProfileImage) mainProfileImage.classList.add('hidden');
+                    if (mainDefaultIcon) {
+                        mainDefaultIcon.className = `${iconClasses[iconIndex]} text-3xl ${iconColors[iconIndex]}`;
+                        mainDefaultIcon.classList.remove('hidden');
+                    }
+                    
+                } else {
+                    // Это изображение (data URL или путь к файлу)
+                    profileImage.src = savedAvatar;
+                    profileImage.classList.remove('hidden');
+                    defaultIcon.classList.add('hidden');
+                    
+                    // Обновляем основное фото профиля
+                    const mainProfileImage = document.querySelector('#profileSection #profileImagePreview img');
+                    const mainDefaultIcon = document.querySelector('#profileSection #profileImagePreview i');
+                    
+                    if (mainProfileImage) {
+                        mainProfileImage.src = savedAvatar;
+                        mainProfileImage.classList.remove('hidden');
+                    } else {
+                        // Создаем изображение если его нет
+                        const newImg = document.createElement('img');
+                        newImg.src = savedAvatar;
+                        newImg.alt = 'Фото профиля';
+                        newImg.className = 'w-full h-full object-cover';
+                        document.querySelector('#profileSection #profileImagePreview').appendChild(newImg);
+                    }
+                    
+                    if (mainDefaultIcon) {
+                        mainDefaultIcon.classList.add('hidden');
+                    }
+                }
+                
+                console.log('Аватарка восстановлена успешно');
+                
+            } catch (error) {
+                console.error('Error restoring avatar:', error);
             }
         }
 
@@ -1296,73 +1382,52 @@
             const fullName = document.getElementById('editFullName').value;
             const phone = document.getElementById('editPhone').value;
             
-            try {
-                const client = window.supabaseClient || supabaseClient;
-                const { error } = await client
-                    .from('profiles')
-                    .update({
-                        full_name: fullName,
-                        phone: phone || null,
-                        updated_at: new Date().toISOString()
-                    })
-                    .eq('id', currentUser.id);
-                
-                if (error) throw error;
-                
-                // Update UI
-                document.getElementById('userName').textContent = fullName;
-                document.getElementById('userPhone').textContent = phone || 'Не указан';
-                
-                // Close modal
-                document.getElementById('editProfileModal').classList.add('hidden');
-                
-                showNotification('success', 'Профиль обновлен!', 'Ваши данные успешно сохранены');
-                
-            } catch (error) {
-                console.error('Error updating profile:', error);
-                showNotification('error', 'Ошибка обновления профиля', error.message);
-            }
+            // Сразу обновляем UI для быстрого отклика
+            document.getElementById('userName').textContent = fullName;
+            document.getElementById('userPhone').textContent = phone || 'Не указан';
+            
+            // Закрываем модальное окно
+            document.getElementById('editProfileModal').classList.add('hidden');
+            
+            // Показываем уведомление об успехе
+            showNotification('success', 'Профиль обновлен!', 'Ваши данные успешно сохранены');
+            
+            // Асинхронно сохраняем в базу данных
+            setTimeout(async () => {
+                try {
+                    const client = window.supabaseClient || supabaseClient;
+                    if (client) {
+                        const { error } = await client
+                            .from('profiles')
+                            .update({
+                                full_name: fullName,
+                                phone: phone || null,
+                                updated_at: new Date().toISOString()
+                            })
+                            .eq('id', currentUser.id);
+                        
+                        if (error) {
+                            console.error('Error saving to database:', error);
+                            showNotification('warning', 'Внимание', 'Данные сохранены локально, но есть проблемы с сервером');
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error saving to database:', error);
+                    showNotification('warning', 'Внимание', 'Данные сохранены локально, но есть проблемы с сервером');
+                }
+            }, 100);
         });
 
-        // Handle Custom Photo Upload
-        document.getElementById('customPhotoUpload').addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const profileImage = document.getElementById('profileImage');
-                    const defaultIcon = document.getElementById('defaultProfileIcon');
-                    
-                    profileImage.src = e.target.result;
-                    profileImage.classList.remove('hidden');
-                    defaultIcon.classList.add('hidden');
-                    
-                    // Update main profile image
-                    const mainProfileImage = document.querySelector('#profileSection #profileImagePreview img');
-                    if (mainProfileImage) {
-                        mainProfileImage.src = e.target.result;
-                        mainProfileImage.classList.remove('hidden');
-                    }
-                    
-                    // Close photo selection modal
-                    document.getElementById('photoSelectionModal').classList.add('hidden');
-                };
-                reader.readAsDataURL(file);
-            }
-        });
+
 
         // Load Standard Photos and Icons
         async function loadStandardPhotos() {
             try {
-                const client = window.supabaseClient || supabaseClient;
-                
-                // Используем доступные изображения из папки images
-                const availableImages = [
-                    '../images/Светлана.webp',
-                    '../images/Анна.jpg',
-                    '../images/log5o.png',
-                    '../images/Вход.jpeg'
-                ];
+                const container = document.getElementById('standardPhotos');
+                if (!container) {
+                    console.error('Container for standard photos not found');
+                    return;
+                }
                 
                 // Добавляем цветные иконки как альтернативу
                 const colorIcons = [
@@ -1380,26 +1445,12 @@
                     { icon: 'fas fa-user-clock', color: 'bg-cyan-500' }
                 ];
                 
-                const container = document.getElementById('standardPhotos');
                 let html = '';
-                
-                // Добавляем реальные изображения
-                availableImages.forEach((image, index) => {
-                    html += `
-                        <div class="cursor-pointer hover:opacity-75 transition" onclick="selectStandardPhoto('${image}', ${index})">
-                            <div class="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center overflow-hidden">
-                                <img src="${image}" alt="Изображение ${index + 1}" class="w-full h-full object-cover" 
-                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                                <i class="fas fa-user text-pink-600" style="display: none;"></i>
-                            </div>
-                        </div>
-                    `;
-                });
                 
                 // Добавляем цветные иконки
                 colorIcons.forEach((iconData, index) => {
                     html += `
-                        <div class="cursor-pointer hover:opacity-75 transition" onclick="selectStandardPhoto('icon-${index}', ${availableImages.length + index})">
+                        <div class="cursor-pointer hover:opacity-75 transition" onclick="selectStandardPhoto('icon-${index}', ${index})">
                             <div class="w-12 h-12 ${iconData.color} rounded-full flex items-center justify-center">
                                 <i class="${iconData.icon} text-white text-lg"></i>
                             </div>
@@ -1408,19 +1459,27 @@
                 });
                 
                 container.innerHTML = html;
+                console.log('Standard photos loaded successfully');
                 
             } catch (error) {
                 console.error('Error loading standard photos:', error);
+                showNotification('error', 'Ошибка загрузки', 'Не удалось загрузить доступные изображения');
             }
         }
 
         // Select Standard Photo
         function selectStandardPhoto(photoPath, index) {
             try {
+                console.log('Selecting photo:', photoPath, index);
+                
                 // Обновляем фото профиля
                 const profileImage = document.getElementById('profileImage');
                 const defaultIcon = document.getElementById('defaultProfileIcon');
                 const profileImagePreview = document.getElementById('profileImagePreview');
+                
+                if (!profileImage || !defaultIcon || !profileImagePreview) {
+                    throw new Error('Profile image elements not found');
+                }
                 
                 // Проверяем, является ли это иконкой
                 if (photoPath.startsWith('icon-')) {
@@ -1458,6 +1517,10 @@
                             mainDefaultIcon.className = `${iconClasses[iconIndex]} text-3xl ${iconColors[iconIndex]}`;
                         }
                     }
+                    
+                    // Сохраняем выбор в localStorage
+                    localStorage.setItem('selectedAvatar', photoPath);
+                    
                 } else {
                     // Это изображение
                     profileImage.src = photoPath;
@@ -1483,6 +1546,9 @@
                     if (mainDefaultIcon) {
                         mainDefaultIcon.classList.add('hidden');
                     }
+                    
+                    // Сохраняем выбор в localStorage
+                    localStorage.setItem('selectedAvatar', photoPath);
                 }
                 
                 // Закрываем модальное окно
@@ -1494,6 +1560,72 @@
                 console.error('Error selecting standard photo:', error);
                 showNotification('error', 'Ошибка выбора аватарки', error.message);
             }
+        }
+
+        // Handle custom photo upload
+        function handleCustomPhotoUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            // Проверяем размер файла (5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                showNotification('error', 'Ошибка', 'Файл слишком большой. Максимальный размер: 5MB');
+                event.target.value = '';
+                return;
+            }
+            
+            // Проверяем тип файла
+            if (!file.type.startsWith('image/')) {
+                showNotification('error', 'Ошибка', 'Пожалуйста, выберите изображение');
+                event.target.value = '';
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imageData = e.target.result;
+                
+                // Обновляем фото профиля
+                const profileImage = document.getElementById('profileImage');
+                const defaultIcon = document.getElementById('defaultProfileIcon');
+                
+                if (profileImage && defaultIcon) {
+                    profileImage.src = imageData;
+                    profileImage.classList.remove('hidden');
+                    defaultIcon.classList.add('hidden');
+                    
+                    // Обновляем основное фото профиля
+                    const mainProfileImage = document.querySelector('#profileSection #profileImagePreview img');
+                    const mainDefaultIcon = document.querySelector('#profileSection #profileImagePreview i');
+                    
+                    if (mainProfileImage) {
+                        mainProfileImage.src = imageData;
+                        mainProfileImage.classList.remove('hidden');
+                    } else {
+                        // Создаем изображение если его нет
+                        const newImg = document.createElement('img');
+                        newImg.src = imageData;
+                        newImg.alt = 'Фото профиля';
+                        newImg.className = 'w-full h-full object-cover';
+                        document.querySelector('#profileSection #profileImagePreview').appendChild(newImg);
+                    }
+                    
+                    if (mainDefaultIcon) {
+                        mainDefaultIcon.classList.add('hidden');
+                    }
+                    
+                    // Сохраняем в localStorage
+                    localStorage.setItem('selectedAvatar', imageData);
+                    
+                    showNotification('success', 'Фото загружено!', 'Ваше фото успешно загружено');
+                }
+            };
+            
+            reader.onerror = function() {
+                showNotification('error', 'Ошибка', 'Не удалось загрузить изображение');
+            };
+            
+            reader.readAsDataURL(file);
         }
 
         // Setup auth state change listener
