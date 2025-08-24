@@ -23,7 +23,15 @@
                 script1.src = 'https://unpkg.com/@supabase/supabase-js@2';
                 script1.onload = () => {
                     console.log('Supabase SDK загружен с unpkg');
-                    resolve();
+                    // Ждем немного, чтобы SDK полностью инициализировался
+                    setTimeout(() => {
+                        if (typeof window.supabase !== 'undefined') {
+                            console.log('Supabase SDK готов к использованию');
+                            resolve();
+                        } else {
+                            reject(new Error('Supabase SDK загружен, но не инициализирован'));
+                        }
+                    }, 100);
                 };
                 script1.onerror = () => {
                     console.log('Ошибка загрузки с unpkg, пробуем cdn.jsdelivr.net');
@@ -33,7 +41,14 @@
                     script2.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
                     script2.onload = () => {
                         console.log('Supabase SDK загружен с cdn.jsdelivr.net');
-                        resolve();
+                        setTimeout(() => {
+                            if (typeof window.supabase !== 'undefined') {
+                                console.log('Supabase SDK готов к использованию');
+                                resolve();
+                            } else {
+                                reject(new Error('Supabase SDK загружен, но не инициализирован'));
+                            }
+                        }, 100);
                     };
                     script2.onerror = () => {
                         reject(new Error('Не удалось загрузить Supabase SDK'));
@@ -338,21 +353,20 @@
                 console.log('Начинаем инициализацию Supabase...');
                 
                 // Проверяем, что Supabase SDK загружен
-                if (typeof supabase === 'undefined') {
+                if (typeof window.supabase === 'undefined') {
                     throw new Error('Supabase SDK не загружен');
                 }
                 
-                console.log('Supabase SDK найден:', supabase);
+                console.log('Supabase SDK найден:', window.supabase);
                 
                 // Создаем клиент
-                const client = supabase.createClient(
+                const client = window.supabase.createClient(
                     'https://iaezefurqmtgubdgqakt.supabase.co',
                     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlhZXplZnVycW1tZ3ViZGdxYWt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU5NTk3NjQsImV4cCI6MjA3MTUzNTc2NH0.-Puoiddwu_xIx9BaHM0BBfbsULdU0Ljzh6uQleVToBQ'
                 );
                 
                 // Присваиваем глобальным переменным
                 window.supabaseClient = client;
-                window.supabase = client;
                 supabaseClient = client;
                 
                 console.log('Supabase клиент инициализирован:', client);
@@ -385,7 +399,7 @@
             
             try {
                 // Проверяем, что Supabase инициализирован
-                const client = window.supabaseClient || window.supabase || supabaseClient;
+                const client = window.supabaseClient || supabaseClient;
                 if (!client || !client.auth) {
                     throw new Error('Supabase не инициализирован. Попробуйте обновить страницу.');
                 }
@@ -727,7 +741,7 @@
 
         // Handle auth state changes
         function setupAuthStateChange() {
-            const client = window.supabaseClient || window.supabase || supabaseClient;
+            const client = window.supabaseClient || supabaseClient;
             if (client) {
                 console.log('Настраиваем отслеживание состояния аутентификации...');
                 client.auth.onAuthStateChange(async (event, session) => {
