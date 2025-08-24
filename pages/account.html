@@ -311,15 +311,23 @@
         // Initialize Supabase
         async function initSupabase() {
             try {
-                // Ждем загрузки Supabase SDK
-                let attempts = 0;
-                while (typeof supabase === 'undefined' && attempts < 50) {
-                    await new Promise(resolve => setTimeout(resolve, 100));
-                    attempts++;
-                }
+                console.log('Начинаем инициализацию Supabase...');
                 
+                // Проверяем, что Supabase SDK загружен
                 if (typeof supabase === 'undefined') {
-                    throw new Error('Supabase SDK не загружен после 5 секунд ожидания');
+                    console.log('Supabase SDK не найден, ждем...');
+                    // Ждем загрузки
+                    await new Promise(resolve => {
+                        const checkSupabase = () => {
+                            if (typeof supabase !== 'undefined') {
+                                console.log('Supabase SDK найден!');
+                                resolve();
+                            } else {
+                                setTimeout(checkSupabase, 100);
+                            }
+                        };
+                        checkSupabase();
+                    });
                 }
                 
                 console.log('Supabase SDK найден:', supabase);
@@ -332,18 +340,21 @@
                 
                 // Присваиваем глобальной переменной
                 window.supabaseClient = supabaseClient;
-                supabase = supabaseClient;
+                window.supabase = supabaseClient;
                 
-                console.log('Supabase клиент инициализирован:', supabase);
+                console.log('Supabase клиент инициализирован:', supabaseClient);
                 
                 // Check if user is already logged in
-                const { data: { user } } = await supabase.auth.getUser();
+                const { data: { user } } = await supabaseClient.auth.getUser();
                 if (user) {
                     currentUser = user;
                     showProfile();
                     loadUserProfile();
                     loadBookings();
                 }
+                
+                console.log('Инициализация Supabase завершена успешно!');
+                
             } catch (error) {
                 console.error('Error initializing Supabase:', error);
                 alert('Ошибка инициализации: ' + error.message);
@@ -361,9 +372,12 @@
             
             try {
                 // Проверяем, что Supabase инициализирован
-                if (!supabase || !supabase.auth) {
+                const supabaseClient = window.supabaseClient || window.supabase;
+                if (!supabaseClient || !supabaseClient.auth) {
                     throw new Error('Supabase не инициализирован. Попробуйте обновить страницу.');
                 }
+                
+                console.log('Используем Supabase клиент:', supabaseClient);
                 
                 // Show loading state
                 loginBtn.disabled = true;
@@ -371,7 +385,7 @@
                 loginBtnLoading.classList.remove('hidden');
                 
                 // Send magic link
-                const { error } = await supabase.auth.signInWithOtp({
+                const { error } = await supabaseClient.auth.signInWithOtp({
                     email: email,
                     options: {
                         emailRedirectTo: window.location.origin + '/pages/account.html'
@@ -700,8 +714,11 @@
 
         // Handle auth state changes
         function setupAuthStateChange() {
-            if (supabase) {
-                supabase.auth.onAuthStateChange(async (event, session) => {
+            const supabaseClient = window.supabaseClient || window.supabase;
+            if (supabaseClient) {
+                console.log('Настраиваем отслеживание состояния аутентификации...');
+                supabaseClient.auth.onAuthStateChange(async (event, session) => {
+                    console.log('Auth state changed:', event, session);
                     if (event === 'SIGNED_IN' && session?.user) {
                         currentUser = session.user;
                         showProfile();
@@ -712,6 +729,8 @@
                         showAuth();
                     }
                 });
+            } else {
+                console.error('Supabase клиент не найден для настройки auth state change');
             }
         }
     </script>
