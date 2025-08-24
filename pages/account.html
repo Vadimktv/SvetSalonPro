@@ -1036,7 +1036,10 @@
                         newImg.src = savedAvatar;
                         newImg.alt = 'Фото профиля';
                         newImg.className = 'w-full h-full object-cover';
-                        document.querySelector('#profileSection #profileImagePreview').appendChild(newImg);
+                        const container = document.querySelector('#profileSection #profileImagePreview');
+                        if (container) {
+                            container.appendChild(newImg);
+                        }
                     }
                     
                     if (mainDefaultIcon) {
@@ -1429,6 +1432,40 @@
                     return;
                 }
                 
+                // Используем иконки из папки ICO
+                const icoImages = [
+                    '../images/ico/icon1.png',
+                    '../images/ico/icon2.png',
+                    '../images/ico/icon3.png',
+                    '../images/ico/icon4.png',
+                    '../images/ico/icon5.png',
+                    '../images/ico/icon6.png',
+                    '../images/ico/icon7.png',
+                    '../images/ico/icon8.png',
+                    '../images/ico/icon9.png',
+                    '../images/ico/icon10.png',
+                    '../images/ico/icon11.png',
+                    '../images/ico/icon12.png',
+                    '../images/ico/icon13.png',
+                    '../images/ico/icon14.png',
+                    '../images/ico/icon15.png',
+                    '../images/ico/icon16.png',
+                    '../images/ico/icon17.png',
+                    '../images/ico/icon18.png',
+                    '../images/ico/icon19.png',
+                    '../images/ico/icon20.png',
+                    '../images/ico/icon21.png',
+                    '../images/ico/icon22.png',
+                    '../images/ico/icon23.png',
+                    '../images/ico/icon24.png',
+                    '../images/ico/icon25.png',
+                    '../images/ico/icon26.png',
+                    '../images/ico/icon27.png',
+                    '../images/ico/icon28.png',
+                    '../images/ico/icon29.png',
+                    '../images/ico/icon30.png'
+                ];
+                
                 // Добавляем цветные иконки как альтернативу
                 const colorIcons = [
                     { icon: 'fas fa-user', color: 'bg-pink-500' },
@@ -1447,10 +1484,23 @@
                 
                 let html = '';
                 
+                // Добавляем иконки из папки ICO
+                icoImages.forEach((imagePath, index) => {
+                    html += `
+                        <div class="cursor-pointer hover:opacity-75 transition" onclick="selectStandardPhoto('${imagePath}', ${index})">
+                            <div class="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center overflow-hidden">
+                                <img src="${imagePath}" alt="Иконка ${index + 1}" class="w-full h-full object-cover" 
+                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'; this.parentElement.style.backgroundColor='#f3e8ff';">
+                                <i class="fas fa-user text-pink-600" style="display: none;"></i>
+                            </div>
+                        </div>
+                    `;
+                });
+                
                 // Добавляем цветные иконки
                 colorIcons.forEach((iconData, index) => {
                     html += `
-                        <div class="cursor-pointer hover:opacity-75 transition" onclick="selectStandardPhoto('icon-${index}', ${index})">
+                        <div class="cursor-pointer hover:opacity-75 transition" onclick="selectStandardPhoto('icon-${index}', ${icoImages.length + index})">
                             <div class="w-12 h-12 ${iconData.color} rounded-full flex items-center justify-center">
                                 <i class="${iconData.icon} text-white text-lg"></i>
                             </div>
@@ -1538,7 +1588,10 @@
                         newImg.src = photoPath;
                         newImg.alt = 'Фото профиля';
                         newImg.className = 'w-full h-full object-cover';
-                        document.querySelector('#profileSection #profileImagePreview').appendChild(newImg);
+                        const container = document.querySelector('#profileSection #profileImagePreview');
+                        if (container) {
+                            container.appendChild(newImg);
+                        }
                     }
                     
                     // Скрываем иконку по умолчанию в основном профиле
@@ -1607,7 +1660,10 @@
                         newImg.src = imageData;
                         newImg.alt = 'Фото профиля';
                         newImg.className = 'w-full h-full object-cover';
-                        document.querySelector('#profileSection #profileImagePreview').appendChild(newImg);
+                        const container = document.querySelector('#profileSection #profileImagePreview');
+                        if (container) {
+                            container.appendChild(newImg);
+                        }
                     }
                     
                     if (mainDefaultIcon) {

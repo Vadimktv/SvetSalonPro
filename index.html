@@ -1967,27 +1967,28 @@
         document.querySelectorAll('.menu-item').forEach(item => {
             item.addEventListener('click', (e) => {
                 e.preventDefault();
+                e.stopPropagation();
                 triggerHapticFeedback();
                 
                 // Get the href and navigate
                 const href = item.getAttribute('href');
                 if (href) {
+                    // Close menu immediately
+                    closeMenu();
+                    
+                    // Navigate after a short delay for haptic feedback
                     setTimeout(() => {
-                        closeMenu();
-                        // Small delay to show feedback before navigation
-                        setTimeout(() => {
-                            if (href.startsWith('#')) {
-                                // Smooth scroll to section
-                                const target = document.querySelector(href);
-                                if (target) {
-                                    target.scrollIntoView({ behavior: 'smooth' });
-                                }
-                            } else {
-                                // Navigate to page
-                                window.location.href = href;
+                        if (href.startsWith('#')) {
+                            // Smooth scroll to section
+                            const target = document.querySelector(href);
+                            if (target) {
+                                target.scrollIntoView({ behavior: 'smooth' });
                             }
-                        }, 100);
-                    }, 150);
+                        } else {
+                            // Navigate to page
+                            window.location.href = href;
+                        }
+                    }, 200);
                 }
             });
         });
