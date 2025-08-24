@@ -11,27 +11,51 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" type="image/png" href="../images/logo.png">
     <link rel="shortcut icon" type="image/png" href="../images/logo.png">
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script>
-        // Проверяем загрузку Supabase SDK
-        window.addEventListener('load', function() {
-            if (typeof supabase === 'undefined') {
-                console.error('Supabase SDK не загружен!');
-                // Попробуем загрузить альтернативно
-                const script = document.createElement('script');
-                script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
-                script.onload = function() {
-                    console.log('Supabase SDK загружен альтернативно');
-                    if (typeof initSupabase === 'function') {
-                        initSupabase();
-                    }
+        // Глобальная переменная для Supabase
+        let supabaseClient = null;
+        
+        // Функция загрузки Supabase SDK
+        function loadSupabase() {
+            return new Promise((resolve, reject) => {
+                // Пробуем загрузить с unpkg
+                const script1 = document.createElement('script');
+                script1.src = 'https://unpkg.com/@supabase/supabase-js@2';
+                script1.onload = () => {
+                    console.log('Supabase SDK загружен с unpkg');
+                    resolve();
                 };
-                script.onerror = function() {
-                    alert('Ошибка: Не удалось загрузить Supabase SDK. Проверьте подключение к интернету.');
+                script1.onerror = () => {
+                    console.log('Ошибка загрузки с unpkg, пробуем cdn.jsdelivr.net');
+                    
+                    // Пробуем альтернативный источник
+                    const script2 = document.createElement('script');
+                    script2.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+                    script2.onload = () => {
+                        console.log('Supabase SDK загружен с cdn.jsdelivr.net');
+                        resolve();
+                    };
+                    script2.onerror = () => {
+                        reject(new Error('Не удалось загрузить Supabase SDK'));
+                    };
+                    document.head.appendChild(script2);
                 };
-                document.head.appendChild(script);
-            } else {
-                console.log('Supabase SDK загружен успешно:', supabase);
+                document.head.appendChild(script1);
+            });
+        }
+        
+        // Загружаем SDK при загрузке страницы
+        window.addEventListener('load', async function() {
+            try {
+                await loadSupabase();
+                console.log('Supabase SDK загружен успешно!');
+                // Запускаем инициализацию
+                if (typeof initSupabase === 'function') {
+                    initSupabase();
+                }
+            } catch (error) {
+                console.error('Ошибка загрузки Supabase:', error);
+                alert('Ошибка: ' + error.message);
             }
         });
     </script>
@@ -315,37 +339,26 @@
                 
                 // Проверяем, что Supabase SDK загружен
                 if (typeof supabase === 'undefined') {
-                    console.log('Supabase SDK не найден, ждем...');
-                    // Ждем загрузки
-                    await new Promise(resolve => {
-                        const checkSupabase = () => {
-                            if (typeof supabase !== 'undefined') {
-                                console.log('Supabase SDK найден!');
-                                resolve();
-                            } else {
-                                setTimeout(checkSupabase, 100);
-                            }
-                        };
-                        checkSupabase();
-                    });
+                    throw new Error('Supabase SDK не загружен');
                 }
                 
                 console.log('Supabase SDK найден:', supabase);
                 
                 // Создаем клиент
-                const supabaseClient = supabase.createClient(
+                const client = supabase.createClient(
                     'https://iaezefurqmtgubdgqakt.supabase.co',
                     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlhZXplZnVycW1tZ3ViZGdxYWt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU5NTk3NjQsImV4cCI6MjA3MTUzNTc2NH0.-Puoiddwu_xIx9BaHM0BBfbsULdU0Ljzh6uQleVToBQ'
                 );
                 
-                // Присваиваем глобальной переменной
-                window.supabaseClient = supabaseClient;
-                window.supabase = supabaseClient;
+                // Присваиваем глобальным переменным
+                window.supabaseClient = client;
+                window.supabase = client;
+                supabaseClient = client;
                 
-                console.log('Supabase клиент инициализирован:', supabaseClient);
+                console.log('Supabase клиент инициализирован:', client);
                 
                 // Check if user is already logged in
-                const { data: { user } } = await supabaseClient.auth.getUser();
+                const { data: { user } } = await client.auth.getUser();
                 if (user) {
                     currentUser = user;
                     showProfile();
@@ -372,12 +385,12 @@
             
             try {
                 // Проверяем, что Supabase инициализирован
-                const supabaseClient = window.supabaseClient || window.supabase;
-                if (!supabaseClient || !supabaseClient.auth) {
+                const client = window.supabaseClient || window.supabase || supabaseClient;
+                if (!client || !client.auth) {
                     throw new Error('Supabase не инициализирован. Попробуйте обновить страницу.');
                 }
                 
-                console.log('Используем Supabase клиент:', supabaseClient);
+                console.log('Используем Supabase клиент:', client);
                 
                 // Show loading state
                 loginBtn.disabled = true;
@@ -385,7 +398,7 @@
                 loginBtnLoading.classList.remove('hidden');
                 
                 // Send magic link
-                const { error } = await supabaseClient.auth.signInWithOtp({
+                const { error } = await client.auth.signInWithOtp({
                     email: email,
                     options: {
                         emailRedirectTo: window.location.origin + '/pages/account.html'
@@ -714,10 +727,10 @@
 
         // Handle auth state changes
         function setupAuthStateChange() {
-            const supabaseClient = window.supabaseClient || window.supabase;
-            if (supabaseClient) {
+            const client = window.supabaseClient || window.supabase || supabaseClient;
+            if (client) {
                 console.log('Настраиваем отслеживание состояния аутентификации...');
-                supabaseClient.auth.onAuthStateChange(async (event, session) => {
+                client.auth.onAuthStateChange(async (event, session) => {
                     console.log('Auth state changed:', event, session);
                     if (event === 'SIGNED_IN' && session?.user) {
                         currentUser = session.user;
