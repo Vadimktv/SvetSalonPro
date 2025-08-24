@@ -668,6 +668,19 @@
         
         #sideMenu.open #menuContainer {
             transform: translateX(0);
+            animation: menuBounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        @keyframes menuBounce {
+            0% {
+                transform: translateX(100%);
+            }
+            50% {
+                transform: translateX(-8px);
+            }
+            100% {
+                transform: translateX(0);
+            }
         }
         
         /* Prevent body scroll when menu is open */
@@ -677,16 +690,54 @@
             width: 100%;
         }
         
+        /* Menu Button Animation */
+        .menu-icon-container {
+            position: relative;
+            width: 20px;
+            height: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .menu-line {
+            width: 100%;
+            height: 2px;
+            background-color: #374151;
+            border-radius: 1px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: center;
+        }
+        
+        /* Menu Button Active State */
+        #iosMenuBtn.active .menu-line:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+        
+        #iosMenuBtn.active .menu-line:nth-child(2) {
+            opacity: 0;
+            transform: scaleX(0);
+        }
+        
+        #iosMenuBtn.active .menu-line:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+        
+        /* Hover effects for menu lines */
+        #iosMenuBtn:hover .menu-line {
+            background-color: #ec4899;
+        }
+        
         /* Menu Items */
         .menu-item {
             display: flex;
             align-items: center;
-            padding: 16px 20px;
-            border-radius: 16px;
+            padding: 12px 16px;
+            border-radius: 12px;
             text-decoration: none;
             color: #374151;
             font-weight: 500;
-            font-size: 16px;
+            font-size: 15px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
@@ -727,14 +778,14 @@
         
         /* Menu Icons */
         .menu-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
             background: linear-gradient(135deg, rgba(236, 72, 153, 0.12) 0%, rgba(236, 72, 153, 0.06) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 16px;
+            margin-right: 12px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(236, 72, 153, 0.15);
@@ -839,9 +890,9 @@
         <div id="menuBackdrop" class="absolute inset-0 bg-black/40 backdrop-blur-md opacity-0 transition-all duration-500 ease-out pointer-events-none"></div>
         
         <!-- Menu Container -->
-        <div id="menuContainer" class="absolute top-0 right-0 h-full w-full md:w-96 bg-white/90 backdrop-blur-2xl border-l border-white/30 shadow-2xl transform translate-x-full transition-all duration-500 ease-out">
+        <div id="menuContainer" class="absolute top-0 right-0 h-full w-full md:w-80 bg-white/95 backdrop-blur-2xl border-l border-white/40 shadow-2xl transform translate-x-full transition-all duration-500 ease-out">
             <!-- Menu Header -->
-            <div class="flex items-center justify-between p-6 border-b border-white/10">
+            <div class="flex items-center justify-between p-4 border-b border-white/10">
                 <div class="flex items-center space-x-3">
                     <img src="images/logo.png" alt="SvetSalonPro" class="w-10 h-10 rounded-full">
                     <div>
@@ -857,7 +908,7 @@
             <!-- Menu Content -->
             <div class="flex-1 overflow-y-auto">
                 <!-- Navigation Links -->
-                <div class="p-4 space-y-2">
+                <div class="p-3 space-y-1">
                     <a href="#home" class="menu-item group">
                         <div class="menu-icon">
                             <i class="fas fa-home"></i>
@@ -898,7 +949,7 @@
                 <div class="mx-4 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
                 
                 <!-- Profile Section -->
-                <div class="p-4">
+                <div class="p-3">
                     <a href="pages/account.html" class="menu-item group">
                         <div class="menu-icon">
                             <i class="fas fa-user"></i>
@@ -908,7 +959,7 @@
                 </div>
                 
                 <!-- Contact Info -->
-                <div class="p-4 mt-4">
+                <div class="p-3 mt-3">
                     <div class="bg-gradient-to-r from-pink-500 to-pink-600 rounded-2xl p-4 text-white">
                         <div class="flex items-center space-x-3 mb-3">
                             <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
@@ -965,7 +1016,11 @@
                 <!-- iOS Style Menu Button -->
                 <button id="iosMenuBtn" class="md:hidden text-gray-700 hover:text-pink-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 rounded-full">
                     <div class="w-12 h-12 bg-gray-100/50 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-gray-200/50 active:bg-gray-300/50 transition-all duration-200 transform hover:scale-105 active:scale-95">
-                        <i class="fas fa-bars text-lg"></i>
+                        <div class="menu-icon-container">
+                            <span class="menu-line"></span>
+                            <span class="menu-line"></span>
+                            <span class="menu-line"></span>
+                        </div>
                     </div>
                 </button>
             </div>
@@ -1908,6 +1963,7 @@
             isMenuOpen = true;
             sideMenu.classList.add('open');
             document.body.classList.add('menu-open');
+            iosMenuBtn.classList.add('active');
             
             // Prevent any background interactions
             setTimeout(() => {
@@ -1923,6 +1979,7 @@
             isMenuOpen = false;
             sideMenu.classList.remove('open');
             document.body.classList.remove('menu-open');
+            iosMenuBtn.classList.remove('active');
             sideMenu.style.pointerEvents = 'none';
             
             // Reset any transform
