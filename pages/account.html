@@ -268,6 +268,9 @@
                                 <p id="userPhone" class="text-gray-600">+7 (___) ___-__-__</p>
                             </div>
                             
+                            <button id="editProfileBtn" class="w-full py-2 px-4 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition mb-3">
+                                Редактировать профиль
+                            </button>
                             <button id="logoutBtn" class="w-full py-2 px-4 border border-pink-300 text-pink-600 rounded-lg hover:bg-pink-50 transition">
                                 Выйти
                             </button>
@@ -350,6 +353,92 @@
         </div>
     </main>
 
+    <!-- Edit Profile Modal -->
+    <div id="editProfileModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-semibold text-gray-800">Редактировать профиль</h3>
+                    <button id="closeEditModalBtn" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <form id="editProfileForm" class="space-y-4">
+                    <div class="text-center mb-6">
+                        <div class="relative inline-block">
+                            <div id="profileImagePreview" class="w-24 h-24 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4 overflow-hidden">
+                                <i class="fas fa-user text-3xl text-pink-600" id="defaultProfileIcon"></i>
+                                <img id="profileImage" class="w-full h-full object-cover hidden" alt="Фото профиля">
+                            </div>
+                            <button type="button" id="changePhotoBtn" class="absolute bottom-0 right-0 bg-pink-600 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-pink-700 transition">
+                                <i class="fas fa-camera text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="editFullName" class="block text-gray-700 font-medium mb-2">Имя</label>
+                        <input type="text" id="editFullName" name="fullName" required 
+                               class="form-input w-full" placeholder="Введите ваше имя">
+                    </div>
+                    
+                    <div>
+                        <label for="editPhone" class="block text-gray-700 font-medium mb-2">Телефон</label>
+                        <input type="tel" id="editPhone" name="phone" 
+                               class="form-input w-full" placeholder="+7 (___) ___-__-__">
+                    </div>
+                    
+                    <div class="flex space-x-3 pt-4">
+                        <button type="button" id="cancelEditBtn" 
+                                class="flex-1 py-2 px-4 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition">
+                            Отмена
+                        </button>
+                        <button type="submit" class="flex-1 btn-primary py-2 px-4 rounded-lg text-white font-semibold">
+                            Сохранить
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Photo Selection Modal -->
+    <div id="photoSelectionModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-semibold text-gray-800">Выберите фото профиля</h3>
+                    <button id="closePhotoModalBtn" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label for="customPhotoUpload" class="block text-gray-700 font-medium mb-2">Загрузить свое фото</label>
+                        <input type="file" id="customPhotoUpload" name="photo" accept="image/*" 
+                               class="form-input w-full">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2">Доступные изображения (аватары + иконки)</label>
+                        <div id="standardPhotos" class="grid grid-cols-6 gap-2 max-h-60 overflow-y-auto">
+                            <!-- Available images will be loaded here -->
+                        </div>
+                    </div>
+                    
+                    <div class="flex space-x-3 pt-4">
+                        <button type="button" id="cancelPhotoBtn" 
+                                class="flex-1 py-2 px-4 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition">
+                            Отмена
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Scripts -->
     <script>
         // Supabase configuration
@@ -410,6 +499,7 @@
                     showProfile();
                     loadUserProfile();
                     loadBookings();
+                    loadServices();
                 } else {
                     console.log('Пользователь не найден, показываем форму входа');
                     showAuth();
@@ -423,6 +513,7 @@
                     showProfile();
                     loadUserProfile();
                     loadBookings();
+                    loadServices();
                 }
                 
                 console.log('=== ИНИЦИАЛИЗАЦИЯ SUPABASE ЗАВЕРШЕНА УСПЕШНО ===');
@@ -443,25 +534,7 @@
             }
         }
 
-        // Setup auth state change listener
-        function setupAuthStateChange() {
-            const client = window.supabaseClient || supabaseClient;
-            client.auth.onAuthStateChange(async (event, session) => {
-                console.log('Auth state changed:', event, session);
-                
-                if (event === 'SIGNED_IN' && session) {
-                    console.log('Пользователь вошел в систему:', session.user);
-                    currentUser = session.user;
-                    showProfile();
-                    loadUserProfile();
-                    loadBookings();
-                } else if (event === 'SIGNED_OUT') {
-                    console.log('Пользователь вышел из системы');
-                    currentUser = null;
-                    showAuth();
-                }
-            });
-        }
+
 
         // Handle login form submission
         function setupLoginForm() {
@@ -675,7 +748,8 @@
             if (!confirm('Вы уверены, что хотите отменить запись?')) return;
             
             try {
-                const { error } = await supabase
+                const client = window.supabaseClient || supabaseClient;
+                const { error } = await client
                     .from('bookings')
                     .update({ status: 'cancelled' })
                     .eq('id', bookingId);
@@ -712,7 +786,8 @@
         // Load services for booking
         async function loadServices() {
             try {
-                const { data: services, error } = await supabase
+                const client = window.supabaseClient || supabaseClient;
+                const { data: services, error } = await client
                     .from('services')
                     .select('*')
                     .order('name');
@@ -737,8 +812,10 @@
             const time = formData.get('time');
             
             try {
+                const client = window.supabaseClient || supabaseClient;
+                
                 // Create slot
-                const { data: slot, error: slotError } = await supabase
+                const { data: slot, error: slotError } = await client
                     .from('slots')
                     .insert({
                         date: date,
@@ -751,7 +828,7 @@
                 if (slotError) throw slotError;
                 
                 // Create booking
-                const { error: bookingError } = await supabase
+                const { error: bookingError } = await client
                     .from('bookings')
                     .insert({
                         user_id: currentUser.id,
@@ -827,9 +904,218 @@
             await initSupabase();
             setupAuthStateChange();
             initializeDateTimeInputs();
+            loadAvailableImages();
         });
 
-        // Handle auth state changes
+
+
+        // Edit Profile Modal
+        document.getElementById('editProfileBtn').addEventListener('click', () => {
+            const modal = document.getElementById('editProfileModal');
+            const fullNameInput = document.getElementById('editFullName');
+            const phoneInput = document.getElementById('editPhone');
+            
+            // Fill current values
+            fullNameInput.value = document.getElementById('userName').textContent;
+            phoneInput.value = document.getElementById('userPhone').textContent === 'Не указан' ? '' : document.getElementById('userPhone').textContent;
+            
+            modal.classList.remove('hidden');
+        });
+
+        // Close Edit Profile Modal
+        document.getElementById('closeEditModalBtn').addEventListener('click', () => {
+            document.getElementById('editProfileModal').classList.add('hidden');
+        });
+
+        // Cancel Edit Profile
+        document.getElementById('cancelEditBtn').addEventListener('click', () => {
+            document.getElementById('editProfileModal').classList.add('hidden');
+        });
+
+        // Change Photo Button
+        document.getElementById('changePhotoBtn').addEventListener('click', () => {
+            document.getElementById('photoSelectionModal').classList.remove('hidden');
+        });
+
+        // Close Photo Selection Modal
+        document.getElementById('closePhotoModalBtn').addEventListener('click', () => {
+            document.getElementById('photoSelectionModal').classList.add('hidden');
+        });
+
+        // Cancel Photo Selection
+        document.getElementById('cancelPhotoBtn').addEventListener('click', () => {
+            document.getElementById('photoSelectionModal').classList.add('hidden');
+        });
+
+        // Handle Edit Profile Form
+        document.getElementById('editProfileForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const fullName = document.getElementById('editFullName').value;
+            const phone = document.getElementById('editPhone').value;
+            
+            try {
+                const client = window.supabaseClient || supabaseClient;
+                const { error } = await client
+                    .from('profiles')
+                    .update({
+                        full_name: fullName,
+                        phone: phone || null,
+                        updated_at: new Date().toISOString()
+                    })
+                    .eq('id', currentUser.id);
+                
+                if (error) throw error;
+                
+                // Update UI
+                document.getElementById('userName').textContent = fullName;
+                document.getElementById('userPhone').textContent = phone || 'Не указан';
+                
+                // Close modal
+                document.getElementById('editProfileModal').classList.add('hidden');
+                
+                alert('Профиль обновлен!');
+                
+            } catch (error) {
+                console.error('Error updating profile:', error);
+                alert('Ошибка при обновлении профиля: ' + error.message);
+            }
+        });
+
+        // Handle Custom Photo Upload
+        document.getElementById('customPhotoUpload').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const profileImage = document.getElementById('profileImage');
+                    const defaultIcon = document.getElementById('defaultProfileIcon');
+                    
+                    profileImage.src = e.target.result;
+                    profileImage.classList.remove('hidden');
+                    defaultIcon.classList.add('hidden');
+                    
+                    // Update main profile image
+                    const mainProfileImage = document.querySelector('#profileSection #profileImagePreview img');
+                    if (mainProfileImage) {
+                        mainProfileImage.src = e.target.result;
+                        mainProfileImage.classList.remove('hidden');
+                    }
+                    
+                    // Close photo selection modal
+                    document.getElementById('photoSelectionModal').classList.add('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Load Standard Photos and Icons
+        async function loadStandardPhotos() {
+            try {
+                const client = window.supabaseClient || supabaseClient;
+                
+                // Список стандартных аватарок (если есть)
+                const standardPhotos = [];
+                for (let i = 1; i <= 30; i++) {
+                    standardPhotos.push(`/images/profile-photos/avatar${i}.jpg`);
+                }
+                
+                // Список иконок из папки ico (поддерживаемые форматы)
+                const iconFiles = [
+                    '/images/ico/icon1.png',
+                    '/images/ico/icon2.png',
+                    '/images/ico/icon3.png',
+                    '/images/ico/icon4.png',
+                    '/images/ico/icon5.png',
+                    '/images/ico/icon6.png',
+                    '/images/ico/icon7.png',
+                    '/images/ico/icon8.png',
+                    '/images/ico/icon9.png',
+                    '/images/ico/icon10.png',
+                    '/images/ico/icon11.png',
+                    '/images/ico/icon12.png',
+                    '/images/ico/icon13.png',
+                    '/images/ico/icon14.png',
+                    '/images/ico/icon15.png',
+                    '/images/ico/icon16.png',
+                    '/images/ico/icon17.png',
+                    '/images/ico/icon18.png',
+                    '/images/ico/icon19.png',
+                    '/images/ico/icon20.png',
+                    '/images/ico/icon21.png',
+                    '/images/ico/icon22.png',
+                    '/images/ico/icon23.png',
+                    '/images/ico/icon24.png',
+                    '/images/ico/icon25.png',
+                    '/images/ico/icon26.png',
+                    '/images/ico/icon27.png',
+                    '/images/ico/icon28.png',
+                    '/images/ico/icon29.png',
+                    '/images/ico/icon30.png'
+                ];
+                
+                // Объединяем все доступные изображения
+                const allImages = [...standardPhotos, ...iconFiles];
+                
+                const container = document.getElementById('standardPhotos');
+                container.innerHTML = allImages.map((image, index) => `
+                    <div class="cursor-pointer hover:opacity-75 transition" onclick="selectStandardPhoto('${image}', index)">
+                        <div class="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center overflow-hidden">
+                            <img src="${image}" alt="Изображение ${index + 1}" class="w-full h-full object-cover" 
+                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <i class="fas fa-user text-pink-600" style="display: none;"></i>
+                        </div>
+                    </div>
+                `).join('');
+                
+            } catch (error) {
+                console.error('Error loading standard photos:', error);
+            }
+        }
+
+        // Select Standard Photo
+        function selectStandardPhoto(photoPath, index) {
+            try {
+                // Обновляем фото профиля
+                const profileImage = document.getElementById('profileImage');
+                const defaultIcon = document.getElementById('defaultProfileIcon');
+                
+                profileImage.src = photoPath;
+                profileImage.classList.remove('hidden');
+                defaultIcon.classList.add('hidden');
+                
+                // Обновляем основное фото профиля
+                const mainProfileImage = document.querySelector('#profileSection #profileImagePreview img');
+                if (mainProfileImage) {
+                    mainProfileImage.src = photoPath;
+                    mainProfileImage.classList.remove('hidden');
+                } else {
+                    // Создаем изображение если его нет
+                    const newImg = document.createElement('img');
+                    newImg.src = photoPath;
+                    newImg.alt = 'Фото профиля';
+                    newImg.className = 'w-full h-full object-cover';
+                    document.querySelector('#profileSection #profileImagePreview').appendChild(newImg);
+                }
+                
+                // Скрываем иконку по умолчанию в основном профиле
+                const mainDefaultIcon = document.querySelector('#profileSection #profileImagePreview i');
+                if (mainDefaultIcon) {
+                    mainDefaultIcon.classList.add('hidden');
+                }
+                
+                // Закрываем модальное окно
+                document.getElementById('photoSelectionModal').classList.add('hidden');
+                
+                alert(`Выбрана аватарка ${index + 1}!`);
+                
+            } catch (error) {
+                console.error('Error selecting standard photo:', error);
+                alert('Ошибка при выборе аватарки: ' + error.message);
+            }
+        }
+
+        // Setup auth state change listener
         function setupAuthStateChange() {
             const client = window.supabaseClient || supabaseClient;
             if (client) {
@@ -841,6 +1127,7 @@
                         showProfile();
                         loadUserProfile();
                         loadBookings();
+                        loadServices();
                     } else if (event === 'SIGNED_OUT') {
                         currentUser = null;
                         showAuth();
@@ -850,6 +1137,7 @@
                 console.error('Supabase клиент не найден для настройки auth state change');
             }
         }
+
     </script>
 </body>
 </html>
