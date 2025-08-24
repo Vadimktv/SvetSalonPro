@@ -350,43 +350,60 @@
         // Initialize Supabase
         async function initSupabase() {
             try {
-                console.log('Начинаем инициализацию Supabase...');
+                console.log('=== НАЧАЛО ИНИЦИАЛИЗАЦИИ SUPABASE ===');
                 
                 // Проверяем, что Supabase SDK загружен
-                if (typeof window.supabase === 'undefined') {
-                    throw new Error('Supabase SDK не загружен');
+                console.log('Проверяем window.supabase:', typeof window.supabase);
+                console.log('Проверяем глобальную переменную supabase:', typeof supabase);
+                
+                if (typeof window.supabase === 'undefined' && typeof supabase === 'undefined') {
+                    throw new Error('Supabase SDK не загружен ни в window.supabase, ни в глобальной переменной');
                 }
                 
-                console.log('Supabase SDK найден:', window.supabase);
+                // Используем доступный SDK
+                const sdk = window.supabase || supabase;
+                console.log('Используем SDK:', sdk);
                 
                 // Создаем клиент
-                const client = window.supabase.createClient(
+                console.log('Создаем клиент Supabase...');
+                const client = sdk.createClient(
                     'https://iaezefurqmtgubdgqakt.supabase.co',
                     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlhZXplZnVycW1tZ3ViZGdxYWt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU5NTk3NjQsImV4cCI6MjA3MTUzNTc2NH0.-Puoiddwu_xIx9BaHM0BBfbsULdU0Ljzh6uQleVToBQ'
                 );
+                
+                console.log('Клиент создан:', client);
                 
                 // Присваиваем глобальным переменным
                 window.supabaseClient = client;
                 supabaseClient = client;
                 
-                console.log('Supabase клиент инициализирован:', client);
+                console.log('Глобальные переменные установлены:');
+                console.log('- window.supabaseClient:', window.supabaseClient);
+                console.log('- supabaseClient:', supabaseClient);
                 
                 // Check if user is already logged in
+                console.log('Проверяем текущего пользователя...');
                 const { data: { user } } = await client.auth.getUser();
                 if (user) {
+                    console.log('Пользователь найден:', user);
                     currentUser = user;
                     showProfile();
                     loadUserProfile();
                     loadBookings();
+                } else {
+                    console.log('Пользователь не найден, показываем форму входа');
                 }
                 
-                console.log('Инициализация Supabase завершена успешно!');
+                console.log('=== ИНИЦИАЛИЗАЦИЯ SUPABASE ЗАВЕРШЕНА УСПЕШНО ===');
                 
                 // Настраиваем форму входа
+                console.log('Настраиваем форму входа...');
                 setupLoginForm();
                 
             } catch (error) {
+                console.error('=== ОШИБКА ИНИЦИАЛИЗАЦИИ SUPABASE ===');
                 console.error('Error initializing Supabase:', error);
+                console.error('Stack trace:', error.stack);
                 alert('Ошибка инициализации: ' + error.message);
             }
         }
