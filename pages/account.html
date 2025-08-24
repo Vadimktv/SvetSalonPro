@@ -26,12 +26,17 @@
                     // Ждем немного, чтобы SDK полностью инициализировался
                     setTimeout(() => {
                         if (typeof window.supabase !== 'undefined') {
-                            console.log('Supabase SDK готов к использованию');
+                            console.log('Supabase SDK готов к использованию в window.supabase');
+                            resolve();
+                        } else if (typeof supabase !== 'undefined') {
+                            console.log('Supabase SDK готов к использованию в глобальной переменной');
+                            // Делаем доступным в window
+                            window.supabase = supabase;
                             resolve();
                         } else {
                             reject(new Error('Supabase SDK загружен, но не инициализирован'));
                         }
-                    }, 100);
+                    }, 200);
                 };
                 script1.onerror = () => {
                     console.log('Ошибка загрузки с unpkg, пробуем cdn.jsdelivr.net');
@@ -43,12 +48,16 @@
                         console.log('Supabase SDK загружен с cdn.jsdelivr.net');
                         setTimeout(() => {
                             if (typeof window.supabase !== 'undefined') {
-                                console.log('Supabase SDK готов к использованию');
+                                console.log('Supabase SDK готов к использованию в window.supabase');
+                                resolve();
+                            } else if (typeof supabase !== 'undefined') {
+                                console.log('Supabase SDK готов к использованию в глобальной переменной');
+                                window.supabase = supabase;
                                 resolve();
                             } else {
                                 reject(new Error('Supabase SDK загружен, но не инициализирован'));
                             }
-                        }, 100);
+                        }, 200);
                     };
                     script2.onerror = () => {
                         reject(new Error('Не удалось загрузить Supabase SDK'));
@@ -356,8 +365,19 @@
                 console.log('Проверяем window.supabase:', typeof window.supabase);
                 console.log('Проверяем глобальную переменную supabase:', typeof supabase);
                 
+                // Если SDK не найден, пробуем загрузить заново
                 if (typeof window.supabase === 'undefined' && typeof supabase === 'undefined') {
-                    throw new Error('Supabase SDK не загружен ни в window.supabase, ни в глобальной переменной');
+                    console.log('SDK не найден, пробуем загрузить заново...');
+                    await loadSupabase();
+                    
+                    // Проверяем снова
+                    console.log('После повторной загрузки:');
+                    console.log('- window.supabase:', typeof window.supabase);
+                    console.log('- supabase:', typeof supabase);
+                    
+                    if (typeof window.supabase === 'undefined' && typeof supabase === 'undefined') {
+                        throw new Error('Supabase SDK не загружен даже после повторной попытки');
+                    }
                 }
                 
                 // Используем доступный SDK
