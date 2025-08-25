@@ -877,7 +877,7 @@
 </head>
 <body class="font-sans bg-white text-gray-800">
     <!-- Custom Notification System -->
-    <div id="notificationContainer" class="fixed top-4 right-4 z-50 space-y-2"></div>
+    <div id="notificationContainer" class="fixed top-2 right-4 z-50 space-y-2"></div>
     <div id="page-preloader">
         <div class="spinner"><img src="images/logo.png" alt="Loading..." style="width:64px;height:64px;"></div>
     </div>
@@ -887,7 +887,7 @@
         <div id="menuBackdrop" class="absolute inset-0 bg-black/20 opacity-0 transition-all duration-300 ease-out pointer-events-none"></div>
         
         <!-- Menu Container -->
-        <div id="menuContainer" class="absolute top-16 right-4 h-auto max-h-[80vh] w-72 bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl transform translate-x-full transition-all duration-300 ease-out border border-white/30">
+        <div id="menuContainer" class="absolute top-20 right-4 h-auto max-h-[80vh] w-72 bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl transform translate-x-full transition-all duration-300 ease-out border border-white/30">
             <!-- Menu Header -->
             <div class="flex items-center justify-between p-3 border-b border-white/10">
                 <div class="flex items-center space-x-2">
@@ -1000,7 +1000,13 @@
             </nav>
             <div class="flex items-center space-x-4">
                 <!-- Profile Icon -->
-                <button id="profileBtn" class="text-gray-700 hover:text-pink-600 transition-colors duration-200">
+                <button id="profileBtn" class="hidden md:block text-gray-700 hover:text-pink-600 transition-colors duration-200">
+                    <div class="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center">
+                        <i class="fas fa-user text-white text-sm"></i>
+                    </div>
+                </button>
+                <!-- Mobile Profile Icon -->
+                <button id="mobileProfileBtn" class="md:hidden text-gray-700 hover:text-pink-600 transition-colors duration-200">
                     <div class="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center">
                         <i class="fas fa-user text-white text-sm"></i>
                     </div>
@@ -1930,9 +1936,16 @@
         
         // Profile button handlers
         const profileBtn = document.getElementById('profileBtn');
+        const mobileProfileBtn = document.getElementById('mobileProfileBtn');
         
         if (profileBtn) {
             profileBtn.addEventListener('click', () => {
+                window.location.href = 'pages/account.html';
+            });
+        }
+        
+        if (mobileProfileBtn) {
+            mobileProfileBtn.addEventListener('click', () => {
                 window.location.href = 'pages/account.html';
             });
         }
@@ -1942,51 +1955,69 @@
             try {
                 const savedAvatar = localStorage.getItem('selectedAvatar');
                 if (savedAvatar) {
+                    // Обновляем десктопную кнопку профиля
                     const profileBtn = document.getElementById('profileBtn');
                     if (profileBtn) {
-                        const iconContainer = profileBtn.querySelector('div');
-                        const icon = profileBtn.querySelector('i');
-                        
-                        if (savedAvatar.startsWith('icon-')) {
-                            // Это иконка
-                            const iconIndex = parseInt(savedAvatar.split('-')[1]);
-                            const iconClasses = [
-                                'fas fa-user', 'fas fa-user-tie', 'fas fa-user-graduate', 'fas fa-user-ninja',
-                                'fas fa-user-astronaut', 'fas fa-user-cowboy', 'fas fa-user-doctor', 'fas fa-user-nurse',
-                                'fas fa-user-secret', 'fas fa-user-tag', 'fas fa-user-check', 'fas fa-user-clock',
-                                'fas fa-heart', 'fas fa-star', 'fas fa-crown', 'fas fa-gem', 'fas fa-sparkles',
-                                'fas fa-fire', 'fas fa-leaf', 'fas fa-sun', 'fas fa-moon', 'fas fa-cloud',
-                                'fas fa-flower', 'fas fa-butterfly'
-                            ];
-                            const iconColors = [
-                                'bg-pink-500', 'bg-blue-500', 'bg-green-500', 'bg-purple-500',
-                                'bg-indigo-500', 'bg-yellow-500', 'bg-red-500', 'bg-teal-500',
-                                'bg-gray-500', 'bg-orange-500', 'bg-emerald-500', 'bg-cyan-500',
-                                'bg-rose-500', 'bg-amber-500', 'bg-yellow-500', 'bg-violet-500',
-                                'bg-sky-500', 'bg-orange-500', 'bg-green-500', 'bg-yellow-500',
-                                'bg-indigo-500', 'bg-blue-500', 'bg-pink-500', 'bg-purple-500'
-                            ];
-                            
-                            if (iconIndex < iconClasses.length) {
-                                iconContainer.className = `w-8 h-8 ${iconColors[iconIndex]} rounded-full flex items-center justify-center`;
-                                icon.className = `${iconClasses[iconIndex]} text-white text-sm`;
-                            }
-                        } else {
-                            // Это изображение
-                            iconContainer.className = 'w-8 h-8 rounded-full flex items-center justify-center overflow-hidden';
-                            icon.style.display = 'none';
-                            
-                            // Создаем изображение
-                            const img = document.createElement('img');
-                            img.src = savedAvatar;
-                            img.alt = 'Фото профиля';
-                            img.className = 'w-full h-full object-cover';
-                            iconContainer.appendChild(img);
-                        }
+                        updateAvatarButton(profileBtn, savedAvatar);
+                    }
+                    
+                    // Обновляем мобильную кнопку профиля
+                    const mobileProfileBtn = document.getElementById('mobileProfileBtn');
+                    if (mobileProfileBtn) {
+                        updateAvatarButton(mobileProfileBtn, savedAvatar);
                     }
                 }
             } catch (error) {
                 console.error('Error loading saved avatar:', error);
+            }
+        }
+        
+        // Helper function to update avatar button
+        function updateAvatarButton(button, savedAvatar) {
+            const iconContainer = button.querySelector('div');
+            const icon = button.querySelector('i');
+            
+            if (savedAvatar.startsWith('icon-')) {
+                // Это иконка
+                const iconIndex = parseInt(savedAvatar.split('-')[1]);
+                const iconClasses = [
+                    'fas fa-user', 'fas fa-user-tie', 'fas fa-user-graduate', 'fas fa-user-ninja',
+                    'fas fa-user-astronaut', 'fas fa-user-cowboy', 'fas fa-user-doctor', 'fas fa-user-nurse',
+                    'fas fa-user-secret', 'fas fa-user-tag', 'fas fa-user-check', 'fas fa-user-clock',
+                    'fas fa-heart', 'fas fa-star', 'fas fa-crown', 'fas fa-gem', 'fas fa-sparkles',
+                    'fas fa-fire', 'fas fa-leaf', 'fas fa-sun', 'fas fa-moon', 'fas fa-cloud',
+                    'fas fa-flower', 'fas fa-butterfly'
+                ];
+                const iconColors = [
+                    'bg-pink-500', 'bg-blue-500', 'bg-green-500', 'bg-purple-500',
+                    'bg-indigo-500', 'bg-yellow-500', 'bg-red-500', 'bg-teal-500',
+                    'bg-gray-500', 'bg-orange-500', 'bg-emerald-500', 'bg-cyan-500',
+                    'bg-rose-500', 'bg-amber-500', 'bg-yellow-500', 'bg-violet-500',
+                    'bg-sky-500', 'bg-orange-500', 'bg-green-500', 'bg-yellow-500',
+                    'bg-indigo-500', 'bg-blue-500', 'bg-pink-500', 'bg-purple-500'
+                ];
+                
+                if (iconIndex < iconClasses.length) {
+                    iconContainer.className = `w-8 h-8 ${iconColors[iconIndex]} rounded-full flex items-center justify-center`;
+                    icon.className = `${iconClasses[iconIndex]} text-white text-sm`;
+                }
+            } else {
+                // Это изображение
+                iconContainer.className = 'w-8 h-8 rounded-full flex items-center justify-center overflow-hidden';
+                icon.style.display = 'none';
+                
+                // Удаляем предыдущее изображение если есть
+                const existingImg = iconContainer.querySelector('img');
+                if (existingImg) {
+                    existingImg.remove();
+                }
+                
+                // Создаем изображение
+                const img = document.createElement('img');
+                img.src = savedAvatar;
+                img.alt = 'Фото профиля';
+                img.className = 'w-full h-full object-cover';
+                iconContainer.appendChild(img);
             }
         }
 
