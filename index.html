@@ -14,16 +14,7 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <style>
-        .logo-image {
-            height: 40px;
-            width: 40px;
-            object-fit: cover;
-            border-radius: 9999px;
-            transition: transform 0.3s ease;
-        }
-        .logo-image:hover {
-            transform: scale(1.05);
-        }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -631,23 +622,23 @@
         }
 
         /* Profile Button Styles */
-        #profileBtn, #desktopProfileBtn {
+        #profileBtn {
             transition: all 0.3s ease;
         }
         
-        #profileBtn:hover, #desktopProfileBtn:hover {
+        #profileBtn:hover {
             transform: scale(1.1);
         }
         
-        #profileBtn:active, #desktopProfileBtn:active {
+        #profileBtn:active {
             transform: scale(0.95);
         }
         
-        #profileBtn .w-8, #desktopProfileBtn .w-8 {
+        #profileBtn .w-8 {
             transition: all 0.3s ease;
         }
         
-        #profileBtn:hover .w-8, #desktopProfileBtn:hover .w-8 {
+        #profileBtn:hover .w-8 {
             background-color: #ec4899 !important;
             box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3);
         }
@@ -977,8 +968,9 @@
     <header class="fixed w-full bg-white shadow-sm z-50">
         <div class="container mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center">
-                <a href="#" class="logo-link"><img src="images/logo.png" alt="SvetSalonPro" class="logo-image mr-3"></a>
-                <h1 class="text-2xl font-bold text-pink-600">SvetSalonPro</h1>
+                <a href="#" class="logo-link">
+                    <h1 class="text-2xl font-bold text-pink-600 hover:text-pink-700 transition-colors duration-200 cursor-pointer">SvetSalonPro</h1>
+                </a>
             </div>
             <nav class="hidden md:flex items-center space-x-8">
                 <a href="#home" class="nav-link text-gray-700 hover:text-pink-600 transition">Главная</a>
@@ -987,12 +979,6 @@
                 <a href="#masters" class="nav-link text-gray-700 hover:text-pink-600 transition">Мастера</a>
                 <a href="#contact" class="nav-link text-gray-700 hover:text-pink-600 transition">Контакты</a>
                 <a href="pages/account.html" class="nav-link text-gray-700 hover:text-pink-600 transition">Личный кабинет</a>
-                <!-- Desktop Profile Icon -->
-                <button id="desktopProfileBtn" class="text-gray-700 hover:text-pink-600 transition-colors duration-200">
-                    <div class="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center">
-                        <i class="fas fa-user text-white text-sm"></i>
-                    </div>
-                </button>
             </nav>
             <div class="flex items-center space-x-4">
                 <!-- Profile Icon -->
@@ -1541,44 +1527,61 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-12 relative overflow-hidden">
-        <div class="footer-gradient-decor" style="width: 360px; height: 360px; left: -120px; bottom: -140px; background: radial-gradient(60% 60% at 50% 50%, rgba(243,232,255,0.5) 0%, rgba(253,242,248,0.25) 60%, rgba(255,255,255,0) 100%);"></div>
-        <div class="footer-gradient-decor" style="width: 260px; height: 260px; right: -80px; top: -80px; background: radial-gradient(60% 60% at 50% 50%, rgba(240,253,250,0.5) 0%, rgba(253,242,248,0.25) 60%, rgba(255,255,255,0) 100%);"></div>
-        <div class="container mx-auto px-4">
-            <div class="flex flex-col md:flex-row justify-between items-center">
-                <div class="mb-6 md:mb-0">
-                    <div class="flex items-center">
-                        <a href="#" class="logo-link"><img src="images/logo.png" alt="SvetSalonPro" class="logo-image mr-3"></a>
-                        <h2 class="text-2xl font-bold">SvetSalonPro</h2>
+    <footer class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white py-16 relative overflow-hidden">
+        <div class="footer-gradient-decor" style="width: 360px; height: 360px; left: -120px; bottom: -140px; background: radial-gradient(60% 60% at 50% 50%, rgba(243,232,255,0.3) 0%, rgba(253,242,248,0.15) 60%, rgba(255,255,255,0) 100%);"></div>
+        <div class="footer-gradient-decor" style="width: 260px; height: 260px; right: -80px; top: -80px; background: radial-gradient(60% 60% at 50% 50%, rgba(240,253,250,0.3) 0%, rgba(253,242,248,0.15) 60%, rgba(255,255,255,0) 100%);"></div>
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+                <!-- Brand Section -->
+                <div class="text-center md:text-left">
+                    <a href="#" class="logo-link">
+                        <h2 class="text-3xl font-bold text-pink-400 hover:text-pink-300 transition-colors duration-300 mb-2">SvetSalonPro</h2>
+                    </a>
+                    <p class="text-gray-300 text-sm">Салон красоты в Геленджике</p>
+                    <p class="text-gray-400 text-xs mt-1">Одесская 3А корпус 10</p>
+                </div>
+                
+                <!-- Social Media Section -->
+                <div class="text-center">
+                    <h3 class="text-lg font-semibold text-gray-200 mb-4">Мы в социальных сетях</h3>
+                    <div class="flex justify-center space-x-4">
+                        <a href="#" class="w-10 h-10 bg-gray-700 hover:bg-pink-600 text-gray-300 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-gray-700 hover:bg-pink-600 text-gray-300 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110">
+                            <i class="fab fa-vk"></i>
+                        </a>
+                        <a href="https://t.me/SvetSalonPro" target="_blank" class="w-10 h-10 bg-gray-700 hover:bg-pink-600 text-gray-300 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                        <a href="https://wa.me/79282806294" target="_blank" class="w-10 h-10 bg-gray-700 hover:bg-pink-600 text-gray-300 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
                     </div>
-                    <p class="text-gray-400 mt-2">Салон красоты в Геленджике Одесская 3А корпус 10</p>
                 </div>
                 
-                <div class="flex space-x-6 mb-6 md:mb-0">
-                    <a href="#" class="text-gray-400 hover:text-white transition">
-                        <i class="fab fa-instagram text-xl"></i>
-                    </a>
-                    <a href="#" class="text-gray-400 hover:text-white transition">
-                        <i class="fab fa-vk text-xl"></i>
-                    </a>
-                    <a href="https://t.me/SvetSalonPro" target="_blank" class="text-gray-400 hover:text-white transition">
-                        <i class="fab fa-telegram text-xl"></i>
-                    </a>
-                    <a href="https://wa.me/79282806294" target="_blank" class="text-gray-400 hover:text-white transition">
-                        <i class="fab fa-whatsapp text-xl"></i>
-                    </a>
-                </div>
-                
-                <div class="text-gray-400 text-sm">
-                    <p>© 2023 SvetSalonPro. Все права защищены.</p>
+                <!-- Contact Info -->
+                <div class="text-center md:text-right">
+                    <h3 class="text-lg font-semibold text-gray-200 mb-4">Контакты</h3>
+                    <div class="space-y-2 text-sm">
+                        <p class="text-gray-300">
+                            <i class="fas fa-phone text-pink-400 mr-2"></i>
+                            +7 928 280 62 94
+                        </p>
+                        <p class="text-gray-300">
+                            <i class="fas fa-envelope text-pink-400 mr-2"></i>
+                            my@SvetSalonPro.ru
+                        </p>
+                        <p class="text-gray-400 text-xs mt-4">© 2023 SvetSalonPro. Все права защищены.</p>
+                    </div>
                 </div>
             </div>
         </div>
     </footer>
 
     <!-- Back to Top Button -->
-    <button id="backToTop" class="fixed bottom-8 right-8 w-12 h-12 bg-pink-600 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-pink-700 transition opacity-0 invisible">
-        <i class="fas fa-arrow-up"></i>
+    <button id="backToTop" class="fixed bottom-6 right-6 w-10 h-10 bg-pink-600 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-pink-700 hover:scale-110 transition-all duration-300 opacity-0 invisible z-50">
+        <i class="fas fa-arrow-up text-sm"></i>
     </button>
 
     <script>
@@ -1909,16 +1912,9 @@
         
         // Profile button handlers
         const profileBtn = document.getElementById('profileBtn');
-        const desktopProfileBtn = document.getElementById('desktopProfileBtn');
         
         if (profileBtn) {
             profileBtn.addEventListener('click', () => {
-                window.location.href = 'pages/account.html';
-            });
-        }
-        
-        if (desktopProfileBtn) {
-            desktopProfileBtn.addEventListener('click', () => {
                 window.location.href = 'pages/account.html';
             });
         }

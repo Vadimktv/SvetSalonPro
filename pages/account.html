@@ -85,16 +85,7 @@
     </script>
     <script src="../supabase-config.js"></script>
     <style>
-        .logo-image {
-            height: 40px;
-            width: 40px;
-            object-fit: cover;
-            border-radius: 9999px;
-            transition: transform 0.3s ease;
-        }
-        .logo-image:hover {
-            transform: scale(1.05);
-        }
+
         
         .nav-link:hover::after {
             content: '';
@@ -318,8 +309,9 @@
     <header class="fixed w-full bg-white shadow-sm z-50">
         <div class="container mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center">
-                <a href="../index.html" class="logo-link"><img src="../images/logo.png" alt="SvetSalonPro" class="logo-image mr-3"></a>
-                <h1 class="text-2xl font-bold text-pink-600">SvetSalonPro</h1>
+                <a href="../index.html" class="logo-link">
+                    <h1 class="text-2xl font-bold text-pink-600 hover:text-pink-700 transition-colors duration-200 cursor-pointer">SvetSalonPro</h1>
+                </a>
             </div>
             <nav class="hidden md:flex space-x-8">
                 <a href="../index.html#home" class="nav-link text-gray-700 hover:text-pink-600 transition">Главная</a>
