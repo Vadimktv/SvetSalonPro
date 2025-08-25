@@ -1714,9 +1714,14 @@
                             body: JSON.stringify({ email: email })
                         });
                         
+                        if (!response.ok) {
+                            const errorText = await response.text();
+                            throw new Error(`Ошибка отправки SMS-кода: ${response.status} ${errorText}`);
+                        }
+                        
                         const result = await response.json();
                         
-                        if (!response.ok) {
+                        if (!result.success) {
                             throw new Error(result.error || 'Ошибка отправки SMS-кода');
                         }
                         
@@ -1785,9 +1790,19 @@
                             })
                         });
                         
+                        if (!response.ok) {
+                            const errorText = await response.text();
+                            // Показываем ошибку
+                            document.querySelectorAll('#smsCode1, #smsCode2, #smsCode3, #smsCode4').forEach(input => {
+                                input.classList.add('code-error');
+                                setTimeout(() => input.classList.remove('code-error'), 500);
+                            });
+                            throw new Error(`Ошибка проверки кода: ${response.status} ${errorText}`);
+                        }
+                        
                         const result = await response.json();
                         
-                        if (!response.ok) {
+                        if (!result.success) {
                             // Показываем ошибку
                             document.querySelectorAll('#smsCode1, #smsCode2, #smsCode3, #smsCode4').forEach(input => {
                                 input.classList.add('code-error');
@@ -1844,9 +1859,14 @@
                             body: JSON.stringify({ email: email })
                         });
                         
+                        if (!response.ok) {
+                            const errorText = await response.text();
+                            throw new Error(`Ошибка отправки SMS-кода: ${response.status} ${errorText}`);
+                        }
+                        
                         const result = await response.json();
                         
-                        if (!response.ok) {
+                        if (!result.success) {
                             throw new Error(result.error || 'Ошибка отправки SMS-кода');
                         }
                         
