@@ -189,7 +189,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            z-index: 50;
+            z-index: 60;
             pointer-events: none;
         }
         
@@ -536,7 +536,7 @@
     </header>
 
     <!-- iOS Style Side Menu -->
-    <div id="sideMenu" class="fixed inset-0 z-50 pointer-events-none">
+    <div id="sideMenu" class="fixed inset-0 z-60 pointer-events-none">
         <!-- Backdrop -->
         <div id="menuBackdrop" class="absolute inset-0 bg-black/20 opacity-0 transition-all duration-250 ease-out pointer-events-none"></div>
         
@@ -2517,12 +2517,23 @@
 
         // iOS Style Menu Handlers for account page
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM Content Loaded - Setting up menu handlers');
+            
             let isMenuOpen = false;
             const iosMenuBtn = document.getElementById('iosMenuBtn');
             const sideMenu = document.getElementById('sideMenu');
             const closeMenuBtn = document.getElementById('closeMenuBtn');
             const menuBackdrop = document.getElementById('menuBackdrop');
             const menuContainer = document.getElementById('menuContainer');
+            
+            // Debug: Check if elements exist
+            console.log('Menu elements found:', {
+                iosMenuBtn: !!iosMenuBtn,
+                sideMenu: !!sideMenu,
+                closeMenuBtn: !!closeMenuBtn,
+                menuBackdrop: !!menuBackdrop,
+                menuContainer: !!menuContainer
+            });
 
             // Haptic feedback function
             function triggerHapticFeedback() {
@@ -2541,6 +2552,11 @@
                 console.log('Opening menu, isMenuOpen:', isMenuOpen);
                 if (isMenuOpen) return;
                 
+                if (!sideMenu) {
+                    console.error('Side menu element not found!');
+                    return;
+                }
+                
                 triggerHapticFeedback();
                 isMenuOpen = true;
                 sideMenu.classList.add('open');
@@ -2553,6 +2569,8 @@
                 }, 50);
                 
                 console.log('Menu opened successfully');
+                console.log('Side menu classes:', sideMenu.className);
+                console.log('Side menu style:', sideMenu.style.cssText);
             }
 
             // Close menu function
@@ -2572,6 +2590,7 @@
 
             // Event listeners
             if (iosMenuBtn) {
+                console.log('Adding click listener to menu button');
                 iosMenuBtn.addEventListener('click', (e) => {
                     e.preventDefault();
                     e.stopPropagation();
@@ -2583,6 +2602,8 @@
                         openMenu();
                     }
                 });
+            } else {
+                console.error('Menu button not found!');
             }
 
             if (closeMenuBtn) {
