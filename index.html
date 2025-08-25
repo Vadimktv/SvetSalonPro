@@ -2796,22 +2796,40 @@
         const photoPreview = document.getElementById('photoPreview');
         
         if (files.length > 0) {
-            photoPreview.classList.remove('hidden');
-            previewContainer.innerHTML = '';
+            // Проверяем типы файлов
+            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+            const validFiles = Array.from(files).filter(file => allowedTypes.includes(file.type));
             
-            Array.from(files).forEach((file, index) => {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const previewDiv = document.createElement('div');
-                    previewDiv.className = 'relative';
-                    previewDiv.innerHTML = `
-                        <img src="${e.target.result}" alt="Preview ${index + 1}" class="w-full h-32 object-cover rounded-lg">
-                        <button onclick="removePhoto(${index})" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs">×</button>
-                    `;
-                    previewContainer.appendChild(previewDiv);
-                };
-                reader.readAsDataURL(file);
-            });
+            if (validFiles.length !== files.length) {
+                showNotification('warning', 'Внимание', 'Некоторые файлы не являются изображениями и будут пропущены');
+            }
+            
+            if (validFiles.length > 0) {
+                photoPreview.classList.remove('hidden');
+                previewContainer.innerHTML = '';
+                
+                validFiles.forEach((file, index) => {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const previewDiv = document.createElement('div');
+                        previewDiv.className = 'relative';
+                        previewDiv.innerHTML = `
+                            <img src="${e.target.result}" alt="Preview ${index + 1}" class="w-full h-24 sm:h-32 object-cover rounded-lg">
+                            <button onclick="removePhoto(${index})" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center text-xs">×</button>
+                        `;
+                        previewContainer.appendChild(previewDiv);
+                    };
+                    reader.readAsDataURL(file);
+                });
+                
+                // Обновляем файлы в input только валидными
+                const dt = new DataTransfer();
+                validFiles.forEach(file => dt.items.add(file));
+                event.target.files = dt.files;
+            } else {
+                photoPreview.classList.add('hidden');
+                showNotification('error', 'Ошибка', 'Не выбрано ни одного изображения');
+            }
         } else {
             photoPreview.classList.add('hidden');
         }
@@ -2892,10 +2910,11 @@
     // Загрузить фотографии
     async function uploadPhotos() {
         console.log('uploadPhotos function called');
+        console.log('Button clicked - starting upload process');
         
         const fileInput = document.getElementById('photoFiles');
         const categorySelect = document.getElementById('photoCategory');
-        const uploadBtn = document.querySelector('#photoUploadModal button[onclick="uploadPhotos()"]');
+        const uploadBtn = document.querySelector('button[onclick="uploadPhotos()"]');
         const uploadBtnText = document.getElementById('uploadBtnText');
         const uploadBtnLoading = document.getElementById('uploadBtnLoading');
         
@@ -2917,6 +2936,24 @@
         const files = Array.from(fileInput.files);
         
         console.log('Files to upload:', files.length, 'Category:', category);
+        
+        // Проверяем размер файлов (максимум 5MB каждый)
+        const maxSize = 5 * 1024 * 1024; // 5MB в байтах
+        const oversizedFiles = files.filter(file => file.size > maxSize);
+        
+        if (oversizedFiles.length > 0) {
+            showNotification('error', 'Ошибка', `Файлы превышают лимит 5MB: ${oversizedFiles.map(f => f.name).join(', ')}`);
+            return;
+        }
+        
+        // Проверяем тип файлов (только изображения)
+        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+        const invalidFiles = files.filter(file => !allowedTypes.includes(file.type));
+        
+        if (invalidFiles.length > 0) {
+            showNotification('error', 'Ошибка', `Неподдерживаемые форматы файлов: ${invalidFiles.map(f => f.name).join(', ')}`);
+            return;
+        }
         
         // Показываем загрузку
         if (uploadBtn) uploadBtn.disabled = true;
@@ -3173,28 +3210,28 @@
         <div class="absolute inset-0 bg-black bg-opacity-40 backdrop-blur-sm transition-opacity duration-300" onclick="closePhotoUpload()"></div>
         
         <!-- Модальное окно -->
-        <div class="absolute inset-0 flex items-center justify-center p-4">
-            <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden transform scale-95 opacity-0 transition-all duration-300" id="photoUploadContent">
+        <div class="absolute inset-0 flex items-center justify-center p-2 sm:p-4">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-sm sm:max-w-md md:max-w-lg lg:max-w-2xl w-full max-h-[85vh] sm:max-h-[90vh] overflow-hidden transform scale-95 opacity-0 transition-all duration-300" id="photoUploadContent">
                 <!-- Заголовок -->
-                <div class="bg-gradient-to-r from-purple-500 to-pink-500 text-white p-6">
+                <div class="bg-gradient-to-r from-purple-500 to-pink-500 text-white p-4 sm:p-6">
                     <div class="flex justify-between items-center">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
-                                <i class="fas fa-camera text-xl"></i>
+                        <div class="flex items-center space-x-2 sm:space-x-3">
+                            <div class="w-8 h-8 sm:w-12 sm:h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                                <i class="fas fa-camera text-sm sm:text-xl"></i>
                             </div>
                             <div>
-                                <h2 class="text-2xl font-bold">Добавить фотографии работ</h2>
-                                <p class="text-purple-100 text-sm">Загрузите фотографии выполненных работ</p>
+                                <h2 class="text-lg sm:text-xl md:text-2xl font-bold">Добавить фотографии работ</h2>
+                                <p class="text-purple-100 text-xs sm:text-sm">Загрузите фотографии выполненных работ</p>
                             </div>
                         </div>
-                        <button onclick="closePhotoUpload()" class="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center hover:bg-opacity-30 transition-all duration-200">
-                            <i class="fas fa-times text-lg"></i>
+                        <button onclick="closePhotoUpload()" class="w-8 h-8 sm:w-10 sm:h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center hover:bg-opacity-30 transition-all duration-200">
+                            <i class="fas fa-times text-sm sm:text-lg"></i>
                         </button>
                     </div>
                 </div>
                 
                 <!-- Содержимое -->
-                <div class="p-6 space-y-6">
+                <div class="p-4 sm:p-6 space-y-4 sm:space-y-6">
                     <!-- Выбор категории -->
                     <div class="space-y-3">
                         <label class="block text-gray-700 font-semibold text-lg">Категория работ</label>
@@ -3213,44 +3250,44 @@
                         <label class="block text-gray-700 font-semibold text-lg">Выберите фотографии</label>
                         
                         <!-- Область загрузки -->
-                        <div id="dropZone" class="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-purple-400 transition-all duration-200 bg-gray-50 hover:bg-purple-50">
-                            <div class="space-y-4">
-                                <div class="w-20 h-20 bg-gradient-to-br from-purple-100 to-pink-100 rounded-full flex items-center justify-center mx-auto">
-                                    <i class="fas fa-cloud-upload-alt text-3xl text-purple-600"></i>
+                        <div id="dropZone" class="border-2 border-dashed border-gray-300 rounded-xl p-4 sm:p-6 md:p-8 text-center hover:border-purple-400 transition-all duration-200 bg-gray-50 hover:bg-purple-50">
+                            <div class="space-y-3 sm:space-y-4">
+                                <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-purple-100 to-pink-100 rounded-full flex items-center justify-center mx-auto">
+                                    <i class="fas fa-cloud-upload-alt text-2xl sm:text-3xl text-purple-600"></i>
                                 </div>
                                 <div>
-                                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Загрузите фотографии</h3>
-                                    <p class="text-gray-600 mb-4">Перетащите файлы сюда или нажмите для выбора из галереи</p>
+                                    <h3 class="text-base sm:text-lg font-semibold text-gray-800 mb-2">Загрузите фотографии</h3>
+                                    <p class="text-gray-600 mb-3 sm:mb-4 text-sm sm:text-base">Перетащите файлы сюда или нажмите для выбора из галереи</p>
                                     <input type="file" id="photoFiles" multiple accept="image/*" 
                                            class="hidden" onchange="handlePhotoSelection(event)">
                                     <button onclick="document.getElementById('photoFiles').click()" 
-                                            class="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-medium py-3 px-6 rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                                            class="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-medium py-2 sm:py-3 px-4 sm:px-6 rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl text-sm sm:text-base">
                                         <i class="fas fa-images mr-2"></i>
                                         Выбрать из галереи
                                     </button>
                                 </div>
-                                <p class="text-sm text-gray-500">Поддерживаются форматы: JPG, PNG, WebP (макс. 5MB на файл)</p>
+                                <p class="text-xs sm:text-sm text-gray-500">Поддерживаются форматы: JPG, PNG, WebP (макс. 5MB на файл)</p>
                             </div>
                         </div>
                     </div>
                     
                     <!-- Предварительный просмотр -->
                     <div id="photoPreview" class="hidden space-y-3">
-                        <label class="block text-gray-700 font-semibold text-lg">Предварительный просмотр</label>
-                        <div id="previewContainer" class="grid grid-cols-2 md:grid-cols-3 gap-4 max-h-60 overflow-y-auto p-4 bg-gray-50 rounded-xl"></div>
+                        <label class="block text-gray-700 font-semibold text-base sm:text-lg">Предварительный просмотр</label>
+                        <div id="previewContainer" class="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-4 max-h-40 sm:max-h-60 overflow-y-auto p-2 sm:p-4 bg-gray-50 rounded-xl"></div>
                     </div>
                     
                     <!-- Кнопки -->
-                    <div class="flex space-x-4 pt-4">
+                    <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 pt-4">
                         <button onclick="uploadPhotos()" 
-                                class="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-medium py-4 px-6 rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2">
+                                class="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-medium py-3 sm:py-4 px-4 sm:px-6 rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2 text-sm sm:text-base">
                             <span id="uploadBtnText">Загрузить фотографии</span>
                             <div id="uploadBtnLoading" class="hidden">
                                 <i class="fas fa-spinner fa-spin"></i>
                             </div>
                         </button>
                         <button onclick="closePhotoUpload()" 
-                                class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-4 px-6 rounded-xl transition-all duration-200 transform hover:scale-105">
+                                class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-3 sm:py-4 px-4 sm:px-6 rounded-xl transition-all duration-200 transform hover:scale-105 text-sm sm:text-base">
                             Отмена
                         </button>
                     </div>
