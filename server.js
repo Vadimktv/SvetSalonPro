@@ -73,9 +73,7 @@ const server = http.createServer((req, res) => {
     }
     
     // Добавляем точку в начало пути для статических файлов
-    if (!filePath.startsWith('/pages/')) {
-        filePath = '.' + filePath;
-    }
+    filePath = '.' + filePath;
     
     // Получаем расширение файла
     const extname = path.extname(filePath).toLowerCase();
