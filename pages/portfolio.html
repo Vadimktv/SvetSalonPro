@@ -1400,7 +1400,7 @@
             photosToShow.forEach((photo, index) => {
                 const photoElement = document.createElement('div');
                 photoElement.className = 'portfolio-item';
-                photoElement.style.animationDelay = `${index * 0.1}s`;
+                photoElement.style.animationDelay = `${index * 0.05}s`;
                 photoElement.innerHTML = `
                     <img src="${photo.src}" alt="Пример работы" class="portfolio-image" 
                          onerror="console.error('Ошибка загрузки изображения:', this.src); this.style.display='none';"
@@ -1416,7 +1416,7 @@
                 // Добавляем анимацию появления
                 setTimeout(() => {
                     photoElement.classList.add('photo-fade-in');
-                }, index * 100);
+                }, index * 50);
             });
         }
 
