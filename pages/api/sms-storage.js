@@ -58,7 +58,7 @@ class SmsCodeStorage {
 }
 
 // Создаем единственный экземпляр
-const smsStorage = new SmsStorage();
+const smsStorage = new SmsCodeStorage();
 
 // Очищаем истекшие коды каждые 5 минут
 setInterval(() => {
