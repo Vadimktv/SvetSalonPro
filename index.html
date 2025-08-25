@@ -662,6 +662,10 @@
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         }
         
+        #sideMenu:not(.open) #menuContainer {
+            transform: translateX(100%) !important;
+        }
+        
         /* Prevent body scroll when menu is open */
         body.menu-open {
             overflow: hidden;
@@ -877,7 +881,7 @@
 </head>
 <body class="font-sans bg-white text-gray-800">
     <!-- Custom Notification System -->
-    <div id="notificationContainer" class="fixed top-2 right-4 z-50 space-y-2"></div>
+    <div id="notificationContainer" class="fixed top-1 right-4 z-50 space-y-2"></div>
     <div id="page-preloader">
         <div class="spinner"><img src="images/logo.png" alt="Loading..." style="width:64px;height:64px;"></div>
     </div>
@@ -887,7 +891,7 @@
         <div id="menuBackdrop" class="absolute inset-0 bg-black/20 opacity-0 transition-all duration-300 ease-out pointer-events-none"></div>
         
         <!-- Menu Container -->
-        <div id="menuContainer" class="absolute top-20 right-4 h-auto max-h-[80vh] w-72 bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl transform translate-x-full transition-all duration-300 ease-out border border-white/30">
+        <div id="menuContainer" class="absolute top-24 right-4 h-auto max-h-[80vh] w-72 bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl transform translate-x-full transition-all duration-300 ease-out border border-white/30">
             <!-- Menu Header -->
             <div class="flex items-center justify-between p-3 border-b border-white/10">
                 <div class="flex items-center space-x-2">
@@ -2087,11 +2091,6 @@
             iosMenuBtn.classList.remove('active');
             sideMenu.style.pointerEvents = 'none';
             
-            // Reset any transform
-            if (menuContainer) {
-                menuContainer.style.transform = '';
-            }
-            
             console.log('Menu closed successfully');
         }
 
@@ -2202,8 +2201,13 @@
                 if (diffX > 50) { // Swipe threshold
                     closeMenu();
                 } else {
-                    // Reset position
+                    // Reset position - let CSS handle the animation
                     menuContainer.style.transform = '';
+                    setTimeout(() => {
+                        if (isMenuOpen) {
+                            menuContainer.style.transform = '';
+                        }
+                    }, 10);
                 }
             }, { passive: true });
         }
