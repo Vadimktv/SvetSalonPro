@@ -116,30 +116,67 @@
             text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
         }
 
-        .menu-item:hover {
-            background: linear-gradient(135deg, rgba(236, 72, 153, 0.1) 0%, rgba(236, 72, 153, 0.05) 100%);
-            transform: translateX(4px);
-            box-shadow: 0 4px 12px rgba(236, 72, 153, 0.15);
+        .menu-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(236, 72, 153, 0.08);
+            opacity: 0;
+            transition: all 0.3s ease;
         }
-
+        
+        .menu-item:hover::before {
+            opacity: 1;
+        }
+        
+        .menu-item:hover {
+            background: rgba(236, 72, 153, 0.05);
+            transform: translateX(4px);
+            box-shadow: 0 2px 8px rgba(236, 72, 153, 0.15);
+        }
+        
+        .menu-item:active {
+            transform: translateX(2px) scale(0.98);
+            background: rgba(236, 72, 153, 0.1);
+        }
+        
         .menu-icon {
-            width: 24px;
-            height: 24px;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
             display: flex;
             align-items: center;
             justify-content: center;
             margin-right: 12px;
-            border-radius: 8px;
-            background: linear-gradient(135deg, rgba(236, 72, 153, 0.1) 0%, rgba(236, 72, 153, 0.05) 100%);
-            color: #ec4899;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .menu-item:hover .menu-icon {
+            background: linear-gradient(135deg, #ec4899, #db2777);
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3);
+        }
+        
+        .menu-item:hover .menu-icon i {
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        .menu-icon i {
+            color: #6b7280;
             font-size: 14px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .menu-item:hover .menu-icon {
-            background: linear-gradient(135deg, rgba(236, 72, 153, 0.2) 0%, rgba(236, 72, 153, 0.1) 100%);
-            transform: scale(1.1);
-            box-shadow: 0 4px 12px rgba(236, 72, 153, 0.2);
+        /* Better focus states */
+        .menu-item:focus, #iosMenuBtn:focus, #closeMenuBtn:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.3);
         }
 
         /* Bubble Animation */
