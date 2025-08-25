@@ -2,7 +2,7 @@
   {
     "id": 1,
     "category": "hair",
-    "src": "images/Женская стрижка.JPG",
+    "src": "images/portfolio/hair/Женская стрижка.JPG",
     "fileName": "Женская стрижка.JPG",
     "description": "Женская стрижка",
     "uploadDate": "2024-01-01T00:00:00.000Z"
@@ -10,7 +10,7 @@
   {
     "id": 2,
     "category": "hair",
-    "src": "images/Колористика волос.JPG",
+    "src": "images/portfolio/hair/Колористика волос.JPG",
     "fileName": "Колористика волос.JPG",
     "description": "Колористика волос",
     "uploadDate": "2024-01-01T00:00:00.000Z"
@@ -18,7 +18,7 @@
   {
     "id": 3,
     "category": "hair",
-    "src": "images/Ламинирования волос.JPG",
+    "src": "images/portfolio/hair/Ламинирования волос.JPG",
     "fileName": "Ламинирования волос.JPG",
     "description": "Ламинирование волос",
     "uploadDate": "2024-01-01T00:00:00.000Z"
@@ -26,7 +26,7 @@
   {
     "id": 4,
     "category": "hair",
-    "src": "images/Мелирование волос.JPG",
+    "src": "images/portfolio/hair/Мелирование волос.JPG",
     "fileName": "Мелирование волос.JPG",
     "description": "Мелирование волос",
     "uploadDate": "2024-01-01T00:00:00.000Z"
@@ -34,7 +34,7 @@
   {
     "id": 5,
     "category": "hair",
-    "src": "images/Мужская стрижка под машинку.JPG",
+    "src": "images/portfolio/hair/Мужская стрижка под машинку.JPG",
     "fileName": "Мужская стрижка под машинку.JPG",
     "description": "Мужская стрижка под машинку",
     "uploadDate": "2024-01-01T00:00:00.000Z"
@@ -42,7 +42,7 @@
   {
     "id": 6,
     "category": "hair",
-    "src": "images/Мужская стрижка.JPG",
+    "src": "images/portfolio/hair/Мужская стрижка.JPG",
     "fileName": "Мужская стрижка.JPG",
     "description": "Мужская стрижка",
     "uploadDate": "2024-01-01T00:00:00.000Z"
@@ -50,7 +50,7 @@
   {
     "id": 7,
     "category": "hair",
-    "src": "images/Окрашивание волос.JPG",
+    "src": "images/portfolio/hair/Окрашивание волос.JPG",
     "fileName": "Окрашивание волос.JPG",
     "description": "Окрашивание волос",
     "uploadDate": "2024-01-01T00:00:00.000Z"
@@ -58,7 +58,7 @@
   {
     "id": 8,
     "category": "manicure",
-    "src": "images/Классический маникюр.png",
+    "src": "images/portfolio/manicure/Классический маникюр.png",
     "fileName": "Классический маникюр.png",
     "description": "Классический маникюр",
     "uploadDate": "2024-01-01T00:00:00.000Z"
@@ -66,7 +66,7 @@
   {
     "id": 9,
     "category": "manicure",
-    "src": "images/Комбинированный маникюр.jpg",
+    "src": "images/portfolio/manicure/Комбинированный маникюр.jpg",
     "fileName": "Комбинированный маникюр.jpg",
     "description": "Комбинированный маникюр",
     "uploadDate": "2024-01-01T00:00:00.000Z"
@@ -74,7 +74,7 @@
   {
     "id": 10,
     "category": "manicure",
-    "src": "images/Ремонт одного ногтя.jpg",
+    "src": "images/portfolio/manicure/Ремонт одного ногтя.jpg",
     "fileName": "Ремонт одного ногтя.jpg",
     "description": "Ремонт одного ногтя",
     "uploadDate": "2024-01-01T00:00:00.000Z"
@@ -82,7 +82,7 @@
   {
     "id": 11,
     "category": "manicure",
-    "src": "images/Снятие покрытия.jpeg",
+    "src": "images/portfolio/manicure/Снятие покрытия.jpeg",
     "fileName": "Снятие покрытия.jpeg",
     "description": "Снятие покрытия",
     "uploadDate": "2024-01-01T00:00:00.000Z"
@@ -90,7 +90,7 @@
   {
     "id": 12,
     "category": "manicure",
-    "src": "images/Укрепление базой или биогелем — копия.jpeg",
+    "src": "images/portfolio/manicure/Укрепление базой или биогелем — копия.jpeg",
     "fileName": "Укрепление базой или биогелем — копия.jpeg",
     "description": "Укрепление базой или биогелем",
     "uploadDate": "2024-01-01T00:00:00.000Z"
@@ -98,7 +98,7 @@
   {
     "id": 13,
     "category": "manicure",
-    "src": "images/Укрепление гелем 00.37.43.JPG",
+    "src": "images/portfolio/manicure/Укрепление гелем 00.37.43.JPG",
     "fileName": "Укрепление гелем 00.37.43.JPG",
     "description": "Укрепление гелем",
     "uploadDate": "2024-01-01T00:00:00.000Z"
@@ -106,7 +106,7 @@
   {
     "id": 14,
     "category": "manicure",
-    "src": "images/Укрепление_базой_или_биогелем_копия.jpeg",
+    "src": "images/portfolio/manicure/Укрепление_базой_или_биогелем_копия.jpeg",
     "fileName": "Укрепление_базой_или_биогелем_копия.jpeg",
     "description": "Укрепление базой или биогелем",
     "uploadDate": "2024-01-01T00:00:00.000Z"
@@ -114,7 +114,7 @@
   {
     "id": 15,
     "category": "spa",
-    "src": "images/SPA процедуры.JPG",
+    "src": "images/portfolio/spa/SPA процедуры.JPG",
     "fileName": "SPA процедуры.JPG",
     "description": "SPA процедуры",
     "uploadDate": "2024-01-01T00:00:00.000Z"
@@ -122,72 +122,72 @@
   {
     "id": 16,
     "category": "manicure",
-    "src": "images/portfolio/manicure/IMG_9508.JPG",
-    "fileName": "IMG_9508.JPG",
+    "src": "images/portfolio/manicure/19508.JPG",
+    "fileName": "19508.JPG",
     "description": "Маникюр - Дизайн ногтей",
     "uploadDate": "2024-01-01T00:00:00.000Z"
   },
   {
     "id": 17,
     "category": "manicure",
-    "src": "images/portfolio/manicure/IMG_9510.JPG",
-    "fileName": "IMG_9510.JPG",
+    "src": "images/portfolio/manicure/19510.JPG",
+    "fileName": "19510.JPG",
     "description": "Маникюр - Классический дизайн",
     "uploadDate": "2024-01-01T00:00:00.000Z"
   },
   {
     "id": 18,
     "category": "manicure",
-    "src": "images/portfolio/manicure/IMG_9511.JPG",
-    "fileName": "IMG_9511.JPG",
+    "src": "images/portfolio/manicure/19511.JPG",
+    "fileName": "19511.JPG",
     "description": "Маникюр - Современный дизайн",
     "uploadDate": "2024-01-01T00:00:00.000Z"
   },
   {
     "id": 19,
     "category": "manicure",
-    "src": "images/portfolio/manicure/IMG_9512.JPG",
-    "fileName": "IMG_9512.JPG",
+    "src": "images/portfolio/manicure/19512.JPG",
+    "fileName": "19512.JPG",
     "description": "Маникюр - Французский маникюр",
     "uploadDate": "2024-01-01T00:00:00.000Z"
   },
   {
     "id": 20,
     "category": "manicure",
-    "src": "images/portfolio/manicure/IMG_9513.JPG",
-    "fileName": "IMG_9513.JPG",
+    "src": "images/portfolio/manicure/19513.JPG",
+    "fileName": "19513.JPG",
     "description": "Маникюр - Минималистичный дизайн",
     "uploadDate": "2024-01-01T00:00:00.000Z"
   },
   {
     "id": 21,
     "category": "manicure",
-    "src": "images/portfolio/manicure/IMG_9514.JPG",
-    "fileName": "IMG_9514.JPG",
+    "src": "images/portfolio/manicure/19514.JPG",
+    "fileName": "19514.JPG",
     "description": "Маникюр - Цветочный дизайн",
     "uploadDate": "2024-01-01T00:00:00.000Z"
   },
   {
     "id": 22,
     "category": "manicure",
-    "src": "images/portfolio/manicure/IMG_9515.JPG",
-    "fileName": "IMG_9515.JPG",
+    "src": "images/portfolio/manicure/19515.JPG",
+    "fileName": "19515.JPG",
     "description": "Маникюр - Геометрический дизайн",
     "uploadDate": "2024-01-01T00:00:00.000Z"
   },
   {
     "id": 23,
     "category": "manicure",
-    "src": "images/portfolio/manicure/IMG_9517.JPG",
-    "fileName": "IMG_9517.JPG",
+    "src": "images/portfolio/manicure/19517.JPG",
+    "fileName": "19517.JPG",
     "description": "Маникюр - Свадебный дизайн",
     "uploadDate": "2024-01-01T00:00:00.000Z"
   },
   {
     "id": 24,
     "category": "manicure",
-    "src": "images/portfolio/manicure/IMG_9518.JPG",
-    "fileName": "IMG_9518.JPG",
+    "src": "images/portfolio/manicure/19518.JPG",
+    "fileName": "19518.JPG",
     "description": "Маникюр - Вечерний дизайн",
     "uploadDate": "2024-01-01T00:00:00.000Z"
   }
