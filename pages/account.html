@@ -639,8 +639,8 @@
                     </div>
                     
                     <div>
-                        <label class="block text-gray-700 font-medium mb-2">Доступные изображения (аватары + иконки)</label>
-                        <div id="standardPhotos" class="grid grid-cols-6 gap-2 max-h-60 overflow-y-auto">
+                        <label class="block text-gray-700 font-medium mb-3">Доступные изображения (аватары + иконки)</label>
+                        <div id="standardPhotos" class="grid grid-cols-5 gap-3 max-h-80 overflow-y-auto p-2 bg-gray-50 rounded-lg">
                             <!-- Available images will be loaded here -->
                         </div>
                     </div>
@@ -649,6 +649,10 @@
                         <button type="button" id="cancelPhotoBtn" 
                                 class="flex-1 py-2 px-4 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition">
                             Отмена
+                        </button>
+                        <button type="button" id="savePhotoBtn" 
+                                class="flex-1 py-2 px-4 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition">
+                            Сохранить
                         </button>
                     </div>
                 </div>
@@ -1358,6 +1362,7 @@
         // Change Photo Button
         document.getElementById('changePhotoBtn').addEventListener('click', () => {
             document.getElementById('photoSelectionModal').classList.remove('hidden');
+            loadStandardPhotos(); // Загружаем стандартные фото при открытии модального окна
         });
 
         // Close Photo Selection Modal
@@ -1367,6 +1372,15 @@
 
         // Cancel Photo Selection
         document.getElementById('cancelPhotoBtn').addEventListener('click', () => {
+            document.getElementById('photoSelectionModal').classList.add('hidden');
+        });
+
+        // Save Photo Selection
+        document.getElementById('savePhotoBtn').addEventListener('click', () => {
+            // Если выбрано фото, применяем его
+            if (window.selectedPhotoPath) {
+                applySelectedPhoto(window.selectedPhotoPath);
+            }
             document.getElementById('photoSelectionModal').classList.add('hidden');
         });
 
@@ -1458,43 +1472,55 @@
                     '../images/ico/icon30.png'
                 ];
                 
-                // Добавляем цветные иконки как альтернативу
+                // Расширенный список красивых цветных иконок
                 const colorIcons = [
-                    { icon: 'fas fa-user', color: 'bg-pink-500' },
-                    { icon: 'fas fa-user-tie', color: 'bg-blue-500' },
-                    { icon: 'fas fa-user-graduate', color: 'bg-green-500' },
-                    { icon: 'fas fa-user-ninja', color: 'bg-purple-500' },
-                    { icon: 'fas fa-user-astronaut', color: 'bg-indigo-500' },
-                    { icon: 'fas fa-user-cowboy', color: 'bg-yellow-500' },
-                    { icon: 'fas fa-user-doctor', color: 'bg-red-500' },
-                    { icon: 'fas fa-user-nurse', color: 'bg-teal-500' },
-                    { icon: 'fas fa-user-secret', color: 'bg-gray-500' },
-                    { icon: 'fas fa-user-tag', color: 'bg-orange-500' },
-                    { icon: 'fas fa-user-check', color: 'bg-emerald-500' },
-                    { icon: 'fas fa-user-clock', color: 'bg-cyan-500' }
+                    { icon: 'fas fa-user', color: 'bg-gradient-to-br from-pink-400 to-pink-600' },
+                    { icon: 'fas fa-user-tie', color: 'bg-gradient-to-br from-blue-400 to-blue-600' },
+                    { icon: 'fas fa-user-graduate', color: 'bg-gradient-to-br from-green-400 to-green-600' },
+                    { icon: 'fas fa-user-ninja', color: 'bg-gradient-to-br from-purple-400 to-purple-600' },
+                    { icon: 'fas fa-user-astronaut', color: 'bg-gradient-to-br from-indigo-400 to-indigo-600' },
+                    { icon: 'fas fa-user-cowboy', color: 'bg-gradient-to-br from-yellow-400 to-yellow-600' },
+                    { icon: 'fas fa-user-doctor', color: 'bg-gradient-to-br from-red-400 to-red-600' },
+                    { icon: 'fas fa-user-nurse', color: 'bg-gradient-to-br from-teal-400 to-teal-600' },
+                    { icon: 'fas fa-user-secret', color: 'bg-gradient-to-br from-gray-400 to-gray-600' },
+                    { icon: 'fas fa-user-tag', color: 'bg-gradient-to-br from-orange-400 to-orange-600' },
+                    { icon: 'fas fa-user-check', color: 'bg-gradient-to-br from-emerald-400 to-emerald-600' },
+                    { icon: 'fas fa-user-clock', color: 'bg-gradient-to-br from-cyan-400 to-cyan-600' },
+                    { icon: 'fas fa-heart', color: 'bg-gradient-to-br from-rose-400 to-rose-600' },
+                    { icon: 'fas fa-star', color: 'bg-gradient-to-br from-amber-400 to-amber-600' },
+                    { icon: 'fas fa-crown', color: 'bg-gradient-to-br from-yellow-400 to-yellow-600' },
+                    { icon: 'fas fa-gem', color: 'bg-gradient-to-br from-violet-400 to-violet-600' },
+                    { icon: 'fas fa-sparkles', color: 'bg-gradient-to-br from-sky-400 to-sky-600' },
+                    { icon: 'fas fa-fire', color: 'bg-gradient-to-br from-orange-400 to-orange-600' },
+                    { icon: 'fas fa-leaf', color: 'bg-gradient-to-br from-green-400 to-green-600' },
+                    { icon: 'fas fa-sun', color: 'bg-gradient-to-br from-yellow-400 to-yellow-600' },
+                    { icon: 'fas fa-moon', color: 'bg-gradient-to-br from-indigo-400 to-indigo-600' },
+                    { icon: 'fas fa-cloud', color: 'bg-gradient-to-br from-blue-400 to-blue-600' },
+                    { icon: 'fas fa-flower', color: 'bg-gradient-to-br from-pink-400 to-pink-600' },
+                    { icon: 'fas fa-butterfly', color: 'bg-gradient-to-br from-purple-400 to-purple-600' }
                 ];
                 
                 let html = '';
                 
-                // Добавляем иконки из папки ICO
+                // Добавляем иконки из папки ICO с улучшенным дизайном
                 icoImages.forEach((imagePath, index) => {
                     html += `
-                        <div class="cursor-pointer hover:opacity-75 transition" onclick="selectStandardPhoto('${imagePath}', ${index})">
-                            <div class="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center overflow-hidden">
+                        <div class="cursor-pointer group" onclick="selectStandardPhoto('${imagePath}', ${index})">
+                            <div class="w-14 h-14 bg-gradient-to-br from-pink-100 to-pink-200 rounded-full flex items-center justify-center overflow-hidden border-2 border-pink-200 hover:border-pink-400 transition-all duration-300 transform hover:scale-110 shadow-md hover:shadow-lg">
                                 <img src="${imagePath}" alt="Иконка ${index + 1}" class="w-full h-full object-cover" 
-                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'; this.parentElement.style.backgroundColor='#f3e8ff';">
-                                <i class="fas fa-user text-pink-600" style="display: none;"></i>
+                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'; this.parentElement.style.background='linear-gradient(135deg, #f3e8ff 0%, #fdf2f8 100%)';">
+                                <i class="fas fa-user text-pink-600 text-xl" style="display: none;"></i>
                             </div>
                         </div>
                     `;
                 });
                 
-                // Добавляем цветные иконки
+                // Добавляем красивые цветные иконки
                 colorIcons.forEach((iconData, index) => {
                     html += `
-                        <div class="cursor-pointer hover:opacity-75 transition" onclick="selectStandardPhoto('icon-${index}', ${icoImages.length + index})">
-                            <div class="w-12 h-12 ${iconData.color} rounded-full flex items-center justify-center">
-                                <i class="${iconData.icon} text-white text-lg"></i>
+                        <div class="cursor-pointer group" onclick="selectStandardPhoto('icon-${index}', ${icoImages.length + index})">
+                            <div class="w-14 h-14 ${iconData.color} rounded-full flex items-center justify-center border-2 border-white hover:border-pink-300 transition-all duration-300 transform hover:scale-110 shadow-md hover:shadow-lg">
+                                <i class="${iconData.icon} text-white text-xl"></i>
                             </div>
                         </div>
                     `;
@@ -1513,6 +1539,20 @@
         function selectStandardPhoto(photoPath, index) {
             try {
                 console.log('Selecting photo:', photoPath, index);
+                
+                // Сохраняем выбранное фото в глобальной переменной
+                window.selectedPhotoPath = photoPath;
+                
+                // Убираем выделение со всех аватарок
+                document.querySelectorAll('#standardPhotos > div').forEach(div => {
+                    div.querySelector('div').classList.remove('ring-4', 'ring-pink-400', 'ring-offset-2');
+                });
+                
+                // Добавляем выделение к выбранной аватарке
+                const selectedDiv = document.querySelectorAll('#standardPhotos > div')[index];
+                if (selectedDiv) {
+                    selectedDiv.querySelector('div').classList.add('ring-4', 'ring-pink-400', 'ring-offset-2');
+                }
                 
                 // Обновляем фото профиля
                 const profileImage = document.getElementById('profileImage');
@@ -1596,14 +1636,111 @@
                     localStorage.setItem('selectedAvatar', photoPath);
                 }
                 
-                // Закрываем модальное окно
-                document.getElementById('photoSelectionModal').classList.add('hidden');
-                
-                showNotification('success', 'Аватарка выбрана!', `Выбрана аватарка ${index + 1}`);
+                // Показываем уведомление об успешном выборе
+                showNotification('success', 'Фото выбрано!', 'Нажмите "Сохранить" для применения изменений');
                 
             } catch (error) {
                 console.error('Error selecting standard photo:', error);
-                showNotification('error', 'Ошибка выбора аватарки', error.message);
+                showNotification('error', 'Ошибка', 'Не удалось выбрать изображение');
+            }
+        }
+
+        // Apply Selected Photo
+        function applySelectedPhoto(photoPath) {
+            try {
+                console.log('Applying selected photo:', photoPath);
+                
+                // Проверяем, является ли это иконкой
+                if (photoPath.startsWith('icon-')) {
+                    // Это иконка - применяем её
+                    const iconIndex = parseInt(photoPath.split('-')[1]);
+                    const iconClasses = [
+                        'fas fa-user', 'fas fa-user-tie', 'fas fa-user-graduate', 'fas fa-user-ninja',
+                        'fas fa-user-astronaut', 'fas fa-user-cowboy', 'fas fa-user-doctor', 'fas fa-user-nurse',
+                        'fas fa-user-secret', 'fas fa-user-tag', 'fas fa-user-check', 'fas fa-user-clock',
+                        'fas fa-heart', 'fas fa-star', 'fas fa-crown', 'fas fa-gem', 'fas fa-sparkles',
+                        'fas fa-fire', 'fas fa-leaf', 'fas fa-sun', 'fas fa-moon', 'fas fa-cloud',
+                        'fas fa-flower', 'fas fa-butterfly'
+                    ];
+                    const iconColors = [
+                        'text-pink-600', 'text-blue-600', 'text-green-600', 'text-purple-600',
+                        'text-indigo-600', 'text-yellow-600', 'text-red-600', 'text-teal-600',
+                        'text-gray-600', 'text-orange-600', 'text-emerald-600', 'text-cyan-600',
+                        'text-rose-600', 'text-amber-600', 'text-yellow-600', 'text-violet-600',
+                        'text-sky-600', 'text-orange-600', 'text-green-600', 'text-yellow-600',
+                        'text-indigo-600', 'text-blue-600', 'text-pink-600', 'text-purple-600'
+                    ];
+                    
+                    if (iconIndex < iconClasses.length) {
+                        // Обновляем иконку в профиле
+                        const defaultIcon = document.getElementById('defaultProfileIcon');
+                        const mainDefaultIcon = document.querySelector('#profileSection #profileImagePreview i');
+                        
+                        if (defaultIcon) {
+                            defaultIcon.className = `${iconClasses[iconIndex]} text-3xl ${iconColors[iconIndex]}`;
+                        }
+                        if (mainDefaultIcon) {
+                            mainDefaultIcon.className = `${iconClasses[iconIndex]} text-3xl ${iconColors[iconIndex]}`;
+                        }
+                        
+                        // Скрываем изображения
+                        const profileImage = document.getElementById('profileImage');
+                        const mainProfileImage = document.querySelector('#profileSection #profileImagePreview img');
+                        
+                        if (profileImage) profileImage.classList.add('hidden');
+                        if (mainProfileImage) mainProfileImage.classList.add('hidden');
+                        
+                        // Показываем иконки
+                        if (defaultIcon) defaultIcon.classList.remove('hidden');
+                        if (mainDefaultIcon) mainDefaultIcon.classList.remove('hidden');
+                    }
+                    
+                } else {
+                    // Это изображение - применяем его
+                    const profileImage = document.getElementById('profileImage');
+                    const defaultIcon = document.getElementById('defaultProfileIcon');
+                    
+                    if (profileImage) {
+                        profileImage.src = photoPath;
+                        profileImage.classList.remove('hidden');
+                    }
+                    if (defaultIcon) {
+                        defaultIcon.classList.add('hidden');
+                    }
+                    
+                    // Обновляем основное фото профиля
+                    const mainProfileImage = document.querySelector('#profileSection #profileImagePreview img');
+                    const mainDefaultIcon = document.querySelector('#profileSection #profileImagePreview i');
+                    
+                    if (mainProfileImage) {
+                        mainProfileImage.src = photoPath;
+                        mainProfileImage.classList.remove('hidden');
+                    } else {
+                        // Создаем изображение если его нет
+                        const newImg = document.createElement('img');
+                        newImg.src = photoPath;
+                        newImg.alt = 'Фото профиля';
+                        newImg.className = 'w-full h-full object-cover';
+                        const container = document.querySelector('#profileSection #profileImagePreview');
+                        if (container) {
+                            container.appendChild(newImg);
+                        }
+                    }
+                    
+                    if (mainDefaultIcon) {
+                        mainDefaultIcon.classList.add('hidden');
+                    }
+                }
+                
+                // Сохраняем в localStorage
+                localStorage.setItem('selectedAvatar', photoPath);
+                
+                // Показываем уведомление об успехе
+                showNotification('success', 'Фото применено!', 'Ваше фото профиля успешно обновлено');
+                
+            } catch (error) {
+                console.error('Error applying selected photo:', error);
+                showNotification('error', 'Ошибка', 'Не удалось применить выбранное фото');
             }
         }
 
