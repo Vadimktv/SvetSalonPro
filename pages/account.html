@@ -1368,57 +1368,105 @@
         // Проверка авторизации при загрузке страницы
         async function checkAuthOnLoad() {
             try {
-                console.log('Checking authentication status on account page...');
+                console.log('=== ПРОВЕРКА АВТОРИЗАЦИИ ПРИ ЗАГРУЗКЕ ===');
                 
-                // Показываем состояние загрузки
-                showLoadingState();
+                // Получаем клиент
+                const client = window.supabaseClient || supabaseClient;
+                if (!client) {
+                    console.log('Клиент не готов, пропускаем проверку авторизации');
+                    hideLoadingState();
+                    showAuth();
+                    return;
+                }
                 
-                // Проверяем, есть ли сохраненный пользователь
-                const savedUser = localStorage.getItem('currentUser');
-                if (savedUser) {
-                    try {
-                        const user = JSON.parse(savedUser);
-                        console.log('Found saved user:', user.email);
-                        
-                        // Проверяем, не истек ли токен
-                        const currentTime = Math.floor(Date.now() / 1000);
-                        if (user.exp && user.exp < currentTime) {
-                            console.log('Token expired, clearing user data');
+                // Проверяем текущего пользователя через Supabase
+                console.log('Проверяем текущего пользователя через Supabase...');
+                const { data: { user }, error } = await client.auth.getUser();
+                
+                if (error) {
+                    console.error('Ошибка получения пользователя:', error);
+                    hideLoadingState();
+                    showAuth();
+                    return;
+                }
+                
+                if (user) {
+                    console.log('Пользователь найден через Supabase:', user.email);
+                    currentUser = user;
+                    currentUserEmail = user.email;
+                    
+                    // Сохраняем пользователя в localStorage
+                    localStorage.setItem('currentUser', JSON.stringify(user));
+                    
+                    // Проверяем административные привилегии
+                    if (checkAdminPrivileges(currentUserEmail)) {
+                        isAdmin = true;
+                        toggleAdminButtons(true);
+                        console.log('Admin privileges restored');
+                    }
+                    
+                    // Отправляем событие о входе пользователя
+                    window.dispatchEvent(new CustomEvent('userLoggedIn', { detail: user }));
+                    
+                    // Скрываем загрузку и показываем профиль
+                    hideLoadingState();
+                    showProfile();
+                    showUserDataImmediately(user);
+                    loadUserProfile();
+                    
+                } else {
+                    console.log('Пользователь не найден через Supabase');
+                    
+                    // Проверяем localStorage как fallback
+                    const savedUser = localStorage.getItem('currentUser');
+                    if (savedUser) {
+                        try {
+                            const user = JSON.parse(savedUser);
+                            console.log('Found saved user in localStorage:', user.email);
+                            
+                            // Проверяем, не истек ли токен
+                            const currentTime = Math.floor(Date.now() / 1000);
+                            if (user.exp && user.exp < currentTime) {
+                                console.log('Token expired, clearing user data');
+                                localStorage.removeItem('currentUser');
+                                localStorage.removeItem('selectedAvatar');
+                                hideLoadingState();
+                                showAuth();
+                                return;
+                            }
+                            
+                            // Пользователь авторизован
+                            currentUser = user;
+                            currentUserEmail = user.email;
+                            
+                            // Проверяем административные привилегии
+                            if (checkAdminPrivileges(currentUserEmail)) {
+                                isAdmin = true;
+                                toggleAdminButtons(true);
+                                console.log('Admin privileges restored');
+                            }
+                            
+                            // Отправляем событие о входе пользователя
+                            window.dispatchEvent(new CustomEvent('userLoggedIn', { detail: user }));
+                            
+                            // Скрываем загрузку и показываем профиль
+                            hideLoadingState();
+                            showProfile();
+                            showUserDataImmediately(user);
+                            loadUserProfile();
+                            
+                        } catch (e) {
+                            console.error('Error parsing saved user:', e);
                             localStorage.removeItem('currentUser');
                             localStorage.removeItem('selectedAvatar');
                             hideLoadingState();
                             showAuth();
-                            return;
                         }
-                        
-                        // Пользователь авторизован
-                        currentUserEmail = user.email;
-                        
-                        // Проверяем административные привилегии
-                        if (checkAdminPrivileges(currentUserEmail)) {
-                            isAdmin = true;
-                            toggleAdminButtons(true);
-                            console.log('Admin privileges restored');
-                        }
-                        
-                        // Отправляем событие о входе пользователя
-                        window.dispatchEvent(new CustomEvent('userLoggedIn', { detail: user }));
-                        
-                        // Скрываем загрузку и показываем профиль
-                        hideLoadingState();
-                        showProfile();
-                        
-                    } catch (e) {
-                        console.error('Error parsing saved user:', e);
-                        localStorage.removeItem('currentUser');
-                        localStorage.removeItem('selectedAvatar');
+                    } else {
+                        console.log('No saved user found');
                         hideLoadingState();
                         showAuth();
                     }
-                } else {
-                    console.log('No saved user found');
-                    hideLoadingState();
-                    showAuth();
                 }
             } catch (error) {
                 console.error('Error checking authentication:', error);
@@ -1521,9 +1569,6 @@
             try {
                 console.log('=== НАЧАЛО ИНИЦИАЛИЗАЦИИ SUPABASE ===');
                 
-                // Проверяем авторизацию при загрузке страницы
-                await checkAuthOnLoad();
-                
                 // Проверяем, что DOM загружен
                 if (document.readyState !== 'complete') {
                     console.log('DOM еще не загружен, ждем...');
@@ -1578,135 +1623,6 @@
                 // Проверяем авторизацию при загрузке страницы
                 await checkAuthOnLoad();
                 
-                // Проверяем, что DOM загружен
-                if (document.readyState !== 'complete') {
-                    console.log('DOM еще не загружен, ждем...');
-                    await new Promise(resolve => {
-                        document.addEventListener('DOMContentLoaded', resolve);
-                    });
-                }
-                
-                // Проверяем, что Supabase SDK загружен
-                console.log('Проверяем window.supabase:', typeof window.supabase);
-                console.log('Проверяем глобальную переменную supabase:', typeof supabase);
-                
-                // Если SDK не найден, пробуем загрузить заново
-                if (typeof window.supabase === 'undefined' && typeof supabase === 'undefined') {
-                    console.log('SDK не найден, пробуем загрузить заново...');
-                    await loadSupabase();
-                    
-                    // Проверяем снова
-                    console.log('После повторной загрузки:');
-                    console.log('- window.supabase:', typeof window.supabase);
-                    console.log('- supabase:', typeof supabase);
-                    
-                    if (typeof window.supabase === 'undefined' && typeof supabase === 'undefined') {
-                        throw new Error('Supabase SDK не загружен даже после повторной попытки');
-                    }
-                }
-                
-                // Используем доступный SDK
-                const sdk = window.supabase || supabase;
-                console.log('Используем SDK:', sdk);
-                
-                // Создаем клиент
-                console.log('Создаем клиент Supabase...');
-                const client = sdk.createClient(
-                    'https://iaezefurqmmgubdgqakt.supabase.co',
-                    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlhZXplZnVycW1tZ3ViZGdxYWt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU5NTk3NjQsImV4cCI6MjA3MTUzNTc2NH0.-Puoiddwu_xIx9BaHM0BBfbsULdU0Ljzh6uQleVToBQ'
-                );
-                
-                console.log('Клиент создан:', client);
-                
-                // Присваиваем глобальным переменным
-                window.supabaseClient = client;
-                supabaseClient = client;
-                
-                console.log('Глобальные переменные установлены:');
-                console.log('- window.supabaseClient:', window.supabaseClient);
-                console.log('- supabaseClient:', supabaseClient);
-                
-                // Check if user is already logged in
-                console.log('Проверяем текущего пользователя...');
-                const { data: { user } } = await client.auth.getUser();
-                if (user) {
-                    console.log('Пользователь найден:', user);
-                    currentUser = user;
-                    
-                    // Сохраняем пользователя в localStorage
-                    localStorage.setItem('currentUser', JSON.stringify(user));
-                    
-                    // Отправляем событие о входе пользователя
-                    window.dispatchEvent(new CustomEvent('userLoggedIn', { detail: user }));
-                    
-                    showProfile();
-                    // Сразу показываем данные из currentUser
-                    showUserDataImmediately(user);
-                    // Затем загружаем полный профиль из базы данных
-                    loadUserProfile();
-                } else {
-                    console.log('Пользователь не найден, показываем форму входа');
-                    showAuth();
-                }
-                
-                // Проверяем сессию в URL (для Magic Link)
-                const { data: { session } } = await client.auth.getSession();
-                if (session) {
-                    console.log('Сессия найдена в URL:', session);
-                    currentUser = session.user;
-                    
-                    // Сохраняем пользователя в localStorage
-                    localStorage.setItem('currentUser', JSON.stringify(session.user));
-                    
-                    // Отправляем событие о входе пользователя
-                    window.dispatchEvent(new CustomEvent('userLoggedIn', { detail: session.user }));
-                    
-                    showProfile();
-                    // Сразу показываем данные из currentUser
-                    showUserDataImmediately(session.user);
-                    // Затем загружаем полный профиль из базы данных
-                    loadUserProfile();
-                } else {
-                    // Проверяем токены в URL напрямую
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const hashParams = new URLSearchParams(window.location.hash.substring(1));
-                    
-                    const accessToken = urlParams.get('access_token') || hashParams.get('access_token');
-                    const refreshToken = urlParams.get('refresh_token') || hashParams.get('refresh_token');
-                    const type = urlParams.get('type') || hashParams.get('type');
-                    
-                    if (accessToken && (type === 'recovery' || type === 'signup' || type === 'magiclink')) {
-                        console.log('Найден токен в URL, устанавливаем сессию...');
-                        
-                        // Устанавливаем сессию
-                        let { data, error } = await client.auth.setSession({
-                            access_token: accessToken,
-                            refresh_token: refreshToken || null
-                        });
-                        
-                        if (!error && data.session) {
-                            console.log('Сессия успешно установлена из токена:', data.session);
-                            currentUser = data.session.user;
-                            
-                            // Сохраняем пользователя в localStorage
-                            localStorage.setItem('currentUser', JSON.stringify(data.session.user));
-                            
-                            // Отправляем событие о входе пользователя
-                            window.dispatchEvent(new CustomEvent('userLoggedIn', { detail: data.session.user }));
-                            
-                            // Очищаем URL от токенов
-                            const cleanURL = window.location.pathname;
-                            window.history.replaceState({}, document.title, cleanURL);
-                            
-                            showProfile();
-                            showUserDataImmediately(data.session.user);
-                            loadUserProfile();
-                            
-                            showNotification('success', 'Вход выполнен!', 'Добро пожаловать в личный кабинет!');
-                        }
-                    }
-                }
-                
                 console.log('=== ИНИЦИАЛИЗАЦИЯ SUPABASE ЗАВЕРШЕНА УСПЕШНО ===');
                 
                 // Настраиваем форму входа
@@ -1718,10 +1634,10 @@
                 setupAuthStateChange();
                 
             } catch (error) {
-                console.error('=== ОШИБКА ИНИЦИАЛИЗАЦИИ SUPABASE ===');
-                console.error('Error initializing Supabase:', error);
-                console.error('Stack trace:', error.stack);
-                showNotification('error', 'Ошибка инициализации', error.message);
+                console.error('Ошибка инициализации Supabase:', error);
+                showNotification('error', 'Ошибка инициализации', 'Не удалось инициализировать систему авторизации.');
+                hideLoadingState();
+                showAuth();
             }
         }
 
