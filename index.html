@@ -655,15 +655,20 @@
         #sideMenu.open #menuBackdrop {
             opacity: 1;
             pointer-events: all;
+            backdrop-filter: blur(2px);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         #sideMenu.open #menuContainer {
-            transform: translateX(0);
+            transform: scale(1) translateX(0);
+            opacity: 1;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         #sideMenu:not(.open) #menuContainer {
-            transform: translateX(100%) !important;
+            transform: scale(0.75) translateX(0) !important;
+            opacity: 0 !important;
         }
         
         /* Prevent body scroll when menu is open */
@@ -888,10 +893,10 @@
     <!-- iOS Style Side Menu -->
     <div id="sideMenu" class="fixed inset-0 z-50 pointer-events-none">
         <!-- Backdrop -->
-        <div id="menuBackdrop" class="absolute inset-0 bg-black/20 opacity-0 transition-all duration-300 ease-out pointer-events-none"></div>
+        <div id="menuBackdrop" class="absolute inset-0 bg-black/20 opacity-0 transition-all duration-250 ease-out pointer-events-none"></div>
         
         <!-- Menu Container -->
-        <div id="menuContainer" class="absolute top-24 right-4 h-auto max-h-[80vh] w-72 bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl transform translate-x-full transition-all duration-300 ease-out border border-white/30">
+        <div id="menuContainer" class="absolute top-24 right-4 h-auto max-h-[80vh] w-72 bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl transform scale-75 opacity-0 transition-all duration-250 ease-out border border-white/30">
             <!-- Menu Header -->
             <div class="flex items-center justify-between p-3 border-b border-white/10">
                 <div class="flex items-center space-x-2">
@@ -2189,7 +2194,9 @@
                 
                 if (diffX > 0) { // Swipe right to close
                     const translateX = Math.min(diffX, 100);
-                    menuContainer.style.transform = `translateX(${translateX}px)`;
+                    const scale = Math.max(0.75, 1 - (diffX / 200)); // Scale down as we swipe
+                    menuContainer.style.transform = `scale(${scale}) translateX(${translateX}px)`;
+                    menuContainer.style.opacity = Math.max(0, 1 - (diffX / 100));
                 }
             }, { passive: true });
 
@@ -2203,9 +2210,11 @@
                 } else {
                     // Reset position - let CSS handle the animation
                     menuContainer.style.transform = '';
+                    menuContainer.style.opacity = '';
                     setTimeout(() => {
                         if (isMenuOpen) {
                             menuContainer.style.transform = '';
+                            menuContainer.style.opacity = '';
                         }
                     }, 10);
                 }
