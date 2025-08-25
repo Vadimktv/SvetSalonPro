@@ -770,6 +770,11 @@
             background-color: #ec4899;
         }
         
+        /* Simple menu button hover effect */
+        #iosMenuBtn:hover i {
+            color: #ec4899;
+        }
+        
         /* Menu Items */
         .menu-item {
             display: flex;
@@ -1067,14 +1072,8 @@
                     </div>
                 </button>
                 <!-- iOS Style Menu Button -->
-                <button id="iosMenuBtn" class="md:hidden text-gray-700 hover:text-pink-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 rounded-full">
-                    <div class="w-12 h-12 bg-gray-100/50 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-gray-200/50 active:bg-gray-300/50 transition-all duration-200 transform hover:scale-105 active:scale-95">
-                        <div class="menu-icon-container">
-                            <span class="menu-line"></span>
-                            <span class="menu-line"></span>
-                            <span class="menu-line"></span>
-                        </div>
-                    </div>
+                <button id="iosMenuBtn" class="md:hidden w-10 h-10 rounded-full bg-gray-100/50 backdrop-blur-sm flex items-center justify-center hover:bg-gray-200/50 active:bg-gray-300/50 transition-all duration-200 transform hover:scale-105 active:scale-95 cursor-pointer">
+                    <i class="fas fa-bars text-gray-600 text-sm"></i>
                 </button>
             </div>
         </div>
@@ -2260,7 +2259,6 @@
             isMenuOpen = true;
             sideMenu.classList.add('open');
             document.body.classList.add('menu-open');
-            iosMenuBtn.classList.add('active');
             
             setTimeout(() => {
                 sideMenu.style.pointerEvents = 'all';
@@ -2275,7 +2273,6 @@
             isMenuOpen = false;
             sideMenu.classList.remove('open');
             document.body.classList.remove('menu-open');
-            iosMenuBtn.classList.remove('active');
             sideMenu.style.pointerEvents = 'none';
         }
 
