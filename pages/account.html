@@ -1448,17 +1448,21 @@
                 if (accessToken && (type === 'recovery' || type === 'signup' || type === 'magiclink')) {
                     console.log('Найден токен восстановления, обрабатываем...');
                     
-                    // Создаем временный клиент для обработки токена
-                    const tempClient = window.supabase || supabase;
-                    if (!tempClient) {
-                        console.log('Supabase SDK еще не загружен, ждем...');
-                        await loadSupabase();
+                    // Используем уже созданный клиент или создаем новый
+                    let client = window.supabaseClient || supabaseClient;
+                    if (!client) {
+                        console.log('Клиент не найден, создаем новый...');
+                        const sdk = window.supabase || supabase;
+                        if (!sdk) {
+                            console.log('Supabase SDK еще не загружен, ждем...');
+                            await loadSupabase();
+                        }
+                        
+                        client = (window.supabase || supabase).createClient(
+                            'https://iaezefurqmmgubdgqakt.supabase.co',
+                            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlhZXplZnVycW1tZ3ViZGdxYWt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU5NTk3NjQsImV4cCI6MjA3MTUzNTc2NH0.-Puoiddwu_xIx9BaHM0BBfbsULdU0Ljzh6uQleVToBQ'
+                        );
                     }
-                    
-                    const client = (window.supabase || supabase).createClient(
-                        'https://iaezefurqmmgubdgqakt.supabase.co',
-                        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlhZXplZnVycW1tZ3ViZGdxYWt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU5NTk3NjQsImV4cCI6MjA3MTUzNTc2NH0.-Puoiddwu_xIx9BaHM0BBfbsULdU0Ljzh6uQleVToBQ'
-                    );
                     
                     // Устанавливаем сессию
                     let { data, error } = await client.auth.setSession({
@@ -1517,7 +1521,58 @@
             try {
                 console.log('=== НАЧАЛО ИНИЦИАЛИЗАЦИИ SUPABASE ===');
                 
-                // Обрабатываем токен авторизации из URL (Magic Link)
+                // Проверяем авторизацию при загрузке страницы
+                await checkAuthOnLoad();
+                
+                // Проверяем, что DOM загружен
+                if (document.readyState !== 'complete') {
+                    console.log('DOM еще не загружен, ждем...');
+                    await new Promise(resolve => {
+                        document.addEventListener('DOMContentLoaded', resolve);
+                    });
+                }
+                
+                // Проверяем, что Supabase SDK загружен
+                console.log('Проверяем window.supabase:', typeof window.supabase);
+                console.log('Проверяем глобальную переменную supabase:', typeof supabase);
+                
+                // Если SDK не найден, пробуем загрузить заново
+                if (typeof window.supabase === 'undefined' && typeof supabase === 'undefined') {
+                    console.log('SDK не найден, пробуем загрузить заново...');
+                    await loadSupabase();
+                    
+                    // Проверяем снова
+                    console.log('После повторной загрузки:');
+                    console.log('- window.supabase:', typeof window.supabase);
+                    console.log('- supabase:', typeof supabase);
+                    
+                    if (typeof window.supabase === 'undefined' && typeof supabase === 'undefined') {
+                        throw new Error('Supabase SDK не загружен даже после повторной попытки');
+                    }
+                }
+                
+                // Используем доступный SDK
+                const sdk = window.supabase || supabase;
+                console.log('Используем SDK:', sdk);
+                
+                // Создаем клиент
+                console.log('Создаем клиент Supabase...');
+                const client = sdk.createClient(
+                    'https://iaezefurqmmgubdgqakt.supabase.co',
+                    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlhZXplZnVycW1tZ3ViZGdxYWt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU5NTk3NjQsImV4cCI6MjA3MTUzNTc2NH0.-Puoiddwu_xIx9BaHM0BBfbsULdU0Ljzh6uQleVToBQ'
+                );
+                
+                console.log('Клиент создан:', client);
+                
+                // Присваиваем глобальным переменным
+                window.supabaseClient = client;
+                supabaseClient = client;
+                
+                console.log('Глобальные переменные установлены:');
+                console.log('- window.supabaseClient:', window.supabaseClient);
+                console.log('- supabaseClient:', supabaseClient);
+                
+                // Обрабатываем токен авторизации из URL (Magic Link) ПОСЛЕ создания клиента
                 await handleAuthFromURL();
                 
                 // Проверяем авторизацию при загрузке страницы
