@@ -1949,7 +1949,7 @@
         }
     }
     
-    // Мобильное меню
+    // Мобильное меню и авторизация
     document.addEventListener('DOMContentLoaded', function() {
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileMenu = document.getElementById('mobileMenu');
@@ -1968,6 +1968,97 @@
             mobileProfileBtn.addEventListener('click', () => {
                 window.location.href = 'pages/account.html';
             });
+        }
+
+        // Проверка авторизации при загрузке страницы
+        async function checkAuthOnLoad() {
+            try {
+                console.log('Checking authentication status...');
+                
+                // Проверяем, есть ли сохраненный пользователь
+                const savedUser = localStorage.getItem('currentUser');
+                if (savedUser) {
+                    try {
+                        const user = JSON.parse(savedUser);
+                        console.log('Found saved user:', user.email);
+                        
+                        // Проверяем, не истек ли токен
+                        const currentTime = Math.floor(Date.now() / 1000);
+                        if (user.exp && user.exp < currentTime) {
+                            console.log('Token expired, clearing user data');
+                            localStorage.removeItem('currentUser');
+                            localStorage.removeItem('selectedAvatar');
+                            resetProfileUI();
+                            return;
+                        }
+                        
+                        // Пользователь авторизован
+                        currentUserEmail = user.email;
+                        
+                        // Загружаем аватар
+                        loadSavedAvatar();
+                        
+                        // Проверяем административные привилегии
+                        if (checkAdminPrivileges(currentUserEmail)) {
+                            isAdmin = true;
+                            toggleAdminButtons(true);
+                            console.log('Admin privileges restored');
+                        }
+                        
+                        // Отправляем событие о входе пользователя
+                        window.dispatchEvent(new CustomEvent('userLoggedIn', { detail: user }));
+                        
+                    } catch (e) {
+                        console.error('Error parsing saved user:', e);
+                        localStorage.removeItem('currentUser');
+                        localStorage.removeItem('selectedAvatar');
+                        resetProfileUI();
+                    }
+                } else {
+                    console.log('No saved user found');
+                    resetProfileUI();
+                }
+            } catch (error) {
+                console.error('Error checking authentication:', error);
+                resetProfileUI();
+            }
+        }
+
+        // Функция сброса UI профиля
+        function resetProfileUI() {
+            const profileBtn = document.getElementById('profileBtn');
+            const mobileProfileBtn = document.getElementById('mobileProfileBtn');
+            
+            if (profileBtn) {
+                const iconContainer = profileBtn.querySelector('div');
+                const icon = profileBtn.querySelector('i');
+                
+                iconContainer.className = 'w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center';
+                icon.className = 'fas fa-user text-white text-sm';
+                icon.style.display = 'block';
+                
+                const existingImg = iconContainer.querySelector('img');
+                if (existingImg) {
+                    existingImg.remove();
+                }
+            }
+            
+            if (mobileProfileBtn) {
+                const iconContainer = mobileProfileBtn.querySelector('div');
+                const icon = mobileProfileBtn.querySelector('i');
+                
+                iconContainer.className = 'w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center';
+                icon.className = 'fas fa-user text-white text-sm';
+                icon.style.display = 'block';
+                
+                const existingImg = iconContainer.querySelector('img');
+                if (existingImg) {
+                    existingImg.remove();
+                }
+            }
+            
+            // Скрываем кнопки администратора
+            toggleAdminButtons(false);
         }
 
         // Load saved avatar
@@ -2048,8 +2139,8 @@
             }
         }
 
-        // Load avatar on page load
-        loadSavedAvatar();
+        // Load avatar on page load (теперь вызывается в checkAuthOnLoad)
+        // loadSavedAvatar();
 
         // Listen for avatar updates from account page
         window.addEventListener('storage', function(e) {
@@ -2205,6 +2296,8 @@
         // Setup menu handlers after menu is created
         setupMenuHandlers();
 
+        // Проверяем авторизацию при загрузке страницы
+        checkAuthOnLoad();
 
     });
 
