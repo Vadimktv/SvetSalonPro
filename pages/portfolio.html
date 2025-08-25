@@ -98,7 +98,184 @@
             background: linear-gradient(135deg, #ec4899, #be185d);
             color: white;
             border-color: #ec4899;
-            box-shadow: 0 4px 20px rgba(236, 72, 153, 0.3);
+        }
+
+        /* iOS Style Menu Styles */
+        #sideMenu.open #menuBackdrop {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        #sideMenu.open #menuContainer {
+            transform: scale(1);
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* Menu Items */
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border-radius: 12px;
+            color: #374151;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .menu-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(236, 72, 153, 0.08);
+            border-radius: 12px;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+        }
+
+        .menu-item:hover::before {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .menu-item:hover {
+            transform: translateX(8px);
+            color: #ec4899;
+        }
+
+        .menu-item:active {
+            transform: translateX(8px) scale(0.95);
+        }
+
+        .menu-item:active::before {
+            background: rgba(236, 72, 153, 0.12);
+            transform: scale(1.05);
+        }
+
+        /* Menu Icons */
+        .menu-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: rgba(236, 72, 153, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            flex-shrink: 0;
+        }
+
+        .menu-item:hover .menu-icon {
+            background: rgba(236, 72, 153, 0.15);
+            transform: scale(1.05);
+        }
+
+        .menu-item:active .menu-icon {
+            transform: scale(0.98);
+        }
+
+        .menu-icon i {
+            font-size: 18px;
+            color: #ec4899;
+            transition: all 0.3s ease;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+        }
+
+        .menu-item:hover .menu-icon i {
+            transform: scale(1.1);
+        }
+
+        .menu-item span {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .menu-item:hover span {
+            transform: translateX(2px);
+            color: #ec4899;
+        }
+
+        /* Bubble Animation */
+        @keyframes bubblePop {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .menu-item.bubble-animation::before {
+            animation: bubblePop 0.2s ease-out;
+        }
+
+        /* iOS Haptic Feedback Simulation */
+        @keyframes hapticFeedback {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-1px); }
+            75% { transform: translateX(1px); }
+        }
+
+        .haptic-feedback {
+            animation: hapticFeedback 0.1s ease-in-out;
+        }
+
+        /* Glassmorphism Effects */
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Smooth Scrolling */
+        #menuContainer {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(236, 72, 153, 0.3) transparent;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        #menuContainer::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        #menuContainer::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        #menuContainer::-webkit-scrollbar-thumb {
+            background: rgba(236, 72, 153, 0.3);
+            border-radius: 2px;
+        }
+
+        #menuContainer::-webkit-scrollbar-thumb:hover {
+            background: rgba(236, 72, 153, 0.5);
+        }
+
+        /* Touch improvements */
+        .menu-item, #iosMenuBtn, #closeMenuBtn {
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+
+        /* Prevent text selection */
+        #sideMenu {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        /* Better focus states */
+        .menu-item:focus, #iosMenuBtn:focus, #closeMenuBtn:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.3);
         }
         
         /* Слайдшоу для фотографий */
@@ -373,33 +550,118 @@
                         <i class="fas fa-user text-white text-sm"></i>
                     </div>
                 </button>
-                <!-- Mobile Menu Button -->
-                <button id="mobileMenuBtn" class="md:hidden text-gray-700 hover:text-pink-600 transition-colors duration-200">
-                    <i class="fas fa-bars text-xl"></i>
+                <!-- iOS Style Menu Button -->
+                <button id="iosMenuBtn" class="md:hidden w-10 h-10 rounded-full bg-gray-100/50 backdrop-blur-sm flex items-center justify-center hover:bg-gray-200/50 active:bg-gray-300/50 transition-all duration-200 transform hover:scale-105 active:scale-95 cursor-pointer">
+                    <i class="fas fa-bars text-gray-600 text-sm"></i>
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- Mobile Menu -->
-    <div id="mobileMenu" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden md:hidden">
-        <div class="bg-white w-80 h-full transform translate-x-full transition-transform duration-300">
-            <div class="p-6">
-                <div class="flex justify-between items-center mb-8">
-                    <h2 class="text-xl font-bold text-gray-800">Меню</h2>
-                    <button id="closeMobileMenu" class="text-gray-500 hover:text-gray-700">
-                        <i class="fas fa-times text-xl"></i>
-                    </button>
+    <!-- iOS Style Side Menu -->
+    <div id="sideMenu" class="fixed inset-0 z-50 pointer-events-none">
+        <!-- Backdrop -->
+        <div id="menuBackdrop" class="absolute inset-0 bg-black/20 opacity-0 transition-all duration-250 ease-out pointer-events-none"></div>
+        
+        <!-- Menu Container -->
+        <div id="menuContainer" class="absolute top-24 right-4 h-auto max-h-[80vh] w-72 bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl transform scale-75 opacity-0 transition-all duration-250 ease-out border border-white/30">
+            <!-- Menu Header -->
+            <div class="flex items-center justify-between p-3 border-b border-white/10">
+                <div class="flex items-center space-x-2">
+                    <img src="../images/logo.png" alt="SvetSalonPro" class="w-8 h-8 rounded-full">
+                    <div>
+                        <h2 class="text-base font-semibold text-gray-800">SvetSalonPro</h2>
+                        <p class="text-xs text-gray-600">Салон красоты</p>
+                    </div>
                 </div>
-                <nav class="space-y-4">
-                    <a href="../index.html#home" class="block text-gray-700 hover:text-pink-600 transition py-2">Главная</a>
-                    <a href="../index.html#about" class="block text-gray-700 hover:text-pink-600 transition py-2">О нас</a>
-                    <a href="../index.html#services" class="block text-gray-700 hover:text-pink-600 transition py-2">Услуги</a>
-                    <a href="../index.html#masters" class="block text-gray-700 hover:text-pink-600 transition py-2">Мастера</a>
-                    <a href="portfolio.html" class="block text-pink-600 font-semibold py-2">Примеры работ</a>
-                    <a href="../index.html#contact" class="block text-gray-700 hover:text-pink-600 transition py-2">Контакты</a>
-                    <a href="account.html" class="block text-gray-700 hover:text-pink-600 transition py-2">Личный кабинет</a>
-                </nav>
+                <button id="closeMenuBtn" class="w-8 h-8 rounded-full bg-gray-100/50 backdrop-blur-sm flex items-center justify-center hover:bg-gray-200/50 active:bg-gray-300/50 transition-all duration-200 transform hover:scale-105 active:scale-95 cursor-pointer">
+                    <i class="fas fa-times text-gray-600 text-sm"></i>
+                </button>
+            </div>
+            
+            <!-- Menu Content -->
+            <div class="flex-1 overflow-y-auto">
+                <!-- Navigation Links -->
+                <div class="p-2 space-y-0.5">
+                    <a href="../index.html#home" class="menu-item group">
+                        <div class="menu-icon">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        <span>Главная</span>
+                    </a>
+                    
+                    <a href="../index.html#about" class="menu-item group">
+                        <div class="menu-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <span>О нас</span>
+                    </a>
+                    
+                    <a href="../index.html#services" class="menu-item group">
+                        <div class="menu-icon">
+                            <i class="fas fa-spa"></i>
+                        </div>
+                        <span>Услуги</span>
+                    </a>
+                    
+                    <a href="../index.html#masters" class="menu-item group">
+                        <div class="menu-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <span>Мастера</span>
+                    </a>
+                    
+                    <a href="portfolio.html" class="menu-item group">
+                        <div class="menu-icon">
+                            <i class="fas fa-images"></i>
+                        </div>
+                        <span>Примеры работ</span>
+                    </a>
+                    
+                    <a href="../index.html#contact" class="menu-item group">
+                        <div class="menu-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <span>Контакты</span>
+                    </a>
+                </div>
+                
+                <!-- Divider -->
+                <div class="mx-4 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
+                
+                <!-- Profile Section -->
+                <div class="p-2">
+                    <a href="account.html" class="menu-item group">
+                        <div class="menu-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <span>Личный кабинет</span>
+                    </a>
+                </div>
+                
+                <!-- Contact Info -->
+                <div class="p-2 mt-2">
+                    <div class="bg-gradient-to-r from-pink-500 to-pink-600 rounded-xl p-3 text-white">
+                        <div class="flex items-center space-x-2 mb-2">
+                            <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                                <i class="fas fa-envelope text-sm"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs opacity-90">Связаться с нами</p>
+                                <p class="text-sm font-medium">my@SvetSalonPro.ru</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                                <i class="fas fa-phone text-sm"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs opacity-90">Позвонить</p>
+                                <p class="text-sm font-medium">+7 928 280 62 94</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -546,28 +808,126 @@
         window.addEventListener('scroll', animateOnScroll);
         animateOnScroll();
 
-        // Мобильное меню
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const mobileMenu = document.getElementById('mobileMenu');
-        const closeMobileMenu = document.getElementById('closeMobileMenu');
+        // iOS Style Menu functionality
+        let isMenuOpen = false;
+        const iosMenuBtn = document.getElementById('iosMenuBtn');
+        const sideMenu = document.getElementById('sideMenu');
+        const closeMenuBtn = document.getElementById('closeMenuBtn');
+        const menuBackdrop = document.getElementById('menuBackdrop');
+        const menuContainer = document.getElementById('menuContainer');
 
-        if (mobileMenuBtn) {
-            mobileMenuBtn.addEventListener('click', () => {
-                mobileMenu.classList.remove('hidden');
-                setTimeout(() => {
-                    mobileMenu.querySelector('div').classList.remove('translate-x-full');
-                }, 10);
+        // Haptic feedback function
+        function triggerHapticFeedback() {
+            if ('vibrate' in navigator) {
+                navigator.vibrate(10);
+            }
+            document.body.classList.add('haptic-feedback');
+            setTimeout(() => {
+                document.body.classList.remove('haptic-feedback');
+            }, 100);
+        }
+
+        // Open menu function
+        function openMenu() {
+            if (isMenuOpen) return;
+            
+            triggerHapticFeedback();
+            isMenuOpen = true;
+            sideMenu.classList.add('open');
+            document.body.classList.add('menu-open');
+            iosMenuBtn.classList.add('active');
+            
+            setTimeout(() => {
+                sideMenu.style.pointerEvents = 'all';
+            }, 50);
+        }
+
+        // Close menu function
+        function closeMenu() {
+            if (!isMenuOpen) return;
+            
+            triggerHapticFeedback();
+            isMenuOpen = false;
+            sideMenu.classList.remove('open');
+            document.body.classList.remove('menu-open');
+            iosMenuBtn.classList.remove('active');
+            sideMenu.style.pointerEvents = 'none';
+        }
+
+        // Event listeners
+        if (iosMenuBtn) {
+            iosMenuBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                if (isMenuOpen) {
+                    closeMenu();
+                } else {
+                    openMenu();
+                }
             });
         }
 
-        if (closeMobileMenu) {
-            closeMobileMenu.addEventListener('click', () => {
-                mobileMenu.querySelector('div').classList.add('translate-x-full');
-                setTimeout(() => {
-                    mobileMenu.classList.add('hidden');
-                }, 300);
+        if (closeMenuBtn) {
+            closeMenuBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                closeMenu();
             });
         }
+
+        if (menuBackdrop) {
+            menuBackdrop.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                closeMenu();
+            });
+        }
+
+        // Menu item click handlers
+        function setupMenuHandlers() {
+            const menuItems = document.querySelectorAll('.menu-item');
+            
+            menuItems.forEach((item, index) => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    triggerHapticFeedback();
+                    
+                    // Add bubble animation
+                    item.classList.add('bubble-animation');
+                    setTimeout(() => {
+                        item.classList.remove('bubble-animation');
+                    }, 400);
+                    
+                    // Get the href and navigate
+                    const href = item.getAttribute('href');
+                    if (href) {
+                        // Close menu immediately
+                        closeMenu();
+                        
+                        // Navigate after a short delay for haptic feedback
+                        setTimeout(() => {
+                            if (href.startsWith('#')) {
+                                // Smooth scroll to section
+                                const target = document.querySelector(href);
+                                if (target) {
+                                    target.scrollIntoView({ behavior: 'smooth' });
+                                }
+                            } else {
+                                // Navigate to page
+                                window.location.href = href;
+                            }
+                        }, 200);
+                    }
+                });
+            });
+        }
+
+        // Setup menu handlers after DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            setupMenuHandlers();
+        });
 
         // Переменные для слайдшоу
         let currentSlide = 0;

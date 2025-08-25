@@ -833,38 +833,19 @@
                         </div>
                         
                         <div id="favoriteServices" class="space-y-3">
-                            <div class="p-3 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-lg cursor-pointer hover:shadow-md transition-all duration-200">
-                                <div class="flex items-center space-x-3">
-                                    <div class="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center">
-                                        <i class="fas fa-cut text-white text-sm"></i>
-                                    </div>
-                                    <div class="flex-1">
-                                        <p class="font-semibold text-gray-800">Женская стрижка</p>
-                                        <p class="text-sm text-gray-600">от 700 ₽</p>
-                                    </div>
-                                    <button class="text-pink-500 hover:text-pink-600">
-                                        <i class="fas fa-plus"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            
-                            <div class="p-3 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg cursor-pointer hover:shadow-md transition-all duration-200">
-                                <div class="flex items-center space-x-3">
-                                    <div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center">
-                                        <i class="fas fa-hand-sparkles text-white text-sm"></i>
-                                    </div>
-                                    <div class="flex-1">
-                                        <p class="font-semibold text-gray-800">Маникюр</p>
-                                        <p class="text-sm text-gray-600">от 500 ₽</p>
-                                    </div>
-                                    <button class="text-pink-500 hover:text-pink-600">
-                                        <i class="fas fa-plus"></i>
-                                    </button>
-                                </div>
-                            </div>
+                            <!-- Избранные услуги будут загружаться здесь -->
                         </div>
                         
-                        <button class="w-full mt-4 py-2 px-4 border-2 border-dashed border-gray-300 text-gray-500 rounded-lg hover:border-pink-300 hover:text-pink-500 transition-all duration-200">
+                        <div id="emptyFavorites" class="text-center py-8">
+                            <i class="fas fa-star text-4xl text-gray-300 mb-4"></i>
+                            <p class="text-gray-500 mb-4">У вас пока нет избранных услуг</p>
+                            <button onclick="openFavoritesModal()" class="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition">
+                                <i class="fas fa-plus mr-2"></i>
+                                Добавить услугу
+                            </button>
+                        </div>
+                        
+                        <button id="addFavoriteBtn" onclick="openFavoritesModal()" class="w-full mt-4 py-2 px-4 border-2 border-dashed border-gray-300 text-gray-500 rounded-lg hover:border-pink-300 hover:text-pink-500 transition-all duration-200">
                             <i class="fas fa-plus mr-2"></i>
                             Добавить услугу
                         </button>
@@ -919,88 +900,7 @@
                     </div>
                 </div>
 
-                <!-- История активности и рекомендации -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-                    <!-- История активности -->
-                    <div class="card rounded-xl p-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-xl font-semibold text-gray-800">История активности</h3>
-                            <i class="fas fa-history text-blue-500 text-xl"></i>
-                        </div>
-                        
-                        <div class="space-y-4">
-                            <div class="flex items-start space-x-3 p-3 bg-blue-50 rounded-lg">
-                                <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
-                                    <i class="fas fa-calendar-check text-white text-sm"></i>
-                                </div>
-                                <div class="flex-1">
-                                    <p class="font-medium text-gray-800">Запись на стрижку</p>
-                                    <p class="text-sm text-gray-600">25 августа, 15:00</p>
-                                </div>
-                            </div>
-                            
-                            <div class="flex items-start space-x-3 p-3 bg-green-50 rounded-lg">
-                                <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
-                                    <i class="fas fa-star text-white text-sm"></i>
-                                </div>
-                                <div class="flex-1">
-                                    <p class="font-medium text-gray-800">Оставлен отзыв</p>
-                                    <p class="text-sm text-gray-600">24 августа, 18:30</p>
-                                </div>
-                            </div>
-                            
-                            <div class="flex items-start space-x-3 p-3 bg-purple-50 rounded-lg">
-                                <div class="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
-                                    <i class="fas fa-user-edit text-white text-sm"></i>
-                                </div>
-                                <div class="flex-1">
-                                    <p class="font-medium text-gray-800">Обновлен профиль</p>
-                                    <p class="text-sm text-gray-600">23 августа, 12:15</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
-                    <!-- Персональные рекомендации -->
-                    <div class="card rounded-xl p-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-xl font-semibold text-gray-800">Рекомендации</h3>
-                            <i class="fas fa-lightbulb text-yellow-500 text-xl"></i>
-                        </div>
-                        
-                        <div class="space-y-4">
-                            <div class="p-4 bg-gradient-to-r from-pink-50 to-purple-50 rounded-lg border-l-4 border-pink-500">
-                                <div class="flex items-start space-x-3">
-                                    <div class="w-10 h-10 bg-pink-500 rounded-full flex items-center justify-center flex-shrink-0">
-                                        <i class="fas fa-cut text-white"></i>
-                                    </div>
-                                    <div class="flex-1">
-                                        <h4 class="font-semibold text-gray-800 mb-1">Попробуйте новую стрижку</h4>
-                                        <p class="text-sm text-gray-600 mb-2">На основе ваших предпочтений рекомендуем современную стрижку боб</p>
-                                        <button class="text-pink-600 hover:text-pink-700 text-sm font-medium">
-                                            Записаться →
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="p-4 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-lg border-l-4 border-blue-500">
-                                <div class="flex items-start space-x-3">
-                                    <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
-                                        <i class="fas fa-gift text-white"></i>
-                                    </div>
-                                    <div class="flex-1">
-                                        <h4 class="font-semibold text-gray-800 mb-1">Специальное предложение</h4>
-                                        <p class="text-sm text-gray-600 mb-2">Скидка 20% на окрашивание волос при записи на этой неделе</p>
-                                        <button class="text-blue-600 hover:text-blue-700 text-sm font-medium">
-                                            Использовать →
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 </div>
             </div>
 
@@ -2127,6 +2027,168 @@
             else if (bookings.length >= 5) discount = 10;
             
             userDiscount.textContent = discount + '%';
+        }
+
+        // Функции для работы с избранными услугами
+        let selectedFavorites = new Set();
+
+        // Открыть модальное окно избранных услуг
+        function openFavoritesModal() {
+            const modal = document.getElementById('favoritesModal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                loadCurrentFavorites();
+                setupFavoriteToggles();
+            }
+        }
+
+        // Закрыть модальное окно избранных услуг
+        function closeFavoritesModal() {
+            const modal = document.getElementById('favoritesModal');
+            if (modal) {
+                modal.classList.add('hidden');
+                selectedFavorites.clear();
+            }
+        }
+
+        // Загрузить текущие избранные услуги
+        function loadCurrentFavorites() {
+            const favorites = JSON.parse(localStorage.getItem('userFavorites') || '[]');
+            selectedFavorites = new Set(favorites.map(f => f.service));
+            
+            // Обновляем звездочки в модальном окне
+            document.querySelectorAll('.service-favorite-item').forEach(item => {
+                const service = item.getAttribute('data-service');
+                const toggle = item.querySelector('.favorite-toggle');
+                
+                if (selectedFavorites.has(service)) {
+                    toggle.innerHTML = '<i class="fas fa-star text-pink-500"></i>';
+                    item.classList.add('border-pink-300', 'bg-pink-50');
+                } else {
+                    toggle.innerHTML = '<i class="fas fa-star text-gray-400"></i>';
+                    item.classList.remove('border-pink-300', 'bg-pink-50');
+                }
+            });
+        }
+
+        // Настроить переключатели избранного
+        function setupFavoriteToggles() {
+            document.querySelectorAll('.service-favorite-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    // Не переключаем если кликнули на кнопку звездочки
+                    if (e.target.closest('.favorite-toggle')) {
+                        return;
+                    }
+                    
+                    const service = item.getAttribute('data-service');
+                    const name = item.getAttribute('data-name');
+                    const price = item.getAttribute('data-price');
+                    const toggle = item.querySelector('.favorite-toggle');
+                    
+                    if (selectedFavorites.has(service)) {
+                        selectedFavorites.delete(service);
+                        toggle.innerHTML = '<i class="fas fa-star text-gray-400"></i>';
+                        item.classList.remove('border-pink-300', 'bg-pink-50');
+                    } else {
+                        selectedFavorites.add(service);
+                        toggle.innerHTML = '<i class="fas fa-star text-pink-500"></i>';
+                        item.classList.add('border-pink-300', 'bg-pink-50');
+                    }
+                });
+            });
+            
+            // Обработчики для кнопок звездочек
+            document.querySelectorAll('.favorite-toggle').forEach(toggle => {
+                toggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const item = toggle.closest('.service-favorite-item');
+                    const service = item.getAttribute('data-service');
+                    
+                    if (selectedFavorites.has(service)) {
+                        selectedFavorites.delete(service);
+                        toggle.innerHTML = '<i class="fas fa-star text-gray-400"></i>';
+                        item.classList.remove('border-pink-300', 'bg-pink-50');
+                    } else {
+                        selectedFavorites.add(service);
+                        toggle.innerHTML = '<i class="fas fa-star text-pink-500"></i>';
+                        item.classList.add('border-pink-300', 'bg-pink-50');
+                    }
+                });
+            });
+        }
+
+        // Сохранить избранные услуги
+        function saveFavorites() {
+            const favorites = [];
+            
+            selectedFavorites.forEach(service => {
+                const item = document.querySelector(`[data-service="${service}"]`);
+                if (item) {
+                    favorites.push({
+                        service: service,
+                        name: item.getAttribute('data-name'),
+                        price: item.getAttribute('data-price')
+                    });
+                }
+            });
+            
+            localStorage.setItem('userFavorites', JSON.stringify(favorites));
+            updateFavoritesDisplay();
+            closeFavoritesModal();
+            
+            showNotification('success', 'Избранные услуги сохранены!', `Добавлено ${favorites.length} услуг в избранное`);
+        }
+
+        // Обновить отображение избранных услуг
+        function updateFavoritesDisplay() {
+            const favoritesContainer = document.getElementById('favoriteServices');
+            const emptyFavorites = document.getElementById('emptyFavorites');
+            const addFavoriteBtn = document.getElementById('addFavoriteBtn');
+            
+            const favorites = JSON.parse(localStorage.getItem('userFavorites') || '[]');
+            
+            if (favorites.length === 0) {
+                // Показываем пустое состояние
+                favoritesContainer.innerHTML = '';
+                emptyFavorites.classList.remove('hidden');
+                addFavoriteBtn.classList.add('hidden');
+            } else {
+                // Показываем избранные услуги
+                emptyFavorites.classList.add('hidden');
+                addFavoriteBtn.classList.remove('hidden');
+                
+                favoritesContainer.innerHTML = favorites.map(favorite => `
+                    <div class="p-3 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-lg cursor-pointer hover:shadow-md transition-all duration-200">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center">
+                                <i class="fas fa-star text-white text-sm"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-semibold text-gray-800">${favorite.name}</p>
+                                <p class="text-sm text-gray-600">от ${favorite.price} ₽</p>
+                            </div>
+                            <button onclick="removeFavorite('${favorite.service}')" class="text-red-500 hover:text-red-600">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Удалить услугу из избранного
+        function removeFavorite(service) {
+            const favorites = JSON.parse(localStorage.getItem('userFavorites') || '[]');
+            const updatedFavorites = favorites.filter(f => f.service !== service);
+            localStorage.setItem('userFavorites', JSON.stringify(updatedFavorites));
+            updateFavoritesDisplay();
+            
+            showNotification('success', 'Услуга удалена из избранного', 'Услуга успешно удалена из вашего списка избранного');
+        }
+
+        // Загрузить избранные услуги при загрузке страницы
+        function loadFavoritesOnPageLoad() {
+            updateFavoritesDisplay();
         }
 
         // Get status text
@@ -3550,6 +3612,285 @@
             });
         }
     </script>
+
+    <!-- Модальное окно для выбора избранных услуг -->
+    <div id="favoritesModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-semibold text-gray-800">Выберите избранные услуги</h3>
+                    <button onclick="closeFavoritesModal()" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <!-- Список всех услуг -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Услуги для волос -->
+                    <div class="space-y-3">
+                        <h4 class="font-semibold text-gray-800 text-lg border-b border-gray-200 pb-2">Услуги для волос</h4>
+                        
+                        <div class="service-favorite-item p-3 border border-gray-200 rounded-lg hover:border-pink-300 transition-all cursor-pointer" data-service="womens_haircut" data-name="Женская стрижка" data-price="700">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 bg-pink-500 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-cut text-white"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-gray-800">Женская стрижка</p>
+                                        <p class="text-sm text-gray-600">от 700 ₽</p>
+                                    </div>
+                                </div>
+                                <button class="favorite-toggle text-gray-400 hover:text-pink-500 transition-colors">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="service-favorite-item p-3 border border-gray-200 rounded-lg hover:border-pink-300 transition-all cursor-pointer" data-service="mens_haircut" data-name="Мужская стрижка" data-price="500">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-cut text-white"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-gray-800">Мужская стрижка</p>
+                                        <p class="text-sm text-gray-600">от 500 ₽</p>
+                                    </div>
+                                </div>
+                                <button class="favorite-toggle text-gray-400 hover:text-pink-500 transition-colors">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="service-favorite-item p-3 border border-gray-200 rounded-lg hover:border-pink-300 transition-all cursor-pointer" data-service="mens_machine" data-name="Мужская стрижка под машинку" data-price="400">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 bg-indigo-500 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-cut text-white"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-gray-800">Мужская стрижка под машинку</p>
+                                        <p class="text-sm text-gray-600">от 400 ₽</p>
+                                    </div>
+                                </div>
+                                <button class="favorite-toggle text-gray-400 hover:text-pink-500 transition-colors">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="service-favorite-item p-3 border border-gray-200 rounded-lg hover:border-pink-300 transition-all cursor-pointer" data-service="hair_coloring" data-name="Окрашивание волос" data-price="1500">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-palette text-white"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-gray-800">Окрашивание волос</p>
+                                        <p class="text-sm text-gray-600">от 1500 ₽</p>
+                                    </div>
+                                </div>
+                                <button class="favorite-toggle text-gray-400 hover:text-pink-500 transition-colors">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="service-favorite-item p-3 border border-gray-200 rounded-lg hover:border-pink-300 transition-all cursor-pointer" data-service="hair_highlighting" data-name="Мелирование волос" data-price="2000">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-sun text-white"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-gray-800">Мелирование волос</p>
+                                        <p class="text-sm text-gray-600">от 2000 ₽</p>
+                                    </div>
+                                </div>
+                                <button class="favorite-toggle text-gray-400 hover:text-pink-500 transition-colors">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="service-favorite-item p-3 border border-gray-200 rounded-lg hover:border-pink-300 transition-all cursor-pointer" data-service="lamination" data-name="Ламинирование волос" data-price="2500">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-sparkles text-white"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-gray-800">Ламинирование волос</p>
+                                        <p class="text-sm text-gray-600">от 2500 ₽</p>
+                                    </div>
+                                </div>
+                                <button class="favorite-toggle text-gray-400 hover:text-pink-500 transition-colors">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="service-favorite-item p-3 border border-gray-200 rounded-lg hover:border-pink-300 transition-all cursor-pointer" data-service="coloristics" data-name="Колористика волос" data-price="3000">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 bg-rose-500 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-palette text-white"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-gray-800">Колористика волос</p>
+                                        <p class="text-sm text-gray-600">от 3000 ₽</p>
+                                    </div>
+                                </div>
+                                <button class="favorite-toggle text-gray-400 hover:text-pink-500 transition-colors">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="service-favorite-item p-3 border border-gray-200 rounded-lg hover:border-pink-300 transition-all cursor-pointer" data-service="gel" data-name="Укрепление гелем" data-price="800">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 bg-teal-500 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-shield-alt text-white"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-gray-800">Укрепление гелем</p>
+                                        <p class="text-sm text-gray-600">от 800 ₽</p>
+                                    </div>
+                                </div>
+                                <button class="favorite-toggle text-gray-400 hover:text-pink-500 transition-colors">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Услуги маникюра -->
+                    <div class="space-y-3">
+                        <h4 class="font-semibold text-gray-800 text-lg border-b border-gray-200 pb-2">Услуги маникюра</h4>
+                        
+                        <div class="service-favorite-item p-3 border border-gray-200 rounded-lg hover:border-pink-300 transition-all cursor-pointer" data-service="combined_manicure" data-name="Комбинированный маникюр" data-price="500">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 bg-pink-500 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-hand-sparkles text-white"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-gray-800">Комбинированный маникюр</p>
+                                        <p class="text-sm text-gray-600">от 500 ₽</p>
+                                    </div>
+                                </div>
+                                <button class="favorite-toggle text-gray-400 hover:text-pink-500 transition-colors">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="service-favorite-item p-3 border border-gray-200 rounded-lg hover:border-pink-300 transition-all cursor-pointer" data-service="classic_manicure" data-name="Классический маникюр" data-price="400">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-hand-sparkles text-white"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-gray-800">Классический маникюр</p>
+                                        <p class="text-sm text-gray-600">от 400 ₽</p>
+                                    </div>
+                                </div>
+                                <button class="favorite-toggle text-gray-400 hover:text-pink-500 transition-colors">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="service-favorite-item p-3 border border-gray-200 rounded-lg hover:border-pink-300 transition-all cursor-pointer" data-service="nail_repair" data-name="Ремонт одного ногтя" data-price="200">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-tools text-white"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-gray-800">Ремонт одного ногтя</p>
+                                        <p class="text-sm text-gray-600">от 200 ₽</p>
+                                    </div>
+                                </div>
+                                <button class="favorite-toggle text-gray-400 hover:text-pink-500 transition-colors">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="service-favorite-item p-3 border border-gray-200 rounded-lg hover:border-pink-300 transition-all cursor-pointer" data-service="base_strengthening" data-name="Укрепление базой или биогелем" data-price="600">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-shield-alt text-white"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-gray-800">Укрепление базой или биогелем</p>
+                                        <p class="text-sm text-gray-600">от 600 ₽</p>
+                                    </div>
+                                </div>
+                                <button class="favorite-toggle text-gray-400 hover:text-pink-500 transition-colors">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="service-favorite-item p-3 border border-gray-200 rounded-lg hover:border-pink-300 transition-all cursor-pointer" data-service="coating_removal" data-name="Снятие покрытия" data-price="300">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-eraser text-white"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-gray-800">Снятие покрытия</p>
+                                        <p class="text-sm text-gray-600">от 300 ₽</p>
+                                    </div>
+                                </div>
+                                <button class="favorite-toggle text-gray-400 hover:text-pink-500 transition-colors">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- SPA процедуры -->
+                    <div class="space-y-3">
+                        <h4 class="font-semibold text-gray-800 text-lg border-b border-gray-200 pb-2">SPA процедуры</h4>
+                        
+                        <div class="service-favorite-item p-3 border border-gray-200 rounded-lg hover:border-pink-300 transition-all cursor-pointer" data-service="spa" data-name="SPA процедуры" data-price="1000">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 bg-cyan-500 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-spa text-white"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-gray-800">SPA процедуры</p>
+                                        <p class="text-sm text-gray-600">от 1000 ₽</p>
+                                    </div>
+                                </div>
+                                <button class="favorite-toggle text-gray-400 hover:text-pink-500 transition-colors">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-end space-x-3 mt-6 pt-6 border-t border-gray-200">
+                    <button onclick="closeFavoritesModal()" class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition">
+                        Отмена
+                    </button>
+                    <button onclick="saveFavorites()" class="px-6 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition">
+                        Сохранить
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Административное модальное окно -->
     <div id="adminModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
