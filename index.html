@@ -114,6 +114,38 @@
             background-color: #fdf2f8;
         }
         
+        /* Стили для прокрутки в модальном окне */
+        #previewContainer {
+            scrollbar-width: thin;
+            scrollbar-color: #d1d5db #f3f4f6;
+        }
+        
+        #previewContainer::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        #previewContainer::-webkit-scrollbar-track {
+            background: #f3f4f6;
+            border-radius: 3px;
+        }
+        
+        #previewContainer::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 3px;
+        }
+        
+        #previewContainer::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
+        }
+        
+        /* Блокировка прокрутки фона */
+        body.modal-open {
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+        }
+        }
+        
         /* Изображения */
         .img-hover, .service-card img, .bg-white img, .rounded-lg img {
             transition: transform 0.4s cubic-bezier(.4,0,.2,1), box-shadow 0.3s;
@@ -2731,12 +2763,29 @@
         }
     }
 
+    // Функции для блокировки прокрутки
+    function disableBodyScroll() {
+        const scrollY = window.scrollY;
+        document.body.style.top = `-${scrollY}px`;
+        document.body.classList.add('modal-open');
+    }
+
+    function enableBodyScroll() {
+        const scrollY = document.body.style.top;
+        document.body.classList.remove('modal-open');
+        document.body.style.top = '';
+        window.scrollTo(0, parseInt(scrollY || '0') * -1);
+    }
+
     // Открыть модальное окно загрузки фотографий
     function openPhotoUpload() {
         const modal = document.getElementById('photoUploadModal');
         const content = document.getElementById('photoUploadContent');
         if (modal && content) {
             modal.classList.remove('hidden');
+            
+            // Блокируем прокрутку фона
+            disableBodyScroll();
             
             // Анимация появления
             setTimeout(() => {
@@ -2760,6 +2809,9 @@
             setTimeout(() => {
                 modal.classList.add('hidden');
                 resetPhotoUpload();
+                
+                // Восстанавливаем прокрутку фона
+                enableBodyScroll();
             }, 300);
         }
     }
@@ -2786,6 +2838,18 @@
                 dropZone.addEventListener('dragenter', handleDragEnter);
                 dropZone.addEventListener('dragleave', handleDragLeave);
                 console.log('Drag and drop event listeners added');
+            }
+            
+            // Предотвращаем прокрутку фона при взаимодействии с модальным окном
+            const modal = document.getElementById('photoUploadModal');
+            if (modal) {
+                modal.addEventListener('touchmove', function(e) {
+                    e.stopPropagation();
+                }, { passive: false });
+                
+                modal.addEventListener('wheel', function(e) {
+                    e.stopPropagation();
+                }, { passive: false });
             }
     }
 
@@ -3207,10 +3271,10 @@
     <!-- Модальное окно загрузки фотографий -->
     <div id="photoUploadModal" class="fixed inset-0 z-[9999] hidden">
         <!-- Затемнение фона -->
-        <div class="absolute inset-0 bg-black bg-opacity-40 backdrop-blur-sm transition-opacity duration-300" onclick="closePhotoUpload()"></div>
+        <div class="absolute inset-0 bg-black bg-opacity-40 backdrop-blur-sm transition-opacity duration-300" onclick="closePhotoUpload()" style="pointer-events: auto;"></div>
         
         <!-- Модальное окно -->
-        <div class="absolute inset-0 flex items-center justify-center p-2 sm:p-4">
+        <div class="absolute inset-0 flex items-center justify-center p-2 sm:p-4" onclick="event.stopPropagation()">
             <div class="bg-white rounded-2xl shadow-2xl max-w-sm sm:max-w-md md:max-w-lg lg:max-w-2xl w-full max-h-[85vh] sm:max-h-[90vh] overflow-hidden transform scale-95 opacity-0 transition-all duration-300" id="photoUploadContent">
                 <!-- Заголовок -->
                 <div class="bg-gradient-to-r from-purple-500 to-pink-500 text-white p-4 sm:p-6">
@@ -3274,7 +3338,7 @@
                     <!-- Предварительный просмотр -->
                     <div id="photoPreview" class="hidden space-y-3">
                         <label class="block text-gray-700 font-semibold text-base sm:text-lg">Предварительный просмотр</label>
-                        <div id="previewContainer" class="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-4 max-h-40 sm:max-h-60 overflow-y-auto p-2 sm:p-4 bg-gray-50 rounded-xl"></div>
+                        <div id="previewContainer" class="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-4 max-h-40 sm:max-h-60 overflow-y-auto overflow-x-hidden p-2 sm:p-4 bg-gray-50 rounded-xl scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100"></div>
                     </div>
                     
                     <!-- Кнопки -->
