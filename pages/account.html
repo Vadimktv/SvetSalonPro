@@ -849,7 +849,7 @@
                     currentUser = user;
                     showProfile();
                     loadUserProfile();
-                    loadBookings();
+                    // loadBookings(); // Временно отключено
                 } else {
                     console.log('Пользователь не найден, показываем форму входа');
                     showAuth();
@@ -862,7 +862,7 @@
                     currentUser = session.user;
                     showProfile();
                     loadUserProfile();
-                    loadBookings();
+                    // loadBookings(); // Временно отключено
                 }
                 
                 console.log('=== ИНИЦИАЛИЗАЦИЯ SUPABASE ЗАВЕРШЕНА УСПЕШНО ===');
@@ -1246,10 +1246,7 @@
                 if (error) throw error;
                 
                 showNotification('success', 'Запись отменена', 'Запись успешно отменена');
-                loadBookings(); // Перезагружаем список записей
-                
-                showNotification('success', 'Запись отменена', 'Ваша запись была успешно отменена');
-                loadBookings();
+                // loadBookings(); // Перезагружаем список записей (временно отключено)
             } catch (error) {
                 console.error('Error cancelling booking:', error);
                 showNotification('error', 'Ошибка', 'Не удалось отменить запись');
@@ -1324,11 +1321,16 @@
         document.getElementById('newBookingForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
+            console.log('Форма отправлена');
+            
             const formData = new FormData(e.target);
             const service = formData.get('service');
             const price = formData.get('price');
             const date = formData.get('date');
             const time = formData.get('time');
+            
+            console.log('Данные формы:', { service, price, date, time });
+            console.log('Текущий пользователь:', currentUser);
             
             try {
                 const client = window.supabaseClient || supabaseClient;
@@ -1337,32 +1339,23 @@
                 const userPhone = currentUser.phone || currentUser.user_metadata?.phone || 'Не указан';
                 const serviceName = serviceTranslations[service] || service;
                 
-                // Сохраняем запись в базу данных
-                const { data: bookingData, error: bookingError } = await client
-                    .from('bookings')
-                    .insert([{
-                        user_id: currentUser.id,
-                        service: service,
-                        service_name: serviceName,
-                        price: price,
-                        date: date,
-                        time: time,
-                        status: 'pending',
-                        created_at: new Date().toISOString()
-                    }])
-                    .select();
-                
-                if (bookingError) {
-                    console.error('Error saving booking:', bookingError);
-                    showNotification('error', 'Ошибка сохранения', 'Не удалось сохранить запись');
-                    return;
-                }
+                // Пока что пропускаем сохранение в базу данных, чтобы проверить отправку в Telegram
+                console.log('Создание записи:', {
+                    user_id: currentUser.id,
+                    service: service,
+                    service_name: serviceName,
+                    price: price,
+                    date: date,
+                    time: time
+                });
                 
                 // Отправляем уведомление в Telegram
                 const isRegistered = currentUser.email ? '💎 Зарегистрированный пользователь' : '👤 Гость';
                 const message = `💬 Новая запись через личный кабинет:\n${isRegistered}\n📱 Телефон: ${userPhone}\n📋 Услуга: ${serviceName}\n💰 Цена: ${price} ₽\n📅 Дата: ${date}\n🕐 Время: ${time}`;
                 
                 const chatIds = ["339033504", "1366208620"]; // основной ID и ID Светланы
+                
+                console.log('Отправка в Telegram:', message);
                 
                 chatIds.forEach(chatId => {
                     fetch("https://api.telegram.org/bot7811248285:AAHfspwV_mA-PF298Bac28LBkEeehX_ql70/sendMessage", {
@@ -1375,7 +1368,11 @@
                             text: message
                         })
                     }).then(response => {
-                        if (response.ok) {
+                        console.log('Telegram response:', response.status, response.statusText);
+                        return response.json();
+                    }).then(data => {
+                        console.log('Telegram data:', data);
+                        if (data.ok) {
                             if (chatId === "339033504") {
                                 showNotification('success', 'Запись отправлена!', 'Ожидайте подтверждения от администратора.');
                                 document.getElementById('bookingModal').classList.add('hidden');
@@ -1384,15 +1381,17 @@
                                 document.querySelector('.grid').style.display = 'grid';
                                 document.getElementById('bookingFormContainer').classList.add('hidden');
                                 
-                                // Перезагружаем список записей
-                                loadBookings();
+                                // Перезагружаем список записей (пока отключено)
+                                // loadBookings();
                             }
                         } else {
                             if (chatId === "339033504") {
-                                showNotification('error', 'Ошибка отправки', 'Попробуйте позже');
+                                console.error('Telegram error:', data);
+                                showNotification('error', 'Ошибка отправки', `Ошибка: ${data.description || 'Неизвестная ошибка'}`);
                             }
                         }
                     }).catch(error => {
+                        console.error('Telegram fetch error:', error);
                         if (chatId === "339033504") {
                             showNotification('error', 'Ошибка соединения', 'Проверьте интернет');
                         }
@@ -1401,7 +1400,7 @@
                 
             } catch (error) {
                 console.error('Error creating booking:', error);
-                showNotification('error', 'Ошибка создания записи', error.message);
+                showNotification('error', 'Ошибка создания записи', error.message || 'Неизвестная ошибка');
             }
         });
 
@@ -1944,7 +1943,7 @@
                         currentUser = session.user;
                         showProfile();
                         loadUserProfile();
-                        loadBookings();
+                        // loadBookings(); // Временно отключено
                     } else if (event === 'SIGNED_OUT') {
                         currentUser = null;
                         showAuth();
