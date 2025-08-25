@@ -404,7 +404,9 @@
                                     <i class="fas fa-user text-3xl text-pink-600" id="mainProfileIcon"></i>
                                     <img id="mainProfileImage" class="w-full h-full object-cover hidden" alt="Фото профиля">
                                 </div>
-                                <h3 id="userName" class="text-xl font-semibold text-gray-800">Загрузка...</h3>
+                                <h3 id="userName" class="text-xl font-semibold text-gray-800">
+                                    <i class="fas fa-spinner fa-spin text-pink-600 mr-2"></i>Загрузка...
+                                </h3>
                                 <p id="userEmail" class="text-gray-600">loading@email.com</p>
                                 <p id="userPhone" class="text-gray-600">+7 (___) ___-__-__</p>
                             </div>
@@ -857,6 +859,9 @@
                     console.log('Пользователь найден:', user);
                     currentUser = user;
                     showProfile();
+                    // Сразу показываем данные из currentUser
+                    showUserDataImmediately(user);
+                    // Затем загружаем полный профиль из базы данных
                     loadUserProfile();
                     // loadBookings(); // Временно отключено
                 } else {
@@ -870,6 +875,9 @@
                     console.log('Сессия найдена в URL:', session);
                     currentUser = session.user;
                     showProfile();
+                    // Сразу показываем данные из currentUser
+                    showUserDataImmediately(session.user);
+                    // Затем загружаем полный профиль из базы данных
                     loadUserProfile();
                     // loadBookings(); // Временно отключено
                 }
@@ -1002,6 +1010,51 @@
             }
         }
 
+        // Показать данные пользователя сразу (без задержки)
+        function showUserDataImmediately(user) {
+            console.log('Показываем данные пользователя сразу:', user);
+            
+            // Показываем данные из user_metadata или email
+            const userName = user.user_metadata?.full_name || user.email?.split('@')[0] || 'Пользователь';
+            const userEmail = user.email || 'loading@email.com';
+            const userPhone = user.phone || user.user_metadata?.phone || 'Не указан';
+            
+            // Обновляем UI с анимацией
+            const nameElement = document.getElementById('userName');
+            const emailElement = document.getElementById('userEmail');
+            const phoneElement = document.getElementById('userPhone');
+            
+            if (nameElement) {
+                nameElement.style.opacity = '0';
+                nameElement.innerHTML = userName; // Убираем спиннер
+                setTimeout(() => {
+                    nameElement.style.transition = 'opacity 0.3s ease-in-out';
+                    nameElement.style.opacity = '1';
+                }, 50);
+            }
+            
+            if (emailElement) {
+                emailElement.style.opacity = '0';
+                emailElement.textContent = userEmail;
+                setTimeout(() => {
+                    emailElement.style.transition = 'opacity 0.3s ease-in-out';
+                    emailElement.style.opacity = '1';
+                }, 100);
+            }
+            
+            if (phoneElement) {
+                phoneElement.style.opacity = '0';
+                phoneElement.textContent = userPhone;
+                setTimeout(() => {
+                    phoneElement.style.transition = 'opacity 0.3s ease-in-out';
+                    phoneElement.style.opacity = '1';
+                }, 150);
+            }
+            
+            // Восстанавливаем аватарку
+            restoreSelectedAvatar();
+        }
+
         // Load user profile
         async function loadUserProfile() {
             if (!currentUser) {
@@ -1029,9 +1082,20 @@
                 
                 if (profile) {
                     console.log('Профиль найден:', profile);
-                    document.getElementById('userName').textContent = profile.full_name || 'Пользователь';
-                    document.getElementById('userEmail').textContent = profile.email || currentUser.email;
-                    document.getElementById('userPhone').textContent = profile.phone || 'Не указан';
+                    // Обновляем только если данные из базы лучше
+                    const nameElement = document.getElementById('userName');
+                    const emailElement = document.getElementById('userEmail');
+                    const phoneElement = document.getElementById('userPhone');
+                    
+                    if (nameElement && profile.full_name) {
+                        nameElement.textContent = profile.full_name;
+                    }
+                    if (emailElement && profile.email) {
+                        emailElement.textContent = profile.email;
+                    }
+                    if (phoneElement && profile.phone) {
+                        phoneElement.textContent = profile.phone;
+                    }
                 } else {
                     console.log('Профиль не найден, создаем новый');
                     // Create profile if doesn't exist
@@ -1982,6 +2046,9 @@
                     if (event === 'SIGNED_IN' && session?.user) {
                         currentUser = session.user;
                         showProfile();
+                        // Сразу показываем данные из currentUser
+                        showUserDataImmediately(session.user);
+                        // Затем загружаем полный профиль из базы данных
                         loadUserProfile();
                         // loadBookings(); // Временно отключено
                     } else if (event === 'SIGNED_OUT') {
