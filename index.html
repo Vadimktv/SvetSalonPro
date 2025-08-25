@@ -711,18 +711,19 @@
         .menu-item {
             display: flex;
             align-items: center;
-            padding: 10px 12px;
-            border-radius: 10px;
+            padding: 12px 16px;
+            border-radius: 12px;
             text-decoration: none;
-            color: #374151;
-            font-weight: 500;
-            font-size: 14px;
+            color: #1f2937;
+            font-weight: 600;
+            font-size: 15px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
             cursor: pointer;
             user-select: none;
             -webkit-tap-highlight-color: transparent;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
         }
         
         .menu-item::before {
@@ -736,10 +737,12 @@
             opacity: 0;
             transition: all 0.3s ease;
             border-radius: 16px;
+            transform: scale(0.8);
         }
         
         .menu-item:hover::before {
             opacity: 1;
+            transform: scale(1);
         }
         
         .menu-item:hover {
@@ -753,44 +756,68 @@
         
         .menu-item:active::before {
             background: linear-gradient(135deg, rgba(236, 72, 153, 0.25) 0%, rgba(236, 72, 153, 0.15) 100%);
+            transform: scale(1.1);
         }
         
         /* Menu Icons */
         .menu-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            background: linear-gradient(135deg, rgba(236, 72, 153, 0.12) 0%, rgba(236, 72, 153, 0.06) 100%);
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.15) 0%, rgba(236, 72, 153, 0.08) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 10px;
+            margin-right: 12px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(236, 72, 153, 0.15);
+            border: 1px solid rgba(236, 72, 153, 0.2);
             flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(236, 72, 153, 0.1);
         }
         
         .menu-item:hover .menu-icon {
             background: linear-gradient(135deg, rgba(236, 72, 153, 0.25) 0%, rgba(236, 72, 153, 0.15) 100%);
-            transform: scale(1.08);
-            box-shadow: 0 6px 20px rgba(236, 72, 153, 0.25);
-            border-color: rgba(236, 72, 153, 0.3);
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(236, 72, 153, 0.3);
+            border-color: rgba(236, 72, 153, 0.4);
         }
         
         .menu-item:active .menu-icon {
-            transform: scale(1.05);
-            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3);
+            transform: scale(0.95);
+            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
         }
         
         .menu-icon i {
-            font-size: 20px;
+            font-size: 18px;
             color: #ec4899;
             transition: all 0.3s ease;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
         }
         
         .menu-item:hover .menu-icon i {
-            transform: scale(1.15);
+            transform: scale(1.2);
+        }
+        
+        .menu-item span {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .menu-item:hover span {
+            transform: translateX(4px);
+            color: #ec4899;
+        }
+        
+        /* Bubble Animation */
+        @keyframes bubblePop {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .menu-item.bubble-animation::before {
+            animation: bubblePop 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         /* iOS Haptic Feedback Simulation */
@@ -2092,6 +2119,12 @@
                 e.preventDefault();
                 e.stopPropagation();
                 triggerHapticFeedback();
+                
+                // Add bubble animation
+                item.classList.add('bubble-animation');
+                setTimeout(() => {
+                    item.classList.remove('bubble-animation');
+                }, 400);
                 
                 // Get the href and navigate
                 const href = item.getAttribute('href');
