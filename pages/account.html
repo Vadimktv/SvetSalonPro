@@ -2589,22 +2589,12 @@
             initializeDateTimeInputs();
             loadAvailableImages();
             
+            // Initialize menu immediately
+            console.log('Initializing menu...');
+            initializeMenu();
+            
             // Setup all event handlers after DOM is loaded
             setupAllEventHandlers();
-            
-            // Test menu functionality
-            console.log('Testing menu functionality...');
-            const testBtn = document.getElementById('iosMenuBtn');
-            if (testBtn) {
-                console.log('Menu button found, testing click...');
-                // Simulate a click after a short delay
-                setTimeout(() => {
-                    console.log('Simulating menu button click...');
-                    testBtn.click();
-                }, 1000);
-            } else {
-                console.error('Menu button not found for testing!');
-            }
         });
 
 
@@ -3189,101 +3179,59 @@
             });
         });
 
-        // Menu functionality - Global variables
+        // Simple Menu functionality
         let isMenuOpen = false;
-        let sideMenu, iosMenuBtn, closeMenuBtn, menuBackdrop;
 
-        // Haptic feedback function
-        function triggerHapticFeedback() {
-            if (navigator.vibrate) {
-                navigator.vibrate(10);
-            }
-            document.body.classList.add('haptic-feedback');
-            setTimeout(() => {
-                document.body.classList.remove('haptic-feedback');
-            }, 100);
-        }
-
-        // Open menu function
+        // Simple open menu function
         function openMenu() {
-            console.log('openMenu called, isMenuOpen:', isMenuOpen);
+            console.log('openMenu called');
+            const sideMenu = document.getElementById('sideMenu');
+            const iosMenuBtn = document.getElementById('iosMenuBtn');
+            
+            if (!sideMenu || !iosMenuBtn) {
+                console.error('Menu elements not found!');
+                return;
+            }
+            
             if (isMenuOpen) return;
             
             console.log('Opening menu...');
-            triggerHapticFeedback();
             isMenuOpen = true;
             sideMenu.classList.add('open');
             document.body.classList.add('menu-open');
             iosMenuBtn.classList.add('active');
-            
-            setTimeout(() => {
-                sideMenu.style.pointerEvents = 'all';
-            }, 50);
             console.log('Menu opened successfully');
         }
 
-        // Close menu function
+        // Simple close menu function
         function closeMenu() {
-            console.log('closeMenu called, isMenuOpen:', isMenuOpen);
+            console.log('closeMenu called');
+            const sideMenu = document.getElementById('sideMenu');
+            const iosMenuBtn = document.getElementById('iosMenuBtn');
+            
+            if (!sideMenu || !iosMenuBtn) {
+                console.error('Menu elements not found!');
+                return;
+            }
+            
             if (!isMenuOpen) return;
             
             console.log('Closing menu...');
-            triggerHapticFeedback();
             isMenuOpen = false;
             sideMenu.classList.remove('open');
             document.body.classList.remove('menu-open');
             iosMenuBtn.classList.remove('active');
-            sideMenu.style.pointerEvents = 'none';
             console.log('Menu closed successfully');
         }
 
-        // Menu item click handlers
-        function setupMenuHandlers() {
-            const menuItems = document.querySelectorAll('.menu-item');
-            
-            menuItems.forEach((item, index) => {
-                item.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    triggerHapticFeedback();
-                    
-                    // Add bubble animation
-                    item.classList.add('bubble-animation');
-                    setTimeout(() => {
-                        item.classList.remove('bubble-animation');
-                    }, 400);
-                    
-                    // Get the href and navigate
-                    const href = item.getAttribute('href');
-                    if (href) {
-                        // Close menu immediately
-                        closeMenu();
-                        
-                        // Navigate after a short delay for haptic feedback
-                        setTimeout(() => {
-                            if (href.startsWith('#')) {
-                                // Smooth scroll to section
-                                const target = document.querySelector(href);
-                                if (target) {
-                                    target.scrollIntoView({ behavior: 'smooth' });
-                                }
-                            } else {
-                                // Navigate to page
-                                window.location.href = href;
-                            }
-                        }, 200);
-                    }
-                });
-            });
-        }
-
-        // Initialize menu functionality
+        // Simple menu initialization
         function initializeMenu() {
-            console.log('Initializing menu...');
-            sideMenu = document.getElementById('sideMenu');
-            iosMenuBtn = document.getElementById('iosMenuBtn');
-            closeMenuBtn = document.getElementById('closeMenuBtn');
-            menuBackdrop = document.getElementById('menuBackdrop');
+            console.log('Initializing simple menu...');
+            
+            const sideMenu = document.getElementById('sideMenu');
+            const iosMenuBtn = document.getElementById('iosMenuBtn');
+            const closeMenuBtn = document.getElementById('closeMenuBtn');
+            const menuBackdrop = document.getElementById('menuBackdrop');
 
             console.log('Menu elements found:', {
                 sideMenu: !!sideMenu,
@@ -3292,7 +3240,7 @@
                 menuBackdrop: !!menuBackdrop
             });
 
-            // Event listeners
+            // Menu button click
             if (iosMenuBtn) {
                 console.log('Adding click listener to iosMenuBtn');
                 iosMenuBtn.addEventListener('click', (e) => {
@@ -3301,10 +3249,8 @@
                     e.stopPropagation();
                     
                     if (isMenuOpen) {
-                        console.log('Closing menu...');
                         closeMenu();
                     } else {
-                        console.log('Opening menu...');
                         openMenu();
                     }
                 });
@@ -3312,6 +3258,7 @@
                 console.error('iosMenuBtn not found!');
             }
 
+            // Close button click
             if (closeMenuBtn) {
                 closeMenuBtn.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -3320,6 +3267,7 @@
                 });
             }
 
+            // Backdrop click
             if (menuBackdrop) {
                 menuBackdrop.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -3328,30 +3276,37 @@
                 });
             }
 
-            // Keyboard event listener for Escape key
+            // Escape key
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape' && isMenuOpen) {
                     closeMenu();
                 }
             });
 
-            // Setup menu handlers
-            setupMenuHandlers();
+            // Menu items click
+            const menuItems = document.querySelectorAll('.menu-item');
+            menuItems.forEach((item) => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const href = item.getAttribute('href');
+                    if (href) {
+                        closeMenu();
+                        setTimeout(() => {
+                            window.location.href = href;
+                        }, 200);
+                    }
+                });
+            });
         }
 
         // Setup all event handlers
         function setupAllEventHandlers() {
             console.log('Setting up all event handlers...');
             
-            // Initialize menu functionality
-            console.log('Calling initializeMenu...');
-            initializeMenu();
-            console.log('initializeMenu completed');
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && isMenuOpen) {
-                    closeMenu();
-                }
-            });
+            // Menu is already initialized in DOMContentLoaded
+            console.log('Menu already initialized');
 
             // Booking Modal Controls
             
