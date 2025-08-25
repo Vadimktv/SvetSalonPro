@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Примеры работ - SvetSalonPro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #ec4899;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+        
+        .animate-on-scroll.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .delay-100 { transition-delay: 0.1s; }
+        .delay-200 { transition-delay: 0.2s; }
+        .delay-300 { transition-delay: 0.3s; }
+        
+        .portfolio-filter {
+            transition: all 0.3s ease;
+        }
+        
+        .portfolio-filter.active {
+            background-color: #ec4899;
+            color: white;
+        }
+        
+        .portfolio-item {
+            transition: all 0.3s ease;
+        }
+        
+        .portfolio-item:hover {
+            transform: scale(1.05);
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #ec4899;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="fixed w-full bg-white shadow-sm z-50">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <a href="../index.html" class="logo-link">
+                    <h1 class="text-2xl font-bold text-pink-600 hover:text-pink-700 transition-colors duration-200 cursor-pointer">SvetSalonPro</h1>
+                </a>
+            </div>
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="../index.html#home" class="nav-link text-gray-700 hover:text-pink-600 transition">Главная</a>
+                <a href="../index.html#about" class="nav-link text-gray-700 hover:text-pink-600 transition">О нас</a>
+                <a href="../index.html#services" class="nav-link text-gray-700 hover:text-pink-600 transition">Услуги</a>
+                <a href="../index.html#masters" class="nav-link text-gray-700 hover:text-pink-600 transition">Мастера</a>
+                <a href="portfolio.html" class="nav-link text-pink-600 font-semibold">Примеры работ</a>
+                <a href="../index.html#contact" class="nav-link text-gray-700 hover:text-pink-600 transition">Контакты</a>
+                <a href="account.html" class="nav-link text-gray-700 hover:text-pink-600 transition">Личный кабинет</a>
+            </nav>
+            <div class="flex items-center space-x-4">
+                <!-- Profile Icon -->
+                <button id="profileBtn" class="hidden md:block text-gray-700 hover:text-pink-600 transition-colors duration-200">
+                    <div class="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center">
+                        <i class="fas fa-user text-white text-sm"></i>
+                    </div>
+                </button>
+                <!-- Mobile Menu Button -->
+                <button id="mobileMenuBtn" class="md:hidden text-gray-700 hover:text-pink-600 transition-colors duration-200">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden md:hidden">
+        <div class="bg-white w-80 h-full transform translate-x-full transition-transform duration-300">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-xl font-bold text-gray-800">Меню</h2>
+                    <button id="closeMobileMenu" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <nav class="space-y-4">
+                    <a href="../index.html#home" class="block text-gray-700 hover:text-pink-600 transition py-2">Главная</a>
+                    <a href="../index.html#about" class="block text-gray-700 hover:text-pink-600 transition py-2">О нас</a>
+                    <a href="../index.html#services" class="block text-gray-700 hover:text-pink-600 transition py-2">Услуги</a>
+                    <a href="../index.html#masters" class="block text-gray-700 hover:text-pink-600 transition py-2">Мастера</a>
+                    <a href="portfolio.html" class="block text-pink-600 font-semibold py-2">Примеры работ</a>
+                    <a href="../index.html#contact" class="block text-gray-700 hover:text-pink-600 transition py-2">Контакты</a>
+                    <a href="account.html" class="block text-gray-700 hover:text-pink-600 transition py-2">Личный кабинет</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="pt-32 pb-20 bg-gradient-to-br from-pink-50 to-purple-50">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-6xl font-bold text-gray-800 mb-6 animate-on-scroll">Примеры наших работ</h1>
+            <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto animate-on-scroll delay-100">
+                Посмотрите на результаты нашей работы и вдохновитесь на создание своего идеального образа
+            </p>
+        </div>
+    </section>
+
+    <!-- Portfolio Filters -->
+    <section class="py-12 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-center space-x-4 mb-8">
+                <button class="portfolio-filter active px-6 py-3 rounded-full bg-pink-600 text-white font-medium transition-all duration-300" data-filter="all">
+                    Все работы
+                </button>
+                <button class="portfolio-filter px-6 py-3 rounded-full bg-gray-200 text-gray-700 font-medium transition-all duration-300" data-filter="hair">
+                    Парикмахерские услуги
+                </button>
+                <button class="portfolio-filter px-6 py-3 rounded-full bg-gray-200 text-gray-700 font-medium transition-all duration-300" data-filter="manicure">
+                    Услуги маникюра
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Gallery -->
+    <section class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div id="portfolioGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Фотографии будут загружаться динамически -->
+            </div>
+            
+            <!-- Empty State -->
+            <div id="emptyState" class="text-center py-20 hidden">
+                <i class="fas fa-images text-6xl text-gray-300 mb-6"></i>
+                <h3 class="text-2xl font-semibold text-gray-600 mb-4">Пока нет фотографий</h3>
+                <p class="text-gray-500 mb-8">Фотографии работ будут добавлены администратором</p>
+                <a href="../index.html#services" class="bg-pink-600 hover:bg-pink-700 text-white px-8 py-3 rounded-lg font-medium transition">
+                    Посмотреть услуги
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-90 z-50 hidden flex items-center justify-center p-4">
+        <div class="relative max-w-4xl w-full">
+            <button id="closeModal" class="absolute top-4 right-4 text-white text-3xl hover:text-gray-300 transition z-10">
+                <i class="fas fa-times"></i>
+            </button>
+            <img id="modalImage" src="" alt="Увеличенное изображение" class="w-full h-auto max-h-[90vh] object-contain">
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white py-16">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+                <!-- Brand Section -->
+                <div class="text-center md:text-left">
+                    <a href="../index.html" class="logo-link">
+                        <h2 class="text-3xl font-bold text-pink-400 hover:text-pink-300 transition-colors duration-300 mb-2">SvetSalonPro</h2>
+                    </a>
+                    <p class="text-gray-300 text-sm">Салон красоты в Геленджике</p>
+                    <p class="text-gray-400 text-xs mt-1">Одесская 3А корпус 10</p>
+                </div>
+                
+                <!-- Social Media Section -->
+                <div class="text-center">
+                    <h3 class="text-lg font-semibold text-gray-200 mb-4">Мы в социальных сетях</h3>
+                    <div class="flex justify-center space-x-4">
+                        <a href="#" class="w-10 h-10 bg-gray-700 hover:bg-pink-600 text-gray-300 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-gray-700 hover:bg-pink-600 text-gray-300 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110">
+                            <i class="fab fa-vk"></i>
+                        </a>
+                        <a href="https://t.me/SvetSalonPro" target="_blank" class="w-10 h-10 bg-gray-700 hover:bg-pink-600 text-gray-300 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                        <a href="https://wa.me/79282806294" target="_blank" class="w-10 h-10 bg-gray-700 hover:bg-pink-600 text-gray-300 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Contact Info -->
+                <div class="text-center md:text-right">
+                    <h3 class="text-lg font-semibold text-gray-200 mb-4">Контакты</h3>
+                    <div class="space-y-2 text-sm">
+                        <p class="text-gray-300">
+                            <i class="fas fa-phone text-pink-400 mr-2"></i>
+                            +7 928 280 62 94
+                        </p>
+                        <p class="text-gray-300">
+                            <i class="fas fa-envelope text-pink-400 mr-2"></i>
+                            my@SvetSalonPro.ru
+                        </p>
+                        <p class="text-gray-400 text-xs mt-4">© 2023 SvetSalonPro. Все права защищены.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Инициализация AOS
+        AOS.init();
+
+        // Анимация при скролле
+        function animateOnScroll() {
+            const elements = document.querySelectorAll('.animate-on-scroll');
+            elements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.classList.add('animate');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', animateOnScroll);
+        animateOnScroll();
+
+        // Мобильное меню
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const closeMobileMenu = document.getElementById('closeMobileMenu');
+
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.remove('hidden');
+                setTimeout(() => {
+                    mobileMenu.querySelector('div').classList.remove('translate-x-full');
+                }, 10);
+            });
+        }
+
+        if (closeMobileMenu) {
+            closeMobileMenu.addEventListener('click', () => {
+                mobileMenu.querySelector('div').classList.add('translate-x-full');
+                setTimeout(() => {
+                    mobileMenu.classList.add('hidden');
+                }, 300);
+            });
+        }
+
+        // Фильтры портфолио
+        const filterButtons = document.querySelectorAll('.portfolio-filter');
+        let currentFilter = 'all';
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const filter = button.getAttribute('data-filter');
+                
+                // Обновляем активную кнопку
+                filterButtons.forEach(btn => {
+                    btn.classList.remove('active', 'bg-pink-600', 'text-white');
+                    btn.classList.add('bg-gray-200', 'text-gray-700');
+                });
+                button.classList.add('active', 'bg-pink-600', 'text-white');
+                button.classList.remove('bg-gray-200', 'text-gray-700');
+                
+                currentFilter = filter;
+                loadPortfolioPhotos();
+            });
+        });
+
+        // Загрузка фотографий портфолио
+        function loadPortfolioPhotos() {
+            const portfolioGrid = document.getElementById('portfolioGrid');
+            const emptyState = document.getElementById('emptyState');
+            
+            // Получаем фотографии из localStorage
+            const portfolioPhotos = JSON.parse(localStorage.getItem('portfolioPhotos') || '{}');
+            
+            // Фильтруем фотографии
+            let photosToShow = [];
+            if (currentFilter === 'all') {
+                Object.values(portfolioPhotos).forEach(categoryPhotos => {
+                    photosToShow = photosToShow.concat(categoryPhotos);
+                });
+            } else {
+                photosToShow = portfolioPhotos[currentFilter] || [];
+            }
+            
+            if (photosToShow.length === 0) {
+                portfolioGrid.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                return;
+            }
+            
+            portfolioGrid.classList.remove('hidden');
+            emptyState.classList.add('hidden');
+            
+            // Очищаем сетку
+            portfolioGrid.innerHTML = '';
+            
+            // Добавляем фотографии
+            photosToShow.forEach(photo => {
+                const photoElement = document.createElement('div');
+                photoElement.className = 'portfolio-item bg-white rounded-lg shadow-lg overflow-hidden cursor-pointer transform transition-all duration-300 hover:shadow-xl';
+                photoElement.innerHTML = `
+                    <img src="${photo.src}" alt="Пример работы" class="w-full h-64 object-cover">
+                    <div class="p-4">
+                        <p class="text-sm text-gray-500">${photo.category === 'hair' ? 'Парикмахерские услуги' : 'Услуги маникюра'}</p>
+                        <p class="text-xs text-gray-400">${new Date(photo.uploadedAt).toLocaleDateString()}</p>
+                    </div>
+                `;
+                
+                photoElement.addEventListener('click', () => {
+                    openImageModal(photo.src);
+                });
+                
+                portfolioGrid.appendChild(photoElement);
+            });
+        }
+
+        // Модальное окно для просмотра изображений
+        const imageModal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+        const closeModal = document.getElementById('closeModal');
+
+        function openImageModal(src) {
+            modalImage.src = src;
+            imageModal.classList.remove('hidden');
+        }
+
+        if (closeModal) {
+            closeModal.addEventListener('click', () => {
+                imageModal.classList.add('hidden');
+            });
+        }
+
+        if (imageModal) {
+            imageModal.addEventListener('click', (e) => {
+                if (e.target === imageModal) {
+                    imageModal.classList.add('hidden');
+                }
+            });
+        }
+
+        // Загружаем фотографии при загрузке страницы
+        document.addEventListener('DOMContentLoaded', () => {
+            loadPortfolioPhotos();
+        });
+
+        // Обновляем фотографии при изменении localStorage
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'portfolioPhotos') {
+                loadPortfolioPhotos();
+            }
+        });
+    </script>
+</body>
+</html>

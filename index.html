@@ -943,6 +943,13 @@
                         <span>Мастера</span>
                     </a>
                     
+                    <a href="pages/portfolio.html" class="menu-item group">
+                        <div class="menu-icon">
+                            <i class="fas fa-images"></i>
+                        </div>
+                        <span>Примеры работ</span>
+                    </a>
+                    
                     <a href="#contact" class="menu-item group">
                         <div class="menu-icon">
                             <i class="fas fa-phone"></i>
@@ -1004,6 +1011,7 @@
                 <a href="#about" class="nav-link text-gray-700 hover:text-pink-600 transition">О нас</a>
                 <a href="#services" class="nav-link text-gray-700 hover:text-pink-600 transition">Услуги</a>
                 <a href="#masters" class="nav-link text-gray-700 hover:text-pink-600 transition">Мастера</a>
+                <a href="pages/portfolio.html" class="nav-link text-gray-700 hover:text-pink-600 transition">Примеры работ</a>
                 <a href="#contact" class="nav-link text-gray-700 hover:text-pink-600 transition">Контакты</a>
                 <a href="pages/account.html" class="nav-link text-gray-700 hover:text-pink-600 transition">Личный кабинет</a>
             </nav>
@@ -2734,29 +2742,139 @@
         }
     }
 
-    // Экспорт записей
-    function exportBookings() {
-        const bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
-        if (bookings.length === 0) {
-            showNotification('Записей для экспорта нет', 'info');
+    // Открыть модальное окно загрузки фотографий
+    function openPhotoUpload() {
+        const modal = document.getElementById('photoUploadModal');
+        if (modal) {
+            modal.classList.remove('hidden');
+            setupPhotoUpload();
+        }
+    }
+
+    // Закрыть модальное окно загрузки фотографий
+    function closePhotoUpload() {
+        const modal = document.getElementById('photoUploadModal');
+        if (modal) {
+            modal.classList.add('hidden');
+            resetPhotoUpload();
+        }
+    }
+
+    // Настройка загрузки фотографий
+    function setupPhotoUpload() {
+        const fileInput = document.getElementById('photoFiles');
+        if (fileInput) {
+            fileInput.addEventListener('change', handlePhotoSelection);
+        }
+    }
+
+    // Обработка выбора фотографий
+    function handlePhotoSelection(event) {
+        const files = event.target.files;
+        const previewContainer = document.getElementById('previewContainer');
+        const photoPreview = document.getElementById('photoPreview');
+        
+        if (files.length > 0) {
+            photoPreview.classList.remove('hidden');
+            previewContainer.innerHTML = '';
+            
+            Array.from(files).forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const previewDiv = document.createElement('div');
+                    previewDiv.className = 'relative';
+                    previewDiv.innerHTML = `
+                        <img src="${e.target.result}" alt="Preview ${index + 1}" class="w-full h-32 object-cover rounded-lg">
+                        <button onclick="removePhoto(${index})" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs">×</button>
+                    `;
+                    previewContainer.appendChild(previewDiv);
+                };
+                reader.readAsDataURL(file);
+            });
+        } else {
+            photoPreview.classList.add('hidden');
+        }
+    }
+
+    // Удалить фотографию из предварительного просмотра
+    function removePhoto(index) {
+        const fileInput = document.getElementById('photoFiles');
+        const dt = new DataTransfer();
+        const files = fileInput.files;
+        
+        for (let i = 0; i < files.length; i++) {
+            if (i !== index) {
+                dt.items.add(files[i]);
+            }
+        }
+        
+        fileInput.files = dt.files;
+        handlePhotoSelection({ target: { files: dt.files } });
+    }
+
+    // Загрузить фотографии
+    function uploadPhotos() {
+        const fileInput = document.getElementById('photoFiles');
+        const categorySelect = document.getElementById('photoCategory');
+        const uploadBtn = document.querySelector('#photoUploadModal button[onclick="uploadPhotos()"]');
+        const uploadBtnText = document.getElementById('uploadBtnText');
+        const uploadBtnLoading = document.getElementById('uploadBtnLoading');
+        
+        if (!fileInput.files.length) {
+            showNotification('error', 'Ошибка', 'Выберите фотографии для загрузки');
             return;
         }
         
-        const csvContent = 'data:text/csv;charset=utf-8,' + 
-            'Имя,Телефон,Дата,Время,Услуга,Категория\n' +
-            bookings.map(booking => 
-                `"${booking.name}","${booking.phone}","${booking.date}","${booking.time}","${booking.service}","${booking.category}"`
-            ).join('\n');
+        const category = categorySelect.value;
+        const files = Array.from(fileInput.files);
         
-        const encodedUri = encodeURI(csvContent);
-        const link = document.createElement('a');
-        link.setAttribute('href', encodedUri);
-        link.setAttribute('download', `bookings_${new Date().toISOString().split('T')[0]}.csv`);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        // Показываем загрузку
+        uploadBtn.disabled = true;
+        uploadBtnText.classList.add('hidden');
+        uploadBtnLoading.classList.remove('hidden');
         
-        showNotification('Экспорт завершен!', 'success');
+        // Имитируем загрузку (в реальном проекте здесь будет загрузка на сервер)
+        setTimeout(() => {
+            // Сохраняем фотографии в localStorage (для демонстрации)
+            const existingPhotos = JSON.parse(localStorage.getItem('portfolioPhotos') || '{}');
+            if (!existingPhotos[category]) {
+                existingPhotos[category] = [];
+            }
+            
+            files.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    existingPhotos[category].push({
+                        id: Date.now() + Math.random(),
+                        src: e.target.result,
+                        category: category,
+                        uploadedAt: new Date().toISOString()
+                    });
+                    
+                    localStorage.setItem('portfolioPhotos', JSON.stringify(existingPhotos));
+                };
+                reader.readAsDataURL(file);
+            });
+            
+            // Скрываем загрузку
+            uploadBtn.disabled = false;
+            uploadBtnText.classList.remove('hidden');
+            uploadBtnLoading.classList.add('hidden');
+            
+            showNotification('success', 'Успешно!', `Загружено ${files.length} фотографий в категорию "${categorySelect.options[categorySelect.selectedIndex].text}"`);
+            closePhotoUpload();
+        }, 2000);
+    }
+
+    // Сбросить форму загрузки
+    function resetPhotoUpload() {
+        const fileInput = document.getElementById('photoFiles');
+        const photoPreview = document.getElementById('photoPreview');
+        const previewContainer = document.getElementById('previewContainer');
+        
+        if (fileInput) fileInput.value = '';
+        if (photoPreview) photoPreview.classList.add('hidden');
+        if (previewContainer) previewContainer.innerHTML = '';
     }
 
             // Инициализация административных функций
@@ -2867,8 +2985,51 @@
                 <h3 class="text-xl font-bold text-gray-800 mb-4">Панель управления</h3>
                 <button onclick="showBookedTimes()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition">📅 Просмотреть забронированное время</button>
                 <button onclick="clearAllBookings()" class="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition">🗑️ Очистить все записи</button>
-                <button onclick="exportBookings()" class="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition">📤 Экспорт записей</button>
+                <button onclick="openPhotoUpload()" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-lg transition">📸 Добавить фотографии работ</button>
                 <button onclick="closeAdminModal()" class="w-full bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-lg transition">Закрыть</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно загрузки фотографий -->
+    <div id="photoUploadModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg p-8 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">📸 Добавить фотографии работ</h2>
+                <button onclick="closePhotoUpload()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+            </div>
+            
+            <div class="space-y-6">
+                <!-- Выбор категории -->
+                <div>
+                    <label class="block text-gray-700 font-medium mb-2">Категория работ</label>
+                    <select id="photoCategory" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent">
+                        <option value="hair">Парикмахерские услуги</option>
+                        <option value="manicure">Услуги маникюра</option>
+                    </select>
+                </div>
+                
+                <!-- Загрузка файлов -->
+                <div>
+                    <label class="block text-gray-700 font-medium mb-2">Выберите фотографии</label>
+                    <input type="file" id="photoFiles" multiple accept="image/*" capture="environment" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent">
+                    <p class="text-sm text-gray-500 mt-1">Можно выбрать несколько фотографий. На мобильных устройствах можно сфотографировать прямо сейчас.</p>
+                </div>
+                
+                <!-- Предварительный просмотр -->
+                <div id="photoPreview" class="hidden">
+                    <label class="block text-gray-700 font-medium mb-2">Предварительный просмотр</label>
+                    <div id="previewContainer" class="grid grid-cols-2 md:grid-cols-3 gap-4"></div>
+                </div>
+                
+                <!-- Кнопки -->
+                <div class="flex space-x-4">
+                    <button onclick="uploadPhotos()" class="flex-1 bg-pink-600 hover:bg-pink-700 text-white font-medium py-2 px-4 rounded-lg transition">
+                        <span id="uploadBtnText">Загрузить фотографии</span>
+                        <span id="uploadBtnLoading" class="loading hidden"></span>
+                    </button>
+                    <button onclick="closePhotoUpload()" class="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-lg transition">Отмена</button>
+                </div>
             </div>
         </div>
     </div>
