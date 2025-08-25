@@ -1919,6 +1919,74 @@
             });
         }
 
+        // Load saved avatar
+        function loadSavedAvatar() {
+            try {
+                const savedAvatar = localStorage.getItem('selectedAvatar');
+                if (savedAvatar) {
+                    const profileBtn = document.getElementById('profileBtn');
+                    if (profileBtn) {
+                        const iconContainer = profileBtn.querySelector('div');
+                        const icon = profileBtn.querySelector('i');
+                        
+                        if (savedAvatar.startsWith('icon-')) {
+                            // Это иконка
+                            const iconIndex = parseInt(savedAvatar.split('-')[1]);
+                            const iconClasses = [
+                                'fas fa-user', 'fas fa-user-tie', 'fas fa-user-graduate', 'fas fa-user-ninja',
+                                'fas fa-user-astronaut', 'fas fa-user-cowboy', 'fas fa-user-doctor', 'fas fa-user-nurse',
+                                'fas fa-user-secret', 'fas fa-user-tag', 'fas fa-user-check', 'fas fa-user-clock',
+                                'fas fa-heart', 'fas fa-star', 'fas fa-crown', 'fas fa-gem', 'fas fa-sparkles',
+                                'fas fa-fire', 'fas fa-leaf', 'fas fa-sun', 'fas fa-moon', 'fas fa-cloud',
+                                'fas fa-flower', 'fas fa-butterfly'
+                            ];
+                            const iconColors = [
+                                'bg-pink-500', 'bg-blue-500', 'bg-green-500', 'bg-purple-500',
+                                'bg-indigo-500', 'bg-yellow-500', 'bg-red-500', 'bg-teal-500',
+                                'bg-gray-500', 'bg-orange-500', 'bg-emerald-500', 'bg-cyan-500',
+                                'bg-rose-500', 'bg-amber-500', 'bg-yellow-500', 'bg-violet-500',
+                                'bg-sky-500', 'bg-orange-500', 'bg-green-500', 'bg-yellow-500',
+                                'bg-indigo-500', 'bg-blue-500', 'bg-pink-500', 'bg-purple-500'
+                            ];
+                            
+                            if (iconIndex < iconClasses.length) {
+                                iconContainer.className = `w-8 h-8 ${iconColors[iconIndex]} rounded-full flex items-center justify-center`;
+                                icon.className = `${iconClasses[iconIndex]} text-white text-sm`;
+                            }
+                        } else {
+                            // Это изображение
+                            iconContainer.className = 'w-8 h-8 rounded-full flex items-center justify-center overflow-hidden';
+                            icon.style.display = 'none';
+                            
+                            // Создаем изображение
+                            const img = document.createElement('img');
+                            img.src = savedAvatar;
+                            img.alt = 'Фото профиля';
+                            img.className = 'w-full h-full object-cover';
+                            iconContainer.appendChild(img);
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading saved avatar:', error);
+            }
+        }
+
+        // Load avatar on page load
+        loadSavedAvatar();
+
+        // Listen for avatar updates from account page
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'selectedAvatar') {
+                loadSavedAvatar();
+            }
+        });
+
+        // Also listen for custom event (for same-page updates)
+        window.addEventListener('avatarUpdated', function(e) {
+            loadSavedAvatar();
+        });
+
         // iOS Style Menu Handlers
         let isMenuOpen = false;
         const iosMenuBtn = document.getElementById('iosMenuBtn');

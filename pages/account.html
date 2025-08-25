@@ -991,12 +991,18 @@
                     const iconClasses = [
                         'fas fa-user', 'fas fa-user-tie', 'fas fa-user-graduate', 'fas fa-user-ninja',
                         'fas fa-user-astronaut', 'fas fa-user-cowboy', 'fas fa-user-doctor', 'fas fa-user-nurse',
-                        'fas fa-user-secret', 'fas fa-user-tag', 'fas fa-user-check', 'fas fa-user-clock'
+                        'fas fa-user-secret', 'fas fa-user-tag', 'fas fa-user-check', 'fas fa-user-clock',
+                        'fas fa-heart', 'fas fa-star', 'fas fa-crown', 'fas fa-gem', 'fas fa-sparkles',
+                        'fas fa-fire', 'fas fa-leaf', 'fas fa-sun', 'fas fa-moon', 'fas fa-cloud',
+                        'fas fa-flower', 'fas fa-butterfly'
                     ];
                     const iconColors = [
                         'text-pink-600', 'text-blue-600', 'text-green-600', 'text-purple-600',
                         'text-indigo-600', 'text-yellow-600', 'text-red-600', 'text-teal-600',
-                        'text-gray-600', 'text-orange-600', 'text-emerald-600', 'text-cyan-600'
+                        'text-gray-600', 'text-orange-600', 'text-emerald-600', 'text-cyan-600',
+                        'text-rose-600', 'text-amber-600', 'text-yellow-600', 'text-violet-600',
+                        'text-sky-600', 'text-orange-600', 'text-green-600', 'text-yellow-600',
+                        'text-indigo-600', 'text-blue-600', 'text-pink-600', 'text-purple-600'
                     ];
                     
                     if (iconIndex < iconClasses.length) {
@@ -1585,12 +1591,18 @@
                     const iconClasses = [
                         'fas fa-user', 'fas fa-user-tie', 'fas fa-user-graduate', 'fas fa-user-ninja',
                         'fas fa-user-astronaut', 'fas fa-user-cowboy', 'fas fa-user-doctor', 'fas fa-user-nurse',
-                        'fas fa-user-secret', 'fas fa-user-tag', 'fas fa-user-check', 'fas fa-user-clock'
+                        'fas fa-user-secret', 'fas fa-user-tag', 'fas fa-user-check', 'fas fa-user-clock',
+                        'fas fa-heart', 'fas fa-star', 'fas fa-crown', 'fas fa-gem', 'fas fa-sparkles',
+                        'fas fa-fire', 'fas fa-leaf', 'fas fa-sun', 'fas fa-moon', 'fas fa-cloud',
+                        'fas fa-flower', 'fas fa-butterfly'
                     ];
                     const iconColors = [
                         'text-pink-600', 'text-blue-600', 'text-green-600', 'text-purple-600',
                         'text-indigo-600', 'text-yellow-600', 'text-red-600', 'text-teal-600',
-                        'text-gray-600', 'text-orange-600', 'text-emerald-600', 'text-cyan-600'
+                        'text-gray-600', 'text-orange-600', 'text-emerald-600', 'text-cyan-600',
+                        'text-rose-600', 'text-amber-600', 'text-yellow-600', 'text-violet-600',
+                        'text-sky-600', 'text-orange-600', 'text-green-600', 'text-yellow-600',
+                        'text-indigo-600', 'text-blue-600', 'text-pink-600', 'text-purple-600'
                     ];
                     
                     if (iconIndex < iconClasses.length) {
@@ -1735,6 +1747,9 @@
                 // Сохраняем в localStorage
                 localStorage.setItem('selectedAvatar', photoPath);
                 
+                // Обновляем аватарку на главной странице через событие
+                window.dispatchEvent(new CustomEvent('avatarUpdated', { detail: photoPath }));
+                
                 // Показываем уведомление об успехе
                 showNotification('success', 'Фото применено!', 'Ваше фото профиля успешно обновлено');
                 
@@ -1802,6 +1817,9 @@
                     // Сохраняем в localStorage
                     localStorage.setItem('selectedAvatar', imageData);
                     
+                    // Обновляем аватарку на главной странице через событие
+                    window.dispatchEvent(new CustomEvent('avatarUpdated', { detail: imageData }));
+                    
                     showNotification('success', 'Фото загружено!', 'Ваше фото успешно загружено');
                 }
             };
@@ -1835,8 +1853,64 @@
             }
         }
 
+        // Load saved avatar on page load
+        function loadSavedAvatarOnPageLoad() {
+            try {
+                const savedAvatar = localStorage.getItem('selectedAvatar');
+                if (savedAvatar) {
+                    const profileImage = document.getElementById('profileImage');
+                    const defaultIcon = document.getElementById('defaultProfileIcon');
+                    
+                    if (savedAvatar.startsWith('icon-')) {
+                        // Это иконка
+                        const iconIndex = parseInt(savedAvatar.split('-')[1]);
+                        const iconClasses = [
+                            'fas fa-user', 'fas fa-user-tie', 'fas fa-user-graduate', 'fas fa-user-ninja',
+                            'fas fa-user-astronaut', 'fas fa-user-cowboy', 'fas fa-user-doctor', 'fas fa-user-nurse',
+                            'fas fa-user-secret', 'fas fa-user-tag', 'fas fa-user-check', 'fas fa-user-clock',
+                            'fas fa-heart', 'fas fa-star', 'fas fa-crown', 'fas fa-gem', 'fas fa-sparkles',
+                            'fas fa-fire', 'fas fa-leaf', 'fas fa-sun', 'fas fa-moon', 'fas fa-cloud',
+                            'fas fa-flower', 'fas fa-butterfly'
+                        ];
+                        const iconColors = [
+                            'text-pink-600', 'text-blue-600', 'text-green-600', 'text-purple-600',
+                            'text-indigo-600', 'text-yellow-600', 'text-red-600', 'text-teal-600',
+                            'text-gray-600', 'text-orange-600', 'text-emerald-600', 'text-cyan-600',
+                            'text-rose-600', 'text-amber-600', 'text-yellow-600', 'text-violet-600',
+                            'text-sky-600', 'text-orange-600', 'text-green-600', 'text-yellow-600',
+                            'text-indigo-600', 'text-blue-600', 'text-pink-600', 'text-purple-600'
+                        ];
+                        
+                        if (iconIndex < iconClasses.length) {
+                            if (defaultIcon) {
+                                defaultIcon.className = `${iconClasses[iconIndex]} text-3xl ${iconColors[iconIndex]}`;
+                                defaultIcon.classList.remove('hidden');
+                            }
+                            if (profileImage) {
+                                profileImage.classList.add('hidden');
+                            }
+                        }
+                    } else {
+                        // Это изображение
+                        if (profileImage) {
+                            profileImage.src = savedAvatar;
+                            profileImage.classList.remove('hidden');
+                        }
+                        if (defaultIcon) {
+                            defaultIcon.classList.add('hidden');
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading saved avatar on page load:', error);
+            }
+        }
+
         // Initialize service card handlers when DOM is loaded
         document.addEventListener('DOMContentLoaded', function() {
+            // Load saved avatar
+            loadSavedAvatarOnPageLoad();
+            
             // Service Card Click Handlers
             document.querySelectorAll('.service-card').forEach(card => {
                 card.addEventListener('click', () => {
