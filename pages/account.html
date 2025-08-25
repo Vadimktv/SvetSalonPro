@@ -100,6 +100,7 @@
         .service-card {
             transition: all 0.3s ease;
             transform: translateY(0);
+            position: relative;
         }
         
         .service-card:hover {
@@ -113,6 +114,30 @@
         
         .service-card:hover img {
             transform: scale(1.05);
+        }
+        
+        .service-card.selected {
+            background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
+            border: 2px solid #ec4899;
+            box-shadow: 0 10px 25px rgba(236, 72, 153, 0.2);
+            transform: translateY(-4px);
+        }
+        
+        .service-card.selected::before {
+            content: '✓';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ec4899;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 12px;
         }
 
         /* Custom Notification Styles */
@@ -1190,12 +1215,29 @@
         });
 
         document.getElementById('closeModalBtn').addEventListener('click', () => {
+            // Убираем выделение со всех карточек
+            document.querySelectorAll('.service-card').forEach(c => {
+                c.classList.remove('selected');
+            });
+            
+            // Сбрасываем форму и показываем сетку услуг
+            document.querySelector('.grid').style.display = 'grid';
+            document.getElementById('bookingFormContainer').classList.add('hidden');
+            
             document.getElementById('bookingModal').classList.add('hidden');
         });
 
         // Service Card Click Handlers
         document.querySelectorAll('.service-card').forEach(card => {
             card.addEventListener('click', () => {
+                // Убираем выделение со всех карточек
+                document.querySelectorAll('.service-card').forEach(c => {
+                    c.classList.remove('selected');
+                });
+                
+                // Добавляем выделение к выбранной карточке
+                card.classList.add('selected');
+                
                 const service = card.getAttribute('data-service');
                 const price = card.getAttribute('data-price');
                 const serviceName = card.querySelector('h4').textContent;
@@ -1205,14 +1247,25 @@
                 document.getElementById('selectedServicePrice').value = price;
                 document.getElementById('selectedServiceName').textContent = serviceName;
                 
-                // Скрываем сетку услуг, показываем форму
-                document.querySelector('.grid').style.display = 'none';
-                document.getElementById('bookingFormContainer').classList.remove('hidden');
+                // Показываем уведомление о выборе
+                showNotification('success', 'Услуга выбрана!', `Выбрана услуга: ${serviceName}`);
+                
+                // Небольшая задержка перед показом формы для лучшего UX
+                setTimeout(() => {
+                    // Скрываем сетку услуг, показываем форму
+                    document.querySelector('.grid').style.display = 'none';
+                    document.getElementById('bookingFormContainer').classList.remove('hidden');
+                }, 500);
             });
         });
         
         // Back to Services Button
         document.getElementById('backToServicesBtn').addEventListener('click', () => {
+            // Убираем выделение со всех карточек
+            document.querySelectorAll('.service-card').forEach(c => {
+                c.classList.remove('selected');
+            });
+            
             document.querySelector('.grid').style.display = 'grid';
             document.getElementById('bookingFormContainer').classList.add('hidden');
         });
@@ -1913,6 +1966,14 @@
             // Service Card Click Handlers
             document.querySelectorAll('.service-card').forEach(card => {
                 card.addEventListener('click', () => {
+                    // Убираем выделение со всех карточек
+                    document.querySelectorAll('.service-card').forEach(c => {
+                        c.classList.remove('selected');
+                    });
+                    
+                    // Добавляем выделение к выбранной карточке
+                    card.classList.add('selected');
+                    
                     const service = card.getAttribute('data-service');
                     const price = card.getAttribute('data-price');
                     const serviceName = card.querySelector('h4').textContent;
@@ -1922,9 +1983,15 @@
                     document.getElementById('selectedServicePrice').value = price;
                     document.getElementById('selectedServiceName').textContent = serviceName;
                     
-                    // Скрываем сетку услуг, показываем форму
-                    document.querySelector('.grid').style.display = 'none';
-                    document.getElementById('bookingFormContainer').classList.remove('hidden');
+                    // Показываем уведомление о выборе
+                    showNotification('success', 'Услуга выбрана!', `Выбрана услуга: ${serviceName}`);
+                    
+                    // Небольшая задержка перед показом формы для лучшего UX
+                    setTimeout(() => {
+                        // Скрываем сетку услуг, показываем форму
+                        document.querySelector('.grid').style.display = 'none';
+                        document.getElementById('bookingFormContainer').classList.remove('hidden');
+                    }, 500);
                 });
             });
         });
