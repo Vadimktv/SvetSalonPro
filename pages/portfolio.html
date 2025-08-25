@@ -332,6 +332,13 @@
         .slideshow-category {
             font-size: 0.9rem;
             opacity: 0.9;
+            margin-bottom: 5px;
+        }
+        
+        .slideshow-counter {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            font-weight: 500;
         }
         
         /* Навигация слайдшоу */
@@ -1103,6 +1110,7 @@
                 }
             });
             
+            console.log(`Переключение на фильтр: ${filter}`);
             loadPortfolioPhotos();
         }
 
@@ -1134,8 +1142,9 @@
                 slide.innerHTML = `
                     <img src="${photo.src}" alt="Пример работы" class="slideshow-image">
                     <div class="slideshow-overlay">
-                        <div class="slideshow-title">Пример работы</div>
-                        <div class="slideshow-category">${photo.category === 'стрижки' ? 'Стрижки' : 'Маникюр'}</div>
+                        <div class="slideshow-title">${photo.description}</div>
+                        <div class="slideshow-category">${photo.category === 'стрижки' ? 'Стрижки' : photo.category === 'маникюр' ? 'Маникюр' : photo.category === 'spa' ? 'SPA' : 'Другие услуги'}</div>
+                        <div class="slideshow-counter">${index + 1} из ${photos.length}</div>
                     </div>
                 `;
                 container.appendChild(slide);
@@ -1382,8 +1391,9 @@
                 img.src = photo.src;
             });
             
-            // Создаем слайдшоу из первых 5 фотографий
-            const slideshowPhotos = photosToShow.slice(0, 5);
+            // Создаем слайдшоу из всех фотографий выбранной категории
+            const slideshowPhotos = photosToShow;
+            console.log(`Создаем слайдшоу для категории "${currentFilter}" с ${slideshowPhotos.length} фотографиями:`, slideshowPhotos.map(p => p.description));
             createSlideshow(slideshowPhotos);
             
             if (photosToShow.length === 0) {
