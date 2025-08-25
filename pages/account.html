@@ -375,8 +375,9 @@
                     <div class="md:col-span-1">
                         <div class="card rounded-xl p-6">
                             <div class="text-center mb-6">
-                                <div class="w-24 h-24 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                    <i class="fas fa-user text-3xl text-pink-600"></i>
+                                <div class="w-24 h-24 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4 overflow-hidden">
+                                    <i class="fas fa-user text-3xl text-pink-600" id="mainProfileIcon"></i>
+                                    <img id="mainProfileImage" class="w-full h-full object-cover hidden" alt="Фото профиля">
                                 </div>
                                 <h3 id="userName" class="text-xl font-semibold text-gray-800">Загрузка...</h3>
                                 <p id="userEmail" class="text-gray-600">loading@email.com</p>
@@ -1010,13 +1011,13 @@
                     }
                     
                     // Обновляем основное фото профиля
-                    const mainProfileImage = document.querySelector('#profileSection #profileImagePreview img');
-                    const mainDefaultIcon = document.querySelector('#profileSection #profileImagePreview i');
+                    const mainProfileImage = document.getElementById('mainProfileImage');
+                    const mainProfileIcon = document.getElementById('mainProfileIcon');
                     
                     if (mainProfileImage) mainProfileImage.classList.add('hidden');
-                    if (mainDefaultIcon) {
-                        mainDefaultIcon.className = `${iconClasses[iconIndex]} text-3xl ${iconColors[iconIndex]}`;
-                        mainDefaultIcon.classList.remove('hidden');
+                    if (mainProfileIcon) {
+                        mainProfileIcon.className = `${iconClasses[iconIndex]} text-3xl ${iconColors[iconIndex]}`;
+                        mainProfileIcon.classList.remove('hidden');
                     }
                     
                 } else {
@@ -1026,26 +1027,15 @@
                     defaultIcon.classList.add('hidden');
                     
                     // Обновляем основное фото профиля
-                    const mainProfileImage = document.querySelector('#profileSection #profileImagePreview img');
-                    const mainDefaultIcon = document.querySelector('#profileSection #profileImagePreview i');
+                    const mainProfileImage = document.getElementById('mainProfileImage');
+                    const mainProfileIcon = document.getElementById('mainProfileIcon');
                     
                     if (mainProfileImage) {
                         mainProfileImage.src = savedAvatar;
                         mainProfileImage.classList.remove('hidden');
-                    } else {
-                        // Создаем изображение если его нет
-                        const newImg = document.createElement('img');
-                        newImg.src = savedAvatar;
-                        newImg.alt = 'Фото профиля';
-                        newImg.className = 'w-full h-full object-cover';
-                        const container = document.querySelector('#profileSection #profileImagePreview');
-                        if (container) {
-                            container.appendChild(newImg);
-                        }
                     }
-                    
-                    if (mainDefaultIcon) {
-                        mainDefaultIcon.classList.add('hidden');
+                    if (mainProfileIcon) {
+                        mainProfileIcon.classList.add('hidden');
                     }
                 }
                 
@@ -1684,27 +1674,29 @@
                     ];
                     
                     if (iconIndex < iconClasses.length) {
-                        // Обновляем иконку в профиле
+                        // Обновляем иконку в модальном окне
                         const defaultIcon = document.getElementById('defaultProfileIcon');
-                        const mainDefaultIcon = document.querySelector('#profileSection #profileImagePreview i');
+                        const profileImage = document.getElementById('profileImage');
                         
                         if (defaultIcon) {
                             defaultIcon.className = `${iconClasses[iconIndex]} text-3xl ${iconColors[iconIndex]}`;
+                            defaultIcon.classList.remove('hidden');
                         }
-                        if (mainDefaultIcon) {
-                            mainDefaultIcon.className = `${iconClasses[iconIndex]} text-3xl ${iconColors[iconIndex]}`;
+                        if (profileImage) {
+                            profileImage.classList.add('hidden');
                         }
                         
-                        // Скрываем изображения
-                        const profileImage = document.getElementById('profileImage');
-                        const mainProfileImage = document.querySelector('#profileSection #profileImagePreview img');
+                        // Обновляем иконку в основном профиле
+                        const mainProfileIcon = document.getElementById('mainProfileIcon');
+                        const mainProfileImage = document.getElementById('mainProfileImage');
                         
-                        if (profileImage) profileImage.classList.add('hidden');
-                        if (mainProfileImage) mainProfileImage.classList.add('hidden');
-                        
-                        // Показываем иконки
-                        if (defaultIcon) defaultIcon.classList.remove('hidden');
-                        if (mainDefaultIcon) mainDefaultIcon.classList.remove('hidden');
+                        if (mainProfileIcon) {
+                            mainProfileIcon.className = `${iconClasses[iconIndex]} text-3xl ${iconColors[iconIndex]}`;
+                            mainProfileIcon.classList.remove('hidden');
+                        }
+                        if (mainProfileImage) {
+                            mainProfileImage.classList.add('hidden');
+                        }
                     }
                     
                 } else {
@@ -1721,26 +1713,15 @@
                     }
                     
                     // Обновляем основное фото профиля
-                    const mainProfileImage = document.querySelector('#profileSection #profileImagePreview img');
-                    const mainDefaultIcon = document.querySelector('#profileSection #profileImagePreview i');
+                    const mainProfileImage = document.getElementById('mainProfileImage');
+                    const mainProfileIcon = document.getElementById('mainProfileIcon');
                     
                     if (mainProfileImage) {
                         mainProfileImage.src = photoPath;
                         mainProfileImage.classList.remove('hidden');
-                    } else {
-                        // Создаем изображение если его нет
-                        const newImg = document.createElement('img');
-                        newImg.src = photoPath;
-                        newImg.alt = 'Фото профиля';
-                        newImg.className = 'w-full h-full object-cover';
-                        const container = document.querySelector('#profileSection #profileImagePreview');
-                        if (container) {
-                            container.appendChild(newImg);
-                        }
                     }
-                    
-                    if (mainDefaultIcon) {
-                        mainDefaultIcon.classList.add('hidden');
+                    if (mainProfileIcon) {
+                        mainProfileIcon.classList.add('hidden');
                     }
                 }
                 
@@ -1792,26 +1773,15 @@
                     defaultIcon.classList.add('hidden');
                     
                     // Обновляем основное фото профиля
-                    const mainProfileImage = document.querySelector('#profileSection #profileImagePreview img');
-                    const mainDefaultIcon = document.querySelector('#profileSection #profileImagePreview i');
+                    const mainProfileImage = document.getElementById('mainProfileImage');
+                    const mainProfileIcon = document.getElementById('mainProfileIcon');
                     
                     if (mainProfileImage) {
                         mainProfileImage.src = imageData;
                         mainProfileImage.classList.remove('hidden');
-                    } else {
-                        // Создаем изображение если его нет
-                        const newImg = document.createElement('img');
-                        newImg.src = imageData;
-                        newImg.alt = 'Фото профиля';
-                        newImg.className = 'w-full h-full object-cover';
-                        const container = document.querySelector('#profileSection #profileImagePreview');
-                        if (container) {
-                            container.appendChild(newImg);
-                        }
                     }
-                    
-                    if (mainDefaultIcon) {
-                        mainDefaultIcon.classList.add('hidden');
+                    if (mainProfileIcon) {
+                        mainProfileIcon.classList.add('hidden');
                     }
                     
                     // Сохраняем в localStorage
@@ -1858,8 +1828,15 @@
             try {
                 const savedAvatar = localStorage.getItem('selectedAvatar');
                 if (savedAvatar) {
+                    console.log('Loading saved avatar:', savedAvatar);
+                    
+                    // Элементы в модальном окне редактирования
                     const profileImage = document.getElementById('profileImage');
                     const defaultIcon = document.getElementById('defaultProfileIcon');
+                    
+                    // Элементы в основном профиле
+                    const mainProfileImage = document.getElementById('mainProfileImage');
+                    const mainProfileIcon = document.getElementById('mainProfileIcon');
                     
                     if (savedAvatar.startsWith('icon-')) {
                         // Это иконка
@@ -1882,6 +1859,7 @@
                         ];
                         
                         if (iconIndex < iconClasses.length) {
+                            // Обновляем иконку в модальном окне
                             if (defaultIcon) {
                                 defaultIcon.className = `${iconClasses[iconIndex]} text-3xl ${iconColors[iconIndex]}`;
                                 defaultIcon.classList.remove('hidden');
@@ -1889,9 +1867,19 @@
                             if (profileImage) {
                                 profileImage.classList.add('hidden');
                             }
+                            
+                            // Обновляем иконку в основном профиле
+                            if (mainProfileIcon) {
+                                mainProfileIcon.className = `${iconClasses[iconIndex]} text-3xl ${iconColors[iconIndex]}`;
+                                mainProfileIcon.classList.remove('hidden');
+                            }
+                            if (mainProfileImage) {
+                                mainProfileImage.classList.add('hidden');
+                            }
                         }
                     } else {
                         // Это изображение
+                        // Обновляем изображение в модальном окне
                         if (profileImage) {
                             profileImage.src = savedAvatar;
                             profileImage.classList.remove('hidden');
@@ -1899,7 +1887,18 @@
                         if (defaultIcon) {
                             defaultIcon.classList.add('hidden');
                         }
+                        
+                        // Обновляем изображение в основном профиле
+                        if (mainProfileImage) {
+                            mainProfileImage.src = savedAvatar;
+                            mainProfileImage.classList.remove('hidden');
+                        }
+                        if (mainProfileIcon) {
+                            mainProfileIcon.classList.add('hidden');
+                        }
                     }
+                    
+                    console.log('Avatar loaded successfully');
                 }
             } catch (error) {
                 console.error('Error loading saved avatar on page load:', error);
