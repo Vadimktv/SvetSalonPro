@@ -1225,8 +1225,10 @@
                     </div>
                 `;
                 
-                // Получаем фотографии из localStorage
-                const portfolioPhotos = JSON.parse(localStorage.getItem('portfolioPhotos') || '[]');
+                // Получаем фотографии с сервера
+                const response = await fetch('api/upload-photos.js');
+                const result = await response.json();
+                const portfolioPhotos = result.success ? result.photos : [];
                 
                 // Фильтруем фотографии
                 let photosToShow = [];

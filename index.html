@@ -3131,23 +3131,30 @@
                     reader.readAsDataURL(file);
                 });
                 
-                // Сохраняем в localStorage для демонстрации
+                // Отправляем на сервер
                 const photoData = {
-                    id: Date.now() + Math.random(),
                     category: category,
                     src: fileData,
                     fileName: file.name,
-                    description: '',
-                    uploadDate: new Date().toISOString()
+                    description: ''
                 };
                 
-                // Получаем существующие фотографии
-                const existingPhotos = JSON.parse(localStorage.getItem('portfolioPhotos') || '[]');
-                existingPhotos.push(photoData);
-                localStorage.setItem('portfolioPhotos', JSON.stringify(existingPhotos));
+                const response = await fetch('pages/api/upload-photos.js', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(photoData)
+                });
                 
-                console.log('File saved successfully:', file.name);
-                uploadedCount++;
+                const result = await response.json();
+                
+                if (result.success) {
+                    console.log('File uploaded successfully:', file.name);
+                    uploadedCount++;
+                } else {
+                    console.error('Error uploading file:', file.name, result.error);
+                }
             }
             
             // Скрываем загрузку

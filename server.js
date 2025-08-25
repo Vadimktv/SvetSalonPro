@@ -6,6 +6,9 @@ const url = require('url');
 // Импортируем API для портфолио
 const portfolioAPI = require('./pages/api/portfolio-photos.js');
 
+// Импортируем API для загрузки фотографий
+const uploadPhotosAPI = require('./pages/api/upload-photos.js');
+
 // MIME типы для статических файлов
 const mimeTypes = {
     '.html': 'text/html',
@@ -35,6 +38,29 @@ const server = http.createServer((req, res) => {
     // Обработка API запросов для портфолио
     if (pathname === '/api/portfolio-photos.js' || pathname === '/pages/api/portfolio-photos.js') {
         portfolioAPI.handleRequest(req, res);
+        return;
+    }
+    
+    // Обработка API запросов для загрузки фотографий
+    if (pathname === '/api/upload-photos.js' || pathname === '/pages/api/upload-photos.js') {
+        uploadPhotosAPI.handleRequest(req, res);
+        return;
+    }
+    
+    // Обработка статических файлов фотографий
+    if (pathname.startsWith('/uploads/photos/')) {
+        const photoPath = path.join(__dirname, pathname);
+        fs.readFile(photoPath, (error, content) => {
+            if (error) {
+                res.writeHead(404, { 'Content-Type': 'text/plain' });
+                res.end('Photo not found');
+            } else {
+                const extname = path.extname(photoPath).toLowerCase();
+                const contentType = mimeTypes[extname] || 'image/jpeg';
+                res.writeHead(200, { 'Content-Type': contentType });
+                res.end(content);
+            }
+        });
         return;
     }
     
@@ -83,6 +109,7 @@ server.listen(PORT, () => {
     console.log(`Сервер запущен на порту ${PORT}`);
     console.log(`Откройте http://localhost:${PORT} в браузере`);
     console.log('API для портфолио доступен по адресу: /api/portfolio-photos.js');
+    console.log('API для загрузки фотографий доступен по адресу: /api/upload-photos.js');
 });
 
 // Обработка ошибок сервера
