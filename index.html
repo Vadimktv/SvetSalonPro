@@ -2131,6 +2131,13 @@
                 closeMenu();
             });
         }
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (isMenuOpen && !sideMenu.contains(e.target) && !iosMenuBtn.contains(e.target)) {
+                closeMenu();
+            }
+        });
 
         // Close menu on escape key
         document.addEventListener('keydown', (e) => {
@@ -2139,87 +2146,46 @@
             }
         });
 
-        // Menu item click handlers
-        document.querySelectorAll('.menu-item').forEach(item => {
-            item.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                triggerHapticFeedback();
-                
-                // Add bubble animation
-                item.classList.add('bubble-animation');
-                setTimeout(() => {
-                    item.classList.remove('bubble-animation');
-                }, 400);
-                
-                // Get the href and navigate
-                const href = item.getAttribute('href');
-                if (href) {
-                    // Close menu immediately
-                    closeMenu();
+        // Menu item click handlers - moved to after menu creation
+        function setupMenuHandlers() {
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    triggerHapticFeedback();
                     
-                    // Navigate after a short delay for haptic feedback
+                    // Add bubble animation
+                    item.classList.add('bubble-animation');
                     setTimeout(() => {
-                        if (href.startsWith('#')) {
-                            // Smooth scroll to section
-                            const target = document.querySelector(href);
-                            if (target) {
-                                target.scrollIntoView({ behavior: 'smooth' });
+                        item.classList.remove('bubble-animation');
+                    }, 400);
+                    
+                    // Get the href and navigate
+                    const href = item.getAttribute('href');
+                    if (href) {
+                        // Close menu immediately
+                        closeMenu();
+                        
+                        // Navigate after a short delay for haptic feedback
+                        setTimeout(() => {
+                            if (href.startsWith('#')) {
+                                // Smooth scroll to section
+                                const target = document.querySelector(href);
+                                if (target) {
+                                    target.scrollIntoView({ behavior: 'smooth' });
+                                }
+                            } else {
+                                // Navigate to page
+                                window.location.href = href;
                             }
-                        } else {
-                            // Navigate to page
-                            window.location.href = href;
-                        }
-                    }, 200);
-                }
+                        }, 200);
+                    }
+                });
             });
-        });
-
-        // Swipe to close menu (iOS style)
-        let startX = 0;
-        let currentX = 0;
-        let isDragging = false;
-
-        if (sideMenu) {
-            sideMenu.addEventListener('touchstart', (e) => {
-                if (!isMenuOpen) return;
-                startX = e.touches[0].clientX;
-                isDragging = true;
-            }, { passive: true });
-
-            sideMenu.addEventListener('touchmove', (e) => {
-                if (!isDragging || !isMenuOpen) return;
-                currentX = e.touches[0].clientX;
-                const diffX = currentX - startX;
-                
-                if (diffX > 0) { // Swipe right to close
-                    const translateX = Math.min(diffX, 100);
-                    const scale = Math.max(0.75, 1 - (diffX / 200)); // Scale down as we swipe
-                    menuContainer.style.transform = `scale(${scale}) translateX(${translateX}px)`;
-                    menuContainer.style.opacity = Math.max(0, 1 - (diffX / 100));
-                }
-            }, { passive: true });
-
-            sideMenu.addEventListener('touchend', (e) => {
-                if (!isDragging || !isMenuOpen) return;
-                isDragging = false;
-                
-                const diffX = currentX - startX;
-                if (diffX > 50) { // Swipe threshold
-                    closeMenu();
-                } else {
-                    // Reset position - let CSS handle the animation
-                    menuContainer.style.transform = '';
-                    menuContainer.style.opacity = '';
-                    setTimeout(() => {
-                        if (isMenuOpen) {
-                            menuContainer.style.transform = '';
-                            menuContainer.style.opacity = '';
-                        }
-                    }, 10);
-                }
-            }, { passive: true });
         }
+
+        // Setup menu handlers after menu is created
+        setupMenuHandlers();
 
 
     });

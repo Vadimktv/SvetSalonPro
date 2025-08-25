@@ -182,6 +182,183 @@
             background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
         }
         
+        /* iOS Style Mobile Menu */
+        #sideMenu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 50;
+            pointer-events: none;
+        }
+        
+        #sideMenu.open {
+            pointer-events: all;
+        }
+        
+        #sideMenu.open #menuBackdrop {
+            opacity: 1;
+            pointer-events: all;
+            backdrop-filter: blur(2px);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        #sideMenu.open #menuContainer {
+            transform: scale(1) translateX(0);
+            opacity: 1;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        #sideMenu:not(.open) #menuContainer {
+            transform: scale(0.75) translateX(0) !important;
+            opacity: 0 !important;
+        }
+        
+        /* Prevent body scroll when menu is open */
+        body.menu-open {
+            overflow: hidden;
+        }
+        
+        /* Menu Button Animation */
+        .menu-icon-container {
+            position: relative;
+            width: 20px;
+            height: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .menu-line {
+            width: 100%;
+            height: 2px;
+            background-color: #374151;
+            border-radius: 1px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: center;
+        }
+        
+        /* Menu Button Active State */
+        #iosMenuBtn.active .menu-line:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+        
+        #iosMenuBtn.active .menu-line:nth-child(2) {
+            opacity: 0;
+            transform: scaleX(0);
+        }
+        
+        #iosMenuBtn.active .menu-line:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+        
+        /* Hover effects for menu lines */
+        #iosMenuBtn:hover .menu-line {
+            background-color: #ec4899;
+        }
+        
+        /* Menu Items */
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: #1f2937;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+        }
+        
+        .menu-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(236, 72, 153, 0.08);
+            opacity: 0;
+            transition: all 0.3s ease;
+            border-radius: 16px;
+            transform: scale(0.8);
+        }
+        
+        .menu-item:hover::before {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .menu-item:hover {
+            transform: translateX(8px);
+        }
+        
+        .menu-item:active::before {
+            background: rgba(236, 72, 153, 0.12);
+            transform: scale(1.05);
+        }
+        
+        /* Menu Icons */
+        .menu-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: rgba(236, 72, 153, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            flex-shrink: 0;
+        }
+        
+        .menu-icon i {
+            font-size: 18px;
+            color: #ec4899;
+            transition: all 0.3s ease;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+        }
+        
+        .menu-item:hover .menu-icon {
+            background: rgba(236, 72, 153, 0.15);
+            transform: scale(1.05);
+        }
+        
+        .menu-item:active .menu-icon {
+            transform: scale(0.98);
+        }
+        
+        .menu-item:hover .menu-icon i {
+            transform: scale(1.1);
+        }
+        
+        .menu-item span {
+            transition: all 0.3s ease;
+        }
+        
+        .menu-item:hover span {
+            transform: translateX(2px);
+            color: #ec4899;
+        }
+        
+        /* Bubble Animation */
+        @keyframes bubblePop {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .menu-item.bubble-animation::before {
+            animation: bubblePop 0.2s ease-out;
+        }
+        
         .notification-icon {
             width: 24px;
             height: 24px;
@@ -346,22 +523,118 @@
                 <a href="../index.html#contact" class="nav-link text-gray-700 hover:text-pink-600 transition">Контакты</a>
                 <a href="account.html" class="nav-link text-pink-600 font-semibold">Личный кабинет</a>
             </nav>
-            <button id="mobileMenuBtn" class="md:hidden text-gray-700">
-                <i class="fas fa-bars text-2xl"></i>
+            <button id="iosMenuBtn" class="md:hidden text-gray-700 hover:text-pink-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 rounded-full">
+                <div class="w-12 h-12 bg-gray-100/50 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-gray-200/50 active:bg-gray-300/50 transition-all duration-200 transform hover:scale-105 active:scale-95">
+                    <div class="menu-icon-container">
+                        <span class="menu-line"></span>
+                        <span class="menu-line"></span>
+                        <span class="menu-line"></span>
+                    </div>
+                </div>
             </button>
         </div>
+    </header>
+
+    <!-- iOS Style Side Menu -->
+    <div id="sideMenu" class="fixed inset-0 z-50 pointer-events-none">
+        <!-- Backdrop -->
+        <div id="menuBackdrop" class="absolute inset-0 bg-black/20 opacity-0 transition-all duration-250 ease-out pointer-events-none"></div>
         
-        <!-- Mobile Menu -->
-        <div id="mobileMenu" class="md:hidden hidden bg-white border-t border-gray-200">
-            <div class="px-4 py-6 space-y-4">
-                <a href="../index.html#home" class="block text-gray-700 hover:text-pink-600 transition py-2">Главная</a>
-                <a href="../index.html#about" class="block text-gray-700 hover:text-pink-600 transition py-2">О нас</a>
-                <a href="../index.html#services" class="block text-gray-700 hover:text-pink-600 transition py-2">Услуги</a>
-                <a href="../index.html#masters" class="block text-gray-700 hover:text-pink-600 transition py-2">Мастера</a>
-                <a href="../index.html#contact" class="block text-gray-700 hover:text-pink-600 transition py-2">Контакты</a>
-                <a href="account.html" class="block text-pink-600 font-semibold py-2">Личный кабинет</a>
+        <!-- Menu Container -->
+        <div id="menuContainer" class="absolute top-24 right-4 h-auto max-h-[80vh] w-72 bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl transform scale-75 opacity-0 transition-all duration-250 ease-out border border-white/30">
+            <!-- Menu Header -->
+            <div class="flex items-center justify-between p-3 border-b border-white/10">
+                <div class="flex items-center space-x-2">
+                    <img src="../images/logo.png" alt="SvetSalonPro" class="w-8 h-8 rounded-full">
+                    <div>
+                        <h2 class="text-base font-semibold text-gray-800">SvetSalonPro</h2>
+                        <p class="text-xs text-gray-600">Салон красоты</p>
+                    </div>
+                </div>
+                <button id="closeMenuBtn" class="w-8 h-8 rounded-full bg-gray-100/50 backdrop-blur-sm flex items-center justify-center hover:bg-gray-200/50 active:bg-gray-300/50 transition-all duration-200 transform hover:scale-105 active:scale-95 cursor-pointer">
+                    <i class="fas fa-times text-gray-600 text-sm"></i>
+                </button>
+            </div>
+            
+            <!-- Menu Content -->
+            <div class="flex-1 overflow-y-auto">
+                <!-- Navigation Links -->
+                <div class="p-2 space-y-0.5">
+                    <a href="../index.html#home" class="menu-item group">
+                        <div class="menu-icon">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        <span>Главная</span>
+                    </a>
+                    
+                    <a href="../index.html#about" class="menu-item group">
+                        <div class="menu-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <span>О нас</span>
+                    </a>
+                    
+                    <a href="../index.html#services" class="menu-item group">
+                        <div class="menu-icon">
+                            <i class="fas fa-spa"></i>
+                        </div>
+                        <span>Услуги</span>
+                    </a>
+                    
+                    <a href="../index.html#masters" class="menu-item group">
+                        <div class="menu-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <span>Мастера</span>
+                    </a>
+                    
+                    <a href="../index.html#contact" class="menu-item group">
+                        <div class="menu-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <span>Контакты</span>
+                    </a>
+                </div>
+                
+                <!-- Divider -->
+                <div class="mx-4 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
+                
+                <!-- Profile Section -->
+                <div class="p-2">
+                    <a href="account.html" class="menu-item group">
+                        <div class="menu-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <span>Личный кабинет</span>
+                    </a>
+                </div>
+                
+                <!-- Contact Info -->
+                <div class="p-2 mt-2">
+                    <div class="bg-gradient-to-r from-pink-500 to-pink-600 rounded-xl p-3 text-white">
+                        <div class="flex items-center space-x-2 mb-2">
+                            <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                                <i class="fas fa-envelope text-sm"></i>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-sm">my@SvetSalonPro.ru</p>
+                                <p class="text-xs text-pink-100">Пишите в любое время</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                                <i class="fas fa-phone text-sm"></i>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-sm">+7 928 280 62 94</p>
+                                <p class="text-xs text-pink-100">Звоните с 9:00 до 21:00</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
     </header>
 
     <!-- Main Content -->
@@ -2240,6 +2513,150 @@
                     }, 500);
                 });
             });
+        });
+
+        // iOS Style Menu Handlers for account page
+        document.addEventListener('DOMContentLoaded', function() {
+            let isMenuOpen = false;
+            const iosMenuBtn = document.getElementById('iosMenuBtn');
+            const sideMenu = document.getElementById('sideMenu');
+            const closeMenuBtn = document.getElementById('closeMenuBtn');
+            const menuBackdrop = document.getElementById('menuBackdrop');
+            const menuContainer = document.getElementById('menuContainer');
+
+            // Haptic feedback function
+            function triggerHapticFeedback() {
+                if ('vibrate' in navigator) {
+                    navigator.vibrate(10);
+                }
+                // Fallback visual feedback
+                document.body.classList.add('haptic-feedback');
+                setTimeout(() => {
+                    document.body.classList.remove('haptic-feedback');
+                }, 100);
+            }
+
+            // Open menu function
+            function openMenu() {
+                console.log('Opening menu, isMenuOpen:', isMenuOpen);
+                if (isMenuOpen) return;
+                
+                triggerHapticFeedback();
+                isMenuOpen = true;
+                sideMenu.classList.add('open');
+                document.body.classList.add('menu-open');
+                iosMenuBtn.classList.add('active');
+                
+                // Prevent any background interactions
+                setTimeout(() => {
+                    sideMenu.style.pointerEvents = 'all';
+                }, 50);
+                
+                console.log('Menu opened successfully');
+            }
+
+            // Close menu function
+            function closeMenu() {
+                console.log('Closing menu, isMenuOpen:', isMenuOpen);
+                if (!isMenuOpen) return;
+                
+                triggerHapticFeedback();
+                isMenuOpen = false;
+                sideMenu.classList.remove('open');
+                document.body.classList.remove('menu-open');
+                iosMenuBtn.classList.remove('active');
+                sideMenu.style.pointerEvents = 'none';
+                
+                console.log('Menu closed successfully');
+            }
+
+            // Event listeners
+            if (iosMenuBtn) {
+                iosMenuBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('Menu button clicked, isMenuOpen:', isMenuOpen);
+                    
+                    if (isMenuOpen) {
+                        closeMenu();
+                    } else {
+                        openMenu();
+                    }
+                });
+            }
+
+            if (closeMenuBtn) {
+                closeMenuBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('Close button clicked');
+                    triggerHapticFeedback();
+                    closeMenu();
+                });
+            }
+
+            if (menuBackdrop) {
+                menuBackdrop.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    closeMenu();
+                });
+            }
+
+            // Close menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (isMenuOpen && !sideMenu.contains(e.target) && !iosMenuBtn.contains(e.target)) {
+                    closeMenu();
+                }
+            });
+
+            // Close menu on escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && isMenuOpen) {
+                    closeMenu();
+                }
+            });
+
+            // Menu item click handlers
+            function setupMenuHandlers() {
+                document.querySelectorAll('.menu-item').forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        triggerHapticFeedback();
+                        
+                        // Add bubble animation
+                        item.classList.add('bubble-animation');
+                        setTimeout(() => {
+                            item.classList.remove('bubble-animation');
+                        }, 400);
+                        
+                        // Get the href and navigate
+                        const href = item.getAttribute('href');
+                        if (href) {
+                            // Close menu immediately
+                            closeMenu();
+                            
+                            // Navigate after a short delay for haptic feedback
+                            setTimeout(() => {
+                                if (href.startsWith('#')) {
+                                    // Smooth scroll to section
+                                    const target = document.querySelector(href);
+                                    if (target) {
+                                        target.scrollIntoView({ behavior: 'smooth' });
+                                    }
+                                } else {
+                                    // Navigate to page
+                                    window.location.href = href;
+                                }
+                            }, 200);
+                        }
+                    });
+                });
+            }
+
+            // Setup menu handlers after menu is created
+            setupMenuHandlers();
         });
 
     </script>
