@@ -9,6 +9,10 @@ const portfolioAPI = require('./pages/api/portfolio-photos.js');
 // Импортируем API для загрузки фотографий
 const uploadPhotosAPI = require('./pages/api/upload-photos.js');
 
+// Импортируем API для SMS-кода
+const sendSmsCodeAPI = require('./pages/api/send-sms-code.js');
+const verifySmsCodeAPI = require('./pages/api/verify-sms-code.js');
+
 // MIME типы для статических файлов
 const mimeTypes = {
     '.html': 'text/html',
@@ -44,6 +48,18 @@ const server = http.createServer((req, res) => {
     // Обработка API запросов для загрузки фотографий
     if (pathname === '/api/upload-photos.js' || pathname === '/pages/api/upload-photos.js') {
         uploadPhotosAPI.handleRequest(req, res);
+        return;
+    }
+    
+    // Обработка API запросов для отправки SMS-кода
+    if (pathname === '/api/send-sms-code.js' || pathname === '/pages/api/send-sms-code.js') {
+        sendSmsCodeAPI.handleRequest(req, res);
+        return;
+    }
+    
+    // Обработка API запросов для проверки SMS-кода
+    if (pathname === '/api/verify-sms-code.js' || pathname === '/pages/api/verify-sms-code.js') {
+        verifySmsCodeAPI.handleRequest(req, res);
         return;
     }
     
