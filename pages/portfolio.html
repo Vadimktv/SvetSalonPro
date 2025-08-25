@@ -1213,8 +1213,11 @@
 
         // Загрузка фотографий портфолио
         async function loadPortfolioPhotos() {
+            console.log('Функция loadPortfolioPhotos вызвана');
             const portfolioGrid = document.getElementById('portfolioGrid');
             const emptyState = document.getElementById('emptyState');
+            console.log('portfolioGrid найден:', !!portfolioGrid);
+            console.log('emptyState найден:', !!emptyState);
             
             try {
                 // Показываем загрузку
@@ -1230,6 +1233,7 @@
                 try {
                     const response = await fetch('../data/existing-photos.json');
                     portfolioPhotos = await response.json();
+                    console.log('Загружено фотографий:', portfolioPhotos.length);
                 } catch (error) {
                     console.error('Failed to load existing photos:', error);
                     // Fallback to localStorage
@@ -1243,6 +1247,8 @@
                 } else {
                     photosToShow = portfolioPhotos.filter(photo => photo.category === currentFilter);
                 }
+                console.log('Текущий фильтр:', currentFilter);
+                console.log('Показано фотографий:', photosToShow.length);
                 
                 // Создаем слайдшоу из первых 5 фотографий
                 const slideshowPhotos = photosToShow.slice(0, 5);
@@ -1268,7 +1274,7 @@
                     photoElement.innerHTML = `
                         <img src="${photo.src}" alt="Пример работы" class="portfolio-image">
                         <div class="portfolio-info">
-                            <div class="portfolio-category">${photo.category === 'hair' ? 'Парикмахерские услуги' : 'Услуги маникюра'}</div>
+                            <div class="portfolio-category">${photo.category === 'hair' ? 'Парикмахерские услуги' : photo.category === 'manicure' ? 'Услуги маникюра' : photo.category === 'spa' ? 'SPA процедуры' : 'Другие услуги'}</div>
                             <div class="portfolio-date">${new Date(photo.uploadDate).toLocaleDateString()}</div>
                         </div>
                     `;
