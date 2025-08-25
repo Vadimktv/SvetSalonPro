@@ -1419,6 +1419,8 @@
         // Обработка токена авторизации из URL (Magic Link)
         async function handleAuthFromURL() {
             try {
+                console.log('=== ОБРАБОТКА MAGIC LINK ===');
+                console.log('Текущий URL:', window.location.href);
                 console.log('Проверяем URL на наличие токена авторизации...');
                 
                 // Проверяем URL параметры
@@ -1598,6 +1600,45 @@
                     showUserDataImmediately(session.user);
                     // Затем загружаем полный профиль из базы данных
                     loadUserProfile();
+                } else {
+                    // Проверяем токены в URL напрямую
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const hashParams = new URLSearchParams(window.location.hash.substring(1));
+                    
+                    const accessToken = urlParams.get('access_token') || hashParams.get('access_token');
+                    const refreshToken = urlParams.get('refresh_token') || hashParams.get('refresh_token');
+                    const type = urlParams.get('type') || hashParams.get('type');
+                    
+                    if (accessToken && (type === 'recovery' || type === 'signup' || type === 'magiclink')) {
+                        console.log('Найден токен в URL, устанавливаем сессию...');
+                        
+                        // Устанавливаем сессию
+                        let { data, error } = await client.auth.setSession({
+                            access_token: accessToken,
+                            refresh_token: refreshToken || null
+                        });
+                        
+                        if (!error && data.session) {
+                            console.log('Сессия успешно установлена из токена:', data.session);
+                            currentUser = data.session.user;
+                            
+                            // Сохраняем пользователя в localStorage
+                            localStorage.setItem('currentUser', JSON.stringify(data.session.user));
+                            
+                            // Отправляем событие о входе пользователя
+                            window.dispatchEvent(new CustomEvent('userLoggedIn', { detail: data.session.user }));
+                            
+                            // Очищаем URL от токенов
+                            const cleanURL = window.location.pathname;
+                            window.history.replaceState({}, document.title, cleanURL);
+                            
+                            showProfile();
+                            showUserDataImmediately(data.session.user);
+                            loadUserProfile();
+                            
+                            showNotification('success', 'Вход выполнен!', 'Добро пожаловать в личный кабинет!');
+                        }
+                    }
                 }
                 
                 console.log('=== ИНИЦИАЛИЗАЦИЯ SUPABASE ЗАВЕРШЕНА УСПЕШНО ===');
@@ -1654,7 +1695,7 @@
                         const { error } = await client.auth.signInWithOtp({
                             email: email,
                             options: {
-                                emailRedirectTo: window.location.origin + window.location.pathname,
+                                emailRedirectTo: 'https://www.svetsalonpro.ru/pages/account.html',
                                 shouldCreateUser: true
                             }
                         });
