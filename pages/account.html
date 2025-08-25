@@ -701,9 +701,8 @@
                                 <label for="phone" class="block text-gray-700 font-medium mb-2 text-left">Номер телефона</label>
                                 <input type="tel" id="phone" name="phone" required 
                                        class="form-input w-full"
-                                       placeholder="+7 (___) ___-__-__"
-                                       maxlength="18">
-                                <p class="text-sm text-gray-500 mt-1">Начните вводить номер, +7 добавится автоматически</p>
+                                       placeholder="(999) 123-45-67"
+                                       maxlength="15">
                             </div>
                             
                             <button type="submit" id="loginBtn" class="btn-primary w-full py-3 px-6 rounded-lg text-white font-semibold">
@@ -1479,32 +1478,45 @@
                 phoneInput.addEventListener('input', function(e) {
                     let value = e.target.value.replace(/\D/g, '');
                     
-                    if (value.length === 0) {
-                        e.target.value = '';
-                        return;
+                    // Ограничиваем до 10 цифр (без кода страны)
+                    if (value.length > 10) {
+                        value = value.substring(0, 10);
                     }
                     
-                    if (value.length === 1 && value[0] === '7') {
-                        value = value.substring(1);
-                    }
-                    
+                    // Форматируем номер
                     if (value.length > 0) {
-                        value = '+7 (' + value;
+                        let formatted = '(' + value;
+                        if (value.length > 3) {
+                            formatted = formatted.substring(0, 4) + ') ' + formatted.substring(4);
+                        }
                         if (value.length > 6) {
-                            value = value.substring(0, 6) + ') ' + value.substring(6);
+                            formatted = formatted.substring(0, 9) + '-' + formatted.substring(9);
                         }
-                        if (value.length > 11) {
-                            value = value.substring(0, 11) + '-' + value.substring(11);
+                        if (value.length > 8) {
+                            formatted = formatted.substring(0, 12) + '-' + formatted.substring(12);
                         }
-                        if (value.length > 14) {
-                            value = value.substring(0, 14) + '-' + value.substring(14);
-                        }
-                        if (value.length > 17) {
-                            value = value.substring(0, 17) + '-' + value.substring(17);
+                        e.target.value = formatted;
+                    } else {
+                        e.target.value = '';
+                    }
+                });
+                
+                // Обработка удаления (Backspace)
+                phoneInput.addEventListener('keydown', function(e) {
+                    if (e.key === 'Backspace') {
+                        const cursorPosition = e.target.selectionStart;
+                        const value = e.target.value;
+                        
+                        // Если курсор находится на символе форматирования, удаляем его
+                        if (value[cursorPosition - 1] === ' ' || 
+                            value[cursorPosition - 1] === '-' || 
+                            value[cursorPosition - 1] === ')') {
+                            e.preventDefault();
+                            const newValue = value.substring(0, cursorPosition - 1) + value.substring(cursorPosition);
+                            e.target.value = newValue;
+                            e.target.setSelectionRange(cursorPosition - 1, cursorPosition - 1);
                         }
                     }
-                    
-                    e.target.value = value;
                 });
             }
             
@@ -1574,7 +1586,7 @@
                 // Форматируем номер телефона
                 const formattedPhone = formatPhoneForAuth(phone);
                 if (!formattedPhone) {
-                    throw new Error('Введите корректный номер телефона');
+                    throw new Error('Введите полный номер телефона (10 цифр)');
                 }
                 
                 console.log('Отправляем SMS на номер:', formattedPhone);
