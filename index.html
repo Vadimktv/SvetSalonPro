@@ -1017,7 +1017,7 @@
             </nav>
             <div class="flex items-center space-x-4">
                 <!-- Admin Panel Button (Hidden by default) -->
-                <button id="adminPanelBtn" class="text-gray-700 hover:text-red-600 transition-colors duration-200 bg-red-50 hover:bg-red-100 px-3 py-2 rounded-lg" style="display: none !important;">
+                <button id="adminPanelBtn" class="text-gray-700 hover:text-red-600 transition-colors duration-200 bg-red-50 hover:bg-red-100 px-3 py-2 rounded-lg" style="display: block !important;">
                     <i class="fas fa-crown text-red-500"></i>
                 </button>
                 <!-- Profile Icon -->
@@ -2408,25 +2408,52 @@
     // Функция для открытия административной панели
     function openAdminModal() {
         const modal = document.getElementById('adminModal');
+        const sideMenu = document.getElementById('adminSideMenu');
         const login = document.getElementById('adminLogin');
         const panel = document.getElementById('adminPanel');
         const password = document.getElementById('adminPassword');
         
-        if (!modal || !login || !panel || !password) {
+        if (!modal || !sideMenu || !login || !panel || !password) {
             showNotification('error', 'Ошибка', 'Административная панель не загружена');
             return;
         }
         
+        // Показываем модальное окно
         modal.classList.remove('hidden');
+        
+        // Анимация появления бокового меню
+        setTimeout(() => {
+            sideMenu.classList.remove('translate-x-full');
+        }, 10);
+        
+        // Показываем форму входа
         login.classList.remove('hidden');
         panel.classList.add('hidden');
         password.value = '';
-        password.focus();
+        
+        // Фокус на поле пароля
+        setTimeout(() => {
+            password.focus();
+        }, 300);
     }
 
     // Функция для закрытия административной панели
     function closeAdminModal() {
-        document.getElementById('adminModal').classList.add('hidden');
+        const modal = document.getElementById('adminModal');
+        const sideMenu = document.getElementById('adminSideMenu');
+        
+        if (sideMenu) {
+            // Анимация закрытия бокового меню
+            sideMenu.classList.add('translate-x-full');
+            
+            // Скрываем модальное окно после анимации
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        } else {
+            modal.classList.add('hidden');
+        }
+        
         adminClickCount = 0;
     }
 
@@ -2698,45 +2725,23 @@
         console.log('Admin button toggled:', show);
     }
 
-    // Открыть административное модальное окно
-    function openAdminModal() {
-        const modal = document.getElementById('adminModal');
-        if (modal) {
-            modal.classList.remove('hidden');
-            
-            // Если пользователь уже администратор, показываем панель сразу
-            if (isAdmin && currentUserEmail && checkAdminPrivileges(currentUserEmail)) {
-                document.getElementById('adminLogin').classList.add('hidden');
-                document.getElementById('adminPanel').classList.remove('hidden');
-            } else {
-                // Иначе показываем форму ввода пароля
-                document.getElementById('adminLogin').classList.remove('hidden');
-                document.getElementById('adminPanel').classList.add('hidden');
-                document.getElementById('adminPassword').value = '';
-            }
-        }
-    }
 
-    // Закрыть административное модальное окно
-    function closeAdminModal() {
-        const modal = document.getElementById('adminModal');
-        if (modal) {
-            modal.classList.add('hidden');
-        }
-    }
 
     // Проверить пароль администратора
     function checkAdminPassword() {
         const password = document.getElementById('adminPassword').value;
-        const correctPassword = 'SvetSalonPro2024!'; // Пароль администратора
+        const correctPassword = '0808'; // Пароль администратора
         
         if (password === correctPassword) {
             // Устанавливаем статус администратора
             isAdmin = true;
             document.getElementById('adminLogin').classList.add('hidden');
             document.getElementById('adminPanel').classList.remove('hidden');
+            showNotification('success', 'Добро пожаловать!', 'Успешная авторизация в админ панели');
         } else {
-            showNotification('Неверный пароль!', 'error');
+            showNotification('error', 'Ошибка!', 'Неверный пароль');
+            document.getElementById('adminPassword').value = '';
+            document.getElementById('adminPassword').focus();
         }
     }
 
@@ -2744,7 +2749,7 @@
     function showBookedTimes() {
         const bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
         if (bookings.length === 0) {
-            showNotification('Записей пока нет', 'info');
+            showNotification('info', 'Информация', 'Записей пока нет');
             return;
         }
         
@@ -2762,7 +2767,7 @@
     function clearAllBookings() {
         if (confirm('Вы уверены, что хотите удалить ВСЕ записи? Это действие нельзя отменить!')) {
             localStorage.removeItem('bookings');
-            showNotification('Все записи удалены!', 'success');
+            showNotification('success', 'Успех!', 'Все записи удалены');
         }
     }
 
