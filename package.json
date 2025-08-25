@@ -1,0 +1,24 @@
+{
+  "name": "svetsalonpro",
+  "version": "1.0.0",
+  "description": "Салон красоты SvetSalonPro - веб-сайт",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "salon",
+    "beauty",
+    "hair",
+    "manicure",
+    "portfolio"
+  ],
+  "author": "SvetSalonPro",
+  "license": "MIT",
+  "dependencies": {},
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

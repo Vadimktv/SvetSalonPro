@@ -554,7 +554,7 @@
                         <i class="fas fa-crown text-red-500"></i>
                         <span class="text-sm font-medium">Админ панель</span>
                     </div>
-                </button>
+            </button>
                 <!-- Mobile Admin Panel Button -->
                 <button id="mobileAdminPanelBtn" class="md:hidden text-gray-700 hover:text-red-600 transition-colors duration-200 bg-red-50 hover:bg-red-100 px-2 py-2 rounded-lg" style="display: none !important;">
                     <i class="fas fa-crown text-red-500"></i>
@@ -566,7 +566,7 @@
                             <span class="menu-line"></span>
                             <span class="menu-line"></span>
                             <span class="menu-line"></span>
-                        </div>
+        </div>
                     </div>
                 </button>
             </div>
@@ -671,15 +671,26 @@
                     </div>
                 </div>
             </div>
+            </div>
         </div>
-    </div>
     </header>
 
     <!-- Main Content -->
     <main class="pt-32 pb-20">
         <div class="container mx-auto px-4">
+            <!-- Loading Section -->
+            <div id="loadingSection" class="max-w-md mx-auto mb-8 fade-in">
+                <div class="card rounded-xl p-8 text-center">
+                    <div class="flex flex-col items-center justify-center py-12">
+                        <div class="loading mb-4"></div>
+                        <h2 class="text-xl font-semibold text-gray-800 mb-2">Загрузка профиля...</h2>
+                        <p class="text-gray-600">Проверяем авторизацию</p>
+                    </div>
+                </div>
+            </div>
+
             <!-- Auth Section -->
-            <div id="authSection" class="max-w-md mx-auto mb-8 fade-in">
+            <div id="authSection" class="hidden max-w-md mx-auto mb-8 fade-in">
                 <div class="card rounded-xl p-8 text-center">
                     <h2 class="text-3xl font-bold text-gray-800 mb-6">Вход в личный кабинет</h2>
                     
@@ -696,10 +707,10 @@
                             <span id="loginBtnText">Отправить ссылку</span>
                             <span id="loginBtnLoading" class="loading hidden"></span>
                         </button>
-                        
-                        <div class="mt-6 text-sm text-gray-600">
-                            <p>Мы отправим ссылку для входа на ваш email</p>
-                        </div>
+                    
+                    <div class="mt-6 text-sm text-gray-600">
+                        <p>Мы отправим ссылку для входа на ваш email</p>
+                    </div>
                     </form>
                     
 
@@ -803,92 +814,92 @@
                                 </button>
                                 <h4 class="text-xl font-semibold text-gray-800">Стрижки и уход за волосами</h4>
                             </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                                <!-- SPA процедуры -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                            <!-- SPA процедуры -->
                                 <div class="service-card bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2 border-2 border-transparent" data-service="spa" data-price="800">
-                                    <div class="text-center">
-                                        <img src="../images/SPA процедуры.JPG" alt="SPA процедуры" class="w-24 h-24 object-cover rounded-lg mx-auto mb-4">
-                                        <h4 class="text-lg font-semibold mb-2">SPA процедуры</h4>
-                                        <p class="text-pink-600 font-bold mb-2">от 800 ₽</p>
-                                        <p class="text-gray-600 text-sm">Расслабляющие и оздоравливающие процедуры для волос и кожи головы.</p>
-                                    </div>
+                                <div class="text-center">
+                                    <img src="../images/SPA процедуры.JPG" alt="SPA процедуры" class="w-24 h-24 object-cover rounded-lg mx-auto mb-4">
+                                    <h4 class="text-lg font-semibold mb-2">SPA процедуры</h4>
+                                    <p class="text-pink-600 font-bold mb-2">от 800 ₽</p>
+                                    <p class="text-gray-600 text-sm">Расслабляющие и оздоравливающие процедуры для волос и кожи головы.</p>
                                 </div>
-                                
-                                <!-- Женская стрижка -->
+                            </div>
+                            
+                            <!-- Женская стрижка -->
                                 <div class="service-card bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2 border-2 border-transparent" data-service="womens_haircut" data-price="700">
-                                    <div class="text-center">
-                                        <img src="../images/Женская стрижка.JPG" alt="Женская стрижка" class="w-24 h-24 object-cover rounded-lg mx-auto mb-4">
-                                        <h4 class="text-lg font-semibold mb-2">Женская стрижка</h4>
-                                        <p class="text-pink-600 font-bold mb-2">от 700 ₽</p>
-                                        <p class="text-gray-600 text-sm">Современные женские стрижки любой сложности с учетом ваших пожеланий.</p>
-                                    </div>
+                                <div class="text-center">
+                                    <img src="../images/Женская стрижка.JPG" alt="Женская стрижка" class="w-24 h-24 object-cover rounded-lg mx-auto mb-4">
+                                    <h4 class="text-lg font-semibold mb-2">Женская стрижка</h4>
+                                    <p class="text-pink-600 font-bold mb-2">от 700 ₽</p>
+                                    <p class="text-gray-600 text-sm">Современные женские стрижки любой сложности с учетом ваших пожеланий.</p>
                                 </div>
-                                
-                                <!-- Мужская стрижка -->
+                            </div>
+                            
+                            <!-- Мужская стрижка -->
                                 <div class="service-card bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2 border-2 border-transparent" data-service="mens_haircut" data-price="700">
-                                    <div class="text-center">
-                                        <img src="../images/Мужская стрижка.JPG" alt="Мужская стрижка" class="w-24 h-24 object-cover rounded-lg mx-auto mb-4">
-                                        <h4 class="text-lg font-semibold mb-2">Мужская стрижка</h4>
-                                        <p class="text-pink-600 font-bold mb-2">от 700 ₽</p>
-                                        <p class="text-gray-600 text-sm">Классические и современные мужские стрижки для любого стиля.</p>
-                                    </div>
+                                <div class="text-center">
+                                    <img src="../images/Мужская стрижка.JPG" alt="Мужская стрижка" class="w-24 h-24 object-cover rounded-lg mx-auto mb-4">
+                                    <h4 class="text-lg font-semibold mb-2">Мужская стрижка</h4>
+                                    <p class="text-pink-600 font-bold mb-2">от 700 ₽</p>
+                                    <p class="text-gray-600 text-sm">Классические и современные мужские стрижки для любого стиля.</p>
                                 </div>
-                                
-                                <!-- Мужская стрижка под машинку -->
+                            </div>
+                            
+                            <!-- Мужская стрижка под машинку -->
                                 <div class="service-card bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2 border-2 border-transparent" data-service="mens_machine" data-price="600">
-                                    <div class="text-center">
-                                        <img src="../images/Мужская стрижка под машинку.JPG" alt="Мужская стрижка под машинку" class="w-24 h-24 object-cover rounded-lg mx-auto mb-4">
-                                        <h4 class="text-lg font-semibold mb-2">Мужская стрижка под машинку</h4>
-                                        <p class="text-pink-600 font-bold mb-2">от 600 ₽</p>
-                                        <p class="text-gray-600 text-sm">Быстрая и аккуратная стрижка под машинку для мужчин и детей.</p>
-                                    </div>
+                                <div class="text-center">
+                                    <img src="../images/Мужская стрижка под машинку.JPG" alt="Мужская стрижка под машинку" class="w-24 h-24 object-cover rounded-lg mx-auto mb-4">
+                                    <h4 class="text-lg font-semibold mb-2">Мужская стрижка под машинку</h4>
+                                    <p class="text-pink-600 font-bold mb-2">от 600 ₽</p>
+                                    <p class="text-gray-600 text-sm">Быстрая и аккуратная стрижка под машинку для мужчин и детей.</p>
                                 </div>
-                                
-                                <!-- Окрашивание волос -->
+                            </div>
+                            
+                            <!-- Окрашивание волос -->
                                 <div class="service-card bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2 border-2 border-transparent" data-service="coloring" data-price="800">
-                                    <div class="text-center">
-                                        <img src="../images/Окрашивание волос.JPG" alt="Окрашивание волос" class="w-24 h-24 object-cover rounded-lg mx-auto mb-4">
-                                        <h4 class="text-lg font-semibold mb-2">Окрашивание волос</h4>
-                                        <p class="text-pink-600 font-bold mb-2">от 800 ₽</p>
-                                        <p class="text-gray-600 text-sm">Профессиональное окрашивание с использованием премиальных красок.</p>
-                                    </div>
+                                <div class="text-center">
+                                    <img src="../images/Окрашивание волос.JPG" alt="Окрашивание волос" class="w-24 h-24 object-cover rounded-lg mx-auto mb-4">
+                                    <h4 class="text-lg font-semibold mb-2">Окрашивание волос</h4>
+                                    <p class="text-pink-600 font-bold mb-2">от 800 ₽</p>
+                                    <p class="text-gray-600 text-sm">Профессиональное окрашивание с использованием премиальных красок.</p>
                                 </div>
-                                
-                                <!-- Мелирование волос -->
+                            </div>
+                            
+                            <!-- Мелирование волос -->
                                 <div class="service-card bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2 border-2 border-transparent" data-service="highlighting" data-price="1200">
-                                    <div class="text-center">
-                                        <img src="../images/Мелирование волос.JPG" alt="Мелирование волос" class="w-24 h-24 object-cover rounded-lg mx-auto mb-4">
-                                        <h4 class="text-lg font-semibold mb-2">Мелирование волос</h4>
-                                        <p class="text-pink-600 font-bold mb-2">1200 ₽</p>
-                                        <p class="text-gray-600 text-sm">Мелирование для создания ярких и естественных акцентов в прическе.</p>
-                                    </div>
+                                <div class="text-center">
+                                    <img src="../images/Мелирование волос.JPG" alt="Мелирование волос" class="w-24 h-24 object-cover rounded-lg mx-auto mb-4">
+                                    <h4 class="text-lg font-semibold mb-2">Мелирование волос</h4>
+                                    <p class="text-pink-600 font-bold mb-2">1200 ₽</p>
+                                    <p class="text-gray-600 text-sm">Мелирование для создания ярких и естественных акцентов в прическе.</p>
                                 </div>
-                                
-                                <!-- Ламинирование волос -->
+                            </div>
+                            
+                            <!-- Ламинирование волос -->
                                 <div class="service-card bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2 border-2 border-transparent" data-service="lamination" data-price="1000">
-                                    <div class="text-center">
-                                        <img src="../images/Ламинирования волос.JPG" alt="Ламинирование волос" class="w-24 h-24 object-cover rounded-lg mx-auto mb-4">
-                                        <h4 class="text-lg font-semibold mb-2">Ламинирование волос</h4>
-                                        <p class="text-pink-600 font-bold mb-2">1000 ₽</p>
-                                        <p class="text-gray-600 text-sm">Процедура для гладкости, блеска и защиты волос от повреждений.</p>
-                                    </div>
+                                <div class="text-center">
+                                    <img src="../images/Ламинирования волос.JPG" alt="Ламинирование волос" class="w-24 h-24 object-cover rounded-lg mx-auto mb-4">
+                                    <h4 class="text-lg font-semibold mb-2">Ламинирование волос</h4>
+                                    <p class="text-pink-600 font-bold mb-2">1000 ₽</p>
+                                    <p class="text-gray-600 text-sm">Процедура для гладкости, блеска и защиты волос от повреждений.</p>
                                 </div>
-                                
-                                <!-- Колористика волос -->
+                            </div>
+                            
+                            <!-- Колористика волос -->
                                 <div class="service-card bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2 border-2 border-transparent" data-service="coloristics" data-price="2800">
-                                    <div class="text-center">
-                                        <img src="../images/Колористика волос.JPG" alt="Колористика волос" class="w-24 h-24 object-cover rounded-lg mx-auto mb-4">
-                                        <h4 class="text-lg font-semibold mb-2">Колористика волос</h4>
-                                        <p class="text-pink-600 font-bold mb-2">от 2800 ₽</p>
-                                        <p class="text-gray-600 text-sm">Сложные техники окрашивания и подбор идеального оттенка.</p>
-                                    </div>
+                                <div class="text-center">
+                                    <img src="../images/Колористика волос.JPG" alt="Колористика волос" class="w-24 h-24 object-cover rounded-lg mx-auto mb-4">
+                                    <h4 class="text-lg font-semibold mb-2">Колористика волос</h4>
+                                    <p class="text-pink-600 font-bold mb-2">от 2800 ₽</p>
+                                    <p class="text-gray-600 text-sm">Сложные техники окрашивания и подбор идеального оттенка.</p>
                                 </div>
-                                
-                                <!-- Укрепление гелем -->
+                            </div>
+                            
+                            <!-- Укрепление гелем -->
                                 <div class="service-card bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2 border-2 border-transparent" data-service="gel" data-price="1300">
-                                    <div class="text-center">
-                                        <img src="../images/Укрепление гелем 00.37.43.JPG" alt="Укрепление гелем" class="w-24 h-24 object-cover rounded-lg mx-auto mb-4">
-                                        <h4 class="text-lg font-semibold mb-2">Укрепление гелем</h4>
+                                <div class="text-center">
+                                    <img src="../images/Укрепление гелем 00.37.43.JPG" alt="Укрепление гелем" class="w-24 h-24 object-cover rounded-lg mx-auto mb-4">
+                                    <h4 class="text-lg font-semibold mb-2">Укрепление гелем</h4>
                                     <p class="text-pink-600 font-bold mb-2">1300 ₽</p>
                                     <p class="text-gray-600 text-sm">Укрепление и восстановление структуры ногтей с помощью геля.</p>
                                 </div>
@@ -1209,6 +1220,9 @@
             try {
                 console.log('Checking authentication status on account page...');
                 
+                // Показываем состояние загрузки
+                showLoadingState();
+                
                 // Проверяем, есть ли сохраненный пользователь
                 const savedUser = localStorage.getItem('currentUser');
                 if (savedUser) {
@@ -1222,6 +1236,7 @@
                             console.log('Token expired, clearing user data');
                             localStorage.removeItem('currentUser');
                             localStorage.removeItem('selectedAvatar');
+                            hideLoadingState();
                             showAuth();
                             return;
                         }
@@ -1239,18 +1254,25 @@
                         // Отправляем событие о входе пользователя
                         window.dispatchEvent(new CustomEvent('userLoggedIn', { detail: user }));
                         
+                        // Скрываем загрузку и показываем профиль
+                        hideLoadingState();
+                        showProfile();
+                        
                     } catch (e) {
                         console.error('Error parsing saved user:', e);
                         localStorage.removeItem('currentUser');
                         localStorage.removeItem('selectedAvatar');
+                        hideLoadingState();
                         showAuth();
                     }
                 } else {
                     console.log('No saved user found');
+                    hideLoadingState();
                     showAuth();
                 }
             } catch (error) {
                 console.error('Error checking authentication:', error);
+                hideLoadingState();
                 showAuth();
             }
         }
@@ -1429,7 +1451,7 @@
                 });
             }
             
-            console.log('Форма входа настроена успешно!');
+                console.log('Форма входа настроена успешно!');
         }
         
 
@@ -1457,19 +1479,68 @@
             }
         });
 
-        // Show auth section
-        function showAuth() {
+        // Показать состояние загрузки
+        function showLoadingState() {
             try {
                 const authSection = document.getElementById('authSection');
                 const profileSection = document.getElementById('profileSection');
+                const loadingSection = document.getElementById('loadingSection');
                 
                 if (!authSection || !profileSection) {
                     console.error('Не найдены секции auth или profile');
                     return;
                 }
                 
-                authSection.classList.remove('hidden');
+                // Скрываем все секции
+                authSection.classList.add('hidden');
                 profileSection.classList.add('hidden');
+                
+                // Показываем загрузку
+                if (loadingSection) {
+                    loadingSection.classList.remove('hidden');
+                }
+                
+                console.log('Состояние загрузки показано');
+            } catch (error) {
+                console.error('Ошибка при показе состояния загрузки:', error);
+            }
+        }
+
+        // Скрыть состояние загрузки
+        function hideLoadingState() {
+            try {
+                const loadingSection = document.getElementById('loadingSection');
+                
+                if (loadingSection) {
+                    loadingSection.classList.add('hidden');
+                }
+                
+                console.log('Состояние загрузки скрыто');
+            } catch (error) {
+                console.error('Ошибка при скрытии состояния загрузки:', error);
+            }
+        }
+
+        // Show auth section
+        function showAuth() {
+            try {
+                const authSection = document.getElementById('authSection');
+                const profileSection = document.getElementById('profileSection');
+                const loadingSection = document.getElementById('loadingSection');
+                
+                if (!authSection || !profileSection) {
+                    console.error('Не найдены секции auth или profile');
+                    return;
+                }
+                
+                // Скрываем все секции
+                profileSection.classList.add('hidden');
+                if (loadingSection) {
+                    loadingSection.classList.add('hidden');
+                }
+                
+                // Показываем форму входа
+                authSection.classList.remove('hidden');
                 console.log('Форма входа показана успешно');
             } catch (error) {
                 console.error('Ошибка при показе формы входа:', error);
@@ -1481,13 +1552,20 @@
             try {
                 const authSection = document.getElementById('authSection');
                 const profileSection = document.getElementById('profileSection');
+                const loadingSection = document.getElementById('loadingSection');
                 
                 if (!authSection || !profileSection) {
                     console.error('Не найдены секции auth или profile');
                     return;
                 }
                 
+                // Скрываем все секции
                 authSection.classList.add('hidden');
+                if (loadingSection) {
+                    loadingSection.classList.add('hidden');
+                }
+                
+                // Показываем профиль
                 profileSection.classList.remove('hidden');
                 console.log('Профиль показан успешно');
             } catch (error) {
@@ -2601,7 +2679,7 @@
                         // Скрываем все сетки услуг, показываем форму
                         document.getElementById('hairServicesGrid').classList.add('hidden');
                         document.getElementById('manicureServicesGrid').classList.add('hidden');
-                        document.getElementById('bookingFormContainer').classList.remove('hidden');
+                    document.getElementById('bookingFormContainer').classList.remove('hidden');
                         
                         // Предзаполняем телефон, если есть в профиле
                         const phoneInput = document.getElementById('bookingPhone');

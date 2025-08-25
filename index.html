@@ -2830,7 +2830,7 @@
     }
 
     // Загрузить фотографии
-    function uploadPhotos() {
+    async function uploadPhotos() {
         console.log('uploadPhotos function called');
         
         const fileInput = document.getElementById('photoFiles');
@@ -2863,70 +2863,62 @@
         if (uploadBtnText) uploadBtnText.classList.add('hidden');
         if (uploadBtnLoading) uploadBtnLoading.classList.remove('hidden');
         
-        // Сохраняем фотографии в localStorage
         try {
-            const existingPhotos = JSON.parse(localStorage.getItem('portfolioPhotos') || '{}');
-            if (!existingPhotos[category]) {
-                existingPhotos[category] = [];
-            }
-            
             let uploadedCount = 0;
             const totalFiles = files.length;
             
-            files.forEach((file, index) => {
+            for (const file of files) {
                 console.log('Processing file:', file.name, file.type);
                 
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    console.log('File read successfully:', file.name);
-                    
-                    existingPhotos[category].push({
-                        id: Date.now() + Math.random(),
-                        src: e.target.result,
-                        category: category,
-                        uploadedAt: new Date().toISOString(),
-                        fileName: file.name
-                    });
-                    
-                    uploadedCount++;
-                    
-                    // Сохраняем после каждого файла
-                    localStorage.setItem('portfolioPhotos', JSON.stringify(existingPhotos));
-                    
-                    // Если все файлы обработаны
-                    if (uploadedCount === totalFiles) {
-                        console.log('All files uploaded successfully');
-                        
-                        // Скрываем загрузку
-                        if (uploadBtn) uploadBtn.disabled = false;
-                        if (uploadBtnText) uploadBtnText.classList.remove('hidden');
-                        if (uploadBtnLoading) uploadBtnLoading.classList.add('hidden');
-                        
-                        const categoryName = categorySelect && categorySelect.options[categorySelect.selectedIndex] 
-                            ? categorySelect.options[categorySelect.selectedIndex].text 
-                            : (category === 'hair' ? 'Парикмахерские услуги' : 'Услуги маникюра');
-                        
-                        showNotification('success', 'Успешно!', `Загружено ${uploadedCount} фотографий в категорию "${categoryName}"`);
-                        closePhotoUpload();
-                    }
+                // Читаем файл как base64
+                const fileData = await new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => resolve(e.target.result);
+                    reader.onerror = reject;
+                    reader.readAsDataURL(file);
+                });
+                
+                // Отправляем на сервер
+                const photoData = {
+                    category: category,
+                    src: fileData,
+                    fileName: file.name,
+                    description: ''
                 };
                 
-                reader.onerror = function(error) {
-                    console.error('Error reading file:', file.name, error);
-                    uploadedCount++;
-                    
-                    if (uploadedCount === totalFiles) {
-                        // Скрываем загрузку
-                        if (uploadBtn) uploadBtn.disabled = false;
-                        if (uploadBtnText) uploadBtnText.classList.remove('hidden');
-                        if (uploadBtnLoading) uploadBtnLoading.classList.add('hidden');
-                        
-                        showNotification('error', 'Ошибка', 'Произошла ошибка при загрузке некоторых файлов');
-                    }
-                };
+                const response = await fetch('pages/api/portfolio-photos.js', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(photoData)
+                });
                 
-                reader.readAsDataURL(file);
-            });
+                const result = await response.json();
+                
+                if (result.success) {
+                    console.log('File uploaded successfully:', file.name);
+                    uploadedCount++;
+                } else {
+                    console.error('Error uploading file:', file.name, result.error);
+                }
+            }
+            
+            // Скрываем загрузку
+            if (uploadBtn) uploadBtn.disabled = false;
+            if (uploadBtnText) uploadBtnText.classList.remove('hidden');
+            if (uploadBtnLoading) uploadBtnLoading.classList.add('hidden');
+            
+            const categoryName = categorySelect && categorySelect.options[categorySelect.selectedIndex] 
+                ? categorySelect.options[categorySelect.selectedIndex].text 
+                : (category === 'hair' ? 'Парикмахерские услуги' : 'Услуги маникюра');
+            
+            if (uploadedCount > 0) {
+                showNotification('success', 'Успешно!', `Загружено ${uploadedCount} из ${totalFiles} фотографий в категорию "${categoryName}"`);
+                closePhotoUpload();
+            } else {
+                showNotification('error', 'Ошибка', 'Не удалось загрузить ни одной фотографии');
+            }
             
         } catch (error) {
             console.error('Error in uploadPhotos:', error);
@@ -2936,7 +2928,7 @@
             if (uploadBtnText) uploadBtnText.classList.remove('hidden');
             if (uploadBtnLoading) uploadBtnLoading.classList.add('hidden');
             
-            showNotification('error', 'Ошибка', 'Произошла ошибка при сохранении фотографий: ' + error.message);
+            showNotification('error', 'Ошибка', 'Произошла ошибка при загрузке фотографий: ' + error.message);
         }
     }
 

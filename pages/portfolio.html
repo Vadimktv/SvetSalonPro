@@ -47,7 +47,7 @@
         .delay-200 { transition-delay: 0.2s; }
         .delay-300 { transition-delay: 0.3s; }
         
-        /* Бегущая строка для фильтров */
+        /* Улучшенная бегущая строка для фильтров */
         .marquee-container {
             overflow: hidden;
             position: relative;
@@ -55,21 +55,23 @@
             border-radius: 50px;
             padding: 8px;
             box-shadow: 0 4px 20px rgba(236, 72, 153, 0.1);
+            cursor: grab;
+            user-select: none;
+        }
+        
+        .marquee-container:active {
+            cursor: grabbing;
         }
         
         .marquee-content {
             display: flex;
-            animation: marquee 20s linear infinite;
+            transition: transform 0.3s ease-out;
             white-space: nowrap;
+            will-change: transform;
         }
         
-        .marquee-content:hover {
-            animation-play-state: paused;
-        }
-        
-        @keyframes marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
+        .marquee-content.dragging {
+            transition: none;
         }
         
         .filter-button {
@@ -84,6 +86,7 @@
             border: 2px solid transparent;
             cursor: pointer;
             user-select: none;
+            flex-shrink: 0;
         }
         
         .filter-button:hover {
@@ -411,12 +414,12 @@
         </div>
     </section>
 
-    <!-- Бегущая строка фильтров -->
+    <!-- Улучшенная бегущая строка фильтров -->
     <section class="py-12 bg-white">
         <div class="container mx-auto px-4">
-            <div class="marquee-container">
+            <div class="marquee-container" id="marqueeContainer">
                 <div class="marquee-content" id="marqueeContent">
-                    <!-- Фильтры будут дублироваться для бегущей строки -->
+                    <!-- Фильтры будут добавляться динамически -->
                 </div>
             </div>
         </div>
@@ -572,7 +575,16 @@
         let slideInterval;
         let currentFilter = 'all';
 
-        // Создание бегущей строки фильтров
+        // Переменные для улучшенной бегущей строки
+        let marqueeAnimation = null;
+        let isDragging = false;
+        let startX = 0;
+        let currentX = 0;
+        let isMovingRight = true;
+        let marqueeSpeed = 2; // Скорость в пикселях за кадр
+        let autoScroll = true;
+
+        // Создание улучшенной бегущей строки фильтров
         function createMarqueeFilters() {
             const marqueeContent = document.getElementById('marqueeContent');
             const filters = [
@@ -581,29 +593,147 @@
                 { text: 'Услуги маникюра', filter: 'manicure' }
             ];
             
-            // Создаем дублированные фильтры для бегущей строки
+            // Создаем фильтры (без дублирования)
             let html = '';
-            for (let i = 0; i < 3; i++) { // Дублируем 3 раза
-                filters.forEach((filter, index) => {
-                    const isActive = i === 0 && index === 0; // Первый "Все работы" активен
-                    html += `
-                        <div class="filter-button ${isActive ? 'active' : ''}" 
-                             data-filter="${filter.filter}" 
-                             onclick="selectFilter('${filter.filter}')">
-                            ${filter.text}
-                        </div>
-                    `;
-                });
-            }
+            filters.forEach((filter, index) => {
+                const isActive = index === 0; // Первый "Все работы" активен
+                html += `
+                    <div class="filter-button ${isActive ? 'active' : ''}" 
+                         data-filter="${filter.filter}" 
+                         onclick="selectFilter('${filter.filter}')">
+                        ${filter.text}
+                    </div>
+                `;
+            });
             
             marqueeContent.innerHTML = html;
+            
+            // Запускаем анимацию
+            startMarqueeAnimation();
+        }
+
+        // Запуск анимации бегущей строки
+        function startMarqueeAnimation() {
+            if (marqueeAnimation) {
+                cancelAnimationFrame(marqueeAnimation);
+            }
+            
+            const marqueeContent = document.getElementById('marqueeContent');
+            const container = document.getElementById('marqueeContainer');
+            
+            if (!marqueeContent || !container) return;
+            
+            let position = 0;
+            const containerWidth = container.offsetWidth;
+            const contentWidth = marqueeContent.scrollWidth;
+            
+            function animate() {
+                if (!autoScroll || isDragging) {
+                    marqueeAnimation = requestAnimationFrame(animate);
+                    return;
+                }
+                
+                if (isMovingRight) {
+                    position -= marqueeSpeed;
+                    if (position <= -(contentWidth - containerWidth)) {
+                        isMovingRight = false;
+                    }
+                } else {
+                    position += marqueeSpeed;
+                    if (position >= 0) {
+                        isMovingRight = true;
+                    }
+                }
+                
+                marqueeContent.style.transform = `translateX(${position}px)`;
+                marqueeAnimation = requestAnimationFrame(animate);
+            }
+            
+            animate();
+        }
+
+        // Обработчики для свайпа/перетаскивания
+        function setupMarqueeDrag() {
+            const container = document.getElementById('marqueeContainer');
+            const content = document.getElementById('marqueeContent');
+            
+            if (!container || !content) return;
+            
+            // Touch events для мобильных устройств
+            container.addEventListener('touchstart', handleDragStart);
+            container.addEventListener('touchmove', handleDragMove);
+            container.addEventListener('touchend', handleDragEnd);
+            
+            // Mouse events для десктопа
+            container.addEventListener('mousedown', handleDragStart);
+            container.addEventListener('mousemove', handleDragMove);
+            container.addEventListener('mouseup', handleDragEnd);
+            container.addEventListener('mouseleave', handleDragEnd);
+            
+            // Предотвращаем выделение текста при перетаскивании
+            container.addEventListener('selectstart', (e) => e.preventDefault());
+        }
+
+        function handleDragStart(e) {
+            isDragging = true;
+            autoScroll = false;
+            
+            const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+            startX = clientX - currentX;
+            
+            const content = document.getElementById('marqueeContent');
+            if (content) {
+                content.classList.add('dragging');
+            }
+            
+            e.preventDefault();
+        }
+
+        function handleDragMove(e) {
+            if (!isDragging) return;
+            
+            const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+            currentX = clientX - startX;
+            
+            const content = document.getElementById('marqueeContent');
+            const container = document.getElementById('marqueeContainer');
+            
+            if (content && container) {
+                const containerWidth = container.offsetWidth;
+                const contentWidth = content.scrollWidth;
+                const maxScroll = -(contentWidth - containerWidth);
+                
+                // Ограничиваем перетаскивание
+                currentX = Math.max(maxScroll, Math.min(0, currentX));
+                content.style.transform = `translateX(${currentX}px)`;
+            }
+            
+            e.preventDefault();
+        }
+
+        function handleDragEnd(e) {
+            if (!isDragging) return;
+            
+            isDragging = false;
+            
+            const content = document.getElementById('marqueeContent');
+            if (content) {
+                content.classList.remove('dragging');
+            }
+            
+            // Возобновляем автоматическую прокрутку через 2 секунды
+            setTimeout(() => {
+                autoScroll = true;
+            }, 2000);
+            
+            e.preventDefault();
         }
 
         // Выбор фильтра
         function selectFilter(filter) {
             currentFilter = filter;
             
-            // Обновляем активную кнопку во всех дублированных элементах
+            // Обновляем активную кнопку
             const buttons = document.querySelectorAll('.filter-button');
             buttons.forEach(button => {
                 button.classList.remove('active');
@@ -722,63 +852,86 @@
         }
 
         // Загрузка фотографий портфолио
-        function loadPortfolioPhotos() {
+        async function loadPortfolioPhotos() {
             const portfolioGrid = document.getElementById('portfolioGrid');
             const emptyState = document.getElementById('emptyState');
             
-            // Получаем фотографии из localStorage
-            const portfolioPhotos = JSON.parse(localStorage.getItem('portfolioPhotos') || '{}');
-            
-            // Фильтруем фотографии
-            let photosToShow = [];
-            if (currentFilter === 'all') {
-                Object.values(portfolioPhotos).forEach(categoryPhotos => {
-                    photosToShow = photosToShow.concat(categoryPhotos);
-                });
-            } else {
-                photosToShow = portfolioPhotos[currentFilter] || [];
-            }
-            
-            // Создаем слайдшоу из первых 5 фотографий
-            const slideshowPhotos = photosToShow.slice(0, 5);
-            createSlideshow(slideshowPhotos);
-            
-            if (photosToShow.length === 0) {
-                portfolioGrid.classList.add('hidden');
-                emptyState.classList.remove('hidden');
-                return;
-            }
-            
-            portfolioGrid.classList.remove('hidden');
-            emptyState.classList.add('hidden');
-            
-            // Очищаем сетку
-            portfolioGrid.innerHTML = '';
-            
-            // Добавляем фотографии с анимацией
-            photosToShow.forEach((photo, index) => {
-                const photoElement = document.createElement('div');
-                photoElement.className = 'portfolio-item';
-                photoElement.style.animationDelay = `${index * 0.1}s`;
-                photoElement.innerHTML = `
-                    <img src="${photo.src}" alt="Пример работы" class="portfolio-image">
-                    <div class="portfolio-info">
-                        <div class="portfolio-category">${photo.category === 'hair' ? 'Парикмахерские услуги' : 'Услуги маникюра'}</div>
-                        <div class="portfolio-date">${new Date(photo.uploadedAt).toLocaleDateString()}</div>
+            try {
+                // Показываем загрузку
+                portfolioGrid.innerHTML = `
+                    <div class="col-span-full flex justify-center items-center py-20">
+                        <div class="loading"></div>
+                        <span class="ml-3 text-gray-600">Загрузка фотографий...</span>
                     </div>
                 `;
                 
-                photoElement.addEventListener('click', () => {
-                    openImageModal(photo.src);
+                // Получаем фотографии с сервера
+                const response = await fetch('api/portfolio-photos.js');
+                const portfolioPhotos = await response.json();
+                
+                // Фильтруем фотографии
+                let photosToShow = [];
+                if (currentFilter === 'all') {
+                    Object.values(portfolioPhotos).forEach(categoryPhotos => {
+                        photosToShow = photosToShow.concat(categoryPhotos);
+                    });
+                } else {
+                    photosToShow = portfolioPhotos[currentFilter] || [];
+                }
+                
+                // Создаем слайдшоу из первых 5 фотографий
+                const slideshowPhotos = photosToShow.slice(0, 5);
+                createSlideshow(slideshowPhotos);
+                
+                if (photosToShow.length === 0) {
+                    portfolioGrid.classList.add('hidden');
+                    emptyState.classList.remove('hidden');
+                    return;
+                }
+                
+                portfolioGrid.classList.remove('hidden');
+                emptyState.classList.add('hidden');
+                
+                // Очищаем сетку
+                portfolioGrid.innerHTML = '';
+                
+                // Добавляем фотографии с анимацией
+                photosToShow.forEach((photo, index) => {
+                    const photoElement = document.createElement('div');
+                    photoElement.className = 'portfolio-item';
+                    photoElement.style.animationDelay = `${index * 0.1}s`;
+                    photoElement.innerHTML = `
+                        <img src="${photo.src}" alt="Пример работы" class="portfolio-image">
+                        <div class="portfolio-info">
+                            <div class="portfolio-category">${photo.category === 'hair' ? 'Парикмахерские услуги' : 'Услуги маникюра'}</div>
+                            <div class="portfolio-date">${new Date(photo.uploadedAt).toLocaleDateString()}</div>
+                        </div>
+                    `;
+                    
+                    photoElement.addEventListener('click', () => {
+                        openImageModal(photo.src);
+                    });
+                    
+                    portfolioGrid.appendChild(photoElement);
+                    
+                    // Добавляем анимацию появления
+                    setTimeout(() => {
+                        photoElement.classList.add('photo-fade-in');
+                    }, index * 100);
                 });
                 
-                portfolioGrid.appendChild(photoElement);
+            } catch (error) {
+                console.error('Ошибка загрузки фотографий:', error);
                 
-                // Добавляем анимацию появления
-                setTimeout(() => {
-                    photoElement.classList.add('photo-fade-in');
-                }, index * 100);
-            });
+                // Показываем ошибку
+                portfolioGrid.innerHTML = `
+                    <div class="col-span-full text-center py-20">
+                        <i class="fas fa-exclamation-triangle text-4xl text-red-500 mb-4"></i>
+                        <h3 class="text-xl font-semibold text-gray-600 mb-2">Ошибка загрузки</h3>
+                        <p class="text-gray-500">Не удалось загрузить фотографии. Попробуйте обновить страницу.</p>
+                    </div>
+                `;
+            }
         }
 
         // Модальное окно для просмотра изображений
@@ -808,6 +961,7 @@
         // Обработчики для слайдшоу
         document.addEventListener('DOMContentLoaded', () => {
             createMarqueeFilters();
+            setupMarqueeDrag();
             loadPortfolioPhotos();
             
             // Остановка слайдшоу при наведении
@@ -818,12 +972,10 @@
             }
         });
 
-        // Обновляем фотографии при изменении localStorage
-        window.addEventListener('storage', (e) => {
-            if (e.key === 'portfolioPhotos') {
-                loadPortfolioPhotos();
-            }
-        });
+        // Обновляем фотографии каждые 30 секунд для синхронизации
+        setInterval(() => {
+            loadPortfolioPhotos();
+        }, 30000);
 
         // Обработка клавиш для слайдшоу
         document.addEventListener('keydown', (e) => {
@@ -832,6 +984,14 @@
             } else if (e.key === 'ArrowRight') {
                 nextSlide();
             }
+        });
+
+        // Обработка изменения размера окна для бегущей строки
+        window.addEventListener('resize', () => {
+            if (marqueeAnimation) {
+                cancelAnimationFrame(marqueeAnimation);
+            }
+            setTimeout(startMarqueeAnimation, 100);
         });
     </script>
 </body>
