@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест изображений</title>
+    <style>
+        .test-image {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            margin: 10px;
+            border: 2px solid #ccc;
+        }
+        .error {
+            border-color: red;
+            background-color: #ffe6e6;
+        }
+        .success {
+            border-color: green;
+            background-color: #e6ffe6;
+        }
+    </style>
+</head>
+<body>
+    <h1>Тест загрузки изображений</h1>
+    
+    <h2>Из папки primer:</h2>
+    <img src="images/portfolio/primer/маникюрIMG_9508.JPG" class="test-image" alt="Тест 1" onload="this.classList.add('success')" onerror="this.classList.add('error'); console.error('Ошибка:', this.src);">
+    <img src="images/portfolio/primer/маникюрIMG_9515.JPG" class="test-image" alt="Тест 2" onload="this.classList.add('success')" onerror="this.classList.add('error'); console.error('Ошибка:', this.src);">
+    <img src="images/portfolio/primer/маникюрIMG_9518.JPG" class="test-image" alt="Тест 3" onload="this.classList.add('success')" onerror="this.classList.add('error'); console.error('Ошибка:', this.src);">
+    
+    <h2>Из папки manicure:</h2>
+    <img src="images/portfolio/manicure/Классический маникюр.png" class="test-image" alt="Тест 4" onload="this.classList.add('success')" onerror="this.classList.add('error'); console.error('Ошибка:', this.src);">
+    <img src="images/portfolio/manicure/Комбинированный маникюр.jpg" class="test-image" alt="Тест 5" onload="this.classList.add('success')" onerror="this.classList.add('error'); console.error('Ошибка:', this.src);">
+    
+    <h2>Из папки hair:</h2>
+    <img src="images/portfolio/hair/Женская стрижка.JPG" class="test-image" alt="Тест 6" onload="this.classList.add('success')" onerror="this.classList.add('error'); console.error('Ошибка:', this.src);">
+    <img src="images/portfolio/hair/Колористика волос.JPG" class="test-image" alt="Тест 7" onload="this.classList.add('success')" onerror="this.classList.add('error'); console.error('Ошибка:', this.src);">
+    
+    <h2>Из папки spa:</h2>
+    <img src="images/portfolio/spa/SPA процедуры.JPG" class="test-image" alt="Тест 8" onload="this.classList.add('success')" onerror="this.classList.add('error'); console.error('Ошибка:', this.src);">
+    
+    <script>
+        console.log('Тест изображений загружен');
+        console.log('Текущий URL:', window.location.href);
+    </script>
+</body>
+</html>

@@ -568,7 +568,7 @@
             <!-- Menu Header -->
             <div class="flex items-center justify-between p-3 border-b border-white/10">
                 <div class="flex items-center space-x-2">
-                                            <img src="../images/ui/logo.png" alt="SvetSalonPro" class="w-8 h-8 rounded-full">
+                                            <img src="images/ui/logo.png" alt="SvetSalonPro" class="w-8 h-8 rounded-full">
                     <div>
                         <h2 class="text-base font-semibold text-gray-800">SvetSalonPro</h2>
                         <p class="text-xs text-gray-600">Салон красоты</p>
@@ -949,8 +949,9 @@
             const marqueeContent = document.getElementById('marqueeContent');
             const filters = [
                 { text: 'Все работы', filter: 'all' },
-                { text: 'Парикмахерские услуги', filter: 'hair' },
-                { text: 'Услуги маникюра', filter: 'manicure' }
+                { text: 'Стрижки', filter: 'стрижки' },
+                { text: 'Маникюр', filter: 'маникюр' },
+                { text: 'SPA', filter: 'spa' }
             ];
             
             // Создаем фильтры (без дублирования)
@@ -1134,7 +1135,7 @@
                     <img src="${photo.src}" alt="Пример работы" class="slideshow-image">
                     <div class="slideshow-overlay">
                         <div class="slideshow-title">Пример работы</div>
-                        <div class="slideshow-category">${photo.category === 'hair' ? 'Парикмахерские услуги' : 'Услуги маникюра'}</div>
+                        <div class="slideshow-category">${photo.category === 'стрижки' ? 'Стрижки' : 'Маникюр'}</div>
                     </div>
                 `;
                 container.appendChild(slide);
@@ -1212,97 +1213,217 @@
         }
 
         // Загрузка фотографий портфолио
-        async function loadPortfolioPhotos() {
+        function loadPortfolioPhotos() {
             console.log('Функция loadPortfolioPhotos вызвана');
             const portfolioGrid = document.getElementById('portfolioGrid');
             const emptyState = document.getElementById('emptyState');
             console.log('portfolioGrid найден:', !!portfolioGrid);
             console.log('emptyState найден:', !!emptyState);
             
-            try {
-                // Показываем загрузку
-                portfolioGrid.innerHTML = `
-                    <div class="col-span-full flex justify-center items-center py-20">
-                        <div class="loading"></div>
-                        <span class="ml-3 text-gray-600">Загрузка фотографий...</span>
+            // Проверяем доступность изображений
+            console.log('Проверяем доступность изображений...');
+            
+            // Статические фотографии из всех папок портфолио
+            const portfolioPhotos = [
+                // Проверяем каждое изображение
+                // Фотографии из папки primer (маникюр)
+                {
+                    id: 1,
+                    category: 'маникюр',
+                    src: '../../images/portfolio/primer/маникюрIMG_9508.JPG',
+                    fileName: 'маникюрIMG_9508.JPG',
+                    description: 'Пример работы - Маникюр',
+                    uploadDate: '2025-08-25'
+                },
+                {
+                    id: 2,
+                    category: 'маникюр',
+                    src: '../../images/portfolio/primer/маникюрIMG_9515.JPG',
+                    fileName: 'маникюрIMG_9515.JPG',
+                    description: 'Пример работы - Маникюр',
+                    uploadDate: '2025-08-25'
+                },
+                {
+                    id: 3,
+                    category: 'маникюр',
+                    src: '../../images/portfolio/primer/маникюрIMG_9518.JPG',
+                    fileName: 'маникюрIMG_9518.JPG',
+                    description: 'Пример работы - Маникюр',
+                    uploadDate: '2025-08-25'
+                },
+                // Фотографии из папки manicure
+                {
+                    id: 4,
+                    category: 'маникюр',
+                    src: '../../images/portfolio/manicure/classic-manicure.png',
+                    fileName: 'Классический маникюр.png',
+                    description: 'Классический маникюр',
+                    uploadDate: '2025-08-25'
+                },
+                {
+                    id: 5,
+                    category: 'маникюр',
+                    src: '../../images/portfolio/manicure/Комбинированный маникюр.jpg',
+                    fileName: 'Комбинированный маникюр.jpg',
+                    description: 'Комбинированный маникюр',
+                    uploadDate: '2025-08-25'
+                },
+                {
+                    id: 6,
+                    category: 'маникюр',
+                    src: '../../images/portfolio/manicure/Ремонт одного ногтя.jpg',
+                    fileName: 'Ремонт одного ногтя.jpg',
+                    description: 'Ремонт одного ногтя',
+                    uploadDate: '2025-08-25'
+                },
+                {
+                    id: 7,
+                    category: 'маникюр',
+                    src: '../../images/portfolio/manicure/Снятие покрытия.jpeg',
+                    fileName: 'Снятие покрытия.jpeg',
+                    description: 'Снятие покрытия',
+                    uploadDate: '2025-08-25'
+                },
+                {
+                    id: 8,
+                    category: 'маникюр',
+                    src: '../../images/portfolio/manicure/Укрепление гелем 00.37.43.JPG',
+                    fileName: 'Укрепление гелем 00.37.43.JPG',
+                    description: 'Укрепление гелем',
+                    uploadDate: '2025-08-25'
+                },
+                // Фотографии из папки hair (стрижки)
+                {
+                    id: 9,
+                    category: 'стрижки',
+                    src: '../../images/portfolio/hair/Женская стрижка.JPG',
+                    fileName: 'Женская стрижка.JPG',
+                    description: 'Женская стрижка',
+                    uploadDate: '2025-08-25'
+                },
+                {
+                    id: 10,
+                    category: 'стрижки',
+                    src: '../../images/portfolio/hair/Колористика волос.JPG',
+                    fileName: 'Колористика волос.JPG',
+                    description: 'Колористика волос',
+                    uploadDate: '2025-08-25'
+                },
+                {
+                    id: 11,
+                    category: 'стрижки',
+                    src: '../../images/portfolio/hair/Ламинирования волос.JPG',
+                    fileName: 'Ламинирования волос.JPG',
+                    description: 'Ламинирование волос',
+                    uploadDate: '2025-08-25'
+                },
+                {
+                    id: 12,
+                    category: 'стрижки',
+                    src: '../../images/portfolio/hair/Мелирование волос.JPG',
+                    fileName: 'Мелирование волос.JPG',
+                    description: 'Мелирование волос',
+                    uploadDate: '2025-08-25'
+                },
+                {
+                    id: 13,
+                    category: 'стрижки',
+                    src: '../../images/portfolio/hair/Мужская стрижка под машинку.JPG',
+                    fileName: 'Мужская стрижка под машинку.JPG',
+                    description: 'Мужская стрижка под машинку',
+                    uploadDate: '2025-08-25'
+                },
+                {
+                    id: 14,
+                    category: 'стрижки',
+                    src: '../../images/portfolio/hair/Мужская стрижка.JPG',
+                    fileName: 'Мужская стрижка.JPG',
+                    description: 'Мужская стрижка',
+                    uploadDate: '2025-08-25'
+                },
+                {
+                    id: 15,
+                    category: 'стрижки',
+                    src: '../../images/portfolio/hair/Окрашивание волос.JPG',
+                    fileName: 'Окрашивание волос.JPG',
+                    description: 'Окрашивание волос',
+                    uploadDate: '2025-08-25'
+                },
+                // Фотографии из папки spa
+                {
+                    id: 16,
+                    category: 'spa',
+                    src: '../../images/portfolio/spa/SPA процедуры.JPG',
+                    fileName: 'SPA процедуры.JPG',
+                    description: 'SPA процедуры',
+                    uploadDate: '2025-08-25'
+                }
+            ];
+            
+            // Фильтруем фотографии
+            let photosToShow = [];
+            if (currentFilter === 'all') {
+                photosToShow = portfolioPhotos;
+            } else {
+                photosToShow = portfolioPhotos.filter(photo => photo.category === currentFilter);
+            }
+            console.log('Текущий фильтр:', currentFilter);
+            console.log('Показано фотографий:', photosToShow.length);
+            
+            // Проверяем доступность каждого изображения
+            photosToShow.forEach((photo, index) => {
+                const img = new Image();
+                img.onload = () => {
+                    console.log(`✅ Изображение ${index + 1} загружено:`, photo.src);
+                };
+                img.onerror = () => {
+                    console.error(`❌ Ошибка загрузки изображения ${index + 1}:`, photo.src);
+                };
+                img.src = photo.src;
+            });
+            
+            // Создаем слайдшоу из первых 5 фотографий
+            const slideshowPhotos = photosToShow.slice(0, 5);
+            createSlideshow(slideshowPhotos);
+            
+            if (photosToShow.length === 0) {
+                portfolioGrid.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                return;
+            }
+            
+            portfolioGrid.classList.remove('hidden');
+            emptyState.classList.add('hidden');
+            
+            // Очищаем сетку
+            portfolioGrid.innerHTML = '';
+            
+            // Добавляем фотографии с анимацией
+            photosToShow.forEach((photo, index) => {
+                const photoElement = document.createElement('div');
+                photoElement.className = 'portfolio-item';
+                photoElement.style.animationDelay = `${index * 0.1}s`;
+                photoElement.innerHTML = `
+                    <img src="${photo.src}" alt="Пример работы" class="portfolio-image" 
+                         onerror="console.error('Ошибка загрузки изображения:', this.src); this.style.display='none';"
+                         onload="console.log('Изображение загружено:', this.src);">
+                    <div class="portfolio-info">
+                        <div class="portfolio-category">${photo.category === 'стрижки' ? 'Стрижки' : photo.category === 'маникюр' ? 'Маникюр' : photo.category === 'spa' ? 'SPA' : 'Другие услуги'}</div>
+                        <div class="portfolio-date">${photo.uploadDate}</div>
                     </div>
                 `;
                 
-                // Получаем фотографии из существующего файла
-                let portfolioPhotos = [];
-                try {
-                    const response = await fetch('../data/existing-photos.json');
-                    portfolioPhotos = await response.json();
-                    console.log('Загружено фотографий:', portfolioPhotos.length);
-                } catch (error) {
-                    console.error('Failed to load existing photos:', error);
-                    // Fallback to localStorage
-                    portfolioPhotos = JSON.parse(localStorage.getItem('portfolioPhotos') || '[]');
-                }
-                
-                // Фильтруем фотографии
-                let photosToShow = [];
-                if (currentFilter === 'all') {
-                    photosToShow = portfolioPhotos;
-                } else {
-                    photosToShow = portfolioPhotos.filter(photo => photo.category === currentFilter);
-                }
-                console.log('Текущий фильтр:', currentFilter);
-                console.log('Показано фотографий:', photosToShow.length);
-                
-                // Создаем слайдшоу из первых 5 фотографий
-                const slideshowPhotos = photosToShow.slice(0, 5);
-                createSlideshow(slideshowPhotos);
-                
-                if (photosToShow.length === 0) {
-                    portfolioGrid.classList.add('hidden');
-                    emptyState.classList.remove('hidden');
-                    return;
-                }
-                
-                portfolioGrid.classList.remove('hidden');
-                emptyState.classList.add('hidden');
-                
-                // Очищаем сетку
-                portfolioGrid.innerHTML = '';
-                
-                // Добавляем фотографии с анимацией
-                photosToShow.forEach((photo, index) => {
-                    const photoElement = document.createElement('div');
-                    photoElement.className = 'portfolio-item';
-                    photoElement.style.animationDelay = `${index * 0.1}s`;
-                    photoElement.innerHTML = `
-                        <img src="${photo.src}" alt="Пример работы" class="portfolio-image">
-                        <div class="portfolio-info">
-                            <div class="portfolio-category">${photo.category === 'hair' ? 'Парикмахерские услуги' : photo.category === 'manicure' ? 'Услуги маникюра' : photo.category === 'spa' ? 'SPA процедуры' : 'Другие услуги'}</div>
-                            <div class="portfolio-date">${new Date(photo.uploadDate).toLocaleDateString()}</div>
-                        </div>
-                    `;
-                    
-                    photoElement.addEventListener('click', () => {
-                        openImageModal(photo.src);
-                    });
-                    
-                    portfolioGrid.appendChild(photoElement);
-                    
-                    // Добавляем анимацию появления
-                    setTimeout(() => {
-                        photoElement.classList.add('photo-fade-in');
-                    }, index * 100);
+                photoElement.addEventListener('click', () => {
+                    openImageModal(photo.src);
                 });
                 
-            } catch (error) {
-                console.error('Ошибка загрузки фотографий:', error);
+                portfolioGrid.appendChild(photoElement);
                 
-                // Показываем ошибку
-                portfolioGrid.innerHTML = `
-                    <div class="col-span-full text-center py-20">
-                        <i class="fas fa-exclamation-triangle text-4xl text-red-500 mb-4"></i>
-                        <h3 class="text-xl font-semibold text-gray-600 mb-2">Ошибка загрузки</h3>
-                        <p class="text-gray-500">Не удалось загрузить фотографии. Попробуйте обновить страницу.</p>
-                    </div>
-                `;
-            }
+                // Добавляем анимацию появления
+                setTimeout(() => {
+                    photoElement.classList.add('photo-fade-in');
+                }, index * 100);
+            });
         }
 
         // Модальное окно для просмотра изображений
