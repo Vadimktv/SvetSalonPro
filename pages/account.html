@@ -2522,6 +2522,7 @@
         // iOS Style Menu Handlers for account page
         document.addEventListener('DOMContentLoaded', function() {
             console.log('DOM Content Loaded - Setting up menu handlers');
+            console.log('Setting up all event handlers...');
             
             let isMenuOpen = false;
             const iosMenuBtn = document.getElementById('iosMenuBtn');
@@ -2685,20 +2686,38 @@
             
             // Booking Modal Controls
             const newBookingBtn = document.getElementById('newBookingBtn');
+            console.log('newBookingBtn found:', !!newBookingBtn);
             if (newBookingBtn) {
                 newBookingBtn.addEventListener('click', () => {
-                    document.getElementById('bookingModal').classList.remove('hidden');
+                    console.log('newBookingBtn clicked!');
+                    const bookingModal = document.getElementById('bookingModal');
+                    const categorySelection = document.getElementById('categorySelection');
+                    const hairServicesGrid = document.getElementById('hairServicesGrid');
+                    const manicureServicesGrid = document.getElementById('manicureServicesGrid');
+                    const bookingFormContainer = document.getElementById('bookingFormContainer');
+                    
+                    console.log('Modal elements:', {
+                        bookingModal: !!bookingModal,
+                        categorySelection: !!categorySelection,
+                        hairServicesGrid: !!hairServicesGrid,
+                        manicureServicesGrid: !!manicureServicesGrid,
+                        bookingFormContainer: !!bookingFormContainer
+                    });
+                    
+                    bookingModal.classList.remove('hidden');
                     // Показываем категории, скрываем все остальное
-                    document.getElementById('categorySelection').classList.remove('hidden');
-                    document.getElementById('hairServicesGrid').classList.add('hidden');
-                    document.getElementById('manicureServicesGrid').classList.add('hidden');
-                    document.getElementById('bookingFormContainer').classList.add('hidden');
+                    categorySelection.classList.remove('hidden');
+                    hairServicesGrid.classList.add('hidden');
+                    manicureServicesGrid.classList.add('hidden');
+                    bookingFormContainer.classList.add('hidden');
                 });
             }
 
             const bookFirstBtn = document.getElementById('bookFirstBtn');
+            console.log('bookFirstBtn found:', !!bookFirstBtn);
             if (bookFirstBtn) {
                 bookFirstBtn.addEventListener('click', () => {
+                    console.log('bookFirstBtn clicked!');
                     document.getElementById('bookingModal').classList.remove('hidden');
                     // Показываем категории, скрываем все остальное
                     document.getElementById('categorySelection').classList.remove('hidden');
@@ -2709,8 +2728,10 @@
             }
 
             const closeModalBtn = document.getElementById('closeModalBtn');
+            console.log('closeModalBtn found:', !!closeModalBtn);
             if (closeModalBtn) {
                 closeModalBtn.addEventListener('click', () => {
+                    console.log('closeModalBtn clicked!');
                     // Убираем выделение со всех карточек
                     document.querySelectorAll('.service-card').forEach(c => {
                         c.classList.remove('selected');
@@ -2787,11 +2808,19 @@
             
             // Edit Profile Modal
             const editProfileBtn = document.getElementById('editProfileBtn');
+            console.log('editProfileBtn found:', !!editProfileBtn);
             if (editProfileBtn) {
                 editProfileBtn.addEventListener('click', () => {
+                    console.log('editProfileBtn clicked!');
                     const modal = document.getElementById('editProfileModal');
                     const fullNameInput = document.getElementById('editFullName');
                     const phoneInput = document.getElementById('editPhone');
+                    
+                    console.log('Modal elements:', {
+                        modal: !!modal,
+                        fullNameInput: !!fullNameInput,
+                        phoneInput: !!phoneInput
+                    });
                     
                     // Fill current values
                     fullNameInput.value = document.getElementById('userName').textContent;
@@ -2803,16 +2832,20 @@
 
             // Close Edit Profile Modal
             const closeEditModalBtn = document.getElementById('closeEditModalBtn');
+            console.log('closeEditModalBtn found:', !!closeEditModalBtn);
             if (closeEditModalBtn) {
                 closeEditModalBtn.addEventListener('click', () => {
+                    console.log('closeEditModalBtn clicked!');
                     document.getElementById('editProfileModal').classList.add('hidden');
                 });
             }
 
             // Cancel Edit Profile
             const cancelEditBtn = document.getElementById('cancelEditBtn');
+            console.log('cancelEditBtn found:', !!cancelEditBtn);
             if (cancelEditBtn) {
                 cancelEditBtn.addEventListener('click', () => {
+                    console.log('cancelEditBtn clicked!');
                     document.getElementById('editProfileModal').classList.add('hidden');
                 });
             }
@@ -2856,8 +2889,10 @@
 
             // Handle Edit Profile Form
             const editProfileForm = document.getElementById('editProfileForm');
+            console.log('editProfileForm found:', !!editProfileForm);
             if (editProfileForm) {
                 editProfileForm.addEventListener('submit', async (e) => {
+                    console.log('editProfileForm submitted!');
                     e.preventDefault();
                     
                     const fullName = document.getElementById('editFullName').value;
@@ -3011,6 +3046,11 @@
             // Обработчики для кнопок администратора
             const adminBtn = document.getElementById('adminPanelBtn');
             const mobileAdminBtn = document.getElementById('mobileAdminPanelBtn');
+            
+            console.log('Admin buttons found:', {
+                adminBtn: !!adminBtn,
+                mobileAdminBtn: !!mobileAdminBtn
+            });
             
             if (adminBtn) {
                 adminBtn.addEventListener('click', openAdminModal);

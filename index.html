@@ -2642,9 +2642,15 @@
 
             // Инициализация административных функций
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('Admin functions initialization...');
             // Обработчики для кнопок администратора
             const adminBtn = document.getElementById('adminPanelBtn');
             const mobileAdminBtn = document.getElementById('mobileAdminPanelBtn');
+            
+            console.log('Admin buttons found:', {
+                adminBtn: !!adminBtn,
+                mobileAdminBtn: !!mobileAdminBtn
+            });
             
             if (adminBtn) {
                 adminBtn.addEventListener('click', openAdminModal);
