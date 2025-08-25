@@ -201,40 +201,7 @@
             background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
         }
 
-        /* SMS Code Input Styles */
-        #smsCode1, #smsCode2, #smsCode3, #smsCode4 {
-            border: 2px solid #e5e7eb;
-            border-radius: 8px;
-            font-size: 1.25rem;
-            font-weight: bold;
-            color: #374151;
-            background: white;
-            transition: all 0.3s ease;
-        }
 
-        #smsCode1:focus, #smsCode2:focus, #smsCode3:focus, #smsCode4:focus {
-            border-color: #ec4899;
-            box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
-            outline: none;
-        }
-
-        #smsCode1.filled, #smsCode2.filled, #smsCode3.filled, #smsCode4.filled {
-            border-color: #10b981;
-            background: #f0fdf4;
-        }
-
-        /* SMS Code Animation */
-        @keyframes codeShake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-        }
-
-        .code-error {
-            animation: codeShake 0.5s ease-in-out;
-            border-color: #ef4444 !important;
-            background: #fef2f2 !important;
-        }
             border-left-color: #f59e0b;
             background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
         }
@@ -756,37 +723,13 @@
                         </div>
                         
                         <button type="submit" id="loginBtn" class="btn-primary w-full py-3 px-6 rounded-lg text-white font-semibold">
-                            <span id="loginBtnText">Отправить SMS-код</span>
+                            <span id="loginBtnText">Отправить ссылку</span>
                             <span id="loginBtnLoading" class="loading hidden"></span>
                         </button>
                     
                     <div class="mt-6 text-sm text-gray-600">
-                        <p>Мы отправим SMS-код на ваш email</p>
+                        <p>Мы отправим ссылку для входа на ваш email</p>
                     </div>
-                    </form>
-
-                    <!-- SMS Code Form (Hidden by default) -->
-                    <form id="smsForm" class="space-y-6 hidden">
-                        <div>
-                            <label for="smsCode" class="block text-gray-700 font-medium mb-3 text-left">SMS-код</label>
-                            <div class="flex space-x-2 justify-center">
-                                <input type="text" id="smsCode1" maxlength="1" class="form-input w-12 h-12 text-center text-xl font-bold" pattern="[0-9]">
-                                <input type="text" id="smsCode2" maxlength="1" class="form-input w-12 h-12 text-center text-xl font-bold" pattern="[0-9]">
-                                <input type="text" id="smsCode3" maxlength="1" class="form-input w-12 h-12 text-center text-xl font-bold" pattern="[0-9]">
-                                <input type="text" id="smsCode4" maxlength="1" class="form-input w-12 h-12 text-center text-xl font-bold" pattern="[0-9]">
-                            </div>
-                        </div>
-                        
-                        <button type="submit" id="smsBtn" class="btn-primary w-full py-3 px-6 rounded-lg text-white font-semibold">
-                            <span id="smsBtnText">Подтвердить код</span>
-                            <span id="smsBtnLoading" class="loading hidden"></span>
-                        </button>
-                        
-                        <div class="text-center">
-                            <button type="button" id="resendBtn" class="text-pink-600 hover:text-pink-700 text-sm">
-                                Отправить код повторно
-                            </button>
-                        </div>
                     </form>
                     
 
@@ -1621,8 +1564,6 @@
             console.log('Настраиваем форму входа...');
             
             const loginForm = document.getElementById('loginForm');
-            const smsForm = document.getElementById('smsForm');
-            const resendBtn = document.getElementById('resendBtn');
             
             if (loginForm) {
                 loginForm.addEventListener('submit', async (e) => {
@@ -1635,41 +1576,47 @@
                     const loginBtnLoading = document.getElementById('loginBtnLoading');
                     
                     try {
-                        console.log('Отправляем SMS-код на email:', email);
+                        console.log('Отправляем ссылку на email:', email);
                         
                         // Show loading state
                         loginBtn.disabled = true;
                         loginBtnText.classList.add('hidden');
                         loginBtnLoading.classList.remove('hidden');
                         
-                        // Имитация отправки SMS-кода (2 секунды)
-                        await new Promise(resolve => setTimeout(resolve, 2000));
+                        // Имитация отправки email (3 секунды)
+                        await new Promise(resolve => setTimeout(resolve, 3000));
                         
-                        // Генерируем 4-значный код
-                        const smsCode = Math.floor(1000 + Math.random() * 9000).toString();
+                        // Создаем простого пользователя для демонстрации
+                        const mockUser = {
+                            id: 'user_' + Date.now(),
+                            email: email,
+                            created_at: new Date().toISOString(),
+                            user_metadata: {
+                                name: email.split('@')[0],
+                                phone: '+7 (___) ___-__-__'
+                            }
+                        };
                         
-                        // Сохраняем код и email для проверки
-                        localStorage.setItem('smsCode', smsCode);
-                        localStorage.setItem('smsEmail', email);
-                        localStorage.setItem('smsTimestamp', Date.now().toString());
+                        // Сохраняем пользователя
+                        currentUser = mockUser;
+                        localStorage.setItem('currentUser', JSON.stringify(mockUser));
                         
-                        // Показываем форму ввода кода
-                        loginForm.classList.add('hidden');
-                        smsForm.classList.remove('hidden');
+                        // Отправляем событие о входе
+                        window.dispatchEvent(new CustomEvent('userLoggedIn', { detail: mockUser }));
                         
-                        // Фокусируемся на первом поле кода
-                        document.getElementById('smsCode1').focus();
+                        // Показываем профиль
+                        showProfile();
+                        showUserDataImmediately(mockUser);
+                        loadUserProfile();
                         
-                        // Показываем код в консоли для тестирования
-                        console.log('SMS код для тестирования:', smsCode);
-                        
-                        showNotification('success', 'SMS-код отправлен!', `Код отправлен на ваш email. Для тестирования код: ${smsCode}`);
+                        // Show success message
+                        showNotification('success', 'Вход выполнен!', 'Добро пожаловать в личный кабинет!');
                         
                     } catch (error) {
-                        console.error('SMS auth error:', error);
-                        showNotification('error', 'Ошибка отправки SMS-кода', error.message);
+                        console.error('Auth error:', error);
+                        showNotification('error', 'Ошибка входа', error.message);
                     } finally {
-                        // Reset loading state
+                        // Reset button state
                         loginBtn.disabled = false;
                         loginBtnText.classList.remove('hidden');
                         loginBtnLoading.classList.add('hidden');
@@ -1677,206 +1624,10 @@
                 });
             }
             
-            // Настройка формы SMS-кода
-            if (smsForm) {
-                smsForm.addEventListener('submit', async (e) => {
-                    e.preventDefault();
-                    console.log('SMS форма отправлена!');
-                    
-                    const smsBtn = document.getElementById('smsBtn');
-                    const smsBtnText = document.getElementById('smsBtnText');
-                    const smsBtnLoading = document.getElementById('smsBtnLoading');
-                    
-                    try {
-                        // Получаем введенный код
-                        const code1 = document.getElementById('smsCode1').value;
-                        const code2 = document.getElementById('smsCode2').value;
-                        const code3 = document.getElementById('smsCode3').value;
-                        const code4 = document.getElementById('smsCode4').value;
-                        
-                        const enteredCode = code1 + code2 + code3 + code4;
-                        const savedCode = localStorage.getItem('smsCode');
-                        const savedEmail = localStorage.getItem('smsEmail');
-                        const savedTimestamp = localStorage.getItem('smsTimestamp');
-                        
-                        if (!savedEmail || !savedCode) {
-                            throw new Error('Данные не найдены. Попробуйте заново.');
-                        }
-                        
-                        // Проверяем время жизни кода (10 минут)
-                        const now = Date.now();
-                        const codeAge = now - parseInt(savedTimestamp);
-                        if (codeAge > 10 * 60 * 1000) {
-                            throw new Error('Код истек. Запросите новый код.');
-                        }
-                        
-                        // Show loading state
-                        smsBtn.disabled = true;
-                        smsBtnText.classList.add('hidden');
-                        smsBtnLoading.classList.remove('hidden');
-                        
-                        // Проверяем код
-                        if (enteredCode !== savedCode) {
-                            // Показываем ошибку
-                            document.querySelectorAll('#smsCode1, #smsCode2, #smsCode3, #smsCode4').forEach(input => {
-                                input.classList.add('code-error');
-                                setTimeout(() => input.classList.remove('code-error'), 500);
-                            });
-                            throw new Error('Неверный код. Попробуйте еще раз.');
-                        }
-                        
-                        // Код верный - создаем пользователя
-                        const user = {
-                            id: 'user_' + Date.now(),
-                            email: savedEmail,
-                            created_at: new Date().toISOString(),
-                            user_metadata: {
-                                name: savedEmail.split('@')[0],
-                                phone: '+7 (___) ___-__-__'
-                            }
-                        };
-                        
-                        // Сохраняем пользователя
-                        currentUser = user;
-                        localStorage.setItem('currentUser', JSON.stringify(user));
-                        
-                        // Очищаем SMS данные
-                        localStorage.removeItem('smsCode');
-                        localStorage.removeItem('smsEmail');
-                        localStorage.removeItem('smsTimestamp');
-                        
-                        // Отправляем событие о входе
-                        window.dispatchEvent(new CustomEvent('userLoggedIn', { detail: user }));
-                        
-                        // Показываем профиль
-                        showProfile();
-                        showUserDataImmediately(user);
-                        loadUserProfile();
-                        
-                        showNotification('success', 'Вход выполнен!', 'Добро пожаловать в личный кабинет!');
-                        
-                    } catch (error) {
-                        console.error('SMS verification error:', error);
-                        showNotification('error', 'Ошибка проверки кода', error.message);
-                    } finally {
-                        // Reset loading state
-                        smsBtn.disabled = false;
-                        smsBtnText.classList.remove('hidden');
-                        smsBtnLoading.classList.add('hidden');
-                    }
-                });
-            }
-            
-            // Настройка кнопки повторной отправки
-            if (resendBtn) {
-                resendBtn.addEventListener('click', async () => {
-                    const email = localStorage.getItem('smsEmail');
-                    if (!email) {
-                        showNotification('error', 'Ошибка', 'Email не найден. Попробуйте заново.');
-                        return;
-                    }
-                    
-                    try {
-                        // Генерируем новый код
-                        const newSmsCode = Math.floor(1000 + Math.random() * 9000).toString();
-                        
-                        // Обновляем сохраненные данные
-                        localStorage.setItem('smsCode', newSmsCode);
-                        localStorage.setItem('smsTimestamp', Date.now().toString());
-                        
-                        // Показываем новый код в консоли для тестирования
-                        console.log('Новый SMS код для тестирования:', newSmsCode);
-                        
-                        showNotification('success', 'Новый код отправлен!', `Новый код отправлен на ваш email. Для тестирования код: ${newSmsCode}`);
-                        
-                        // Очищаем поля кода
-                        document.querySelectorAll('#smsCode1, #smsCode2, #smsCode3, #smsCode4').forEach(input => {
-                            input.value = '';
-                            input.classList.remove('code-error');
-                        });
-                        
-                        // Фокусируемся на первом поле
-                        document.getElementById('smsCode1').focus();
-                        
-                    } catch (error) {
-                        console.error('Resend error:', error);
-                        showNotification('error', 'Ошибка отправки', error.message);
-                    }
-                });
-            }
-            
-            // Настройка автоматического перехода между полями кода
-            setupSmsCodeInputs();
-            
             console.log('Форма входа настроена успешно!');
         }
 
-        // Настройка автоматического перехода между полями SMS-кода
-        function setupSmsCodeInputs() {
-            const inputs = [
-                document.getElementById('smsCode1'),
-                document.getElementById('smsCode2'),
-                document.getElementById('smsCode3'),
-                document.getElementById('smsCode4')
-            ];
 
-            inputs.forEach((input, index) => {
-                if (!input) return;
-
-                // Обработка ввода
-                input.addEventListener('input', (e) => {
-                    const value = e.target.value;
-                    
-                    // Ограничиваем только цифры
-                    if (!/^\d*$/.test(value)) {
-                        e.target.value = value.replace(/\D/g, '');
-                        return;
-                    }
-
-                    // Если введена цифра, переходим к следующему полю
-                    if (value.length === 1 && index < inputs.length - 1) {
-                        inputs[index + 1].focus();
-                    }
-
-                    // Добавляем класс filled для стилизации
-                    if (value.length > 0) {
-                        input.classList.add('filled');
-                    } else {
-                        input.classList.remove('filled');
-                    }
-                });
-
-                // Обработка удаления
-                input.addEventListener('keydown', (e) => {
-                    if (e.key === 'Backspace' && e.target.value === '' && index > 0) {
-                        inputs[index - 1].focus();
-                    }
-                });
-
-                // Обработка вставки
-                input.addEventListener('paste', (e) => {
-                    e.preventDefault();
-                    const pastedData = e.clipboardData.getData('text');
-                    const numbers = pastedData.replace(/\D/g, '').split('').slice(0, 4);
-                    
-                    inputs.forEach((input, i) => {
-                        if (numbers[i]) {
-                            input.value = numbers[i];
-                            input.classList.add('filled');
-                        } else {
-                            input.value = '';
-                            input.classList.remove('filled');
-                        }
-                    });
-
-                    // Фокусируемся на последнем заполненном поле или первом пустом
-                    const lastFilledIndex = numbers.length - 1;
-                    if (lastFilledIndex < inputs.length - 1) {
-                        inputs[lastFilledIndex + 1].focus();
-                    }
-                });
-            });
-        }
         
 
 
