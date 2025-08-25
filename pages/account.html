@@ -2591,6 +2591,20 @@
             
             // Setup all event handlers after DOM is loaded
             setupAllEventHandlers();
+            
+            // Test menu functionality
+            console.log('Testing menu functionality...');
+            const testBtn = document.getElementById('iosMenuBtn');
+            if (testBtn) {
+                console.log('Menu button found, testing click...');
+                // Simulate a click after a short delay
+                setTimeout(() => {
+                    console.log('Simulating menu button click...');
+                    testBtn.click();
+                }, 1000);
+            } else {
+                console.error('Menu button not found for testing!');
+            }
         });
 
 
@@ -3192,8 +3206,10 @@
 
         // Open menu function
         function openMenu() {
+            console.log('openMenu called, isMenuOpen:', isMenuOpen);
             if (isMenuOpen) return;
             
+            console.log('Opening menu...');
             triggerHapticFeedback();
             isMenuOpen = true;
             sideMenu.classList.add('open');
@@ -3203,18 +3219,22 @@
             setTimeout(() => {
                 sideMenu.style.pointerEvents = 'all';
             }, 50);
+            console.log('Menu opened successfully');
         }
 
         // Close menu function
         function closeMenu() {
+            console.log('closeMenu called, isMenuOpen:', isMenuOpen);
             if (!isMenuOpen) return;
             
+            console.log('Closing menu...');
             triggerHapticFeedback();
             isMenuOpen = false;
             sideMenu.classList.remove('open');
             document.body.classList.remove('menu-open');
             iosMenuBtn.classList.remove('active');
             sideMenu.style.pointerEvents = 'none';
+            console.log('Menu closed successfully');
         }
 
         // Menu item click handlers
@@ -3259,23 +3279,37 @@
 
         // Initialize menu functionality
         function initializeMenu() {
+            console.log('Initializing menu...');
             sideMenu = document.getElementById('sideMenu');
             iosMenuBtn = document.getElementById('iosMenuBtn');
             closeMenuBtn = document.getElementById('closeMenuBtn');
             menuBackdrop = document.getElementById('menuBackdrop');
 
+            console.log('Menu elements found:', {
+                sideMenu: !!sideMenu,
+                iosMenuBtn: !!iosMenuBtn,
+                closeMenuBtn: !!closeMenuBtn,
+                menuBackdrop: !!menuBackdrop
+            });
+
             // Event listeners
             if (iosMenuBtn) {
+                console.log('Adding click listener to iosMenuBtn');
                 iosMenuBtn.addEventListener('click', (e) => {
+                    console.log('iosMenuBtn clicked!');
                     e.preventDefault();
                     e.stopPropagation();
                     
                     if (isMenuOpen) {
+                        console.log('Closing menu...');
                         closeMenu();
                     } else {
+                        console.log('Opening menu...');
                         openMenu();
                     }
                 });
+            } else {
+                console.error('iosMenuBtn not found!');
             }
 
             if (closeMenuBtn) {
@@ -3310,7 +3344,9 @@
             console.log('Setting up all event handlers...');
             
             // Initialize menu functionality
+            console.log('Calling initializeMenu...');
             initializeMenu();
+            console.log('initializeMenu completed');
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape' && isMenuOpen) {
                     closeMenu();
