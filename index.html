@@ -1009,14 +1009,7 @@
             </nav>
             <div class="flex items-center space-x-4">
                 <!-- Admin Panel Button (Hidden by default) -->
-                <button id="adminPanelBtn" class="hidden md:block text-gray-700 hover:text-red-600 transition-colors duration-200 bg-red-50 hover:bg-red-100 px-3 py-2 rounded-lg" style="display: none !important;">
-                    <div class="flex items-center space-x-2">
-                        <i class="fas fa-crown text-red-500"></i>
-                        <span class="text-sm font-medium">Админ панель</span>
-                    </div>
-                </button>
-                <!-- Mobile Admin Panel Button -->
-                <button id="mobileAdminPanelBtn" class="md:hidden text-gray-700 hover:text-red-600 transition-colors duration-200 bg-red-50 hover:bg-red-100 px-2 py-2 rounded-lg" style="display: none !important;">
+                <button id="adminPanelBtn" class="text-gray-700 hover:text-red-600 transition-colors duration-200 bg-red-50 hover:bg-red-100 px-3 py-2 rounded-lg" style="display: none !important;">
                     <i class="fas fa-crown text-red-500"></i>
                 </button>
                 <!-- Profile Icon -->
@@ -2637,19 +2630,15 @@
         return ADMIN_EMAILS.includes(email.toLowerCase());
     }
 
-    // Показать/скрыть кнопки администратора
+    // Показать/скрыть кнопку администратора
     function toggleAdminButtons(show) {
         const adminBtn = document.getElementById('adminPanelBtn');
-        const mobileAdminBtn = document.getElementById('mobileAdminPanelBtn');
         
         if (adminBtn) {
             adminBtn.style.display = show ? 'block' : 'none';
         }
-        if (mobileAdminBtn) {
-            mobileAdminBtn.style.display = show ? 'block' : 'none';
-        }
         
-        console.log('Admin buttons toggled:', show);
+        console.log('Admin button toggled:', show);
     }
 
     // Открыть административное модальное окно
@@ -2657,9 +2646,17 @@
         const modal = document.getElementById('adminModal');
         if (modal) {
             modal.classList.remove('hidden');
-            document.getElementById('adminLogin').classList.remove('hidden');
-            document.getElementById('adminPanel').classList.add('hidden');
-            document.getElementById('adminPassword').value = '';
+            
+            // Если пользователь уже администратор, показываем панель сразу
+            if (isAdmin && currentUserEmail && checkAdminPrivileges(currentUserEmail)) {
+                document.getElementById('adminLogin').classList.add('hidden');
+                document.getElementById('adminPanel').classList.remove('hidden');
+            } else {
+                // Иначе показываем форму ввода пароля
+                document.getElementById('adminLogin').classList.remove('hidden');
+                document.getElementById('adminPanel').classList.add('hidden');
+                document.getElementById('adminPassword').value = '';
+            }
         }
     }
 
@@ -2677,9 +2674,10 @@
         const correctPassword = 'SvetSalonPro2024!'; // Пароль администратора
         
         if (password === correctPassword) {
+            // Устанавливаем статус администратора
+            isAdmin = true;
             document.getElementById('adminLogin').classList.add('hidden');
             document.getElementById('adminPanel').classList.remove('hidden');
-            showNotification('Добро пожаловать в админ панель!', 'success');
         } else {
             showNotification('Неверный пароль!', 'error');
         }
@@ -2739,20 +2737,13 @@
             // Инициализация административных функций
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Admin functions initialization...');
-            // Обработчики для кнопок администратора
+            // Обработчик для кнопки администратора
             const adminBtn = document.getElementById('adminPanelBtn');
-            const mobileAdminBtn = document.getElementById('mobileAdminPanelBtn');
             
-            console.log('Admin buttons found:', {
-                adminBtn: !!adminBtn,
-                mobileAdminBtn: !!mobileAdminBtn
-            });
+            console.log('Admin button found:', !!adminBtn);
             
             if (adminBtn) {
                 adminBtn.addEventListener('click', openAdminModal);
-            }
-            if (mobileAdminBtn) {
-                mobileAdminBtn.addEventListener('click', openAdminModal);
             }
 
         // Проверяем, есть ли сохраненный пользователь
@@ -2764,7 +2755,6 @@
                 if (checkAdminPrivileges(currentUserEmail)) {
                     isAdmin = true;
                     toggleAdminButtons(true);
-                    showNotification('Добро пожаловать, администратор!', 'success');
                 }
             } catch (e) {
                 console.error('Ошибка при парсинге пользователя:', e);
@@ -2780,7 +2770,6 @@
             if (checkAdminPrivileges(currentUserEmail)) {
                 isAdmin = true;
                 toggleAdminButtons(true);
-                showNotification('Добро пожаловать, администратор!', 'success');
                 console.log('Admin privileges granted');
             } else {
                 isAdmin = false;
