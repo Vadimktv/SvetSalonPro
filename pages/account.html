@@ -1264,6 +1264,13 @@
             document.getElementById('bookingFormContainer').classList.add('hidden');
         });
 
+        document.getElementById('bookFirstBtn').addEventListener('click', () => {
+            document.getElementById('bookingModal').classList.remove('hidden');
+            // Показываем сетку услуг, скрываем форму
+            document.querySelector('.grid').style.display = 'grid';
+            document.getElementById('bookingFormContainer').classList.add('hidden');
+        });
+
         document.getElementById('closeModalBtn').addEventListener('click', () => {
             // Убираем выделение со всех карточек
             document.querySelectorAll('.service-card').forEach(c => {
