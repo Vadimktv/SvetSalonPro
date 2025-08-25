@@ -3175,54 +3175,94 @@
             });
         });
 
-        // Setup all event handlers
-        function setupAllEventHandlers() {
-            console.log('Setting up all event handlers...');
+        // Menu functionality - Global variables
+        let isMenuOpen = false;
+        let sideMenu, iosMenuBtn, closeMenuBtn, menuBackdrop;
+
+        // Haptic feedback function
+        function triggerHapticFeedback() {
+            if (navigator.vibrate) {
+                navigator.vibrate(10);
+            }
+            document.body.classList.add('haptic-feedback');
+            setTimeout(() => {
+                document.body.classList.remove('haptic-feedback');
+            }, 100);
+        }
+
+        // Open menu function
+        function openMenu() {
+            if (isMenuOpen) return;
             
-            // Menu functionality
-            let isMenuOpen = false;
-            const sideMenu = document.getElementById('sideMenu');
-            const iosMenuBtn = document.getElementById('iosMenuBtn');
-            const closeMenuBtn = document.getElementById('closeMenuBtn');
-            const menuBackdrop = document.getElementById('menuBackdrop');
+            triggerHapticFeedback();
+            isMenuOpen = true;
+            sideMenu.classList.add('open');
+            document.body.classList.add('menu-open');
+            iosMenuBtn.classList.add('active');
+            
+            setTimeout(() => {
+                sideMenu.style.pointerEvents = 'all';
+            }, 50);
+        }
 
-            // Haptic feedback function
-            function triggerHapticFeedback() {
-                if (navigator.vibrate) {
-                    navigator.vibrate(10);
-                }
-                document.body.classList.add('haptic-feedback');
-                setTimeout(() => {
-                    document.body.classList.remove('haptic-feedback');
-                }, 100);
-            }
+        // Close menu function
+        function closeMenu() {
+            if (!isMenuOpen) return;
+            
+            triggerHapticFeedback();
+            isMenuOpen = false;
+            sideMenu.classList.remove('open');
+            document.body.classList.remove('menu-open');
+            iosMenuBtn.classList.remove('active');
+            sideMenu.style.pointerEvents = 'none';
+        }
 
-            // Open menu function
-            function openMenu() {
-                if (isMenuOpen) return;
-                
-                triggerHapticFeedback();
-                isMenuOpen = true;
-                sideMenu.classList.add('open');
-                document.body.classList.add('menu-open');
-                iosMenuBtn.classList.add('active');
-                
-                setTimeout(() => {
-                    sideMenu.style.pointerEvents = 'all';
-                }, 50);
-            }
+        // Menu item click handlers
+        function setupMenuHandlers() {
+            const menuItems = document.querySelectorAll('.menu-item');
+            
+            menuItems.forEach((item, index) => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    triggerHapticFeedback();
+                    
+                    // Add bubble animation
+                    item.classList.add('bubble-animation');
+                    setTimeout(() => {
+                        item.classList.remove('bubble-animation');
+                    }, 400);
+                    
+                    // Get the href and navigate
+                    const href = item.getAttribute('href');
+                    if (href) {
+                        // Close menu immediately
+                        closeMenu();
+                        
+                        // Navigate after a short delay for haptic feedback
+                        setTimeout(() => {
+                            if (href.startsWith('#')) {
+                                // Smooth scroll to section
+                                const target = document.querySelector(href);
+                                if (target) {
+                                    target.scrollIntoView({ behavior: 'smooth' });
+                                }
+                            } else {
+                                // Navigate to page
+                                window.location.href = href;
+                            }
+                        }, 200);
+                    }
+                });
+            });
+        }
 
-            // Close menu function
-            function closeMenu() {
-                if (!isMenuOpen) return;
-                
-                triggerHapticFeedback();
-                isMenuOpen = false;
-                sideMenu.classList.remove('open');
-                document.body.classList.remove('menu-open');
-                iosMenuBtn.classList.remove('active');
-                sideMenu.style.pointerEvents = 'none';
-            }
+        // Initialize menu functionality
+        function initializeMenu() {
+            sideMenu = document.getElementById('sideMenu');
+            iosMenuBtn = document.getElementById('iosMenuBtn');
+            closeMenuBtn = document.getElementById('closeMenuBtn');
+            menuBackdrop = document.getElementById('menuBackdrop');
 
             // Event listeners
             if (iosMenuBtn) {
@@ -3254,76 +3294,6 @@
                 });
             }
 
-            // Initialize menu when DOM is ready
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', initializeMenu);
-            } else {
-                initializeMenu();
-            }
-
-            if (menuBackdrop) {
-                menuBackdrop.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    closeMenu();
-                });
-            }
-
-            // Close menu when clicking outside
-            document.addEventListener('click', (e) => {
-                if (isMenuOpen && !sideMenu.contains(e.target) && !iosMenuBtn.contains(e.target)) {
-                    closeMenu();
-                }
-            });
-
-            // Close menu on escape key
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && isMenuOpen) {
-                    closeMenu();
-                }
-            });
-
-            // Menu item click handlers
-            // Menu item click handlers
-            function setupMenuHandlers() {
-                const menuItems = document.querySelectorAll('.menu-item');
-                
-                menuItems.forEach((item, index) => {
-                    item.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        triggerHapticFeedback();
-                        
-                        // Add bubble animation
-                        item.classList.add('bubble-animation');
-                        setTimeout(() => {
-                            item.classList.remove('bubble-animation');
-                        }, 400);
-                        
-                        // Get the href and navigate
-                        const href = item.getAttribute('href');
-                        if (href) {
-                            // Close menu immediately
-                            closeMenu();
-                            
-                            // Navigate after a short delay for haptic feedback
-                            setTimeout(() => {
-                                if (href.startsWith('#')) {
-                                    // Smooth scroll to section
-                                    const target = document.querySelector(href);
-                                    if (target) {
-                                        target.scrollIntoView({ behavior: 'smooth' });
-                                    }
-                                } else {
-                                    // Navigate to page
-                                    window.location.href = href;
-                                }
-                            }, 200);
-                        }
-                    });
-                });
-            }
-
             // Keyboard event listener for Escape key
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape' && isMenuOpen) {
@@ -3331,15 +3301,23 @@
                 }
             });
 
-            // Initialize menu handlers when DOM is loaded
-            document.addEventListener('DOMContentLoaded', () => {
-                setupMenuHandlers();
+            // Setup menu handlers
+            setupMenuHandlers();
+        }
+
+        // Setup all event handlers
+        function setupAllEventHandlers() {
+            console.log('Setting up all event handlers...');
+            
+            // Initialize menu functionality
+            initializeMenu();
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && isMenuOpen) {
+                    closeMenu();
+                }
             });
 
-            // Setup menu handlers after menu is created
-            console.log('Setting up menu handlers...');
-            setupMenuHandlers();
-            console.log('Menu handlers setup completed');
+            // Booking Modal Controls
             
             // Booking Modal Controls
             const newBookingBtn = document.getElementById('newBookingBtn');
