@@ -1556,13 +1556,10 @@
             }
         }
 
-        // Initialize Supabase
+        // Initialize authentication
         async function initSupabase() {
             try {
-                console.log('=== НАЧАЛО ИНИЦИАЛИЗАЦИИ SUPABASE ===');
-                
-                // Обрабатываем токен авторизации из URL (Magic Link)
-                await handleAuthFromURL();
+                console.log('=== НАЧАЛО ИНИЦИАЛИЗАЦИИ АВТОРИЗАЦИИ ===');
                 
                 // Проверяем авторизацию при загрузке страницы
                 await checkAuthOnLoad();
@@ -1575,103 +1572,43 @@
                     });
                 }
                 
-                // Проверяем, что Supabase SDK загружен
-                console.log('Проверяем window.supabase:', typeof window.supabase);
-                console.log('Проверяем глобальную переменную supabase:', typeof supabase);
+                // Проверяем сохраненного пользователя в localStorage
+                console.log('Проверяем сохраненного пользователя...');
+                const savedUser = localStorage.getItem('currentUser');
                 
-                // Если SDK не найден, пробуем загрузить заново
-                if (typeof window.supabase === 'undefined' && typeof supabase === 'undefined') {
-                    console.log('SDK не найден, пробуем загрузить заново...');
-                    await loadSupabase();
-                    
-                    // Проверяем снова
-                    console.log('После повторной загрузки:');
-                    console.log('- window.supabase:', typeof window.supabase);
-                    console.log('- supabase:', typeof supabase);
-                    
-                    if (typeof window.supabase === 'undefined' && typeof supabase === 'undefined') {
-                        throw new Error('Supabase SDK не загружен даже после повторной попытки');
+                if (savedUser) {
+                    try {
+                        const user = JSON.parse(savedUser);
+                        console.log('Пользователь найден в localStorage:', user);
+                        currentUser = user;
+                        
+                        // Отправляем событие о входе пользователя
+                        window.dispatchEvent(new CustomEvent('userLoggedIn', { detail: user }));
+                        
+                        showProfile();
+                        // Сразу показываем данные из currentUser
+                        showUserDataImmediately(user);
+                        // Затем загружаем полный профиль
+                        loadUserProfile();
+                    } catch (error) {
+                        console.error('Ошибка при загрузке пользователя:', error);
+                        localStorage.removeItem('currentUser');
+                        showAuth();
                     }
-                }
-                
-                // Используем доступный SDK
-                const sdk = window.supabase || supabase;
-                console.log('Используем SDK:', sdk);
-                
-                // Создаем клиент
-                console.log('Создаем клиент Supabase...');
-                const client = sdk.createClient(
-                    'https://iaezefurqmmgubdgqakt.supabase.co',
-                    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlhZXplZnVycW1tZ3ViZGdxYWt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU5NTk3NjQsImV4cCI6MjA3MTUzNTc2NH0.-Puoiddwu_xIx9BaHM0BBfbsULdU0Ljzh6uQleVToBQ'
-                );
-                
-                console.log('Клиент создан:', client);
-                
-                // Присваиваем глобальным переменным
-                window.supabaseClient = client;
-                supabaseClient = client;
-                
-                console.log('Глобальные переменные установлены:');
-                console.log('- window.supabaseClient:', window.supabaseClient);
-                console.log('- supabaseClient:', supabaseClient);
-                
-                // Check if user is already logged in
-                console.log('Проверяем текущего пользователя...');
-                const { data: { user } } = await client.auth.getUser();
-                if (user) {
-                    console.log('Пользователь найден:', user);
-                    currentUser = user;
-                    
-                    // Сохраняем пользователя в localStorage
-                    localStorage.setItem('currentUser', JSON.stringify(user));
-                    
-                    // Отправляем событие о входе пользователя
-                    window.dispatchEvent(new CustomEvent('userLoggedIn', { detail: user }));
-                    
-                    showProfile();
-                    // Сразу показываем данные из currentUser
-                    showUserDataImmediately(user);
-                    // Затем загружаем полный профиль из базы данных
-                    loadUserProfile();
-                    // loadBookings(); // Временно отключено
                 } else {
                     console.log('Пользователь не найден, показываем форму входа');
                     showAuth();
                 }
                 
-                // Проверяем сессию в URL (для Magic Link)
-                const { data: { session } } = await client.auth.getSession();
-                if (session) {
-                    console.log('Сессия найдена в URL:', session);
-                    currentUser = session.user;
-                    
-                    // Сохраняем пользователя в localStorage
-                    localStorage.setItem('currentUser', JSON.stringify(session.user));
-                    
-                    // Отправляем событие о входе пользователя
-                    window.dispatchEvent(new CustomEvent('userLoggedIn', { detail: session.user }));
-                    
-                    showProfile();
-                    // Сразу показываем данные из currentUser
-                    showUserDataImmediately(session.user);
-                    // Затем загружаем полный профиль из базы данных
-                    loadUserProfile();
-                    // loadBookings(); // Временно отключено
-                }
-                
-                console.log('=== ИНИЦИАЛИЗАЦИЯ SUPABASE ЗАВЕРШЕНА УСПЕШНО ===');
+                console.log('=== ИНИЦИАЛИЗАЦИЯ АВТОРИЗАЦИИ ЗАВЕРШЕНА УСПЕШНО ===');
                 
                 // Настраиваем форму входа
                 console.log('Настраиваем форму входа...');
                 setupLoginForm();
                 
-                // Настраиваем обработчик изменения состояния аутентификации
-                console.log('Настраиваем обработчик аутентификации...');
-                setupAuthStateChange();
-                
             } catch (error) {
-                console.error('=== ОШИБКА ИНИЦИАЛИЗАЦИИ SUPABASE ===');
-                console.error('Error initializing Supabase:', error);
+                console.error('=== ОШИБКА ИНИЦИАЛИЗАЦИИ АВТОРИЗАЦИИ ===');
+                console.error('Error initializing authentication:', error);
                 console.error('Stack trace:', error.stack);
                 showNotification('error', 'Ошибка инициализации', error.message);
             }
@@ -1946,8 +1883,6 @@
         // Handle logout
         document.getElementById('logoutBtn').addEventListener('click', async () => {
             try {
-                const client = window.supabaseClient || supabaseClient;
-                await client.auth.signOut();
                 currentUser = null;
                 
                 // Очищаем данные профиля из localStorage
@@ -1961,6 +1896,8 @@
                 window.dispatchEvent(new CustomEvent('userLoggedOut'));
                 
                 showAuth();
+                
+                showNotification('success', 'Выход выполнен', 'Вы успешно вышли из личного кабинета');
             } catch (error) {
                 console.error('Logout error:', error);
             }
