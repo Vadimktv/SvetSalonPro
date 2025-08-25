@@ -1152,8 +1152,8 @@
                                         <label for="serviceCategory" class="block text-gray-700 font-medium mb-2">Категория услуг</label>
                                         <select id="serviceCategory" name="serviceCategory" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent form-select" required onchange="updateServiceOptions()">
                                             <option value="">Выберите категорию</option>
-                                            <option value="hair">✂️ Парикмахерские услуги</option>
-                                            <option value="manicure">💅 Услуги маникюра</option>
+                                            <option value="hair">Парикмахерские услуги</option>
+                                            <option value="manicure">Услуги маникюра</option>
                                         </select>
                                     </div>
                                     <div class="mb-8 relative">
@@ -1193,7 +1193,7 @@
             
             <!-- Парикмахерские услуги -->
             <div class="mb-20">
-                <h3 class="text-2xl md:text-3xl font-bold text-center mb-8 text-gray-800 animate-on-scroll delay-200">✂️ Парикмахерские услуги</h3>
+                                        <h3 class="text-2xl md:text-3xl font-bold text-center mb-8 text-gray-800 animate-on-scroll delay-200">Парикмахерские услуги</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 services-container">
                 <!-- SPA процедуры -->
                     <div class="service-card bg-white rounded-lg shadow-xl border border-gray-100 flex flex-col items-center justify-center w-full max-w-sm h-auto min-h-80 mx-auto text-center animate-on-scroll" data-aos="zoom-in">
@@ -1291,7 +1291,7 @@
             
             <!-- Услуги маникюра -->
             <div>
-                <h3 class="text-2xl md:text-3xl font-bold text-center mb-8 text-gray-800 animate-on-scroll delay-300">💅 Услуги маникюра</h3>
+                                        <h3 class="text-2xl md:text-3xl font-bold text-center mb-8 text-gray-800 animate-on-scroll delay-300">Услуги маникюра</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 services-container">
                     <!-- Комбинированный маникюр -->
                     <div class="service-card bg-white rounded-lg shadow-xl border border-gray-100 flex flex-col items-center justify-center w-full max-w-sm h-auto min-h-80 mx-auto text-center animate-on-scroll" data-aos="zoom-in">
@@ -1813,12 +1813,24 @@
 
     // Функция для автоматического выбора услуги при клике на кнопку в карточке
     function selectService(category, serviceValue) {
+        console.log('selectService called:', category, serviceValue);
+        
         // Прокручиваем к форме записи
-        document.getElementById('booking').scrollIntoView({ behavior: 'smooth' });
+        const bookingSection = document.getElementById('booking');
+        if (bookingSection) {
+            bookingSection.scrollIntoView({ behavior: 'smooth' });
+        } else {
+            console.error('Booking section not found');
+        }
         
         // Выбираем категорию услуг
         const categorySelect = document.getElementById('serviceCategory');
-        categorySelect.value = category;
+        if (categorySelect) {
+            categorySelect.value = category;
+            console.log('Category selected:', category);
+        } else {
+            console.error('Category select not found');
+        }
         
         // Обновляем список услуг
         updateServiceOptions();
@@ -1826,7 +1838,12 @@
         // Выбираем конкретную услугу
         setTimeout(() => {
             const serviceSelect = document.getElementById('service');
-            serviceSelect.value = serviceValue;
+            if (serviceSelect) {
+                serviceSelect.value = serviceValue;
+                console.log('Service selected:', serviceValue);
+            } else {
+                console.error('Service select not found');
+            }
             updateDebugInfo();
         }, 100);
     }
@@ -1927,12 +1944,20 @@
         const debugCategory = document.getElementById('debug-category');
         const debugService = document.getElementById('debug-service');
         
-        if (categorySelect.value) {
-            debugInfo.classList.remove('hidden');
-            debugCategory.textContent = categorySelect.options[categorySelect.selectedIndex].text;
-            debugService.textContent = serviceSelect.value ? serviceSelect.options[serviceSelect.selectedIndex].text : '-';
-        } else {
-            debugInfo.classList.add('hidden');
+        // Проверяем, существуют ли все необходимые элементы
+        if (!categorySelect || !serviceSelect) {
+            console.log('Form elements not found');
+            return;
+        }
+        
+        if (debugInfo && debugCategory && debugService) {
+            if (categorySelect.value) {
+                debugInfo.classList.remove('hidden');
+                debugCategory.textContent = categorySelect.options[categorySelect.selectedIndex].text;
+                debugService.textContent = serviceSelect.value ? serviceSelect.options[serviceSelect.selectedIndex].text : '-';
+            } else {
+                debugInfo.classList.add('hidden');
+            }
         }
     }
     
@@ -2310,7 +2335,7 @@
         let message = '📅 Забронированное время:\n\n';
         
         if (hairBookings.length > 0) {
-            message += '✂️ Парикмахерские услуги:\n';
+            message += 'Парикмахерские услуги:\n';
             hairBookings.forEach(booking => {
                 message += `  ${booking.date} в ${booking.time} - ${booking.name} (${booking.service})\n`;
             });
@@ -2318,7 +2343,7 @@
         }
         
         if (manicureBookings.length > 0) {
-            message += '💅 Услуги маникюра:\n';
+            message += 'Услуги маникюра:\n';
             manicureBookings.forEach(booking => {
                 message += `  ${booking.date} в ${booking.time} - ${booking.name} (${booking.service})\n`;
             });
