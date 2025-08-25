@@ -659,14 +659,12 @@
         
         #sideMenu.open #menuContainer {
             transform: translateX(0);
-            box-shadow: -15px 0 30px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         }
         
         /* Prevent body scroll when menu is open */
         body.menu-open {
             overflow: hidden;
-            position: fixed;
-            width: 100%;
         }
         
         /* Menu Button Animation */
@@ -733,7 +731,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(135deg, rgba(236, 72, 153, 0.15) 0%, rgba(236, 72, 153, 0.08) 100%);
+            background: rgba(236, 72, 153, 0.08);
             opacity: 0;
             transition: all 0.3s ease;
             border-radius: 16px;
@@ -755,8 +753,8 @@
         }
         
         .menu-item:active::before {
-            background: linear-gradient(135deg, rgba(236, 72, 153, 0.25) 0%, rgba(236, 72, 153, 0.15) 100%);
-            transform: scale(1.1);
+            background: rgba(236, 72, 153, 0.12);
+            transform: scale(1.05);
         }
         
         /* Menu Icons */
@@ -764,28 +762,22 @@
             width: 36px;
             height: 36px;
             border-radius: 10px;
-            background: linear-gradient(135deg, rgba(236, 72, 153, 0.15) 0%, rgba(236, 72, 153, 0.08) 100%);
+            background: rgba(236, 72, 153, 0.08);
             display: flex;
             align-items: center;
             justify-content: center;
             margin-right: 12px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(236, 72, 153, 0.2);
             flex-shrink: 0;
-            box-shadow: 0 2px 8px rgba(236, 72, 153, 0.1);
         }
         
         .menu-item:hover .menu-icon {
-            background: linear-gradient(135deg, rgba(236, 72, 153, 0.25) 0%, rgba(236, 72, 153, 0.15) 100%);
-            transform: scale(1.1);
-            box-shadow: 0 8px 25px rgba(236, 72, 153, 0.3);
-            border-color: rgba(236, 72, 153, 0.4);
+            background: rgba(236, 72, 153, 0.15);
+            transform: scale(1.05);
         }
         
         .menu-item:active .menu-icon {
-            transform: scale(0.95);
-            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
+            transform: scale(0.98);
         }
         
         .menu-icon i {
@@ -796,7 +788,7 @@
         }
         
         .menu-item:hover .menu-icon i {
-            transform: scale(1.2);
+            transform: scale(1.1);
         }
         
         .menu-item span {
@@ -805,19 +797,18 @@
         }
         
         .menu-item:hover span {
-            transform: translateX(4px);
+            transform: translateX(2px);
             color: #ec4899;
         }
         
         /* Bubble Animation */
         @keyframes bubblePop {
-            0% { transform: scale(0.8); opacity: 0; }
-            50% { transform: scale(1.1); opacity: 1; }
+            0% { transform: scale(0.9); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
         }
         
         .menu-item.bubble-animation::before {
-            animation: bubblePop 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: bubblePop 0.2s ease-out;
         }
         
         /* iOS Haptic Feedback Simulation */
@@ -893,10 +884,10 @@
     <!-- iOS Style Side Menu -->
     <div id="sideMenu" class="fixed inset-0 z-50 pointer-events-none">
         <!-- Backdrop -->
-        <div id="menuBackdrop" class="absolute inset-0 bg-black/30 backdrop-blur-sm opacity-0 transition-all duration-250 ease-out pointer-events-none"></div>
+        <div id="menuBackdrop" class="absolute inset-0 bg-black/20 opacity-0 transition-all duration-300 ease-out pointer-events-none"></div>
         
         <!-- Menu Container -->
-        <div id="menuContainer" class="absolute top-4 right-4 h-auto max-h-[80vh] w-72 bg-white/98 backdrop-blur-3xl rounded-2xl shadow-2xl transform translate-x-full transition-all duration-250 ease-out border border-white/50">
+        <div id="menuContainer" class="absolute top-16 right-4 h-auto max-h-[80vh] w-72 bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl transform translate-x-full transition-all duration-300 ease-out border border-white/30">
             <!-- Menu Header -->
             <div class="flex items-center justify-between p-3 border-b border-white/10">
                 <div class="flex items-center space-x-2">
