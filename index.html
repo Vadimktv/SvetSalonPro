@@ -2789,29 +2789,29 @@
         }
     }
 
-    // Настройка загрузки фотографий
-    function setupPhotoUpload() {
-        console.log('setupPhotoUpload called');
-        
-        // Настройка поля для галереи
-        const fileInput = document.getElementById('photoFiles');
-        if (fileInput) {
-            fileInput.removeEventListener('change', handlePhotoSelection);
-            fileInput.addEventListener('change', handlePhotoSelection);
-            console.log('Gallery file input event listener added');
-        } else {
-            console.error('Gallery file input not found');
-        }
-        
-        // Настройка поля для камеры
-        const cameraInput = document.getElementById('cameraFiles');
-        if (cameraInput) {
-            cameraInput.removeEventListener('change', handlePhotoSelection);
-            cameraInput.addEventListener('change', handlePhotoSelection);
-            console.log('Camera file input event listener added');
-        } else {
-            console.error('Camera file input not found');
-        }
+            // Настройка загрузки фотографий
+        function setupPhotoUpload() {
+            console.log('setupPhotoUpload called');
+            
+            // Настройка поля для галереи
+            const fileInput = document.getElementById('photoFiles');
+            if (fileInput) {
+                fileInput.removeEventListener('change', handlePhotoSelection);
+                fileInput.addEventListener('change', handlePhotoSelection);
+                console.log('Gallery file input event listener added');
+            } else {
+                console.error('Gallery file input not found');
+            }
+            
+            // Настройка drag and drop
+            const dropZone = document.getElementById('dropZone');
+            if (dropZone) {
+                dropZone.addEventListener('dragover', handleDragOver);
+                dropZone.addEventListener('drop', handleDrop);
+                dropZone.addEventListener('dragenter', handleDragEnter);
+                dropZone.addEventListener('dragleave', handleDragLeave);
+                console.log('Drag and drop event listeners added');
+            }
     }
 
     // Обработка выбора фотографий
@@ -2856,6 +2856,62 @@
         
         fileInput.files = dt.files;
         handlePhotoSelection({ target: { files: dt.files } });
+    }
+
+    // Drag and Drop функции
+    function handleDragOver(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    function handleDragEnter(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const dropZone = document.getElementById('dropZone');
+        if (dropZone) {
+            dropZone.classList.add('border-purple-500', 'bg-purple-100');
+        }
+    }
+
+    function handleDragLeave(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const dropZone = document.getElementById('dropZone');
+        if (dropZone) {
+            dropZone.classList.remove('border-purple-500', 'bg-purple-100');
+        }
+    }
+
+    function handleDrop(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const dropZone = document.getElementById('dropZone');
+        if (dropZone) {
+            dropZone.classList.remove('border-purple-500', 'bg-purple-100');
+        }
+        
+        const files = e.dataTransfer.files;
+        const fileInput = document.getElementById('photoFiles');
+        
+        if (files.length > 0 && fileInput) {
+            // Фильтруем только изображения
+            const imageFiles = Array.from(files).filter(file => file.type.startsWith('image/'));
+            
+            if (imageFiles.length > 0) {
+                // Создаем DataTransfer для установки файлов
+                const dt = new DataTransfer();
+                imageFiles.forEach(file => dt.items.add(file));
+                fileInput.files = dt.files;
+                
+                // Обрабатываем выбранные файлы
+                handlePhotoSelection({ target: { files: dt.files } });
+                
+                showNotification('success', 'Фотографии добавлены!', `Добавлено ${imageFiles.length} фотографий`);
+            } else {
+                showNotification('error', 'Ошибка', 'Пожалуйста, выберите только изображения');
+            }
+        }
     }
 
     // Загрузить фотографии
@@ -2907,30 +2963,23 @@
                     reader.readAsDataURL(file);
                 });
                 
-                // Отправляем на сервер
+                // Сохраняем в localStorage для демонстрации
                 const photoData = {
+                    id: Date.now() + Math.random(),
                     category: category,
                     src: fileData,
                     fileName: file.name,
-                    description: ''
+                    description: '',
+                    uploadDate: new Date().toISOString()
                 };
                 
-                const response = await fetch('pages/api/portfolio-photos.js', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(photoData)
-                });
+                // Получаем существующие фотографии
+                const existingPhotos = JSON.parse(localStorage.getItem('portfolioPhotos') || '[]');
+                existingPhotos.push(photoData);
+                localStorage.setItem('portfolioPhotos', JSON.stringify(existingPhotos));
                 
-                const result = await response.json();
-                
-                if (result.success) {
-                    console.log('File uploaded successfully:', file.name);
-                    uploadedCount++;
-                } else {
-                    console.error('Error uploading file:', file.name, result.error);
-                }
+                console.log('File saved successfully:', file.name);
+                uploadedCount++;
             }
             
             // Скрываем загрузку
@@ -2964,12 +3013,10 @@
     // Сбросить форму загрузки
     function resetPhotoUpload() {
         const fileInput = document.getElementById('photoFiles');
-        const cameraInput = document.getElementById('cameraFiles');
         const photoPreview = document.getElementById('photoPreview');
         const previewContainer = document.getElementById('previewContainer');
         
         if (fileInput) fileInput.value = '';
-        if (cameraInput) cameraInput.value = '';
         if (photoPreview) photoPreview.classList.add('hidden');
         if (previewContainer) previewContainer.innerHTML = '';
     }
@@ -3195,20 +3242,20 @@
                         <label class="block text-gray-700 font-semibold text-lg">Выберите фотографии</label>
                         
                         <!-- Область загрузки -->
-                        <div class="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-purple-400 transition-all duration-200 bg-gray-50 hover:bg-purple-50">
+                        <div id="dropZone" class="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-purple-400 transition-all duration-200 bg-gray-50 hover:bg-purple-50">
                             <div class="space-y-4">
                                 <div class="w-20 h-20 bg-gradient-to-br from-purple-100 to-pink-100 rounded-full flex items-center justify-center mx-auto">
                                     <i class="fas fa-cloud-upload-alt text-3xl text-purple-600"></i>
                                 </div>
                                 <div>
                                     <h3 class="text-lg font-semibold text-gray-800 mb-2">Загрузите фотографии</h3>
-                                    <p class="text-gray-600 mb-4">Перетащите файлы сюда или нажмите для выбора</p>
+                                    <p class="text-gray-600 mb-4">Перетащите файлы сюда или нажмите для выбора из галереи</p>
                                     <input type="file" id="photoFiles" multiple accept="image/*" 
                                            class="hidden" onchange="handlePhotoSelection(event)">
                                     <button onclick="document.getElementById('photoFiles').click()" 
                                             class="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-medium py-3 px-6 rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl">
-                                        <i class="fas fa-folder-open mr-2"></i>
-                                        Выбрать файлы
+                                        <i class="fas fa-images mr-2"></i>
+                                        Выбрать из галереи
                                     </button>
                                 </div>
                                 <p class="text-sm text-gray-500">Поддерживаются форматы: JPG, PNG, WebP (макс. 5MB на файл)</p>

@@ -1225,18 +1225,15 @@
                     </div>
                 `;
                 
-                // Получаем фотографии с сервера
-                const response = await fetch('api/portfolio-photos.js');
-                const portfolioPhotos = await response.json();
+                // Получаем фотографии из localStorage
+                const portfolioPhotos = JSON.parse(localStorage.getItem('portfolioPhotos') || '[]');
                 
                 // Фильтруем фотографии
                 let photosToShow = [];
                 if (currentFilter === 'all') {
-                    Object.values(portfolioPhotos).forEach(categoryPhotos => {
-                        photosToShow = photosToShow.concat(categoryPhotos);
-                    });
+                    photosToShow = portfolioPhotos;
                 } else {
-                    photosToShow = portfolioPhotos[currentFilter] || [];
+                    photosToShow = portfolioPhotos.filter(photo => photo.category === currentFilter);
                 }
                 
                 // Создаем слайдшоу из первых 5 фотографий
@@ -1264,7 +1261,7 @@
                         <img src="${photo.src}" alt="Пример работы" class="portfolio-image">
                         <div class="portfolio-info">
                             <div class="portfolio-category">${photo.category === 'hair' ? 'Парикмахерские услуги' : 'Услуги маникюра'}</div>
-                            <div class="portfolio-date">${new Date(photo.uploadedAt).toLocaleDateString()}</div>
+                            <div class="portfolio-date">${new Date(photo.uploadDate).toLocaleDateString()}</div>
                         </div>
                     `;
                     
