@@ -1411,10 +1411,96 @@
             }
         }
 
+        // Обработка токена авторизации из URL (Magic Link)
+        async function handleAuthFromURL() {
+            try {
+                console.log('Проверяем URL на наличие токена авторизации...');
+                
+                // Проверяем URL параметры
+                const urlParams = new URLSearchParams(window.location.search);
+                const hashParams = new URLSearchParams(window.location.hash.substring(1));
+                
+                const accessToken = urlParams.get('access_token') || hashParams.get('access_token');
+                const refreshToken = urlParams.get('refresh_token') || hashParams.get('refresh_token');
+                const type = urlParams.get('type') || hashParams.get('type');
+                
+                console.log('URL параметры:', { accessToken: !!accessToken, refreshToken: !!refreshToken, type });
+                
+                // Если есть токены в URL, обрабатываем их
+                if (accessToken && (type === 'recovery' || type === 'signup' || type === 'magiclink')) {
+                    console.log('Найден токен восстановления, обрабатываем...');
+                    
+                    // Создаем временный клиент для обработки токена
+                    const tempClient = window.supabase || supabase;
+                    if (!tempClient) {
+                        console.log('Supabase SDK еще не загружен, ждем...');
+                        await loadSupabase();
+                    }
+                    
+                    const client = (window.supabase || supabase).createClient(
+                        'https://iaezefurqmmgubdgqakt.supabase.co',
+                        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlhZXplZnVycW1tZ3ViZGdxYWt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU5NTk3NjQsImV4cCI6MjA3MTUzNTc2NH0.-Puoiddwu_xIx9BaHM0BBfbsULdU0Ljzh6uQleVToBQ'
+                    );
+                    
+                    // Устанавливаем сессию
+                    let { data, error } = await client.auth.setSession({
+                        access_token: accessToken,
+                        refresh_token: refreshToken || null
+                    });
+                    
+                    // Если не удалось установить сессию, пробуем другой способ
+                    if (error && refreshToken) {
+                        console.log('Пробуем установить сессию только с access_token...');
+                        ({ data, error } = await client.auth.setSession({
+                            access_token: accessToken
+                        }));
+                    }
+                    
+                    if (error) {
+                        console.error('Ошибка установки сессии:', error);
+                        showNotification('error', 'Ошибка входа', 'Не удалось войти в систему. Попробуйте еще раз.');
+                        return;
+                    }
+                    
+                    if (data.session) {
+                        console.log('Сессия успешно установлена:', data.session);
+                        
+                        // Сохраняем пользователя
+                        currentUser = data.session.user;
+                        localStorage.setItem('currentUser', JSON.stringify(data.session.user));
+                        
+                        // Отправляем событие о входе
+                        window.dispatchEvent(new CustomEvent('userLoggedIn', { detail: data.session.user }));
+                        
+                        // Очищаем URL от токенов
+                        const cleanURL = window.location.pathname;
+                        window.history.replaceState({}, document.title, cleanURL);
+                        
+                        // Показываем профиль
+                        showProfile();
+                        showUserDataImmediately(data.session.user);
+                        loadUserProfile();
+                        
+                        showNotification('success', 'Вход выполнен!', 'Добро пожаловать в личный кабинет!');
+                        return;
+                    }
+                }
+                
+                console.log('Токен авторизации не найден в URL');
+                
+            } catch (error) {
+                console.error('Ошибка обработки токена из URL:', error);
+                showNotification('error', 'Ошибка входа', 'Не удалось обработать ссылку для входа.');
+            }
+        }
+
         // Initialize Supabase
         async function initSupabase() {
             try {
                 console.log('=== НАЧАЛО ИНИЦИАЛИЗАЦИИ SUPABASE ===');
+                
+                // Обрабатываем токен авторизации из URL (Magic Link)
+                await handleAuthFromURL();
                 
                 // Проверяем авторизацию при загрузке страницы
                 await checkAuthOnLoad();
@@ -1564,7 +1650,8 @@
                         const { error } = await client.auth.signInWithOtp({
                             email: email,
                             options: {
-                                emailRedirectTo: 'https://svetsalonpro.ru/pages/account.html'
+                                emailRedirectTo: window.location.origin + window.location.pathname,
+                                shouldCreateUser: true
                             }
                         });
                         
