@@ -2403,7 +2403,6 @@
     // Переменные для административной панели
     let adminClickCount = 0;
     let adminClickTimer = null;
-    const ADMIN_PASSWORD = '0808';
 
     // Функция для открытия административной панели
     function openAdminModal() {
@@ -2411,9 +2410,8 @@
         const sideMenu = document.getElementById('adminSideMenu');
         const login = document.getElementById('adminLogin');
         const panel = document.getElementById('adminPanel');
-        const password = document.getElementById('adminPassword');
         
-        if (!modal || !sideMenu || !login || !panel || !password) {
+        if (!modal || !sideMenu || !login || !panel) {
             showNotification('error', 'Ошибка', 'Административная панель не загружена');
             return;
         }
@@ -2426,15 +2424,9 @@
             sideMenu.classList.remove('translate-x-full');
         }, 10);
         
-        // Показываем форму входа
-        login.classList.remove('hidden');
-        panel.classList.add('hidden');
-        password.value = '';
-        
-        // Фокус на поле пароля
-        setTimeout(() => {
-            password.focus();
-        }, 300);
+        // Сразу показываем панель администратора
+        login.classList.add('hidden');
+        panel.classList.remove('hidden');
     }
 
     // Функция для закрытия административной панели
@@ -2457,18 +2449,7 @@
         adminClickCount = 0;
     }
 
-    // Функция для проверки пароля администратора
-    function checkAdminPassword() {
-        const password = document.getElementById('adminPassword').value;
-        if (password === ADMIN_PASSWORD) {
-            document.getElementById('adminLogin').classList.add('hidden');
-            document.getElementById('adminPanel').classList.remove('hidden');
-        } else {
-            showNotification('error', 'Ошибка', 'Неверный пароль!');
-            document.getElementById('adminPassword').value = '';
-            document.getElementById('adminPassword').focus();
-        }
-    }
+
 
     // Функция для очистки всех записей
     function clearAllBookings() {
@@ -2544,12 +2525,7 @@
             });
         }
 
-        // Обработчик Enter для поля пароля
-        document.getElementById('adminPassword').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                checkAdminPassword();
-            }
-        });
+
 
         // Закрытие модального окна при клике вне его
         document.getElementById('adminModal').addEventListener('click', function(e) {
@@ -2727,23 +2703,7 @@
 
 
 
-    // Проверить пароль администратора
-    function checkAdminPassword() {
-        const password = document.getElementById('adminPassword').value;
-        const correctPassword = '0808'; // Пароль администратора
-        
-        if (password === correctPassword) {
-            // Устанавливаем статус администратора
-            isAdmin = true;
-            document.getElementById('adminLogin').classList.add('hidden');
-            document.getElementById('adminPanel').classList.remove('hidden');
-            showNotification('success', 'Добро пожаловать!', 'Успешная авторизация в админ панели');
-        } else {
-            showNotification('error', 'Ошибка!', 'Неверный пароль');
-            document.getElementById('adminPassword').value = '';
-            document.getElementById('adminPassword').focus();
-        }
-    }
+
 
     // Показать забронированное время
     function showBookedTimes() {
@@ -2774,8 +2734,16 @@
     // Открыть модальное окно загрузки фотографий
     function openPhotoUpload() {
         const modal = document.getElementById('photoUploadModal');
-        if (modal) {
+        const content = document.getElementById('photoUploadContent');
+        if (modal && content) {
             modal.classList.remove('hidden');
+            
+            // Анимация появления
+            setTimeout(() => {
+                content.classList.remove('scale-95', 'opacity-0');
+                content.classList.add('scale-100', 'opacity-100');
+            }, 10);
+            
             setupPhotoUpload();
         }
     }
@@ -2783,9 +2751,16 @@
     // Закрыть модальное окно загрузки фотографий
     function closePhotoUpload() {
         const modal = document.getElementById('photoUploadModal');
-        if (modal) {
-            modal.classList.add('hidden');
-            resetPhotoUpload();
+        const content = document.getElementById('photoUploadContent');
+        if (modal && content) {
+            // Анимация закрытия
+            content.classList.remove('scale-100', 'opacity-100');
+            content.classList.add('scale-95', 'opacity-0');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                resetPhotoUpload();
+            }, 300);
         }
     }
 
@@ -3139,7 +3114,7 @@
             <!-- Содержимое -->
             <div class="p-6 space-y-4">
                 <!-- Форма входа -->
-                <div id="adminLogin" class="space-y-4">
+                <div id="adminLogin" class="space-y-4 hidden">
                     <div class="text-center py-4">
                         <div class="w-16 h-16 bg-gradient-to-br from-pink-100 to-pink-200 rounded-full flex items-center justify-center mx-auto mb-4">
                             <i class="fas fa-lock text-2xl text-pink-600"></i>
@@ -3154,16 +3129,12 @@
                             <input type="password" id="adminPassword" placeholder="Пароль администратора" 
                                    class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-200">
                         </div>
-                        <button onclick="checkAdminPassword()" 
-                                class="w-full bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white font-medium py-3 px-4 rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl">
-                            <i class="fas fa-sign-in-alt mr-2"></i>
-                            Войти в панель
-                        </button>
+
                     </div>
                 </div>
                 
                 <!-- Панель управления -->
-                <div id="adminPanel" class="space-y-4 hidden">
+                <div id="adminPanel" class="space-y-4">
                     <div class="text-center py-4">
                         <div class="w-16 h-16 bg-gradient-to-br from-green-100 to-green-200 rounded-full flex items-center justify-center mx-auto mb-4">
                             <i class="fas fa-cog text-2xl text-green-600"></i>
@@ -3197,7 +3168,7 @@
     </div>
 
     <!-- Модальное окно загрузки фотографий -->
-    <div id="photoUploadModal" class="fixed inset-0 z-50 hidden">
+    <div id="photoUploadModal" class="fixed inset-0 z-[9999] hidden">
         <!-- Затемнение фона -->
         <div class="absolute inset-0 bg-black bg-opacity-40 backdrop-blur-sm transition-opacity duration-300" onclick="closePhotoUpload()"></div>
         
