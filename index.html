@@ -2762,9 +2762,26 @@
 
     // Настройка загрузки фотографий
     function setupPhotoUpload() {
+        console.log('setupPhotoUpload called');
+        
+        // Настройка поля для галереи
         const fileInput = document.getElementById('photoFiles');
         if (fileInput) {
+            fileInput.removeEventListener('change', handlePhotoSelection);
             fileInput.addEventListener('change', handlePhotoSelection);
+            console.log('Gallery file input event listener added');
+        } else {
+            console.error('Gallery file input not found');
+        }
+        
+        // Настройка поля для камеры
+        const cameraInput = document.getElementById('cameraFiles');
+        if (cameraInput) {
+            cameraInput.removeEventListener('change', handlePhotoSelection);
+            cameraInput.addEventListener('change', handlePhotoSelection);
+            console.log('Camera file input event listener added');
+        } else {
+            console.error('Camera file input not found');
         }
     }
 
@@ -2814,65 +2831,124 @@
 
     // Загрузить фотографии
     function uploadPhotos() {
+        console.log('uploadPhotos function called');
+        
         const fileInput = document.getElementById('photoFiles');
         const categorySelect = document.getElementById('photoCategory');
         const uploadBtn = document.querySelector('#photoUploadModal button[onclick="uploadPhotos()"]');
         const uploadBtnText = document.getElementById('uploadBtnText');
         const uploadBtnLoading = document.getElementById('uploadBtnLoading');
         
-        if (!fileInput.files.length) {
+        console.log('Elements found:', {
+            fileInput: !!fileInput,
+            categorySelect: !!categorySelect,
+            uploadBtn: !!uploadBtn,
+            uploadBtnText: !!uploadBtnText,
+            uploadBtnLoading: !!uploadBtnLoading
+        });
+        
+        if (!fileInput || !fileInput.files || !fileInput.files.length) {
+            console.error('No files selected');
             showNotification('error', 'Ошибка', 'Выберите фотографии для загрузки');
             return;
         }
         
-        const category = categorySelect.value;
+        const category = categorySelect ? categorySelect.value : 'hair';
         const files = Array.from(fileInput.files);
         
-        // Показываем загрузку
-        uploadBtn.disabled = true;
-        uploadBtnText.classList.add('hidden');
-        uploadBtnLoading.classList.remove('hidden');
+        console.log('Files to upload:', files.length, 'Category:', category);
         
-        // Имитируем загрузку (в реальном проекте здесь будет загрузка на сервер)
-        setTimeout(() => {
-            // Сохраняем фотографии в localStorage (для демонстрации)
+        // Показываем загрузку
+        if (uploadBtn) uploadBtn.disabled = true;
+        if (uploadBtnText) uploadBtnText.classList.add('hidden');
+        if (uploadBtnLoading) uploadBtnLoading.classList.remove('hidden');
+        
+        // Сохраняем фотографии в localStorage
+        try {
             const existingPhotos = JSON.parse(localStorage.getItem('portfolioPhotos') || '{}');
             if (!existingPhotos[category]) {
                 existingPhotos[category] = [];
             }
             
-            files.forEach(file => {
+            let uploadedCount = 0;
+            const totalFiles = files.length;
+            
+            files.forEach((file, index) => {
+                console.log('Processing file:', file.name, file.type);
+                
                 const reader = new FileReader();
                 reader.onload = function(e) {
+                    console.log('File read successfully:', file.name);
+                    
                     existingPhotos[category].push({
                         id: Date.now() + Math.random(),
                         src: e.target.result,
                         category: category,
-                        uploadedAt: new Date().toISOString()
+                        uploadedAt: new Date().toISOString(),
+                        fileName: file.name
                     });
                     
+                    uploadedCount++;
+                    
+                    // Сохраняем после каждого файла
                     localStorage.setItem('portfolioPhotos', JSON.stringify(existingPhotos));
+                    
+                    // Если все файлы обработаны
+                    if (uploadedCount === totalFiles) {
+                        console.log('All files uploaded successfully');
+                        
+                        // Скрываем загрузку
+                        if (uploadBtn) uploadBtn.disabled = false;
+                        if (uploadBtnText) uploadBtnText.classList.remove('hidden');
+                        if (uploadBtnLoading) uploadBtnLoading.classList.add('hidden');
+                        
+                        const categoryName = categorySelect && categorySelect.options[categorySelect.selectedIndex] 
+                            ? categorySelect.options[categorySelect.selectedIndex].text 
+                            : (category === 'hair' ? 'Парикмахерские услуги' : 'Услуги маникюра');
+                        
+                        showNotification('success', 'Успешно!', `Загружено ${uploadedCount} фотографий в категорию "${categoryName}"`);
+                        closePhotoUpload();
+                    }
                 };
+                
+                reader.onerror = function(error) {
+                    console.error('Error reading file:', file.name, error);
+                    uploadedCount++;
+                    
+                    if (uploadedCount === totalFiles) {
+                        // Скрываем загрузку
+                        if (uploadBtn) uploadBtn.disabled = false;
+                        if (uploadBtnText) uploadBtnText.classList.remove('hidden');
+                        if (uploadBtnLoading) uploadBtnLoading.classList.add('hidden');
+                        
+                        showNotification('error', 'Ошибка', 'Произошла ошибка при загрузке некоторых файлов');
+                    }
+                };
+                
                 reader.readAsDataURL(file);
             });
             
-            // Скрываем загрузку
-            uploadBtn.disabled = false;
-            uploadBtnText.classList.remove('hidden');
-            uploadBtnLoading.classList.add('hidden');
+        } catch (error) {
+            console.error('Error in uploadPhotos:', error);
             
-            showNotification('success', 'Успешно!', `Загружено ${files.length} фотографий в категорию "${categorySelect.options[categorySelect.selectedIndex].text}"`);
-            closePhotoUpload();
-        }, 2000);
+            // Скрываем загрузку
+            if (uploadBtn) uploadBtn.disabled = false;
+            if (uploadBtnText) uploadBtnText.classList.remove('hidden');
+            if (uploadBtnLoading) uploadBtnLoading.classList.add('hidden');
+            
+            showNotification('error', 'Ошибка', 'Произошла ошибка при сохранении фотографий: ' + error.message);
+        }
     }
 
     // Сбросить форму загрузки
     function resetPhotoUpload() {
         const fileInput = document.getElementById('photoFiles');
+        const cameraInput = document.getElementById('cameraFiles');
         const photoPreview = document.getElementById('photoPreview');
         const previewContainer = document.getElementById('previewContainer');
         
         if (fileInput) fileInput.value = '';
+        if (cameraInput) cameraInput.value = '';
         if (photoPreview) photoPreview.classList.add('hidden');
         if (previewContainer) previewContainer.innerHTML = '';
     }
@@ -3010,10 +3086,18 @@
                 </div>
                 
                 <!-- Загрузка файлов -->
-                <div>
-                    <label class="block text-gray-700 font-medium mb-2">Выберите фотографии</label>
-                    <input type="file" id="photoFiles" multiple accept="image/*" capture="environment" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent">
-                    <p class="text-sm text-gray-500 mt-1">Можно выбрать несколько фотографий. На мобильных устройствах можно сфотографировать прямо сейчас.</p>
+                <div class="space-y-3">
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2">Выберите фотографии из галереи</label>
+                        <input type="file" id="photoFiles" multiple accept="image/*" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2">Или сделайте новый снимок</label>
+                        <input type="file" id="cameraFiles" accept="image/*" capture="environment" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent">
+                    </div>
+                    
+                    <p class="text-sm text-gray-500">Можно выбрать несколько фотографий из галереи или сделать новые снимки камерой.</p>
                 </div>
                 
                 <!-- Предварительный просмотр -->
