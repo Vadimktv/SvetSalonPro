@@ -123,6 +123,13 @@
             transform: translateY(-4px);
         }
         
+        .service-card.selected {
+            background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
+            border: 2px solid #ec4899 !important;
+            box-shadow: 0 10px 25px rgba(236, 72, 153, 0.2);
+            transform: translateY(-4px);
+        }
+        
         .service-card.selected::before {
             content: '✓';
             position: absolute;
@@ -138,6 +145,23 @@
             justify-content: center;
             font-weight: bold;
             font-size: 12px;
+            animation: checkmarkAppear 0.3s ease-out;
+        }
+        
+        @keyframes checkmarkAppear {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        /* Category card styles */
+        .category-card {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .category-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
         }
 
         /* Custom Notification Styles */
@@ -506,7 +530,7 @@
 </head>
 <body class="font-sans bg-gradient-to-br from-pink-50 to-white text-gray-800 min-h-screen">
     <!-- Custom Notification System -->
-    <div id="notificationContainer" class="fixed top-20 left-4 right-4 z-50 space-y-2 max-w-sm mx-auto"></div>
+    <div id="notificationContainer" class="fixed top-24 left-4 right-4 z-50 space-y-2 max-w-sm mx-auto"></div>
     <!-- Header -->
     <header class="fixed w-full bg-white shadow-sm z-50">
         <div class="container mx-auto px-4 py-4 flex justify-between items-center">
@@ -724,99 +748,131 @@
                 <div class="bg-white rounded-xl max-w-6xl w-full max-h-[90vh] overflow-y-auto">
                     <div class="p-6">
                         <div class="flex justify-between items-center mb-6">
-                            <h3 class="text-2xl font-semibold text-gray-800">Выберите услугу для записи</h3>
+                            <h3 class="text-2xl font-semibold text-gray-800">Выберите категорию услуг</h3>
                             <button id="closeModalBtn" class="text-gray-400 hover:text-gray-600">
                                 <i class="fas fa-times text-xl"></i>
                             </button>
                         </div>
                         
-                        <!-- Services Grid -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                            <!-- SPA процедуры -->
-                            <div class="service-card bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2" data-service="spa" data-price="800">
+                        <!-- Category Selection -->
+                        <div id="categorySelection" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                            <!-- Hair Services Category -->
+                            <div class="category-card bg-gradient-to-br from-pink-50 to-pink-100 rounded-xl p-6 cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2 border-2 border-pink-200 hover:border-pink-300" data-category="hair">
                                 <div class="text-center">
-                                    <img src="../images/SPA процедуры.JPG" alt="SPA процедуры" class="w-24 h-24 object-cover rounded-lg mx-auto mb-4">
-                                    <h4 class="text-lg font-semibold mb-2">SPA процедуры</h4>
-                                    <p class="text-pink-600 font-bold mb-2">от 800 ₽</p>
-                                    <p class="text-gray-600 text-sm">Расслабляющие и оздоравливающие процедуры для волос и кожи головы.</p>
+                                    <div class="w-20 h-20 bg-pink-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                                        <i class="fas fa-cut text-white text-2xl"></i>
+                                    </div>
+                                    <h4 class="text-xl font-semibold mb-2 text-gray-800">Стрижки и уход за волосами</h4>
+                                    <p class="text-gray-600">Женские и мужские стрижки, окрашивание, укладки</p>
                                 </div>
                             </div>
                             
-                            <!-- Женская стрижка -->
-                            <div class="service-card bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2" data-service="womens_haircut" data-price="700">
+                            <!-- Manicure Services Category -->
+                            <div class="category-card bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2 border-2 border-purple-200 hover:border-purple-300" data-category="manicure">
                                 <div class="text-center">
-                                    <img src="../images/Женская стрижка.JPG" alt="Женская стрижка" class="w-24 h-24 object-cover rounded-lg mx-auto mb-4">
-                                    <h4 class="text-lg font-semibold mb-2">Женская стрижка</h4>
-                                    <p class="text-pink-600 font-bold mb-2">от 700 ₽</p>
-                                    <p class="text-gray-600 text-sm">Современные женские стрижки любой сложности с учетом ваших пожеланий.</p>
+                                    <div class="w-20 h-20 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                                        <i class="fas fa-hand-sparkles text-white text-2xl"></i>
+                                    </div>
+                                    <h4 class="text-xl font-semibold mb-2 text-gray-800">Маникюр и уход за ногтями</h4>
+                                    <p class="text-gray-600">Классический, комбинированный маникюр, укрепление</p>
                                 </div>
                             </div>
-                            
-                            <!-- Мужская стрижка -->
-                            <div class="service-card bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2" data-service="mens_haircut" data-price="700">
-                                <div class="text-center">
-                                    <img src="../images/Мужская стрижка.JPG" alt="Мужская стрижка" class="w-24 h-24 object-cover rounded-lg mx-auto mb-4">
-                                    <h4 class="text-lg font-semibold mb-2">Мужская стрижка</h4>
-                                    <p class="text-pink-600 font-bold mb-2">от 700 ₽</p>
-                                    <p class="text-gray-600 text-sm">Классические и современные мужские стрижки для любого стиля.</p>
-                                </div>
+                        </div>
+                        
+                        <!-- Hair Services Grid (Hidden by default) -->
+                        <div id="hairServicesGrid" class="hidden">
+                            <div class="flex items-center mb-6">
+                                <button id="backToCategoriesBtn" class="mr-4 text-pink-600 hover:text-pink-700">
+                                    <i class="fas fa-arrow-left mr-2"></i>Назад к категориям
+                                </button>
+                                <h4 class="text-xl font-semibold text-gray-800">Стрижки и уход за волосами</h4>
                             </div>
-                            
-                            <!-- Мужская стрижка под машинку -->
-                            <div class="service-card bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2" data-service="mens_machine" data-price="600">
-                                <div class="text-center">
-                                    <img src="../images/Мужская стрижка под машинку.JPG" alt="Мужская стрижка под машинку" class="w-24 h-24 object-cover rounded-lg mx-auto mb-4">
-                                    <h4 class="text-lg font-semibold mb-2">Мужская стрижка под машинку</h4>
-                                    <p class="text-pink-600 font-bold mb-2">от 600 ₽</p>
-                                    <p class="text-gray-600 text-sm">Быстрая и аккуратная стрижка под машинку для мужчин и детей.</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                                <!-- SPA процедуры -->
+                                <div class="service-card bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2 border-2 border-transparent" data-service="spa" data-price="800">
+                                    <div class="text-center">
+                                        <img src="../images/SPA процедуры.JPG" alt="SPA процедуры" class="w-24 h-24 object-cover rounded-lg mx-auto mb-4">
+                                        <h4 class="text-lg font-semibold mb-2">SPA процедуры</h4>
+                                        <p class="text-pink-600 font-bold mb-2">от 800 ₽</p>
+                                        <p class="text-gray-600 text-sm">Расслабляющие и оздоравливающие процедуры для волос и кожи головы.</p>
+                                    </div>
                                 </div>
-                            </div>
-                            
-                            <!-- Окрашивание волос -->
-                            <div class="service-card bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2" data-service="coloring" data-price="800">
-                                <div class="text-center">
-                                    <img src="../images/Окрашивание волос.JPG" alt="Окрашивание волос" class="w-24 h-24 object-cover rounded-lg mx-auto mb-4">
-                                    <h4 class="text-lg font-semibold mb-2">Окрашивание волос</h4>
-                                    <p class="text-pink-600 font-bold mb-2">от 800 ₽</p>
-                                    <p class="text-gray-600 text-sm">Профессиональное окрашивание с использованием премиальных красок.</p>
+                                
+                                <!-- Женская стрижка -->
+                                <div class="service-card bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2 border-2 border-transparent" data-service="womens_haircut" data-price="700">
+                                    <div class="text-center">
+                                        <img src="../images/Женская стрижка.JPG" alt="Женская стрижка" class="w-24 h-24 object-cover rounded-lg mx-auto mb-4">
+                                        <h4 class="text-lg font-semibold mb-2">Женская стрижка</h4>
+                                        <p class="text-pink-600 font-bold mb-2">от 700 ₽</p>
+                                        <p class="text-gray-600 text-sm">Современные женские стрижки любой сложности с учетом ваших пожеланий.</p>
+                                    </div>
                                 </div>
-                            </div>
-                            
-                            <!-- Мелирование волос -->
-                            <div class="service-card bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2" data-service="highlighting" data-price="1200">
-                                <div class="text-center">
-                                    <img src="../images/Мелирование волос.JPG" alt="Мелирование волос" class="w-24 h-24 object-cover rounded-lg mx-auto mb-4">
-                                    <h4 class="text-lg font-semibold mb-2">Мелирование волос</h4>
-                                    <p class="text-pink-600 font-bold mb-2">1200 ₽</p>
-                                    <p class="text-gray-600 text-sm">Мелирование для создания ярких и естественных акцентов в прическе.</p>
+                                
+                                <!-- Мужская стрижка -->
+                                <div class="service-card bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2 border-2 border-transparent" data-service="mens_haircut" data-price="700">
+                                    <div class="text-center">
+                                        <img src="../images/Мужская стрижка.JPG" alt="Мужская стрижка" class="w-24 h-24 object-cover rounded-lg mx-auto mb-4">
+                                        <h4 class="text-lg font-semibold mb-2">Мужская стрижка</h4>
+                                        <p class="text-pink-600 font-bold mb-2">от 700 ₽</p>
+                                        <p class="text-gray-600 text-sm">Классические и современные мужские стрижки для любого стиля.</p>
+                                    </div>
                                 </div>
-                            </div>
-                            
-                            <!-- Ламинирование волос -->
-                            <div class="service-card bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2" data-service="lamination" data-price="1000">
-                                <div class="text-center">
-                                    <img src="../images/Ламинирования волос.JPG" alt="Ламинирование волос" class="w-24 h-24 object-cover rounded-lg mx-auto mb-4">
-                                    <h4 class="text-lg font-semibold mb-2">Ламинирование волос</h4>
-                                    <p class="text-pink-600 font-bold mb-2">1000 ₽</p>
-                                    <p class="text-gray-600 text-sm">Процедура для гладкости, блеска и защиты волос от повреждений.</p>
+                                
+                                <!-- Мужская стрижка под машинку -->
+                                <div class="service-card bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2 border-2 border-transparent" data-service="mens_machine" data-price="600">
+                                    <div class="text-center">
+                                        <img src="../images/Мужская стрижка под машинку.JPG" alt="Мужская стрижка под машинку" class="w-24 h-24 object-cover rounded-lg mx-auto mb-4">
+                                        <h4 class="text-lg font-semibold mb-2">Мужская стрижка под машинку</h4>
+                                        <p class="text-pink-600 font-bold mb-2">от 600 ₽</p>
+                                        <p class="text-gray-600 text-sm">Быстрая и аккуратная стрижка под машинку для мужчин и детей.</p>
+                                    </div>
                                 </div>
-                            </div>
-                            
-                            <!-- Колористика волос -->
-                            <div class="service-card bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2" data-service="coloristics" data-price="2800">
-                                <div class="text-center">
-                                    <img src="../images/Колористика волос.JPG" alt="Колористика волос" class="w-24 h-24 object-cover rounded-lg mx-auto mb-4">
-                                    <h4 class="text-lg font-semibold mb-2">Колористика волос</h4>
-                                    <p class="text-pink-600 font-bold mb-2">от 2800 ₽</p>
-                                    <p class="text-gray-600 text-sm">Сложные техники окрашивания и подбор идеального оттенка.</p>
+                                
+                                <!-- Окрашивание волос -->
+                                <div class="service-card bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2 border-2 border-transparent" data-service="coloring" data-price="800">
+                                    <div class="text-center">
+                                        <img src="../images/Окрашивание волос.JPG" alt="Окрашивание волос" class="w-24 h-24 object-cover rounded-lg mx-auto mb-4">
+                                        <h4 class="text-lg font-semibold mb-2">Окрашивание волос</h4>
+                                        <p class="text-pink-600 font-bold mb-2">от 800 ₽</p>
+                                        <p class="text-gray-600 text-sm">Профессиональное окрашивание с использованием премиальных красок.</p>
+                                    </div>
                                 </div>
-                            </div>
-                            
-                            <!-- Укрепление гелем -->
-                            <div class="service-card bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2" data-service="gel" data-price="1300">
-                                <div class="text-center">
-                                    <img src="../images/Укрепление гелем 00.37.43.JPG" alt="Укрепление гелем" class="w-24 h-24 object-cover rounded-lg mx-auto mb-4">
-                                    <h4 class="text-lg font-semibold mb-2">Укрепление гелем</h4>
+                                
+                                <!-- Мелирование волос -->
+                                <div class="service-card bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2 border-2 border-transparent" data-service="highlighting" data-price="1200">
+                                    <div class="text-center">
+                                        <img src="../images/Мелирование волос.JPG" alt="Мелирование волос" class="w-24 h-24 object-cover rounded-lg mx-auto mb-4">
+                                        <h4 class="text-lg font-semibold mb-2">Мелирование волос</h4>
+                                        <p class="text-pink-600 font-bold mb-2">1200 ₽</p>
+                                        <p class="text-gray-600 text-sm">Мелирование для создания ярких и естественных акцентов в прическе.</p>
+                                    </div>
+                                </div>
+                                
+                                <!-- Ламинирование волос -->
+                                <div class="service-card bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2 border-2 border-transparent" data-service="lamination" data-price="1000">
+                                    <div class="text-center">
+                                        <img src="../images/Ламинирования волос.JPG" alt="Ламинирование волос" class="w-24 h-24 object-cover rounded-lg mx-auto mb-4">
+                                        <h4 class="text-lg font-semibold mb-2">Ламинирование волос</h4>
+                                        <p class="text-pink-600 font-bold mb-2">1000 ₽</p>
+                                        <p class="text-gray-600 text-sm">Процедура для гладкости, блеска и защиты волос от повреждений.</p>
+                                    </div>
+                                </div>
+                                
+                                <!-- Колористика волос -->
+                                <div class="service-card bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2 border-2 border-transparent" data-service="coloristics" data-price="2800">
+                                    <div class="text-center">
+                                        <img src="../images/Колористика волос.JPG" alt="Колористика волос" class="w-24 h-24 object-cover rounded-lg mx-auto mb-4">
+                                        <h4 class="text-lg font-semibold mb-2">Колористика волос</h4>
+                                        <p class="text-pink-600 font-bold mb-2">от 2800 ₽</p>
+                                        <p class="text-gray-600 text-sm">Сложные техники окрашивания и подбор идеального оттенка.</p>
+                                    </div>
+                                </div>
+                                
+                                <!-- Укрепление гелем -->
+                                <div class="service-card bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2 border-2 border-transparent" data-service="gel" data-price="1300">
+                                    <div class="text-center">
+                                        <img src="../images/Укрепление гелем 00.37.43.JPG" alt="Укрепление гелем" class="w-24 h-24 object-cover rounded-lg mx-auto mb-4">
+                                        <h4 class="text-lg font-semibold mb-2">Укрепление гелем</h4>
                                     <p class="text-pink-600 font-bold mb-2">1300 ₽</p>
                                     <p class="text-gray-600 text-sm">Укрепление и восстановление структуры ногтей с помощью геля.</p>
                                 </div>
@@ -863,12 +919,73 @@
                             </div>
                             
                             <!-- Снятие покрытия -->
-                            <div class="service-card bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2" data-service="coating_removal" data-price="400">
+                            <div class="service-card bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2 border-2 border-transparent" data-service="coating_removal" data-price="400">
                                 <div class="text-center">
                                     <img src="../images/Снятие покрытия.jpeg" alt="Снятие покрытия" class="w-24 h-24 object-cover rounded-lg mx-auto mb-4">
                                     <h4 class="text-lg font-semibold mb-2">Снятие покрытия</h4>
                                     <p class="text-pink-600 font-bold mb-2">400 ₽</p>
                                     <p class="text-gray-600 text-sm">Безопасное снятие гель-лака и других покрытий.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Manicure Services Grid (Hidden by default) -->
+                        <div id="manicureServicesGrid" class="hidden">
+                            <div class="flex items-center mb-6">
+                                <button id="backToCategoriesBtn2" class="mr-4 text-purple-600 hover:text-purple-700">
+                                    <i class="fas fa-arrow-left mr-2"></i>Назад к категориям
+                                </button>
+                                <h4 class="text-xl font-semibold text-gray-800">Маникюр и уход за ногтями</h4>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                                <!-- Комбинированный маникюр -->
+                                <div class="service-card bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2 border-2 border-transparent" data-service="combined_manicure" data-price="1500">
+                                    <div class="text-center">
+                                        <img src="../images/Комбинированный маникюр.jpg" alt="Комбинированный маникюр" class="w-24 h-24 object-cover rounded-lg mx-auto mb-4">
+                                        <h4 class="text-lg font-semibold mb-2">Комбинированный маникюр</h4>
+                                        <p class="text-purple-600 font-bold mb-2">1500 ₽</p>
+                                        <p class="text-gray-600 text-sm">Комбинированный маникюр с укреплением ногтевой пластины.</p>
+                                    </div>
+                                </div>
+                                
+                                <!-- Классический маникюр -->
+                                <div class="service-card bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2 border-2 border-transparent" data-service="classic_manicure" data-price="700">
+                                    <div class="text-center">
+                                        <img src="../images/Классический маникюр.png" alt="Классический маникюр" class="w-24 h-24 object-cover rounded-lg mx-auto mb-4">
+                                        <h4 class="text-lg font-semibold mb-2">Классический маникюр</h4>
+                                        <p class="text-purple-600 font-bold mb-2">700 ₽</p>
+                                        <p class="text-gray-600 text-sm">Классический маникюр с использованием профессиональных средств.</p>
+                                    </div>
+                                </div>
+                                
+                                <!-- Ремонт одного ногтя -->
+                                <div class="service-card bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2 border-2 border-transparent" data-service="nail_repair" data-price="300">
+                                    <div class="text-center">
+                                        <img src="../images/Ремонт одного ногтя.jpg" alt="Ремонт одного ногтя" class="w-24 h-24 object-cover rounded-lg mx-auto mb-4">
+                                        <h4 class="text-lg font-semibold mb-2">Ремонт одного ногтя</h4>
+                                        <p class="text-purple-600 font-bold mb-2">300 ₽</p>
+                                        <p class="text-gray-600 text-sm">Профессиональный ремонт поврежденного ногтя.</p>
+                                    </div>
+                                </div>
+                                
+                                <!-- Укрепление базой или биогелем -->
+                                <div class="service-card bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2 border-2 border-transparent" data-service="base_strengthening" data-price="800">
+                                    <div class="text-center">
+                                        <img src="../images/Укрепление_базой_или_биогелем_копия.jpeg" alt="Укрепление базой или биогелем" class="w-24 h-24 object-cover rounded-lg mx-auto mb-4">
+                                        <h4 class="text-lg font-semibold mb-2">Укрепление базой или биогелем</h4>
+                                        <p class="text-purple-600 font-bold mb-2">800 ₽</p>
+                                        <p class="text-gray-600 text-sm">Укрепление ногтей базой или биогелем для прочности.</p>
+                                    </div>
+                                </div>
+                                
+                                <!-- Снятие покрытия -->
+                                <div class="service-card bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2 border-2 border-transparent" data-service="coating_removal" data-price="400">
+                                    <div class="text-center">
+                                        <img src="../images/Снятие покрытия.jpeg" alt="Снятие покрытия" class="w-24 h-24 object-cover rounded-lg mx-auto mb-4">
+                                        <h4 class="text-lg font-semibold mb-2">Снятие покрытия</h4>
+                                        <p class="text-purple-600 font-bold mb-2">400 ₽</p>
+                                        <p class="text-gray-600 text-sm">Безопасное снятие гель-лака и других покрытий.</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1603,46 +1720,7 @@
             showNotification('info', 'Информация', 'Функция переноса записи будет доступна в ближайшее время');
         }
 
-        // Modal controls
-        document.getElementById('newBookingBtn').addEventListener('click', () => {
-            document.getElementById('bookingModal').classList.remove('hidden');
-            // Показываем сетку услуг, скрываем форму
-            document.querySelector('.grid').style.display = 'grid';
-            document.getElementById('bookingFormContainer').classList.add('hidden');
-        });
 
-        document.getElementById('bookFirstBtn').addEventListener('click', () => {
-            document.getElementById('bookingModal').classList.remove('hidden');
-            // Показываем сетку услуг, скрываем форму
-            document.querySelector('.grid').style.display = 'grid';
-            document.getElementById('bookingFormContainer').classList.add('hidden');
-        });
-
-        document.getElementById('closeModalBtn').addEventListener('click', () => {
-            // Убираем выделение со всех карточек
-            document.querySelectorAll('.service-card').forEach(c => {
-                c.classList.remove('selected');
-            });
-            
-            // Сбрасываем форму и показываем сетку услуг
-            document.querySelector('.grid').style.display = 'grid';
-            document.getElementById('bookingFormContainer').classList.add('hidden');
-            
-            document.getElementById('bookingModal').classList.add('hidden');
-        });
-
-
-        
-        // Back to Services Button
-        document.getElementById('backToServicesBtn').addEventListener('click', () => {
-            // Убираем выделение со всех карточек
-            document.querySelectorAll('.service-card').forEach(c => {
-                c.classList.remove('selected');
-            });
-            
-            document.querySelector('.grid').style.display = 'grid';
-            document.getElementById('bookingFormContainer').classList.add('hidden');
-        });
 
         // Словарь для перевода услуг на русский
         const serviceTranslations = {
@@ -1862,96 +1940,7 @@
 
 
 
-        // Edit Profile Modal
-        document.getElementById('editProfileBtn').addEventListener('click', () => {
-            const modal = document.getElementById('editProfileModal');
-            const fullNameInput = document.getElementById('editFullName');
-            const phoneInput = document.getElementById('editPhone');
-            
-            // Fill current values
-            fullNameInput.value = document.getElementById('userName').textContent;
-            phoneInput.value = document.getElementById('userPhone').textContent === 'Не указан' ? '' : document.getElementById('userPhone').textContent;
-            
-            modal.classList.remove('hidden');
-        });
 
-        // Close Edit Profile Modal
-        document.getElementById('closeEditModalBtn').addEventListener('click', () => {
-            document.getElementById('editProfileModal').classList.add('hidden');
-        });
-
-        // Cancel Edit Profile
-        document.getElementById('cancelEditBtn').addEventListener('click', () => {
-            document.getElementById('editProfileModal').classList.add('hidden');
-        });
-
-        // Change Photo Button
-        document.getElementById('changePhotoBtn').addEventListener('click', () => {
-            document.getElementById('photoSelectionModal').classList.remove('hidden');
-            loadStandardPhotos(); // Загружаем стандартные фото при открытии модального окна
-        });
-
-        // Close Photo Selection Modal
-        document.getElementById('closePhotoModalBtn').addEventListener('click', () => {
-            document.getElementById('photoSelectionModal').classList.add('hidden');
-        });
-
-        // Cancel Photo Selection
-        document.getElementById('cancelPhotoBtn').addEventListener('click', () => {
-            document.getElementById('photoSelectionModal').classList.add('hidden');
-        });
-
-        // Save Photo Selection
-        document.getElementById('savePhotoBtn').addEventListener('click', () => {
-            // Если выбрано фото, применяем его
-            if (window.selectedPhotoPath) {
-                applySelectedPhoto(window.selectedPhotoPath);
-            }
-            document.getElementById('photoSelectionModal').classList.add('hidden');
-        });
-
-        // Handle Edit Profile Form
-        document.getElementById('editProfileForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const fullName = document.getElementById('editFullName').value;
-            const phone = document.getElementById('editPhone').value;
-            
-            // Сразу обновляем UI для быстрого отклика
-            document.getElementById('userName').textContent = fullName;
-            document.getElementById('userPhone').textContent = phone || 'Не указан';
-            
-            // Закрываем модальное окно
-            document.getElementById('editProfileModal').classList.add('hidden');
-            
-            // Показываем уведомление об успехе
-            showNotification('success', 'Профиль обновлен!', 'Ваши данные успешно сохранены');
-            
-            // Асинхронно сохраняем в базу данных
-            setTimeout(async () => {
-                try {
-                    const client = window.supabaseClient || supabaseClient;
-                    if (client) {
-                        const { error } = await client
-                            .from('profiles')
-                            .update({
-                                full_name: fullName,
-                                phone: phone || null,
-                                updated_at: new Date().toISOString()
-                            })
-                            .eq('id', currentUser.id);
-                        
-                        if (error) {
-                            console.error('Error saving to database:', error);
-                            showNotification('warning', 'Внимание', 'Данные сохранены локально, но есть проблемы с сервером');
-                        }
-                    }
-                } catch (error) {
-                    console.error('Error saving to database:', error);
-                    showNotification('warning', 'Внимание', 'Данные сохранены локально, но есть проблемы с сервером');
-                }
-            }, 100);
-        });
 
 
 
@@ -2498,8 +2487,9 @@
                     
                     // Небольшая задержка перед показом формы для лучшего UX
                     setTimeout(() => {
-                        // Скрываем сетку услуг, показываем форму
-                        document.querySelector('.grid').style.display = 'none';
+                        // Скрываем все сетки услуг, показываем форму
+                        document.getElementById('hairServicesGrid').classList.add('hidden');
+                        document.getElementById('manicureServicesGrid').classList.add('hidden');
                         document.getElementById('bookingFormContainer').classList.remove('hidden');
                         
                         // Предзаполняем телефон, если есть в профиле
@@ -2678,6 +2668,223 @@
 
             // Setup menu handlers after menu is created
             setupMenuHandlers();
+            
+            // Booking Modal Controls
+            const newBookingBtn = document.getElementById('newBookingBtn');
+            if (newBookingBtn) {
+                newBookingBtn.addEventListener('click', () => {
+                    document.getElementById('bookingModal').classList.remove('hidden');
+                    // Показываем категории, скрываем все остальное
+                    document.getElementById('categorySelection').classList.remove('hidden');
+                    document.getElementById('hairServicesGrid').classList.add('hidden');
+                    document.getElementById('manicureServicesGrid').classList.add('hidden');
+                    document.getElementById('bookingFormContainer').classList.add('hidden');
+                });
+            }
+
+            const bookFirstBtn = document.getElementById('bookFirstBtn');
+            if (bookFirstBtn) {
+                bookFirstBtn.addEventListener('click', () => {
+                    document.getElementById('bookingModal').classList.remove('hidden');
+                    // Показываем категории, скрываем все остальное
+                    document.getElementById('categorySelection').classList.remove('hidden');
+                    document.getElementById('hairServicesGrid').classList.add('hidden');
+                    document.getElementById('manicureServicesGrid').classList.add('hidden');
+                    document.getElementById('bookingFormContainer').classList.add('hidden');
+                });
+            }
+
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            if (closeModalBtn) {
+                closeModalBtn.addEventListener('click', () => {
+                    // Убираем выделение со всех карточек
+                    document.querySelectorAll('.service-card').forEach(c => {
+                        c.classList.remove('selected');
+                    });
+                    
+                    // Сбрасываем к категориям
+                    document.getElementById('categorySelection').classList.remove('hidden');
+                    document.getElementById('hairServicesGrid').classList.add('hidden');
+                    document.getElementById('manicureServicesGrid').classList.add('hidden');
+                    document.getElementById('bookingFormContainer').classList.add('hidden');
+                    
+                    document.getElementById('bookingModal').classList.add('hidden');
+                });
+            }
+
+            // Category Selection
+            document.querySelectorAll('.category-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const category = card.getAttribute('data-category');
+                    
+                    if (category === 'hair') {
+                        document.getElementById('categorySelection').classList.add('hidden');
+                        document.getElementById('hairServicesGrid').classList.remove('hidden');
+                    } else if (category === 'manicure') {
+                        document.getElementById('categorySelection').classList.add('hidden');
+                        document.getElementById('manicureServicesGrid').classList.remove('hidden');
+                    }
+                });
+            });
+
+            // Back to Categories Buttons
+            const backToCategoriesBtn = document.getElementById('backToCategoriesBtn');
+            if (backToCategoriesBtn) {
+                backToCategoriesBtn.addEventListener('click', () => {
+                    document.getElementById('categorySelection').classList.remove('hidden');
+                    document.getElementById('hairServicesGrid').classList.add('hidden');
+                    document.getElementById('manicureServicesGrid').classList.add('hidden');
+                    document.getElementById('bookingFormContainer').classList.add('hidden');
+                });
+            }
+
+            const backToCategoriesBtn2 = document.getElementById('backToCategoriesBtn2');
+            if (backToCategoriesBtn2) {
+                backToCategoriesBtn2.addEventListener('click', () => {
+                    document.getElementById('categorySelection').classList.remove('hidden');
+                    document.getElementById('hairServicesGrid').classList.add('hidden');
+                    document.getElementById('manicureServicesGrid').classList.add('hidden');
+                    document.getElementById('bookingFormContainer').classList.add('hidden');
+                });
+            }
+
+            // Back to Services Button
+            const backToServicesBtn = document.getElementById('backToServicesBtn');
+            if (backToServicesBtn) {
+                backToServicesBtn.addEventListener('click', () => {
+                    // Убираем выделение со всех карточек
+                    document.querySelectorAll('.service-card').forEach(c => {
+                        c.classList.remove('selected');
+                    });
+                    
+                    // Показываем текущую сетку услуг
+                    const hairGrid = document.getElementById('hairServicesGrid');
+                    const manicureGrid = document.getElementById('manicureServicesGrid');
+                    
+                    if (!hairGrid.classList.contains('hidden')) {
+                        document.getElementById('hairServicesGrid').classList.remove('hidden');
+                    } else if (!manicureGrid.classList.contains('hidden')) {
+                        document.getElementById('manicureServicesGrid').classList.remove('hidden');
+                    }
+                    
+                    document.getElementById('bookingFormContainer').classList.add('hidden');
+                });
+            }
+            
+            // Edit Profile Modal
+            const editProfileBtn = document.getElementById('editProfileBtn');
+            if (editProfileBtn) {
+                editProfileBtn.addEventListener('click', () => {
+                    const modal = document.getElementById('editProfileModal');
+                    const fullNameInput = document.getElementById('editFullName');
+                    const phoneInput = document.getElementById('editPhone');
+                    
+                    // Fill current values
+                    fullNameInput.value = document.getElementById('userName').textContent;
+                    phoneInput.value = document.getElementById('userPhone').textContent === 'Не указан' ? '' : document.getElementById('userPhone').textContent;
+                    
+                    modal.classList.remove('hidden');
+                });
+            }
+
+            // Close Edit Profile Modal
+            const closeEditModalBtn = document.getElementById('closeEditModalBtn');
+            if (closeEditModalBtn) {
+                closeEditModalBtn.addEventListener('click', () => {
+                    document.getElementById('editProfileModal').classList.add('hidden');
+                });
+            }
+
+            // Cancel Edit Profile
+            const cancelEditBtn = document.getElementById('cancelEditBtn');
+            if (cancelEditBtn) {
+                cancelEditBtn.addEventListener('click', () => {
+                    document.getElementById('editProfileModal').classList.add('hidden');
+                });
+            }
+
+            // Change Photo Button
+            const changePhotoBtn = document.getElementById('changePhotoBtn');
+            if (changePhotoBtn) {
+                changePhotoBtn.addEventListener('click', () => {
+                    document.getElementById('photoSelectionModal').classList.remove('hidden');
+                    loadStandardPhotos(); // Загружаем стандартные фото при открытии модального окна
+                });
+            }
+
+            // Close Photo Selection Modal
+            const closePhotoModalBtn = document.getElementById('closePhotoModalBtn');
+            if (closePhotoModalBtn) {
+                closePhotoModalBtn.addEventListener('click', () => {
+                    document.getElementById('photoSelectionModal').classList.add('hidden');
+                });
+            }
+
+            // Cancel Photo Selection
+            const cancelPhotoBtn = document.getElementById('cancelPhotoBtn');
+            if (cancelPhotoBtn) {
+                cancelPhotoBtn.addEventListener('click', () => {
+                    document.getElementById('photoSelectionModal').classList.add('hidden');
+                });
+            }
+
+            // Save Photo Selection
+            const savePhotoBtn = document.getElementById('savePhotoBtn');
+            if (savePhotoBtn) {
+                savePhotoBtn.addEventListener('click', () => {
+                    // Если выбрано фото, применяем его
+                    if (window.selectedPhotoPath) {
+                        applySelectedPhoto(window.selectedPhotoPath);
+                    }
+                    document.getElementById('photoSelectionModal').classList.add('hidden');
+                });
+            }
+
+            // Handle Edit Profile Form
+            const editProfileForm = document.getElementById('editProfileForm');
+            if (editProfileForm) {
+                editProfileForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    
+                    const fullName = document.getElementById('editFullName').value;
+                    const phone = document.getElementById('editPhone').value;
+                    
+                    // Сразу обновляем UI для быстрого отклика
+                    document.getElementById('userName').textContent = fullName;
+                    document.getElementById('userPhone').textContent = phone || 'Не указан';
+                    
+                    // Закрываем модальное окно
+                    document.getElementById('editProfileModal').classList.add('hidden');
+                    
+                    // Показываем уведомление об успехе
+                    showNotification('success', 'Профиль обновлен!', 'Ваши данные успешно сохранены');
+                    
+                    // Асинхронно сохраняем в базу данных
+                    setTimeout(async () => {
+                        try {
+                            const client = window.supabaseClient || supabaseClient;
+                            if (client) {
+                                const { error } = await client
+                                    .from('profiles')
+                                    .update({
+                                        full_name: fullName,
+                                        phone: phone || null,
+                                        updated_at: new Date().toISOString()
+                                    })
+                                    .eq('id', currentUser.id);
+                                
+                                if (error) {
+                                    console.error('Error saving to database:', error);
+                                    showNotification('warning', 'Внимание', 'Данные сохранены локально, но есть проблемы с сервером');
+                                }
+                            }
+                        } catch (error) {
+                            console.error('Error saving to database:', error);
+                            showNotification('warning', 'Внимание', 'Данные сохранены локально, но есть проблемы с сервером');
+                        }
+                    }, 100);
+                });
+            }
         });
 
     </script>
