@@ -3133,35 +3133,25 @@
                     reader.readAsDataURL(file);
                 });
                 
-                // Отправляем на сервер
+                // Показываем инструкции для ручного добавления
+                showNotification('info', 'Инструкции', `Фотография "${file.name}" подготовлена для добавления. См. файл HOW_TO_ADD_PHOTOS.md для инструкций по добавлению на сайт.`);
+                
+                // Сохраняем в localStorage для демонстрации
                 const photoData = {
+                    id: Date.now() + Math.random(),
                     category: category,
                     src: fileData,
                     fileName: file.name,
-                    description: ''
+                    description: '',
+                    uploadDate: new Date().toISOString()
                 };
                 
-                const response = await fetch('pages/api/upload-photos.js', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(photoData)
-                });
+                const existingPhotos = JSON.parse(localStorage.getItem('portfolioPhotos') || '[]');
+                existingPhotos.push(photoData);
+                localStorage.setItem('portfolioPhotos', JSON.stringify(existingPhotos));
                 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`);
-                }
-                
-                const result = await response.json();
-                
-                if (result.success) {
-                    console.log('File uploaded successfully:', file.name);
-                    uploadedCount++;
-                } else {
-                    console.error('Error uploading file:', file.name, result.error);
-                    throw new Error(result.error || 'Unknown error');
-                }
+                console.log('File prepared for manual upload:', file.name);
+                uploadedCount++;
             }
             
             // Скрываем загрузку

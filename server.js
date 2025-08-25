@@ -65,7 +65,7 @@ const server = http.createServer((req, res) => {
     }
     
     // Определяем путь к файлу
-    let filePath = pathname;
+    let filePath = decodeURIComponent(pathname);
     
     // Если запрос к корню, показываем index.html
     if (pathname === '/') {
@@ -73,7 +73,7 @@ const server = http.createServer((req, res) => {
     }
     
     // Добавляем точку в начало пути для статических файлов
-    if (!filePath.startsWith('/pages/') && !filePath.startsWith('/images/')) {
+    if (!filePath.startsWith('/pages/')) {
         filePath = '.' + filePath;
     }
     

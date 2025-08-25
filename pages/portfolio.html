@@ -1225,10 +1225,15 @@
                     </div>
                 `;
                 
-                // Получаем фотографии с сервера
-                const response = await fetch('api/upload-photos.js');
-                const result = await response.json();
-                const portfolioPhotos = result.success ? result.photos : [];
+                // Получаем фотографии из существующего файла
+                try {
+                    const response = await fetch('../data/existing-photos.json');
+                    const portfolioPhotos = await response.json();
+                } catch (error) {
+                    console.error('Failed to load existing photos:', error);
+                    // Fallback to localStorage
+                    const portfolioPhotos = JSON.parse(localStorage.getItem('portfolioPhotos') || '[]');
+                }
                 
                 // Фильтруем фотографии
                 let photosToShow = [];
