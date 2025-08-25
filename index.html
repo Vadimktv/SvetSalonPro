@@ -13,6 +13,7 @@
     <link rel="shortcut icon" type="image/png" href="images/ui/logo.png">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="/assets/header.css">
     <style>
 
         @keyframes fadeIn {
@@ -125,18 +126,16 @@
             transform: scale(0.8);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             pointer-events: none;
-            z-index: -1;
         }
 
         .menu-item:hover::before {
-            opacity: 0;
-            transform: scale(0.8);
+            opacity: 1;
+            transform: scale(1);
         }
 
         .menu-item:hover {
             transform: translateX(8px);
-            color: white;
-            background: linear-gradient(135deg, #ec4899, #db2777);
+            color: #ec4899;
         }
 
         .menu-item:active {
@@ -144,15 +143,15 @@
         }
 
         .menu-item:active::before {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(236, 72, 153, 0.12);
             transform: scale(1.05);
         }
         
         .menu-icon {
             width: 36px;
             height: 36px;
-            border-radius: 8px;
-            background: #f3f4f6;
+            border-radius: 10px;
+            background: rgba(236, 72, 153, 0.08);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -160,20 +159,25 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             flex-shrink: 0;
         }
-        
+
         .menu-item:hover .menu-icon {
-            background: #ec4899;
+            background: rgba(236, 72, 153, 0.15);
             transform: scale(1.05);
         }
-        
-        .menu-item:hover .menu-icon i {
-            color: white;
+
+        .menu-item:active .menu-icon {
+            transform: scale(0.98);
         }
-        
+
         .menu-icon i {
-            color: #6b7280;
-            font-size: 14px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 18px;
+            color: #ec4899;
+            transition: all 0.3s ease;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+        }
+
+        .menu-item:hover .menu-icon i {
+            transform: scale(1.1);
         }
 
         /* Better focus states */
@@ -1125,117 +1129,8 @@
     <div id="page-preloader">
                         <div class="spinner"><img src="images/ui/logo.png" alt="Loading..." style="width:64px;height:64px;"></div>
     </div>
-    <!-- iOS Style Side Menu -->
-    <div id="sideMenu" class="fixed inset-0 z-50 pointer-events-none">
-        <!-- Backdrop -->
-        <div id="menuBackdrop" class="absolute inset-0 bg-black/20 opacity-0 transition-all duration-250 ease-out pointer-events-none"></div>
-        
-        <!-- Menu Container -->
-        <div id="menuContainer" class="absolute top-24 right-4 h-auto max-h-[80vh] w-72 bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl transform scale-75 opacity-0 transition-all duration-250 ease-out border border-white/30">
-            <!-- Menu Header -->
-            <div class="flex items-center justify-between p-3 border-b border-white/10">
-                <div class="flex items-center space-x-2">
-                    <div class="w-8 h-8 bg-pink-600 rounded-full flex items-center justify-center">
-                        <span class="text-white font-bold text-xs">SVET</span>
-                    </div>
-                    <div>
-                        <h2 class="text-base font-semibold text-gray-800">SvetSalonPro</h2>
-                        <p class="text-xs text-gray-600">Салон красоты</p>
-                    </div>
-                </div>
-                <button id="closeMenuBtn" class="w-8 h-8 rounded-full bg-gray-100/50 backdrop-blur-sm flex items-center justify-center hover:bg-gray-200/50 active:bg-gray-300/50 transition-all duration-200 transform hover:scale-105 active:scale-95 cursor-pointer">
-                    <i class="fas fa-times text-gray-600 text-sm"></i>
-                </button>
-            </div>
-            
-            <!-- Menu Content -->
-            <div class="flex-1 overflow-y-auto">
-                <!-- Navigation Links -->
-                <div class="p-2 space-y-0.5">
-                    <a href="#home" class="menu-item group">
-                        <div class="menu-icon">
-                            <i class="fas fa-home"></i>
-                        </div>
-                        <span>Главная</span>
-                    </a>
-                    
-                    <a href="#about" class="menu-item group">
-                        <div class="menu-icon">
-                            <i class="fas fa-info-circle"></i>
-                        </div>
-                        <span>О нас</span>
-                    </a>
-                    
-                    <a href="#services" class="menu-item group">
-                        <div class="menu-icon">
-                            <i class="fas fa-spa"></i>
-                        </div>
-                        <span>Услуги</span>
-                    </a>
-                    
-                    <a href="#masters" class="menu-item group">
-                        <div class="menu-icon">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <span>Мастера</span>
-                    </a>
-                    
-                    <a href="pages/portfolio.html" class="menu-item group">
-                        <div class="menu-icon">
-                            <i class="fas fa-images"></i>
-                        </div>
-                        <span>Примеры работ</span>
-                    </a>
-                    
-                    <a href="#contact" class="menu-item group">
-                        <div class="menu-icon">
-                            <i class="fas fa-phone"></i>
-                        </div>
-                        <span>Контакты</span>
-                    </a>
-                    
-                    <a href="pages/account.html" class="menu-item group">
-                        <div class="menu-icon">
-                            <i class="fas fa-user"></i>
-                        </div>
-                        <span>Личный кабинет</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Header -->
-    <header class="fixed w-full bg-white shadow-sm z-50">
-        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <div class="flex items-center">
-                <a href="#" class="logo-link">
-                    <h1 class="text-2xl font-bold text-pink-600 hover:text-pink-700 transition-colors duration-200 cursor-pointer">SvetSalonPro</h1>
-                </a>
-            </div>
-            <nav class="hidden md:flex items-center space-x-8">
-                <a href="#home" class="nav-link text-pink-600 font-semibold">Главная</a>
-                <a href="#about" class="nav-link text-gray-700 hover:text-pink-600 transition">О нас</a>
-                <a href="#services" class="nav-link text-gray-700 hover:text-pink-600 transition">Услуги</a>
-                <a href="#masters" class="nav-link text-gray-700 hover:text-pink-600 transition">Мастера</a>
-                <a href="pages/portfolio.html" class="nav-link text-gray-700 hover:text-pink-600 transition">Примеры работ</a>
-                <a href="#contact" class="nav-link text-gray-700 hover:text-pink-600 transition">Контакты</a>
-                <a href="pages/account.html" class="nav-link text-gray-700 hover:text-pink-600 transition">Личный кабинет</a>
-            </nav>
-            <div class="flex items-center space-x-4">
-                <!-- Profile Icon -->
-                <button id="profileBtn" class="hidden md:block text-gray-700 hover:text-pink-600 transition-colors duration-200">
-                    <div class="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center">
-                        <i class="fas fa-user text-white text-sm"></i>
-                    </div>
-                </button>
-                <!-- iOS Style Menu Button -->
-                <button id="iosMenuBtn" class="md:hidden w-10 h-10 rounded-full bg-gray-100/50 backdrop-blur-sm flex items-center justify-center hover:bg-gray-200/50 active:bg-gray-300/50 transition-all duration-200 transform hover:scale-105 active:scale-95 cursor-pointer">
-                    <i class="fas fa-bars text-gray-600 text-sm"></i>
-                </button>
-            </div>
-        </div>
-    </header>
+    <!-- Site Header Container -->
+    <div id="site-header"></div>
 
     <!-- Telegram Login Button -->
     <script>
@@ -3544,5 +3439,23 @@
             </div>
         </div>
     </div>
+
+    <!-- Header Loading Script -->
+    <script src="/assets/header.js"></script>
+    <script>
+        // Load header dynamically
+        fetch('/partials/header.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('site-header').innerHTML = html;
+                // Initialize header functionality after loading
+                if (window.HeaderModule) {
+                    window.HeaderModule.initializeHeader();
+                }
+            })
+            .catch(error => {
+                console.error('Error loading header:', error);
+            });
+    </script>
 </body>
 </html>
