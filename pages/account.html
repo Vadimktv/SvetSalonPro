@@ -1419,11 +1419,21 @@
                     return;
                 }
                 
-                // Проверяем текущего пользователя через Supabase
+                // Проверяем текущего пользователя через Supabase с обработкой ошибок
                 console.log('Проверяем текущего пользователя через Supabase...');
-                const { data: { user }, error } = await client.auth.getUser();
+                let user = null;
+                let error = null;
                 
-                if (error) {
+                try {
+                    const result = await client.auth.getUser();
+                    user = result.data?.user;
+                    error = result.error;
+                } catch (authError) {
+                    console.log('Auth session missing, это нормально для неавторизованных пользователей');
+                    error = authError;
+                }
+                
+                if (error && error.message !== 'Auth session missing') {
                     console.error('Ошибка получения пользователя:', error);
                     hideLoadingState();
                     showAuth();
@@ -1552,18 +1562,35 @@
                         );
                     }
                     
-                    // Устанавливаем сессию
-                    let { data, error } = await client.auth.setSession({
-                        access_token: accessToken,
-                        refresh_token: refreshToken || null
-                    });
+                    // Устанавливаем сессию с обработкой ошибок
+                    let data = null;
+                    let error = null;
+                    
+                    try {
+                        const result = await client.auth.setSession({
+                            access_token: accessToken,
+                            refresh_token: refreshToken || null
+                        });
+                        data = result.data;
+                        error = result.error;
+                    } catch (sessionError) {
+                        console.log('Ошибка установки сессии, пробуем другой способ...');
+                        error = sessionError;
+                    }
                     
                     // Если не удалось установить сессию, пробуем другой способ
                     if (error && refreshToken) {
                         console.log('Пробуем установить сессию только с access_token...');
-                        ({ data, error } = await client.auth.setSession({
-                            access_token: accessToken
-                        }));
+                        try {
+                            const result = await client.auth.setSession({
+                                access_token: accessToken
+                            });
+                            data = result.data;
+                            error = result.error;
+                        } catch (sessionError2) {
+                            console.log('Вторая попытка установки сессии также не удалась');
+                            error = sessionError2;
+                        }
                     }
                     
                     if (error) {
@@ -2584,17 +2611,28 @@
         // Initialize page
         document.addEventListener('DOMContentLoaded', async () => {
             console.log('DOM Content Loaded - Starting initialization...');
-            await initSupabase();
-            setupAuthStateChange();
+            
+            // Initialize menu FIRST - независимо от авторизации
+            console.log('Initializing menu FIRST...');
+            initializeMenu();
+            
+            // Setup all event handlers
+            setupAllEventHandlers();
+            
+            // Initialize other features
             initializeDateTimeInputs();
             loadAvailableImages();
             
-            // Initialize menu immediately
-            console.log('Initializing menu...');
-            initializeMenu();
-            
-            // Setup all event handlers after DOM is loaded
-            setupAllEventHandlers();
+            // Initialize Supabase LAST - чтобы ошибки не блокировали меню
+            try {
+                await initSupabase();
+                setupAuthStateChange();
+            } catch (error) {
+                console.error('Supabase initialization failed, but menu should still work:', error);
+                // Показываем форму входа даже при ошибке
+                hideLoadingState();
+                showAuth();
+            }
         });
 
 
