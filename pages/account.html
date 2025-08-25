@@ -87,13 +87,25 @@
     <style>
 
         
-        .nav-link:hover::after {
+        /* Стили для навигационных ссылок */
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-link::after {
             content: '';
-            display: block;
-            width: 100%;
+            position: absolute;
+            width: 0;
             height: 2px;
+            bottom: -4px;
+            left: 0;
             background-color: #ec4899;
-            margin-top: 2px;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
         }
 
         /* Анимации для карточек услуг */
@@ -248,6 +260,68 @@
         /* Prevent body scroll when menu is open */
         body.menu-open {
             overflow: hidden;
+        }
+
+        /* Menu Items */
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: #1f2937;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+        }
+
+        .menu-item:hover {
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.1) 0%, rgba(236, 72, 153, 0.05) 100%);
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(236, 72, 153, 0.15);
+        }
+
+        .menu-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.1) 0%, rgba(236, 72, 153, 0.05) 100%);
+            color: #ec4899;
+            font-size: 14px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .menu-item:hover .menu-icon {
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.2) 0%, rgba(236, 72, 153, 0.1) 100%);
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(236, 72, 153, 0.2);
+        }
+
+        /* Bubble Animation */
+        @keyframes bubblePop {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .bubble-animation {
+            animation: bubblePop 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         /* Haptic feedback animation */
@@ -558,7 +632,7 @@
         }
     </style>
 </head>
-<body class="font-sans bg-gradient-to-br from-pink-50 to-white text-gray-800 min-h-screen">
+<body class="bg-gradient-to-br from-pink-50 via-white to-purple-50">
     <!-- Custom Notification System -->
     <div id="notificationContainer" class="fixed top-24 left-4 right-4 z-50 space-y-2 max-w-sm mx-auto"></div>
     <!-- Header -->
@@ -569,42 +643,32 @@
                     <h1 class="text-2xl font-bold text-pink-600 hover:text-pink-700 transition-colors duration-200 cursor-pointer">SvetSalonPro</h1>
                 </a>
             </div>
-            <nav class="hidden md:flex space-x-8">
+            <nav class="hidden md:flex items-center space-x-8">
                 <a href="../index.html#home" class="nav-link text-gray-700 hover:text-pink-600 transition">Главная</a>
                 <a href="../index.html#about" class="nav-link text-gray-700 hover:text-pink-600 transition">О нас</a>
                 <a href="../index.html#services" class="nav-link text-gray-700 hover:text-pink-600 transition">Услуги</a>
                 <a href="../index.html#masters" class="nav-link text-gray-700 hover:text-pink-600 transition">Мастера</a>
+                <a href="portfolio.html" class="nav-link text-gray-700 hover:text-pink-600 transition">Примеры работ</a>
                 <a href="../index.html#contact" class="nav-link text-gray-700 hover:text-pink-600 transition">Контакты</a>
                 <a href="account.html" class="nav-link text-pink-600 font-semibold">Личный кабинет</a>
             </nav>
             <div class="flex items-center space-x-4">
-                <!-- Admin Panel Button (Hidden by default) -->
-                <button id="adminPanelBtn" class="hidden md:block text-gray-700 hover:text-red-600 transition-colors duration-200 bg-red-50 hover:bg-red-100 px-3 py-2 rounded-lg" style="display: none !important;">
-                    <div class="flex items-center space-x-2">
-                        <i class="fas fa-crown text-red-500"></i>
-                        <span class="text-sm font-medium">Админ панель</span>
+                <!-- Profile Icon -->
+                <button id="profileBtn" class="hidden md:block text-gray-700 hover:text-pink-600 transition-colors duration-200">
+                    <div class="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center">
+                        <i class="fas fa-user text-white text-sm"></i>
                     </div>
-            </button>
-                <!-- Mobile Admin Panel Button -->
-                <button id="mobileAdminPanelBtn" class="md:hidden text-gray-700 hover:text-red-600 transition-colors duration-200 bg-red-50 hover:bg-red-100 px-2 py-2 rounded-lg" style="display: none !important;">
-                    <i class="fas fa-crown text-red-500"></i>
                 </button>
                 <!-- iOS Style Menu Button -->
-                <button id="iosMenuBtn" class="md:hidden text-gray-700 hover:text-pink-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 rounded-full">
-                    <div class="w-12 h-12 bg-gray-100/50 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-gray-200/50 active:bg-gray-300/50 transition-all duration-200 transform hover:scale-105 active:scale-95">
-                        <div class="menu-icon-container">
-                            <span class="menu-line"></span>
-                            <span class="menu-line"></span>
-                            <span class="menu-line"></span>
-        </div>
-                    </div>
+                <button id="iosMenuBtn" class="md:hidden w-10 h-10 rounded-full bg-gray-100/50 backdrop-blur-sm flex items-center justify-center hover:bg-gray-200/50 active:bg-gray-300/50 transition-all duration-200 transform hover:scale-105 active:scale-95 cursor-pointer">
+                    <i class="fas fa-bars text-gray-600 text-sm"></i>
                 </button>
             </div>
         </div>
     </header>
 
     <!-- iOS Style Side Menu -->
-    <div id="sideMenu" class="fixed inset-0 z-60 pointer-events-none">
+    <div id="sideMenu" class="fixed inset-0 z-50 pointer-events-none">
         <!-- Backdrop -->
         <div id="menuBackdrop" class="absolute inset-0 bg-black/20 opacity-0 transition-all duration-250 ease-out pointer-events-none"></div>
         
@@ -613,7 +677,7 @@
             <!-- Menu Header -->
             <div class="flex items-center justify-between p-3 border-b border-white/10">
                 <div class="flex items-center space-x-2">
-                                            <img src="../images/ui/logo.png" alt="SvetSalonPro" class="w-8 h-8 rounded-full">
+                    <img src="../images/ui/logo.png" alt="SvetSalonPro" class="w-8 h-8 rounded-full">
                     <div>
                         <h2 class="text-base font-semibold text-gray-800">SvetSalonPro</h2>
                         <p class="text-xs text-gray-600">Салон красоты</p>
@@ -656,7 +720,7 @@
                         <span>Мастера</span>
                     </a>
                     
-                    <a href="../pages/portfolio.html" class="menu-item group">
+                    <a href="portfolio.html" class="menu-item group">
                         <div class="menu-icon">
                             <i class="fas fa-images"></i>
                         </div>
@@ -669,13 +733,7 @@
                         </div>
                         <span>Контакты</span>
                     </a>
-                </div>
-                
-                <!-- Divider -->
-                <div class="mx-4 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
-                
-                <!-- Profile Section -->
-                <div class="p-2">
+                    
                     <a href="account.html" class="menu-item group">
                         <div class="menu-icon">
                             <i class="fas fa-user"></i>
@@ -684,9 +742,8 @@
                     </a>
                 </div>
             </div>
-            </div>
         </div>
-    </header>
+    </div>
 
     <!-- Main Content -->
     <main class="pt-32 pb-20">
@@ -3122,103 +3179,78 @@
         function setupAllEventHandlers() {
             console.log('Setting up all event handlers...');
             
-            // iOS Style Menu Handlers
-            function initializeMenu() {
-                let isMenuOpen = false;
-                const iosMenuBtn = document.getElementById('iosMenuBtn');
-                const sideMenu = document.getElementById('sideMenu');
-                const closeMenuBtn = document.getElementById('closeMenuBtn');
-                const menuBackdrop = document.getElementById('menuBackdrop');
-                const menuContainer = document.getElementById('menuContainer');
+            // Menu functionality
+            let isMenuOpen = false;
+            const sideMenu = document.getElementById('sideMenu');
+            const iosMenuBtn = document.getElementById('iosMenuBtn');
+            const closeMenuBtn = document.getElementById('closeMenuBtn');
+            const menuBackdrop = document.getElementById('menuBackdrop');
+
+            // Haptic feedback function
+            function triggerHapticFeedback() {
+                if (navigator.vibrate) {
+                    navigator.vibrate(10);
+                }
+                document.body.classList.add('haptic-feedback');
+                setTimeout(() => {
+                    document.body.classList.remove('haptic-feedback');
+                }, 100);
+            }
+
+            // Open menu function
+            function openMenu() {
+                if (isMenuOpen) return;
                 
-                // Debug: Check if elements exist
-                console.log('Menu elements found:', {
-                    iosMenuBtn: !!iosMenuBtn,
-                    sideMenu: !!sideMenu,
-                    closeMenuBtn: !!closeMenuBtn,
-                    menuBackdrop: !!menuBackdrop,
-                    menuContainer: !!menuContainer
+                triggerHapticFeedback();
+                isMenuOpen = true;
+                sideMenu.classList.add('open');
+                document.body.classList.add('menu-open');
+                iosMenuBtn.classList.add('active');
+                
+                setTimeout(() => {
+                    sideMenu.style.pointerEvents = 'all';
+                }, 50);
+            }
+
+            // Close menu function
+            function closeMenu() {
+                if (!isMenuOpen) return;
+                
+                triggerHapticFeedback();
+                isMenuOpen = false;
+                sideMenu.classList.remove('open');
+                document.body.classList.remove('menu-open');
+                iosMenuBtn.classList.remove('active');
+                sideMenu.style.pointerEvents = 'none';
+            }
+
+            // Event listeners
+            if (iosMenuBtn) {
+                iosMenuBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    if (isMenuOpen) {
+                        closeMenu();
+                    } else {
+                        openMenu();
+                    }
                 });
+            }
 
-                // Haptic feedback function
-                function triggerHapticFeedback() {
-                    if ('vibrate' in navigator) {
-                        navigator.vibrate(10);
-                    }
-                    // Fallback visual feedback
-                    document.body.classList.add('haptic-feedback');
-                    setTimeout(() => {
-                        document.body.classList.remove('haptic-feedback');
-                    }, 100);
-                }
+            if (closeMenuBtn) {
+                closeMenuBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    closeMenu();
+                });
+            }
 
-                // Open menu function
-                function openMenu() {
-                    if (isMenuOpen) return;
-                    
-                    if (!sideMenu) {
-                        return;
-                    }
-                    
-                    triggerHapticFeedback();
-                    isMenuOpen = true;
-                    sideMenu.classList.add('open');
-                    document.body.classList.add('menu-open');
-                    iosMenuBtn.classList.add('active');
-                    
-                    setTimeout(() => {
-                        sideMenu.style.pointerEvents = 'all';
-                    }, 50);
-                }
-
-                // Close menu function
-                function closeMenu() {
-                    if (!isMenuOpen) return;
-                    
-                    triggerHapticFeedback();
-                    isMenuOpen = false;
-                    sideMenu.classList.remove('open');
-                    document.body.classList.remove('menu-open');
-                    iosMenuBtn.classList.remove('active');
-                    sideMenu.style.pointerEvents = 'none';
-                }
-
-                // Event listeners
-                if (iosMenuBtn) {
-                    iosMenuBtn.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        
-                        if (isMenuOpen) {
-                            closeMenu();
-                        } else {
-                            openMenu();
-                        }
-                    });
-                }
-
-                if (closeMenuBtn) {
-                    closeMenuBtn.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        closeMenu();
-                    });
-                }
-
-                // Close menu when clicking on backdrop
-                if (menuBackdrop) {
-                    menuBackdrop.addEventListener('click', (e) => {
-                        if (e.target === menuBackdrop) {
-                            closeMenu();
-                        }
-                    });
-                }
-
-                // Close menu when pressing Escape key
-                document.addEventListener('keydown', (e) => {
-                    if (e.key === 'Escape' && isMenuOpen) {
-                        closeMenu();
-                    }
+            if (menuBackdrop) {
+                menuBackdrop.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    closeMenu();
                 });
             }
 
@@ -3252,13 +3284,11 @@
             });
 
             // Menu item click handlers
+            // Menu item click handlers
             function setupMenuHandlers() {
-                console.log('Setting up menu item handlers...');
                 const menuItems = document.querySelectorAll('.menu-item');
-                console.log('Found menu items:', menuItems.length);
                 
                 menuItems.forEach((item, index) => {
-                    console.log(`Setting up handler for menu item ${index}:`, item.textContent.trim());
                     item.addEventListener('click', (e) => {
                         e.preventDefault();
                         e.stopPropagation();
@@ -3293,6 +3323,18 @@
                     });
                 });
             }
+
+            // Keyboard event listener for Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && isMenuOpen) {
+                    closeMenu();
+                }
+            });
+
+            // Initialize menu handlers when DOM is loaded
+            document.addEventListener('DOMContentLoaded', () => {
+                setupMenuHandlers();
+            });
 
             // Setup menu handlers after menu is created
             console.log('Setting up menu handlers...');
