@@ -2893,6 +2893,8 @@
 
     // Обработка выбора фотографий
     function handlePhotoSelection(event) {
+        console.log('handlePhotoSelection called with files:', event.target.files.length);
+        
         const files = event.target.files;
         const previewContainer = document.getElementById('previewContainer');
         const photoPreview = document.getElementById('photoPreview');
@@ -2902,6 +2904,8 @@
             const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
             const validFiles = Array.from(files).filter(file => allowedTypes.includes(file.type));
             
+            console.log('Valid files found:', validFiles.length);
+            
             if (validFiles.length !== files.length) {
                 showNotification('warning', 'Внимание', 'Некоторые файлы не являются изображениями и будут пропущены');
             }
@@ -2910,7 +2914,14 @@
                 photoPreview.classList.remove('hidden');
                 previewContainer.innerHTML = '';
                 
-                validFiles.forEach((file, index) => {
+                // Убираем дублирование файлов
+                const uniqueFiles = validFiles.filter((file, index, self) => 
+                    index === self.findIndex(f => f.name === file.name && f.size === file.size)
+                );
+                
+                console.log('Unique files after deduplication:', uniqueFiles.length);
+                
+                uniqueFiles.forEach((file, index) => {
                     const reader = new FileReader();
                     reader.onload = function(e) {
                         const previewDiv = document.createElement('div');
@@ -2924,10 +2935,12 @@
                     reader.readAsDataURL(file);
                 });
                 
-                // Обновляем файлы в input только валидными
+                // Обновляем файлы в input только уникальными валидными
                 const dt = new DataTransfer();
-                validFiles.forEach(file => dt.items.add(file));
+                uniqueFiles.forEach(file => dt.items.add(file));
                 event.target.files = dt.files;
+                
+                console.log('Files updated in input:', dt.files.length);
             } else {
                 photoPreview.classList.add('hidden');
                 showNotification('error', 'Ошибка', 'Не выбрано ни одного изображения');
@@ -2940,6 +2953,7 @@
     // Удалить фотографию из предварительного просмотра
     function removePhoto(index) {
         const fileInput = document.getElementById('photoFiles');
+        const previewContainer = document.getElementById('previewContainer');
         const dt = new DataTransfer();
         const files = fileInput.files;
         
@@ -2950,7 +2964,27 @@
         }
         
         fileInput.files = dt.files;
-        handlePhotoSelection({ target: { files: dt.files } });
+        
+        // Обновляем предварительный просмотр без вызова handlePhotoSelection
+        if (dt.files.length > 0) {
+            previewContainer.innerHTML = '';
+            
+            Array.from(dt.files).forEach((file, newIndex) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const previewDiv = document.createElement('div');
+                    previewDiv.className = 'relative';
+                    previewDiv.innerHTML = `
+                        <img src="${e.target.result}" alt="Preview ${newIndex + 1}" class="w-full h-24 sm:h-32 object-cover rounded-lg">
+                        <button onclick="removePhoto(${newIndex})" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center text-xs">×</button>
+                    `;
+                    previewContainer.appendChild(previewDiv);
+                };
+                reader.readAsDataURL(file);
+            });
+        } else {
+            document.getElementById('photoPreview').classList.add('hidden');
+        }
     }
 
     // Drag and Drop функции
@@ -3028,6 +3062,10 @@
             uploadBtnLoading: !!uploadBtnLoading
         });
         
+        console.log('Upload button element:', uploadBtn);
+        console.log('Upload button text element:', uploadBtnText);
+        console.log('Upload button loading element:', uploadBtnLoading);
+        
         if (!fileInput || !fileInput.files || !fileInput.files.length) {
             console.error('No files selected');
             showNotification('error', 'Ошибка', 'Выберите фотографии для загрузки');
@@ -3058,9 +3096,25 @@
         }
         
         // Показываем загрузку
-        if (uploadBtn) uploadBtn.disabled = true;
-        if (uploadBtnText) uploadBtnText.classList.add('hidden');
-        if (uploadBtnLoading) uploadBtnLoading.classList.remove('hidden');
+        console.log('Setting loading state...');
+        if (uploadBtn) {
+            uploadBtn.disabled = true;
+            console.log('Upload button disabled');
+        } else {
+            console.error('Upload button not found!');
+        }
+        if (uploadBtnText) {
+            uploadBtnText.classList.add('hidden');
+            console.log('Upload button text hidden');
+        } else {
+            console.error('Upload button text not found!');
+        }
+        if (uploadBtnLoading) {
+            uploadBtnLoading.classList.remove('hidden');
+            console.log('Upload button loading shown');
+        } else {
+            console.error('Upload button loading not found!');
+        }
         
         try {
             let uploadedCount = 0;
@@ -3097,9 +3151,19 @@
             }
             
             // Скрываем загрузку
-            if (uploadBtn) uploadBtn.disabled = false;
-            if (uploadBtnText) uploadBtnText.classList.remove('hidden');
-            if (uploadBtnLoading) uploadBtnLoading.classList.add('hidden');
+            console.log('Resetting loading state...');
+            if (uploadBtn) {
+                uploadBtn.disabled = false;
+                console.log('Upload button enabled');
+            }
+            if (uploadBtnText) {
+                uploadBtnText.classList.remove('hidden');
+                console.log('Upload button text shown');
+            }
+            if (uploadBtnLoading) {
+                uploadBtnLoading.classList.add('hidden');
+                console.log('Upload button loading hidden');
+            }
             
             const categoryName = categorySelect && categorySelect.options[categorySelect.selectedIndex] 
                 ? categorySelect.options[categorySelect.selectedIndex].text 
@@ -3116,9 +3180,19 @@
             console.error('Error in uploadPhotos:', error);
             
             // Скрываем загрузку
-            if (uploadBtn) uploadBtn.disabled = false;
-            if (uploadBtnText) uploadBtnText.classList.remove('hidden');
-            if (uploadBtnLoading) uploadBtnLoading.classList.add('hidden');
+            console.log('Resetting loading state after error...');
+            if (uploadBtn) {
+                uploadBtn.disabled = false;
+                console.log('Upload button enabled after error');
+            }
+            if (uploadBtnText) {
+                uploadBtnText.classList.remove('hidden');
+                console.log('Upload button text shown after error');
+            }
+            if (uploadBtnLoading) {
+                uploadBtnLoading.classList.add('hidden');
+                console.log('Upload button loading hidden after error');
+            }
             
             showNotification('error', 'Ошибка', 'Произошла ошибка при загрузке фотографий: ' + error.message);
         }
