@@ -684,92 +684,25 @@
                     <h2 class="text-3xl font-bold text-gray-800 mb-6">Вход в личный кабинет</h2>
                     
                     <!-- Login Form -->
-                    <form id="loginForm" class="space-y-4">
-                        <!-- Auth Method Toggle -->
-                        <div class="flex bg-gray-100 rounded-lg p-1 mb-4">
-                            <button type="button" id="phoneAuthBtn" class="flex-1 py-2 px-4 rounded-md bg-pink-600 text-white font-medium transition-colors">
-                                <i class="fas fa-mobile-alt mr-2"></i>Телефон
-                            </button>
-                            <button type="button" id="emailAuthBtn" class="flex-1 py-2 px-4 rounded-md text-gray-600 font-medium transition-colors hover:bg-white">
-                                <i class="fas fa-envelope mr-2"></i>Email
-                            </button>
+                    <form id="loginForm" class="space-y-6">
+                        <div>
+                            <label for="email" class="block text-gray-700 font-medium mb-3 text-left">Email</label>
+                            <input type="email" id="email" name="email" required 
+                                   class="form-input w-full"
+                                   placeholder="your@email.com">
                         </div>
                         
-                        <!-- Phone Auth Section -->
-                        <div id="phoneAuthSection">
-                            <div>
-                                <label for="phone" class="block text-gray-700 font-medium mb-2 text-left">Номер телефона</label>
-                                <input type="tel" id="phone" name="phone" required 
-                                       class="form-input w-full"
-                                       placeholder="(999) 123-45-67"
-                                       maxlength="15">
-                            </div>
-                            
-                            <button type="submit" id="loginBtn" class="btn-primary w-full py-3 px-6 rounded-lg text-white font-semibold">
-                                <span id="loginBtnText">Отправить код</span>
-                                <span id="loginBtnLoading" class="loading hidden"></span>
-                            </button>
-                            
-                            <div class="mt-4 text-sm text-gray-600">
-                                <p>Мы отправим SMS-код для входа на ваш номер</p>
-                            </div>
-                        </div>
+                        <button type="submit" id="loginBtn" class="btn-primary w-full py-3 px-6 rounded-lg text-white font-semibold">
+                            <span id="loginBtnText">Отправить ссылку</span>
+                            <span id="loginBtnLoading" class="loading hidden"></span>
+                        </button>
                         
-                        <!-- Email Auth Section (Hidden by default) -->
-                        <div id="emailAuthSection" class="hidden">
-                            <div>
-                                <label for="email" class="block text-gray-700 font-medium mb-2 text-left">Email</label>
-                                <input type="email" id="email" name="email" 
-                                       class="form-input w-full"
-                                       placeholder="your@email.com">
-                            </div>
-                            
-                            <button type="submit" id="emailLoginBtn" class="btn-primary w-full py-3 px-6 rounded-lg text-white font-semibold">
-                                <span id="emailLoginBtnText">Отправить ссылку</span>
-                                <span id="emailLoginBtnLoading" class="loading hidden"></span>
-                            </button>
-                            
-                            <div class="mt-4 text-sm text-gray-600">
-                                <p>Мы отправим ссылку для входа на ваш email</p>
-                            </div>
+                        <div class="mt-6 text-sm text-gray-600">
+                            <p>Мы отправим ссылку для входа на ваш email</p>
                         </div>
                     </form>
                     
-                    <!-- SMS Code Verification Modal -->
-                    <div id="smsVerificationModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-                        <div class="bg-white rounded-xl max-w-md w-full p-6">
-                            <div class="text-center">
-                                <h3 class="text-xl font-semibold text-gray-800 mb-4">Подтверждение номера</h3>
-                                <p class="text-gray-600 mb-6">Введите код из SMS, отправленный на номер <span id="verificationPhone" class="font-semibold"></span></p>
-                                
-                                <form id="smsVerificationForm" class="space-y-4">
-                                    <div>
-                                        <label for="smsCode" class="block text-gray-700 font-medium mb-2">Код подтверждения</label>
-                                        <input type="text" id="smsCode" name="smsCode" required 
-                                               class="form-input w-full text-center text-2xl font-mono tracking-widest"
-                                               placeholder="000000"
-                                               maxlength="6"
-                                               pattern="[0-9]{6}">
-                                    </div>
-                                    
-                                    <div class="flex space-x-3">
-                                        <button type="button" id="resendCodeBtn" class="flex-1 py-2 px-4 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition">
-                                            <span id="resendCodeText">Отправить повторно</span>
-                                            <span id="resendCodeTimer" class="hidden text-sm text-gray-500"></span>
-                                        </button>
-                                        <button type="submit" id="verifyCodeBtn" class="flex-1 btn-primary py-2 px-4 rounded-lg text-white font-semibold">
-                                            <span id="verifyCodeBtnText">Подтвердить</span>
-                                            <span id="verifyCodeBtnLoading" class="loading hidden"></span>
-                                        </button>
-                                    </div>
-                                </form>
-                                
-                                <button type="button" id="cancelVerificationBtn" class="mt-4 text-gray-500 hover:text-gray-700">
-                                    Отмена
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+
                 </div>
             </div>
 
@@ -1446,400 +1379,60 @@
         function setupLoginForm() {
             console.log('Настраиваем форму входа...');
             
-            // Переключение между методами авторизации
-            const phoneAuthBtn = document.getElementById('phoneAuthBtn');
-            const emailAuthBtn = document.getElementById('emailAuthBtn');
-            const phoneAuthSection = document.getElementById('phoneAuthSection');
-            const emailAuthSection = document.getElementById('emailAuthSection');
-            
-            if (phoneAuthBtn && emailAuthBtn) {
-                phoneAuthBtn.addEventListener('click', () => {
-                    phoneAuthBtn.classList.add('bg-pink-600', 'text-white');
-                    phoneAuthBtn.classList.remove('text-gray-600', 'hover:bg-white');
-                    emailAuthBtn.classList.remove('bg-pink-600', 'text-white');
-                    emailAuthBtn.classList.add('text-gray-600', 'hover:bg-white');
-                    phoneAuthSection.classList.remove('hidden');
-                    emailAuthSection.classList.add('hidden');
-                });
-                
-                emailAuthBtn.addEventListener('click', () => {
-                    emailAuthBtn.classList.add('bg-pink-600', 'text-white');
-                    emailAuthBtn.classList.remove('text-gray-600', 'hover:bg-white');
-                    phoneAuthBtn.classList.remove('bg-pink-600', 'text-white');
-                    phoneAuthBtn.classList.add('text-gray-600', 'hover:bg-white');
-                    emailAuthSection.classList.remove('hidden');
-                    phoneAuthSection.classList.add('hidden');
-                });
-            }
-            
-            // Форматирование номера телефона
-            const phoneInput = document.getElementById('phone');
-            if (phoneInput) {
-                phoneInput.addEventListener('input', function(e) {
-                    let value = e.target.value.replace(/\D/g, '');
-                    
-                    // Ограничиваем до 10 цифр (без кода страны)
-                    if (value.length > 10) {
-                        value = value.substring(0, 10);
-                    }
-                    
-                    // Форматируем номер
-                    if (value.length > 0) {
-                        let formatted = '(' + value;
-                        if (value.length > 3) {
-                            formatted = formatted.substring(0, 4) + ') ' + formatted.substring(4);
-                        }
-                        if (value.length > 6) {
-                            formatted = formatted.substring(0, 9) + '-' + formatted.substring(9);
-                        }
-                        if (value.length > 8) {
-                            formatted = formatted.substring(0, 12) + '-' + formatted.substring(12);
-                        }
-                        e.target.value = formatted;
-                    } else {
-                        e.target.value = '';
-                    }
-                });
-                
-                // Обработка удаления (Backspace)
-                phoneInput.addEventListener('keydown', function(e) {
-                    if (e.key === 'Backspace') {
-                        const cursorPosition = e.target.selectionStart;
-                        const value = e.target.value;
-                        
-                        // Если курсор находится на символе форматирования, удаляем его
-                        if (value[cursorPosition - 1] === ' ' || 
-                            value[cursorPosition - 1] === '-' || 
-                            value[cursorPosition - 1] === ')') {
-                            e.preventDefault();
-                            const newValue = value.substring(0, cursorPosition - 1) + value.substring(cursorPosition);
-                            e.target.value = newValue;
-                            e.target.setSelectionRange(cursorPosition - 1, cursorPosition - 1);
-                        }
-                    }
-                });
-            }
-            
-            // Обработка отправки формы (телефон)
             const loginForm = document.getElementById('loginForm');
             if (loginForm) {
                 loginForm.addEventListener('submit', async (e) => {
                     e.preventDefault();
                     console.log('Форма отправлена!');
                     
-                    const phoneInput = document.getElementById('phone');
-                    const emailInput = document.getElementById('email');
-                    const phoneAuthSection = document.getElementById('phoneAuthSection');
+                    const email = document.getElementById('email').value;
+                    const loginBtn = document.getElementById('loginBtn');
+                    const loginBtnText = document.getElementById('loginBtnText');
+                    const loginBtnLoading = document.getElementById('loginBtnLoading');
                     
-                    // Определяем, какой метод авторизации активен
-                    const isPhoneAuth = !phoneAuthSection.classList.contains('hidden');
-                    
-                    if (isPhoneAuth) {
-                        await handlePhoneAuth(phoneInput.value);
-                    } else {
-                        await handleEmailAuth(emailInput.value);
+                    try {
+                        // Проверяем, что Supabase инициализирован
+                        const client = window.supabaseClient || supabaseClient;
+                        if (!client || !client.auth) {
+                            throw new Error('Supabase не инициализирован. Попробуйте обновить страницу.');
+                        }
+                        
+                        console.log('Отправляем magic link на email:', email);
+                        
+                        // Show loading state
+                        loginBtn.disabled = true;
+                        loginBtnText.classList.add('hidden');
+                        loginBtnLoading.classList.remove('hidden');
+                        
+                        // Send magic link
+                        const { error } = await client.auth.signInWithOtp({
+                            email: email,
+                            options: {
+                                emailRedirectTo: 'https://svetsalonpro.ru/pages/account.html'
+                            }
+                        });
+                        
+                        if (error) throw error;
+                        
+                        // Show success message
+                        showNotification('success', 'Ссылка отправлена!', 'Ссылка для входа отправлена на ваш email!');
+                        
+                    } catch (error) {
+                        console.error('Email auth error:', error);
+                        showNotification('error', 'Ошибка отправки email', error.message);
+                    } finally {
+                        // Reset button state
+                        loginBtn.disabled = false;
+                        loginBtnText.classList.remove('hidden');
+                        loginBtnLoading.classList.add('hidden');
                     }
-                });
-            }
-            
-            // Обработка верификации SMS
-            const smsVerificationForm = document.getElementById('smsVerificationForm');
-            if (smsVerificationForm) {
-                smsVerificationForm.addEventListener('submit', async (e) => {
-                    e.preventDefault();
-                    await handleSMSVerification();
-                });
-            }
-            
-            // Обработка повторной отправки кода
-            const resendCodeBtn = document.getElementById('resendCodeBtn');
-            if (resendCodeBtn) {
-                resendCodeBtn.addEventListener('click', async () => {
-                    await handleResendCode();
-                });
-            }
-            
-            // Обработка отмены верификации
-            const cancelVerificationBtn = document.getElementById('cancelVerificationBtn');
-            if (cancelVerificationBtn) {
-                cancelVerificationBtn.addEventListener('click', () => {
-                    closeSMSVerificationModal();
                 });
             }
             
             console.log('Форма входа настроена успешно!');
         }
         
-        // Обработка телефонной авторизации
-        async function handlePhoneAuth(phone) {
-            const loginBtn = document.getElementById('loginBtn');
-            const loginBtnText = document.getElementById('loginBtnText');
-            const loginBtnLoading = document.getElementById('loginBtnLoading');
-            
-            try {
-                // Проверяем, что Supabase инициализирован
-                const client = window.supabaseClient || supabaseClient;
-                if (!client || !client.auth) {
-                    throw new Error('Supabase не инициализирован. Попробуйте обновить страницу.');
-                }
-                
-                // Форматируем номер телефона
-                const formattedPhone = formatPhoneForAuth(phone);
-                if (!formattedPhone) {
-                    throw new Error('Введите полный номер телефона (10 цифр)');
-                }
-                
-                console.log('Отправляем SMS на номер:', formattedPhone);
-                
-                // Show loading state
-                loginBtn.disabled = true;
-                loginBtnText.classList.add('hidden');
-                loginBtnLoading.classList.remove('hidden');
-                
-                // Send SMS OTP
-                const { error } = await client.auth.signInWithOtp({
-                    phone: formattedPhone,
-                    options: {
-                        shouldCreateUser: true // Создаем пользователя, если его нет
-                    }
-                });
-                
-                if (error) throw error;
-                
-                // Show SMS verification modal
-                showSMSVerificationModal(formattedPhone);
-                
-                // Show success message
-                showNotification('success', 'Код отправлен!', 'SMS-код отправлен на ваш номер телефона');
-                
-            } catch (error) {
-                console.error('Phone auth error:', error);
-                showNotification('error', 'Ошибка отправки SMS', error.message);
-            } finally {
-                // Reset button state
-                loginBtn.disabled = false;
-                loginBtnText.classList.remove('hidden');
-                loginBtnLoading.classList.add('hidden');
-            }
-        }
-        
-        // Обработка email авторизации
-        async function handleEmailAuth(email) {
-            const emailLoginBtn = document.getElementById('emailLoginBtn');
-            const emailLoginBtnText = document.getElementById('emailLoginBtnText');
-            const emailLoginBtnLoading = document.getElementById('emailLoginBtnLoading');
-            
-            try {
-                // Проверяем, что Supabase инициализирован
-                const client = window.supabaseClient || supabaseClient;
-                if (!client || !client.auth) {
-                    throw new Error('Supabase не инициализирован. Попробуйте обновить страницу.');
-                }
-                
-                console.log('Отправляем magic link на email:', email);
-                
-                // Show loading state
-                emailLoginBtn.disabled = true;
-                emailLoginBtnText.classList.add('hidden');
-                emailLoginBtnLoading.classList.remove('hidden');
-                
-                // Send magic link
-                const { error } = await client.auth.signInWithOtp({
-                    email: email,
-                    options: {
-                        emailRedirectTo: 'https://svetsalonpro.ru/pages/account.html'
-                    }
-                });
-                
-                if (error) throw error;
-                
-                // Show success message
-                showNotification('success', 'Ссылка отправлена!', 'Ссылка для входа отправлена на ваш email!');
-                
-            } catch (error) {
-                console.error('Email auth error:', error);
-                showNotification('error', 'Ошибка отправки email', error.message);
-            } finally {
-                // Reset button state
-                emailLoginBtn.disabled = false;
-                emailLoginBtnText.classList.remove('hidden');
-                emailLoginBtnLoading.classList.add('hidden');
-            }
-        }
-        
-        // Форматирование номера телефона для авторизации
-        function formatPhoneForAuth(phone) {
-            // Убираем все символы кроме цифр
-            const digits = phone.replace(/\D/g, '');
-            
-            // Проверяем длину (должно быть 10 цифр для России)
-            if (digits.length !== 10) {
-                return null;
-            }
-            
-            // Возвращаем в формате +7XXXXXXXXXX
-            return '+7' + digits;
-        }
-        
-        // Показать модальное окно верификации SMS
-        function showSMSVerificationModal(phone) {
-            const modal = document.getElementById('smsVerificationModal');
-            const verificationPhone = document.getElementById('verificationPhone');
-            const smsCodeInput = document.getElementById('smsCode');
-            
-            if (modal && verificationPhone && smsCodeInput) {
-                verificationPhone.textContent = phone;
-                modal.classList.remove('hidden');
-                smsCodeInput.focus();
-                
-                // Запускаем таймер для повторной отправки
-                startResendTimer();
-            }
-        }
-        
-        // Закрыть модальное окно верификации SMS
-        function closeSMSVerificationModal() {
-            const modal = document.getElementById('smsVerificationModal');
-            const smsCodeInput = document.getElementById('smsCode');
-            
-            if (modal) {
-                modal.classList.add('hidden');
-            }
-            
-            if (smsCodeInput) {
-                smsCodeInput.value = '';
-            }
-            
-            // Останавливаем таймер
-            stopResendTimer();
-        }
-        
-        // Обработка верификации SMS
-        async function handleSMSVerification() {
-            const verifyCodeBtn = document.getElementById('verifyCodeBtn');
-            const verifyCodeBtnText = document.getElementById('verifyCodeBtnText');
-            const verifyCodeBtnLoading = document.getElementById('verifyCodeBtnLoading');
-            const smsCodeInput = document.getElementById('smsCode');
-            
-            try {
-                const code = smsCodeInput.value.trim();
-                if (!code || code.length !== 6) {
-                    throw new Error('Введите 6-значный код из SMS');
-                }
-                
-                // Show loading state
-                verifyCodeBtn.disabled = true;
-                verifyCodeBtnText.classList.add('hidden');
-                verifyCodeBtnLoading.classList.remove('hidden');
-                
-                // Verify SMS code
-                const client = window.supabaseClient || supabaseClient;
-                const { data, error } = await client.auth.verifyOtp({
-                    phone: document.getElementById('verificationPhone').textContent,
-                    token: code,
-                    type: 'sms'
-                });
-                
-                if (error) throw error;
-                
-                // Success - user is now authenticated
-                console.log('SMS verification successful:', data);
-                closeSMSVerificationModal();
-                showNotification('success', 'Успешная авторизация!', 'Добро пожаловать в личный кабинет!');
-                
-            } catch (error) {
-                console.error('SMS verification error:', error);
-                showNotification('error', 'Ошибка верификации', error.message);
-            } finally {
-                // Reset button state
-                verifyCodeBtn.disabled = false;
-                verifyCodeBtnText.classList.remove('hidden');
-                verifyCodeBtnLoading.classList.add('hidden');
-            }
-        }
-        
-        // Обработка повторной отправки кода
-        async function handleResendCode() {
-            const resendCodeBtn = document.getElementById('resendCodeBtn');
-            const resendCodeText = document.getElementById('resendCodeText');
-            const resendCodeTimer = document.getElementById('resendCodeTimer');
-            
-            try {
-                const phone = document.getElementById('verificationPhone').textContent;
-                
-                // Show loading state
-                resendCodeBtn.disabled = true;
-                resendCodeText.textContent = 'Отправка...';
-                
-                // Resend SMS
-                const client = window.supabaseClient || supabaseClient;
-                const { error } = await client.auth.signInWithOtp({
-                    phone: phone,
-                    options: {
-                        shouldCreateUser: true
-                    }
-                });
-                
-                if (error) throw error;
-                
-                // Show success message
-                showNotification('success', 'Код отправлен!', 'Новый SMS-код отправлен на ваш номер');
-                
-                // Start timer
-                startResendTimer();
-                
-            } catch (error) {
-                console.error('Resend code error:', error);
-                showNotification('error', 'Ошибка отправки', error.message);
-            } finally {
-                // Reset button state
-                resendCodeBtn.disabled = false;
-                resendCodeText.textContent = 'Отправить повторно';
-            }
-        }
-        
-        // Таймер для повторной отправки кода
-        let resendTimer = null;
-        let resendCountdown = 60;
-        
-        function startResendTimer() {
-            const resendCodeBtn = document.getElementById('resendCodeBtn');
-            const resendCodeText = document.getElementById('resendCodeText');
-            const resendCodeTimer = document.getElementById('resendCodeTimer');
-            
-            if (!resendCodeBtn || !resendCodeText || !resendCodeTimer) return;
-            
-            resendCountdown = 60;
-            resendCodeBtn.disabled = true;
-            resendCodeText.classList.add('hidden');
-            resendCodeTimer.classList.remove('hidden');
-            
-            resendTimer = setInterval(() => {
-                resendCountdown--;
-                resendCodeTimer.textContent = `Повторить через ${resendCountdown}с`;
-                
-                if (resendCountdown <= 0) {
-                    stopResendTimer();
-                }
-            }, 1000);
-        }
-        
-        function stopResendTimer() {
-            const resendCodeBtn = document.getElementById('resendCodeBtn');
-            const resendCodeText = document.getElementById('resendCodeText');
-            const resendCodeTimer = document.getElementById('resendCodeTimer');
-            
-            if (resendTimer) {
-                clearInterval(resendTimer);
-                resendTimer = null;
-            }
-            
-            if (resendCodeBtn && resendCodeText && resendCodeTimer) {
-                resendCodeBtn.disabled = false;
-                resendCodeText.classList.remove('hidden');
-                resendCodeTimer.classList.add('hidden');
-            }
-        }
+
 
         // Handle logout
         document.getElementById('logoutBtn').addEventListener('click', async () => {
