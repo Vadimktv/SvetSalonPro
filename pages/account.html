@@ -549,14 +549,14 @@
             </nav>
             <div class="flex items-center space-x-4">
                 <!-- Admin Panel Button (Hidden by default) -->
-                <button id="adminPanelBtn" class="hidden md:block text-gray-700 hover:text-red-600 transition-colors duration-200 bg-red-50 hover:bg-red-100 px-3 py-2 rounded-lg">
+                <button id="adminPanelBtn" class="hidden md:block text-gray-700 hover:text-red-600 transition-colors duration-200 bg-red-50 hover:bg-red-100 px-3 py-2 rounded-lg" style="display: none !important;">
                     <div class="flex items-center space-x-2">
                         <i class="fas fa-crown text-red-500"></i>
                         <span class="text-sm font-medium">Админ панель</span>
                     </div>
                 </button>
                 <!-- Mobile Admin Panel Button -->
-                <button id="mobileAdminPanelBtn" class="md:hidden text-gray-700 hover:text-red-600 transition-colors duration-200 bg-red-50 hover:bg-red-100 px-2 py-2 rounded-lg">
+                <button id="mobileAdminPanelBtn" class="md:hidden text-gray-700 hover:text-red-600 transition-colors duration-200 bg-red-50 hover:bg-red-100 px-2 py-2 rounded-lg" style="display: none !important;">
                     <i class="fas fa-crown text-red-500"></i>
                 </button>
                 <!-- iOS Style Menu Button -->
@@ -1369,6 +1369,17 @@
                 const client = window.supabaseClient || supabaseClient;
                 await client.auth.signOut();
                 currentUser = null;
+                
+                // Очищаем данные профиля из localStorage
+                localStorage.removeItem('currentUser');
+                localStorage.removeItem('selectedAvatar');
+                
+                // Сбрасываем кнопки администратора
+                toggleAdminButtons(false);
+                
+                // Отправляем событие о выходе пользователя
+                window.dispatchEvent(new CustomEvent('userLoggedOut'));
+                
                 showAuth();
             } catch (error) {
                 console.error('Logout error:', error);
@@ -2957,6 +2968,8 @@
                 if (mobileAdminBtn) {
                     mobileAdminBtn.style.display = show ? 'block' : 'none';
                 }
+                
+                console.log('Admin buttons toggled:', show);
             }
 
             // Открыть административное модальное окно
@@ -3079,10 +3092,17 @@
             window.addEventListener('userLoggedIn', function(event) {
                 const user = event.detail;
                 currentUserEmail = user.email;
+                console.log('User logged in:', currentUserEmail);
+                
                 if (checkAdminPrivileges(currentUserEmail)) {
                     isAdmin = true;
                     toggleAdminButtons(true);
                     showNotification('success', 'Добро пожаловать, администратор!', 'У вас есть административные привилегии');
+                    console.log('Admin privileges granted');
+                } else {
+                    isAdmin = false;
+                    toggleAdminButtons(false);
+                    console.log('Regular user, no admin privileges');
                 }
             });
 
@@ -3090,6 +3110,21 @@
                 isAdmin = false;
                 currentUserEmail = null;
                 toggleAdminButtons(false);
+                
+                // Сбрасываем профиль в личном кабинете
+                const mainProfileIcon = document.getElementById('mainProfileIcon');
+                const mainProfileImage = document.getElementById('mainProfileImage');
+                
+                if (mainProfileIcon) {
+                    mainProfileIcon.style.display = 'block';
+                    mainProfileIcon.className = 'fas fa-user text-3xl text-pink-600';
+                }
+                
+                if (mainProfileImage) {
+                    mainProfileImage.style.display = 'none';
+                }
+                
+                console.log('Profile reset in account page after logout');
             });
         });
 

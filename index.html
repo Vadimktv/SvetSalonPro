@@ -1009,14 +1009,14 @@
             </nav>
             <div class="flex items-center space-x-4">
                 <!-- Admin Panel Button (Hidden by default) -->
-                <button id="adminPanelBtn" class="hidden md:block text-gray-700 hover:text-red-600 transition-colors duration-200 bg-red-50 hover:bg-red-100 px-3 py-2 rounded-lg">
+                <button id="adminPanelBtn" class="hidden md:block text-gray-700 hover:text-red-600 transition-colors duration-200 bg-red-50 hover:bg-red-100 px-3 py-2 rounded-lg" style="display: none !important;">
                     <div class="flex items-center space-x-2">
                         <i class="fas fa-crown text-red-500"></i>
                         <span class="text-sm font-medium">Админ панель</span>
                     </div>
                 </button>
                 <!-- Mobile Admin Panel Button -->
-                <button id="mobileAdminPanelBtn" class="md:hidden text-gray-700 hover:text-red-600 transition-colors duration-200 bg-red-50 hover:bg-red-100 px-2 py-2 rounded-lg">
+                <button id="mobileAdminPanelBtn" class="md:hidden text-gray-700 hover:text-red-600 transition-colors duration-200 bg-red-50 hover:bg-red-100 px-2 py-2 rounded-lg" style="display: none !important;">
                     <i class="fas fa-crown text-red-500"></i>
                 </button>
                 <!-- Profile Icon -->
@@ -1973,6 +1973,13 @@
         // Load saved avatar
         function loadSavedAvatar() {
             try {
+                // Проверяем, есть ли авторизованный пользователь
+                const currentUser = localStorage.getItem('currentUser');
+                if (!currentUser) {
+                    console.log('No authenticated user, skipping avatar load');
+                    return;
+                }
+                
                 const savedAvatar = localStorage.getItem('selectedAvatar');
                 if (savedAvatar) {
                     // Обновляем десктопную кнопку профиля
@@ -2554,6 +2561,8 @@
         if (mobileAdminBtn) {
             mobileAdminBtn.style.display = show ? 'block' : 'none';
         }
+        
+        console.log('Admin buttons toggled:', show);
     }
 
     // Открыть административное модальное окно
@@ -2679,10 +2688,17 @@
         window.addEventListener('userLoggedIn', function(event) {
             const user = event.detail;
             currentUserEmail = user.email;
+            console.log('User logged in:', currentUserEmail);
+            
             if (checkAdminPrivileges(currentUserEmail)) {
                 isAdmin = true;
                 toggleAdminButtons(true);
                 showNotification('Добро пожаловать, администратор!', 'success');
+                console.log('Admin privileges granted');
+            } else {
+                isAdmin = false;
+                toggleAdminButtons(false);
+                console.log('Regular user, no admin privileges');
             }
         });
 
@@ -2690,6 +2706,44 @@
             isAdmin = false;
             currentUserEmail = null;
             toggleAdminButtons(false);
+            
+            // Сбрасываем профиль на главной странице
+            const profileBtn = document.getElementById('profileBtn');
+            const mobileProfileBtn = document.getElementById('mobileProfileBtn');
+            
+            if (profileBtn) {
+                const iconContainer = profileBtn.querySelector('div');
+                const icon = profileBtn.querySelector('i');
+                
+                // Возвращаем стандартную иконку
+                iconContainer.className = 'w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center';
+                icon.className = 'fas fa-user text-white text-sm';
+                icon.style.display = 'block';
+                
+                // Удаляем изображение если есть
+                const existingImg = iconContainer.querySelector('img');
+                if (existingImg) {
+                    existingImg.remove();
+                }
+            }
+            
+            if (mobileProfileBtn) {
+                const iconContainer = mobileProfileBtn.querySelector('div');
+                const icon = mobileProfileBtn.querySelector('i');
+                
+                // Возвращаем стандартную иконку
+                iconContainer.className = 'w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center';
+                icon.className = 'fas fa-user text-white text-sm';
+                icon.style.display = 'block';
+                
+                // Удаляем изображение если есть
+                const existingImg = iconContainer.querySelector('img');
+                if (existingImg) {
+                    existingImg.remove();
+                }
+            }
+            
+            console.log('Profile reset after logout');
         });
     });
     </script>
