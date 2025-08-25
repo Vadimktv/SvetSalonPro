@@ -1160,11 +1160,7 @@
                 
                 const { data: bookings, error } = await client
                     .from('bookings')
-                    .select(`
-                        *,
-                        services(name, price),
-                        slots(date, time)
-                    `)
+                    .select('*')
                     .eq('user_id', currentUser.id)
                     .order('created_at', { ascending: false });
                 
@@ -1198,9 +1194,10 @@
                 <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition">
                     <div class="flex justify-between items-start">
                         <div>
-                            <h4 class="font-semibold text-gray-800">${booking.services?.name || 'Услуга'}</h4>
-                            <p class="text-gray-600 text-sm">${new Date(booking.slots?.date).toLocaleDateString('ru-RU')} в ${booking.slots?.time}</p>
+                            <h4 class="font-semibold text-gray-800">${booking.service_name || booking.services?.name || 'Услуга'}</h4>
+                            <p class="text-gray-600 text-sm">${new Date(booking.date || booking.slots?.date).toLocaleDateString('ru-RU')} в ${booking.time || booking.slots?.time}</p>
                             <p class="text-gray-500 text-sm">Статус: ${getStatusText(booking.status)}</p>
+                            <p class="text-pink-600 text-sm font-medium">${booking.price} ₽</p>
                         </div>
                         <div class="flex space-x-2">
                             ${booking.status === 'confirmed' ? `
@@ -1212,6 +1209,11 @@
                                         class="px-3 py-1 text-sm border border-blue-300 text-blue-600 rounded hover:bg-blue-50 transition">
                                     Перенести
                                 </button>
+                            ` : ''}
+                            ${booking.status === 'pending' ? `
+                                <span class="px-3 py-1 text-sm bg-yellow-100 text-yellow-800 rounded">
+                                    Ожидает подтверждения
+                                </span>
                             ` : ''}
                         </div>
                     </div>
@@ -1242,6 +1244,9 @@
                     .eq('id', bookingId);
                 
                 if (error) throw error;
+                
+                showNotification('success', 'Запись отменена', 'Запись успешно отменена');
+                loadBookings(); // Перезагружаем список записей
                 
                 showNotification('success', 'Запись отменена', 'Ваша запись была успешно отменена');
                 loadBookings();
@@ -1297,6 +1302,24 @@
             document.getElementById('bookingFormContainer').classList.add('hidden');
         });
 
+        // Словарь для перевода услуг на русский
+        const serviceTranslations = {
+            'spa': 'SPA процедуры',
+            'womens_haircut': 'Женская стрижка',
+            'mens_haircut': 'Мужская стрижка',
+            'mens_machine': 'Мужская стрижка под машинку',
+            'hair_coloring': 'Окрашивание волос',
+            'hair_highlighting': 'Мелирование волос',
+            'lamination': 'Ламинирование волос',
+            'coloristics': 'Колористика волос',
+            'gel': 'Укрепление гелем',
+            'combined_manicure': 'Комбинированный маникюр',
+            'classic_manicure': 'Классический маникюр',
+            'nail_repair': 'Ремонт одного ногтя',
+            'base_strengthening': 'Укрепление базой или биогелем',
+            'coating_removal': 'Снятие покрытия'
+        };
+
         // Handle new booking form
         document.getElementById('newBookingForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -1310,8 +1333,34 @@
             try {
                 const client = window.supabaseClient || supabaseClient;
                 
+                // Получаем номер телефона пользователя
+                const userPhone = currentUser.phone || currentUser.user_metadata?.phone || 'Не указан';
+                const serviceName = serviceTranslations[service] || service;
+                
+                // Сохраняем запись в базу данных
+                const { data: bookingData, error: bookingError } = await client
+                    .from('bookings')
+                    .insert([{
+                        user_id: currentUser.id,
+                        service: service,
+                        service_name: serviceName,
+                        price: price,
+                        date: date,
+                        time: time,
+                        status: 'pending',
+                        created_at: new Date().toISOString()
+                    }])
+                    .select();
+                
+                if (bookingError) {
+                    console.error('Error saving booking:', bookingError);
+                    showNotification('error', 'Ошибка сохранения', 'Не удалось сохранить запись');
+                    return;
+                }
+                
                 // Отправляем уведомление в Telegram
-                const message = `💬 Новая запись через личный кабинет:\n👤 Пользователь: ${currentUser.email}\n📋 Услуга: ${service}\n💰 Цена: ${price} ₽\n📅 Дата: ${date}\n🕐 Время: ${time}`;
+                const isRegistered = currentUser.email ? '💎 Зарегистрированный пользователь' : '👤 Гость';
+                const message = `💬 Новая запись через личный кабинет:\n${isRegistered}\n📱 Телефон: ${userPhone}\n📋 Услуга: ${serviceName}\n💰 Цена: ${price} ₽\n📅 Дата: ${date}\n🕐 Время: ${time}`;
                 
                 const chatIds = ["339033504", "1366208620"]; // основной ID и ID Светланы
                 
@@ -1334,6 +1383,9 @@
                                 // Сбрасываем форму и показываем сетку услуг
                                 document.querySelector('.grid').style.display = 'grid';
                                 document.getElementById('bookingFormContainer').classList.add('hidden');
+                                
+                                // Перезагружаем список записей
+                                loadBookings();
                             }
                         } else {
                             if (chatId === "339033504") {
