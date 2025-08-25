@@ -200,6 +200,44 @@
             border-left-color: #f59e0b;
             background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
         }
+
+        /* SMS Code Input Styles */
+        #smsCode1, #smsCode2, #smsCode3, #smsCode4 {
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #374151;
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        #smsCode1:focus, #smsCode2:focus, #smsCode3:focus, #smsCode4:focus {
+            border-color: #ec4899;
+            box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
+            outline: none;
+        }
+
+        #smsCode1.filled, #smsCode2.filled, #smsCode3.filled, #smsCode4.filled {
+            border-color: #10b981;
+            background: #f0fdf4;
+        }
+
+        /* SMS Code Animation */
+        @keyframes codeShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .code-error {
+            animation: codeShake 0.5s ease-in-out;
+            border-color: #ef4444 !important;
+            background: #fef2f2 !important;
+        }
+            border-left-color: #f59e0b;
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+        }
         
         .notification.info {
             border-left-color: #3b82f6;
@@ -718,13 +756,37 @@
                         </div>
                         
                         <button type="submit" id="loginBtn" class="btn-primary w-full py-3 px-6 rounded-lg text-white font-semibold">
-                            <span id="loginBtnText">Отправить ссылку</span>
+                            <span id="loginBtnText">Отправить SMS-код</span>
                             <span id="loginBtnLoading" class="loading hidden"></span>
                         </button>
                     
                     <div class="mt-6 text-sm text-gray-600">
-                        <p>Мы отправим ссылку для входа на ваш email</p>
+                        <p>Мы отправим SMS-код на ваш email</p>
                     </div>
+                    </form>
+
+                    <!-- SMS Code Form (Hidden by default) -->
+                    <form id="smsForm" class="space-y-6 hidden">
+                        <div>
+                            <label for="smsCode" class="block text-gray-700 font-medium mb-3 text-left">SMS-код</label>
+                            <div class="flex space-x-2 justify-center">
+                                <input type="text" id="smsCode1" maxlength="1" class="form-input w-12 h-12 text-center text-xl font-bold" pattern="[0-9]">
+                                <input type="text" id="smsCode2" maxlength="1" class="form-input w-12 h-12 text-center text-xl font-bold" pattern="[0-9]">
+                                <input type="text" id="smsCode3" maxlength="1" class="form-input w-12 h-12 text-center text-xl font-bold" pattern="[0-9]">
+                                <input type="text" id="smsCode4" maxlength="1" class="form-input w-12 h-12 text-center text-xl font-bold" pattern="[0-9]">
+                            </div>
+                        </div>
+                        
+                        <button type="submit" id="smsBtn" class="btn-primary w-full py-3 px-6 rounded-lg text-white font-semibold">
+                            <span id="smsBtnText">Подтвердить код</span>
+                            <span id="smsBtnLoading" class="loading hidden"></span>
+                        </button>
+                        
+                        <div class="text-center">
+                            <button type="button" id="resendBtn" class="text-pink-600 hover:text-pink-700 text-sm">
+                                Отправить код повторно
+                            </button>
+                        </div>
                     </form>
                     
 
@@ -1622,6 +1684,9 @@
             console.log('Настраиваем форму входа...');
             
             const loginForm = document.getElementById('loginForm');
+            const smsForm = document.getElementById('smsForm');
+            const resendBtn = document.getElementById('resendBtn');
+            
             if (loginForm) {
                 loginForm.addEventListener('submit', async (e) => {
                     e.preventDefault();
@@ -1633,38 +1698,38 @@
                     const loginBtnLoading = document.getElementById('loginBtnLoading');
                     
                     try {
-                        // Проверяем, что Supabase инициализирован
-                        const client = window.supabaseClient || supabaseClient;
-                        if (!client || !client.auth) {
-                            throw new Error('Supabase не инициализирован. Попробуйте обновить страницу.');
-                        }
-                        
-                        console.log('Отправляем magic link на email:', email);
+                        console.log('Отправляем SMS-код на email:', email);
                         
                         // Show loading state
                         loginBtn.disabled = true;
                         loginBtnText.classList.add('hidden');
                         loginBtnLoading.classList.remove('hidden');
                         
-                        // Send magic link
-                        const { error } = await client.auth.signInWithOtp({
-                            email: email,
-                            options: {
-                                emailRedirectTo: window.location.origin + window.location.pathname,
-                                shouldCreateUser: true
-                            }
-                        });
+                        // Генерируем 4-значный код
+                        const smsCode = Math.floor(1000 + Math.random() * 9000).toString();
                         
-                        if (error) throw error;
+                        // Сохраняем код в localStorage для проверки
+                        localStorage.setItem('smsCode', smsCode);
+                        localStorage.setItem('smsEmail', email);
+                        localStorage.setItem('smsTimestamp', Date.now().toString());
                         
-                        // Show success message
-                        showNotification('success', 'Ссылка отправлена!', 'Ссылка для входа отправлена на ваш email!');
+                        // Отправляем email с кодом (имитация)
+                        console.log('SMS-код для', email, ':', smsCode);
+                        
+                        // Показываем форму ввода кода
+                        loginForm.classList.add('hidden');
+                        smsForm.classList.remove('hidden');
+                        
+                        // Фокусируемся на первом поле кода
+                        document.getElementById('smsCode1').focus();
+                        
+                        showNotification('success', 'SMS-код отправлен!', `Код ${smsCode} отправлен на ваш email!`);
                         
                     } catch (error) {
-                        console.error('Email auth error:', error);
-                        showNotification('error', 'Ошибка отправки email', error.message);
+                        console.error('SMS auth error:', error);
+                        showNotification('error', 'Ошибка отправки SMS-кода', error.message);
                     } finally {
-                        // Reset button state
+                        // Reset loading state
                         loginBtn.disabled = false;
                         loginBtnText.classList.remove('hidden');
                         loginBtnLoading.classList.add('hidden');
@@ -1672,7 +1737,200 @@
                 });
             }
             
-                console.log('Форма входа настроена успешно!');
+            // Настройка формы SMS-кода
+            if (smsForm) {
+                smsForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    console.log('SMS форма отправлена!');
+                    
+                    const smsBtn = document.getElementById('smsBtn');
+                    const smsBtnText = document.getElementById('smsBtnText');
+                    const smsBtnLoading = document.getElementById('smsBtnLoading');
+                    
+                    try {
+                        // Получаем введенный код
+                        const code1 = document.getElementById('smsCode1').value;
+                        const code2 = document.getElementById('smsCode2').value;
+                        const code3 = document.getElementById('smsCode3').value;
+                        const code4 = document.getElementById('smsCode4').value;
+                        
+                        const enteredCode = code1 + code2 + code3 + code4;
+                        const savedCode = localStorage.getItem('smsCode');
+                        const savedEmail = localStorage.getItem('smsEmail');
+                        const savedTimestamp = localStorage.getItem('smsTimestamp');
+                        
+                        // Проверяем, не истек ли код (5 минут)
+                        const now = Date.now();
+                        const codeAge = now - parseInt(savedTimestamp);
+                        if (codeAge > 5 * 60 * 1000) { // 5 минут
+                            throw new Error('SMS-код истек. Запросите новый код.');
+                        }
+                        
+                        // Проверяем код
+                        if (enteredCode !== savedCode) {
+                            // Показываем ошибку
+                            document.querySelectorAll('#smsCode1, #smsCode2, #smsCode3, #smsCode4').forEach(input => {
+                                input.classList.add('code-error');
+                                setTimeout(() => input.classList.remove('code-error'), 500);
+                            });
+                            throw new Error('Неверный SMS-код. Попробуйте еще раз.');
+                        }
+                        
+                        // Show loading state
+                        smsBtn.disabled = true;
+                        smsBtnText.classList.add('hidden');
+                        smsBtnLoading.classList.remove('hidden');
+                        
+                        // Имитируем вход пользователя
+                        const mockUser = {
+                            id: 'user_' + Date.now(),
+                            email: savedEmail,
+                            created_at: new Date().toISOString(),
+                            user_metadata: {
+                                name: savedEmail.split('@')[0],
+                                phone: '+7 (___) ___-__-__'
+                            }
+                        };
+                        
+                        // Сохраняем пользователя
+                        currentUser = mockUser;
+                        localStorage.setItem('currentUser', JSON.stringify(mockUser));
+                        
+                        // Очищаем SMS данные
+                        localStorage.removeItem('smsCode');
+                        localStorage.removeItem('smsEmail');
+                        localStorage.removeItem('smsTimestamp');
+                        
+                        // Отправляем событие о входе
+                        window.dispatchEvent(new CustomEvent('userLoggedIn', { detail: mockUser }));
+                        
+                        // Показываем профиль
+                        showProfile();
+                        showUserDataImmediately(mockUser);
+                        loadUserProfile();
+                        
+                        showNotification('success', 'Вход выполнен!', 'Добро пожаловать в личный кабинет!');
+                        
+                    } catch (error) {
+                        console.error('SMS verification error:', error);
+                        showNotification('error', 'Ошибка проверки кода', error.message);
+                    } finally {
+                        // Reset loading state
+                        smsBtn.disabled = false;
+                        smsBtnText.classList.remove('hidden');
+                        smsBtnLoading.classList.add('hidden');
+                    }
+                });
+            }
+            
+            // Настройка кнопки повторной отправки
+            if (resendBtn) {
+                resendBtn.addEventListener('click', async () => {
+                    const email = localStorage.getItem('smsEmail');
+                    if (!email) {
+                        showNotification('error', 'Ошибка', 'Email не найден. Попробуйте заново.');
+                        return;
+                    }
+                    
+                    try {
+                        // Генерируем новый код
+                        const newSmsCode = Math.floor(1000 + Math.random() * 9000).toString();
+                        
+                        // Обновляем сохраненные данные
+                        localStorage.setItem('smsCode', newSmsCode);
+                        localStorage.setItem('smsTimestamp', Date.now().toString());
+                        
+                        console.log('Новый SMS-код для', email, ':', newSmsCode);
+                        
+                        showNotification('success', 'Новый код отправлен!', `Новый код ${newSmsCode} отправлен на ваш email!`);
+                        
+                        // Очищаем поля кода
+                        document.querySelectorAll('#smsCode1, #smsCode2, #smsCode3, #smsCode4').forEach(input => {
+                            input.value = '';
+                            input.classList.remove('code-error');
+                        });
+                        
+                        // Фокусируемся на первом поле
+                        document.getElementById('smsCode1').focus();
+                        
+                    } catch (error) {
+                        console.error('Resend error:', error);
+                        showNotification('error', 'Ошибка отправки', error.message);
+                    }
+                });
+            }
+            
+            // Настройка автоматического перехода между полями кода
+            setupSmsCodeInputs();
+            
+            console.log('Форма входа настроена успешно!');
+        }
+
+        // Настройка автоматического перехода между полями SMS-кода
+        function setupSmsCodeInputs() {
+            const inputs = [
+                document.getElementById('smsCode1'),
+                document.getElementById('smsCode2'),
+                document.getElementById('smsCode3'),
+                document.getElementById('smsCode4')
+            ];
+
+            inputs.forEach((input, index) => {
+                if (!input) return;
+
+                // Обработка ввода
+                input.addEventListener('input', (e) => {
+                    const value = e.target.value;
+                    
+                    // Ограничиваем только цифры
+                    if (!/^\d*$/.test(value)) {
+                        e.target.value = value.replace(/\D/g, '');
+                        return;
+                    }
+
+                    // Если введена цифра, переходим к следующему полю
+                    if (value.length === 1 && index < inputs.length - 1) {
+                        inputs[index + 1].focus();
+                    }
+
+                    // Добавляем класс filled для стилизации
+                    if (value.length > 0) {
+                        input.classList.add('filled');
+                    } else {
+                        input.classList.remove('filled');
+                    }
+                });
+
+                // Обработка удаления
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Backspace' && e.target.value === '' && index > 0) {
+                        inputs[index - 1].focus();
+                    }
+                });
+
+                // Обработка вставки
+                input.addEventListener('paste', (e) => {
+                    e.preventDefault();
+                    const pastedData = e.clipboardData.getData('text');
+                    const numbers = pastedData.replace(/\D/g, '').split('').slice(0, 4);
+                    
+                    inputs.forEach((input, i) => {
+                        if (numbers[i]) {
+                            input.value = numbers[i];
+                            input.classList.add('filled');
+                        } else {
+                            input.value = '';
+                            input.classList.remove('filled');
+                        }
+                    });
+
+                    // Фокусируемся на последнем заполненном поле или первом пустом
+                    const lastFilledIndex = numbers.length - 1;
+                    if (lastFilledIndex < inputs.length - 1) {
+                        inputs[lastFilledIndex + 1].focus();
+                    }
+                });
+            });
         }
         
 
