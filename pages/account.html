@@ -656,6 +656,13 @@
                         <span>Мастера</span>
                     </a>
                     
+                    <a href="../pages/portfolio.html" class="menu-item group">
+                        <div class="menu-icon">
+                            <i class="fas fa-images"></i>
+                        </div>
+                        <span>Примеры работ</span>
+                    </a>
+                    
                     <a href="../index.html#contact" class="menu-item group">
                         <div class="menu-icon">
                             <i class="fas fa-phone"></i>
@@ -675,30 +682,6 @@
                         </div>
                         <span>Личный кабинет</span>
                     </a>
-                </div>
-                
-                <!-- Contact Info -->
-                <div class="p-2 mt-2">
-                    <div class="bg-gradient-to-r from-pink-500 to-pink-600 rounded-xl p-3 text-white">
-                        <div class="flex items-center space-x-2 mb-2">
-                            <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                                <i class="fas fa-envelope text-sm"></i>
-                            </div>
-                            <div>
-                                <p class="font-semibold text-sm">my@SvetSalonPro.ru</p>
-                                <p class="text-xs text-pink-100">Пишите в любое время</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center space-x-2">
-                            <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                                <i class="fas fa-phone text-sm"></i>
-                            </div>
-                            <div>
-                                <p class="font-semibold text-sm">+7 928 280 62 94</p>
-                                <p class="text-xs text-pink-100">Звоните с 9:00 до 21:00</p>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
             </div>
@@ -3171,11 +3154,9 @@
 
                 // Open menu function
                 function openMenu() {
-                    console.log('Opening menu, isMenuOpen:', isMenuOpen);
                     if (isMenuOpen) return;
                     
                     if (!sideMenu) {
-                        console.error('Side menu element not found!');
                         return;
                     }
                     
@@ -3185,19 +3166,13 @@
                     document.body.classList.add('menu-open');
                     iosMenuBtn.classList.add('active');
                     
-                    // Prevent any background interactions
                     setTimeout(() => {
                         sideMenu.style.pointerEvents = 'all';
                     }, 50);
-                    
-                    console.log('Menu opened successfully');
-                    console.log('Side menu classes:', sideMenu.className);
-                    console.log('Side menu style:', sideMenu.style.cssText);
                 }
 
                 // Close menu function
                 function closeMenu() {
-                    console.log('Closing menu, isMenuOpen:', isMenuOpen);
                     if (!isMenuOpen) return;
                     
                     triggerHapticFeedback();
@@ -3206,19 +3181,13 @@
                     document.body.classList.remove('menu-open');
                     iosMenuBtn.classList.remove('active');
                     sideMenu.style.pointerEvents = 'none';
-                    
-                    console.log('Menu closed successfully');
                 }
 
                 // Event listeners
                 if (iosMenuBtn) {
-                    console.log('Adding click listener to menu button');
                     iosMenuBtn.addEventListener('click', (e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        console.log('Menu button clicked, isMenuOpen:', isMenuOpen);
-                        console.log('Event target:', e.target);
-                        console.log('Event currentTarget:', e.currentTarget);
                         
                         if (isMenuOpen) {
                             closeMenu();
@@ -3226,16 +3195,12 @@
                             openMenu();
                         }
                     });
-                } else {
-                    console.error('Menu button not found!');
                 }
 
                 if (closeMenuBtn) {
                     closeMenuBtn.addEventListener('click', (e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        console.log('Close button clicked');
-                        triggerHapticFeedback();
                         closeMenu();
                     });
                 }
