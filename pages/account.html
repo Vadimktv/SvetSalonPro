@@ -249,6 +249,17 @@
         body.menu-open {
             overflow: hidden;
         }
+
+        /* Haptic feedback animation */
+        body.haptic-feedback {
+            animation: hapticShake 0.1s ease-in-out;
+        }
+
+        @keyframes hapticShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-1px); }
+            75% { transform: translateX(1px); }
+        }
         
         /* Menu Button Animation */
         .menu-icon-container {
@@ -3158,103 +3169,128 @@
             console.log('Setting up all event handlers...');
             
             // iOS Style Menu Handlers
-            let isMenuOpen = false;
-            const iosMenuBtn = document.getElementById('iosMenuBtn');
-            const sideMenu = document.getElementById('sideMenu');
-            const closeMenuBtn = document.getElementById('closeMenuBtn');
-            const menuBackdrop = document.getElementById('menuBackdrop');
-            const menuContainer = document.getElementById('menuContainer');
-            
-            // Debug: Check if elements exist
-            console.log('Menu elements found:', {
-                iosMenuBtn: !!iosMenuBtn,
-                sideMenu: !!sideMenu,
-                closeMenuBtn: !!closeMenuBtn,
-                menuBackdrop: !!menuBackdrop,
-                menuContainer: !!menuContainer
-            });
+            function initializeMenu() {
+                let isMenuOpen = false;
+                const iosMenuBtn = document.getElementById('iosMenuBtn');
+                const sideMenu = document.getElementById('sideMenu');
+                const closeMenuBtn = document.getElementById('closeMenuBtn');
+                const menuBackdrop = document.getElementById('menuBackdrop');
+                const menuContainer = document.getElementById('menuContainer');
+                
+                // Debug: Check if elements exist
+                console.log('Menu elements found:', {
+                    iosMenuBtn: !!iosMenuBtn,
+                    sideMenu: !!sideMenu,
+                    closeMenuBtn: !!closeMenuBtn,
+                    menuBackdrop: !!menuBackdrop,
+                    menuContainer: !!menuContainer
+                });
 
-            // Haptic feedback function
-            function triggerHapticFeedback() {
-                if ('vibrate' in navigator) {
-                    navigator.vibrate(10);
+                // Haptic feedback function
+                function triggerHapticFeedback() {
+                    if ('vibrate' in navigator) {
+                        navigator.vibrate(10);
+                    }
+                    // Fallback visual feedback
+                    document.body.classList.add('haptic-feedback');
+                    setTimeout(() => {
+                        document.body.classList.remove('haptic-feedback');
+                    }, 100);
                 }
-                // Fallback visual feedback
-                document.body.classList.add('haptic-feedback');
-                setTimeout(() => {
-                    document.body.classList.remove('haptic-feedback');
-                }, 100);
-            }
 
-            // Open menu function
-            function openMenu() {
-                console.log('Opening menu, isMenuOpen:', isMenuOpen);
-                if (isMenuOpen) return;
-                
-                if (!sideMenu) {
-                    console.error('Side menu element not found!');
-                    return;
-                }
-                
-                triggerHapticFeedback();
-                isMenuOpen = true;
-                sideMenu.classList.add('open');
-                document.body.classList.add('menu-open');
-                iosMenuBtn.classList.add('active');
-                
-                // Prevent any background interactions
-                setTimeout(() => {
-                    sideMenu.style.pointerEvents = 'all';
-                }, 50);
-                
-                console.log('Menu opened successfully');
-                console.log('Side menu classes:', sideMenu.className);
-                console.log('Side menu style:', sideMenu.style.cssText);
-            }
-
-            // Close menu function
-            function closeMenu() {
-                console.log('Closing menu, isMenuOpen:', isMenuOpen);
-                if (!isMenuOpen) return;
-                
-                triggerHapticFeedback();
-                isMenuOpen = false;
-                sideMenu.classList.remove('open');
-                document.body.classList.remove('menu-open');
-                iosMenuBtn.classList.remove('active');
-                sideMenu.style.pointerEvents = 'none';
-                
-                console.log('Menu closed successfully');
-            }
-
-            // Event listeners
-            if (iosMenuBtn) {
-                console.log('Adding click listener to menu button');
-                iosMenuBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    console.log('Menu button clicked, isMenuOpen:', isMenuOpen);
-                    console.log('Event target:', e.target);
-                    console.log('Event currentTarget:', e.currentTarget);
+                // Open menu function
+                function openMenu() {
+                    console.log('Opening menu, isMenuOpen:', isMenuOpen);
+                    if (isMenuOpen) return;
                     
-                    if (isMenuOpen) {
+                    if (!sideMenu) {
+                        console.error('Side menu element not found!');
+                        return;
+                    }
+                    
+                    triggerHapticFeedback();
+                    isMenuOpen = true;
+                    sideMenu.classList.add('open');
+                    document.body.classList.add('menu-open');
+                    iosMenuBtn.classList.add('active');
+                    
+                    // Prevent any background interactions
+                    setTimeout(() => {
+                        sideMenu.style.pointerEvents = 'all';
+                    }, 50);
+                    
+                    console.log('Menu opened successfully');
+                    console.log('Side menu classes:', sideMenu.className);
+                    console.log('Side menu style:', sideMenu.style.cssText);
+                }
+
+                // Close menu function
+                function closeMenu() {
+                    console.log('Closing menu, isMenuOpen:', isMenuOpen);
+                    if (!isMenuOpen) return;
+                    
+                    triggerHapticFeedback();
+                    isMenuOpen = false;
+                    sideMenu.classList.remove('open');
+                    document.body.classList.remove('menu-open');
+                    iosMenuBtn.classList.remove('active');
+                    sideMenu.style.pointerEvents = 'none';
+                    
+                    console.log('Menu closed successfully');
+                }
+
+                // Event listeners
+                if (iosMenuBtn) {
+                    console.log('Adding click listener to menu button');
+                    iosMenuBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log('Menu button clicked, isMenuOpen:', isMenuOpen);
+                        console.log('Event target:', e.target);
+                        console.log('Event currentTarget:', e.currentTarget);
+                        
+                        if (isMenuOpen) {
+                            closeMenu();
+                        } else {
+                            openMenu();
+                        }
+                    });
+                } else {
+                    console.error('Menu button not found!');
+                }
+
+                if (closeMenuBtn) {
+                    closeMenuBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log('Close button clicked');
+                        triggerHapticFeedback();
                         closeMenu();
-                    } else {
-                        openMenu();
+                    });
+                }
+
+                // Close menu when clicking on backdrop
+                if (menuBackdrop) {
+                    menuBackdrop.addEventListener('click', (e) => {
+                        if (e.target === menuBackdrop) {
+                            closeMenu();
+                        }
+                    });
+                }
+
+                // Close menu when pressing Escape key
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && isMenuOpen) {
+                        closeMenu();
                     }
                 });
-            } else {
-                console.error('Menu button not found!');
             }
 
-            if (closeMenuBtn) {
-                closeMenuBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    console.log('Close button clicked');
-                    triggerHapticFeedback();
-                    closeMenu();
-                });
+            // Initialize menu when DOM is ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initializeMenu);
+            } else {
+                initializeMenu();
             }
 
             if (menuBackdrop) {
