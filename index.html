@@ -1239,19 +1239,14 @@
             }
         }
         
-        /* 🚀 КРУТЫЕ АНИМАЦИИ ДЛЯ ОТЗЫВОВ */
+        /* 🃏 КОЛОДА КАРТ С ОТЗЫВАМИ */
         
-        /* Контейнер карусели отзывов */
-        .reviews-carousel-container {
+        /* Контейнер колоды */
+        .reviews-deck-container {
             position: relative;
-            overflow: hidden;
-            border-radius: 2rem;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: visible;
+            padding: 40px 0;
         }
-        
-        /* Кастомные кнопки навигации - УБРАНО */
         
         /* Кастомная пагинация */
         .reviews-pagination .swiper-pagination-bullet {
@@ -1270,13 +1265,12 @@
             box-shadow: 0 0 20px rgba(236, 72, 153, 0.6) !important;
         }
         
-        /* Карточки отзывов (МИНИ-ИГРА КОЛОДА) */
+        /* Swiper контейнер для колоды */
         .reviews-swiper {
             width: 100% !important;
-            height: 450px !important;
+            height: 500px !important;
             overflow: visible !important;
-            padding: 30px 0 !important;
-            perspective: 1000px !important;
+            perspective: 1200px !important;
         }
         
         .swiper-slide {
@@ -1288,78 +1282,155 @@
             transform-style: preserve-3d !important;
         }
         
+        /* Карточки отзывов - настоящая колода */
         .review-card {
             position: relative;
             width: 100% !important;
-            max-width: 500px !important;
-            height: 100% !important;
-            min-height: 350px !important;
-            background: rgba(255, 255, 255, 0.98) !important;
-            backdrop-filter: blur(20px) !important;
-            border: 2px solid rgba(255, 255, 255, 0.6) !important;
-            border-radius: 25px !important;
+            max-width: 600px !important;
+            height: 400px !important;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important;
+            border: 3px solid #e2e8f0 !important;
+            border-radius: 20px !important;
             box-shadow: 
-                0 30px 60px rgba(0, 0, 0, 0.15),
-                0 0 0 1px rgba(255, 255, 255, 0.4),
-                0 10px 30px rgba(236, 72, 153, 0.1) !important;
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important;
-            padding: 2.5rem !important;
+                0 20px 40px rgba(0, 0, 0, 0.1),
+                0 0 0 1px rgba(255, 255, 255, 0.8),
+                0 8px 16px rgba(236, 72, 153, 0.1) !important;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            padding: 2rem !important;
             margin: 0 !important;
             display: flex !important;
             flex-direction: column !important;
             justify-content: space-between !important;
             transform-origin: center bottom !important;
+            cursor: pointer !important;
         }
         
+        /* Эффект поднятия карты при наведении */
         .review-card:hover {
-            transform: translateY(-5px) scale(1.02) !important;
+            transform: translateY(-15px) scale(1.05) rotateY(5deg) !important;
             box-shadow: 
-                0 40px 80px rgba(0, 0, 0, 0.2),
-                0 0 0 1px rgba(255, 255, 255, 0.6),
-                0 15px 40px rgba(236, 72, 153, 0.2) !important;
+                0 40px 80px rgba(0, 0, 0, 0.15),
+                0 0 0 1px rgba(255, 255, 255, 0.9),
+                0 15px 30px rgba(236, 72, 153, 0.2) !important;
+            border-color: #cbd5e1 !important;
         }
         
-        /* Эффект колоды карт - мини-игра */
+        /* Заголовок карты */
+        .card-header {
+            display: flex !important;
+            align-items: center !important;
+            margin-bottom: 1.5rem !important;
+        }
+        
+        .avatar {
+            width: 60px !important;
+            height: 60px !important;
+            background: linear-gradient(135deg, #ec4899, #9333ea) !important;
+            border-radius: 50% !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            color: white !important;
+            font-weight: bold !important;
+            font-size: 1.5rem !important;
+            margin-right: 1rem !important;
+            box-shadow: 0 8px 16px rgba(236, 72, 153, 0.3) !important;
+        }
+        
+        .client-info {
+            flex: 1 !important;
+        }
+        
+        .client-name {
+            font-size: 1.25rem !important;
+            font-weight: bold !important;
+            background: linear-gradient(135deg, #ec4899, #9333ea) !important;
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+            background-clip: text !important;
+            margin-bottom: 0.5rem !important;
+        }
+        
+        .stars {
+            display: flex !important;
+            gap: 2px !important;
+        }
+        
+        .stars i {
+            color: #fbbf24 !important;
+            font-size: 1rem !important;
+            animation: starTwinkle 2s ease-in-out infinite !important;
+        }
+        
+        .stars i:nth-child(1) { animation-delay: 0s !important; }
+        .stars i:nth-child(2) { animation-delay: 0.2s !important; }
+        .stars i:nth-child(3) { animation-delay: 0.4s !important; }
+        .stars i:nth-child(4) { animation-delay: 0.6s !important; }
+        .stars i:nth-child(5) { animation-delay: 0.8s !important; }
+        
+        @keyframes starTwinkle {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
+        }
+        
+        /* Содержимое карты */
+        .card-content {
+            flex: 1 !important;
+            display: flex !important;
+            align-items: center !important;
+        }
+        
+        .card-content p {
+            font-size: 1.125rem !important;
+            line-height: 1.7 !important;
+            color: #374151 !important;
+            font-style: italic !important;
+            text-align: center !important;
+            margin: 0 !important;
+        }
+        
+        /* Эффект колоды - карты в заднем плане */
         .swiper-slide:not(.swiper-slide-active) {
-            opacity: 0.8 !important;
-            transform: scale(0.85) translateY(30px) rotateX(5deg) !important;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
-            filter: brightness(0.9) !important;
+            opacity: 0.6 !important;
+            transform: scale(0.75) translateY(60px) rotateX(10deg) !important;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            filter: brightness(0.8) blur(1px) !important;
+            z-index: 1 !important;
         }
         
         .swiper-slide-active {
             opacity: 1 !important;
             transform: scale(1) translateY(0) rotateX(0deg) !important;
             z-index: 10 !important;
-            filter: brightness(1) !important;
+            filter: brightness(1) blur(0px) !important;
         }
         
-        /* Анимация перехода карт */
+        /* Анимация перехода карт в колоде */
         .swiper-slide-prev {
-            transform: scale(0.9) translateY(15px) rotateX(3deg) translateX(-20px) !important;
-            opacity: 0.9 !important;
+            transform: scale(0.8) translateY(40px) rotateX(8deg) translateX(-30px) !important;
+            opacity: 0.7 !important;
             z-index: 5 !important;
         }
         
         .swiper-slide-next {
-            transform: scale(0.9) translateY(15px) rotateX(3deg) translateX(20px) !important;
-            opacity: 0.9 !important;
+            transform: scale(0.8) translateY(40px) rotateX(8deg) translateX(30px) !important;
+            opacity: 0.7 !important;
             z-index: 5 !important;
         }
         
-        /* Анимация появления карточек */
+        /* Анимация появления карточек из колоды */
         .swiper-slide-active .review-card {
-            animation: cardDeal 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            animation: cardDealFromDeck 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
         }
         
-        @keyframes cardDeal {
+        @keyframes cardDealFromDeck {
             0% {
                 opacity: 0;
-                transform: translateY(-100px) scale(0.8) rotateX(-15deg);
+                transform: translateY(-200px) scale(0.6) rotateX(-20deg);
             }
             50% {
                 opacity: 0.8;
-                transform: translateY(-20px) scale(0.95) rotateX(-5deg);
+                transform: translateY(-50px) scale(0.9) rotateX(-10deg);
             }
             100% {
                 opacity: 1;
@@ -1371,12 +1442,12 @@
         .reviews-swiper::after {
             content: '';
             position: absolute;
-            bottom: -20px;
+            bottom: -30px;
             left: 50%;
             transform: translateX(-50%);
-            width: 80%;
-            height: 20px;
-            background: radial-gradient(ellipse, rgba(0,0,0,0.1) 0%, transparent 70%);
+            width: 90%;
+            height: 30px;
+            background: radial-gradient(ellipse, rgba(0,0,0,0.08) 0%, transparent 70%);
             border-radius: 50%;
             z-index: -1;
         }
@@ -1409,44 +1480,7 @@
             50% { background-position: 100% 50%; }
         }
         
-        /* Обучающий оверлей */
-        #tutorialOverlay {
-            pointer-events: none;
-        }
-        
-        #swipeTutorial {
-            background: rgba(255, 255, 255, 0.95) !important;
-            backdrop-filter: blur(20px) !important;
-            border: 1px solid rgba(255, 255, 255, 0.3) !important;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15) !important;
-            animation: tutorialPulse 2s ease-in-out infinite !important;
-        }
-        
-        @keyframes tutorialPulse {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); }
-            50% { transform: translate(-50%, -50%) scale(1.05); }
-        }
-        
-        /* Плавающий курсор пальца */
-        #fingerCursor {
-            animation: fingerFloat 3s ease-in-out infinite !important;
-        }
-        
-        @keyframes fingerFloat {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            25% { transform: translate(20px, -10px) rotate(5deg); }
-            50% { transform: translate(40px, 0) rotate(0deg); }
-            75% { transform: translate(20px, 10px) rotate(-5deg); }
-        }
-        
-        /* Индикаторы свайпа */
-        .swipe-indicators {
-            animation: indicatorsGlow 2s ease-in-out infinite !important;
-        }
-        
-        .swipe-indicator {
-            animation: indicatorPulse 1.5s ease-in-out infinite !important;
-        }
+
         
         @keyframes indicatorsGlow {
             0%, 100% { filter: brightness(1); }
@@ -1614,15 +1648,29 @@
                 font-size: 1.2rem !important;
             }
             
-            /* Адаптивность отзывов для мобильных */
+            /* Адаптивность колоды карт для мобильных */
             .reviews-swiper {
-                height: 350px !important;
+                height: 400px !important;
             }
             
             .review-card {
                 max-width: 100% !important;
-                min-height: 250px !important;
+                height: 350px !important;
                 padding: 1.5rem !important;
+            }
+            
+            .avatar {
+                width: 50px !important;
+                height: 50px !important;
+                font-size: 1.25rem !important;
+            }
+            
+            .client-name {
+                font-size: 1.1rem !important;
+            }
+            
+            .card-content p {
+                font-size: 1rem !important;
             }
             
             /* Скрываем сложные анимации на мобильных */
@@ -2987,117 +3035,101 @@
                     Что говорят о нас наши довольные клиенты
                 </p>
             </div>
-        <!-- Interactive Reviews Carousel -->
-        <div class="reviews-carousel-container relative max-w-6xl mx-auto mb-16">
+        <!-- Колода карт с отзывами -->
+        <div class="reviews-deck-container relative max-w-7xl mx-auto mb-16">
             <!-- Swiper Container -->
             <div class="swiper reviews-swiper">
                 <div class="swiper-wrapper">
                     <div class="swiper-slide">
-                        <div class="review-card bg-white/80 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 p-8 transform transition-all duration-500 hover:scale-105 hover:rotate-1">
-                            <div class="flex items-center mb-4">
-                                <div class="w-12 h-12 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg mr-4">А</div>
-                                <div>
-                                    <div class="font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent text-lg">Анна, Геленджик</div>
-                                    <div class="flex text-yellow-400 text-sm">
+                        <div class="review-card">
+                            <div class="card-header">
+                                <div class="avatar">А</div>
+                                <div class="client-info">
+                                    <div class="client-name">Анна, Геленджик</div>
+                                    <div class="stars">
                                         <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
                                     </div>
                                 </div>
                             </div>
-                            <div class="text-gray-700 text-lg leading-relaxed">Очень понравился сервис и атмосфера! Мастер учёл все мои пожелания. Приду ещё!</div>
+                            <div class="card-content">
+                                <p>Очень понравился сервис и атмосфера! Мастер учёл все мои пожелания. Приду ещё!</p>
+                            </div>
                         </div>
                     </div>
                     
                     <div class="swiper-slide">
-                        <div class="review-card bg-white/80 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 p-8 transform transition-all duration-500 hover:scale-105 hover:-rotate-1">
-                            <div class="flex items-center mb-4">
-                                <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg mr-4">М</div>
-                                <div>
-                                    <div class="font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent text-lg">Мария, Краснодар</div>
-                                    <div class="flex text-yellow-400 text-sm">
+                        <div class="review-card">
+                            <div class="card-header">
+                                <div class="avatar">М</div>
+                                <div class="client-info">
+                                    <div class="client-name">Мария, Краснодар</div>
+                                    <div class="stars">
                                         <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
                                     </div>
                                 </div>
                             </div>
-                            <div class="text-gray-700 text-lg leading-relaxed">Потрясающий салон! Делала окрашивание — результат превзошёл ожидания.</div>
+                            <div class="card-content">
+                                <p>Потрясающий салон! Делала окрашивание — результат превзошёл ожидания.</p>
+                            </div>
                         </div>
                     </div>
                     
                     <div class="swiper-slide">
-                        <div class="review-card bg-white/80 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 p-8 transform transition-all duration-500 hover:scale-105 hover:rotate-1">
-                            <div class="flex items-center mb-4">
-                                <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg mr-4">Е</div>
-                                <div>
-                                    <div class="font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent text-lg">Екатерина, Москва</div>
-                                    <div class="flex text-yellow-400 text-sm">
+                        <div class="review-card">
+                            <div class="card-header">
+                                <div class="avatar">Е</div>
+                                <div class="client-info">
+                                    <div class="client-name">Екатерина, Москва</div>
+                                    <div class="stars">
                                         <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
                                     </div>
                                 </div>
                             </div>
-                            <div class="text-gray-700 text-lg leading-relaxed">Очень уютно, чисто и профессионально. Спасибо мастеру Светлане!</div>
+                            <div class="card-content">
+                                <p>Очень уютно, чисто и профессионально. Спасибо мастеру Светлане!</p>
+                            </div>
                         </div>
                     </div>
                     
                     <div class="swiper-slide">
-                        <div class="review-card bg-white/80 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 p-8 transform transition-all duration-500 hover:scale-105 hover:-rotate-1">
-                            <div class="flex items-center mb-4">
-                                <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-600 rounded-full flex items-center justify-center text-white font-bold text-lg mr-4">О</div>
-                                <div>
-                                    <div class="font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent text-lg">Ольга, Геленджик</div>
-                                    <div class="flex text-yellow-400 text-sm">
+                        <div class="review-card">
+                            <div class="card-header">
+                                <div class="avatar">О</div>
+                                <div class="client-info">
+                                    <div class="client-name">Ольга, Геленджик</div>
+                                    <div class="stars">
                                         <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
                                     </div>
                                 </div>
                             </div>
-                            <div class="text-gray-700 text-lg leading-relaxed">Маникюр держится уже 3 недели! Очень довольна качеством услуг.</div>
+                            <div class="card-content">
+                                <p>Маникюр держится уже 3 недели! Очень довольна качеством услуг.</p>
+                            </div>
                         </div>
                     </div>
                     
                     <div class="swiper-slide">
-                        <div class="review-card bg-white/80 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 p-8 transform transition-all duration-500 hover:scale-105 hover:rotate-1">
-                            <div class="flex items-center mb-4">
-                                <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center text-white font-bold text-lg mr-4">С</div>
-                                <div>
-                                    <div class="font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent text-lg">Светлана, Новороссийск</div>
-                                    <div class="flex text-yellow-400 text-sm">
+                        <div class="review-card">
+                            <div class="card-header">
+                                <div class="avatar">С</div>
+                                <div class="client-info">
+                                    <div class="client-name">Светлана, Новороссийск</div>
+                                    <div class="stars">
                                         <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
                                     </div>
                                 </div>
                             </div>
-                            <div class="text-gray-700 text-lg leading-relaxed">Делала стрижку и укладку — всё на высшем уровне. Рекомендую!</div>
+                            <div class="card-content">
+                                <p>Делала стрижку и укладку — всё на высшем уровне. Рекомендую!</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <!-- Custom Navigation -->
-            <!-- Swiper Navigation - УБРАНО -->
-            
             <!-- Custom Pagination -->
             <div class="swiper-pagination reviews-pagination"></div>
-            
-            <!-- Interactive Tutorial Overlay -->
-            <div id="tutorialOverlay" class="absolute inset-0 pointer-events-none z-20">
-                <!-- Swipe Tutorial -->
-                <div id="swipeTutorial" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-md rounded-2xl p-6 shadow-2xl border border-white/20 opacity-0 transition-all duration-500">
-                    <div class="text-center">
-                        <div class="w-16 h-16 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center text-white text-2xl mb-4 mx-auto">
-                            <i class="fas fa-hand-pointer"></i>
-                        </div>
-                        <h3 class="text-xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent mb-2">Листайте отзывы</h3>
-                        <p class="text-gray-600 mb-4">Проведите пальцем влево или вправо</p>
-                        <div class="flex justify-center space-x-4">
-                            <div class="w-8 h-8 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center text-white">
-                                <i class="fas fa-arrow-left text-sm"></i>
-                            </div>
-                            <div class="w-8 h-8 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center text-white">
-                                <i class="fas fa-arrow-right text-sm"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Floating Finger Cursor -->
-                <div id="fingerCursor" class="absolute w-8 h-8 pointer-events-none opacity-0 transition-all duration-300">
+        </div>
                     <div class="w-full h-full bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center text-white text-sm shadow-lg">
                         <i class="fas fa-hand-pointer"></i>
                     </div>
@@ -5022,22 +5054,22 @@
         let reviewsSwiper;
         
         document.addEventListener('DOMContentLoaded', function() {
-            // Инициализация Swiper для отзывов (МИНИ-ИГРА КОЛОДА)
+            // Инициализация Swiper для колоды карт с отзывами
             reviewsSwiper = new Swiper('.reviews-swiper', {
                 slidesPerView: 1,
                 spaceBetween: 0,
                 loop: true,
-                autoplay: false, // Полностью отключаем автопрокрутку
-                effect: 'cards', // Эффект колоды карт
-                speed: 800,
+                autoplay: false,
+                effect: 'cards',
+                speed: 1000,
                 grabCursor: true,
                 allowTouchMove: true,
                 touchRatio: 1,
                 touchAngle: 45,
                 cardsEffect: {
-                    slideShadows: true,
+                    slideShadows: false,
                     rotate: true,
-                    perSlideOffset: 12,
+                    perSlideOffset: 8,
                 },
                 pagination: {
                     el: '.reviews-pagination',
@@ -5088,223 +5120,83 @@
                 }
             });
             
-            // Обучающий интерфейс (МИНИ-ИГРА КОЛОДА)
-            function showTutorial() {
-                const tutorial = document.getElementById('swipeTutorial');
-                const fingerCursor = document.getElementById('fingerCursor');
-                
-                if (tutorial && !localStorage.getItem('reviewsTutorialShown')) {
-                    setTimeout(() => {
-                        tutorial.style.opacity = '1';
-                        tutorial.style.transform = 'translate(-50%, -50%) scale(1)';
-                        
-                        // Обновляем текст для мини-игры
-                        const tutorialText = tutorial.querySelector('p');
-                        if (tutorialText) {
-                            tutorialText.innerHTML = '🎴 <strong>Колода отзывов!</strong><br>Свайпните влево или вправо, чтобы раздать карту';
-                        }
-                        
-                        // Анимация пальца для раздачи карт
-                        if (fingerCursor) {
-                            fingerCursor.style.opacity = '1';
-                            fingerCursor.innerHTML = '🎴';
-                            animateFingerSwipe();
-                        }
-                    }, 1000);
-                }
-            }
+
             
-            // Анимация пальца для свайпа
-            function animateFingerSwipe() {
-                const fingerCursor = document.getElementById('fingerCursor');
-                if (!fingerCursor) return;
-                
-                const positions = [
-                    { x: '30%', y: '50%' },
-                    { x: '70%', y: '50%' },
-                    { x: '50%', y: '50%' }
-                ];
-                
-                let currentPos = 0;
-                
-                const moveFinger = () => {
-                    if (fingerCursor.style.opacity === '0') return;
-                    
-                    const pos = positions[currentPos];
-                    fingerCursor.style.left = pos.x;
-                    fingerCursor.style.top = pos.y;
-                    fingerCursor.style.transform = 'translate(-50%, -50%)';
-                    
-                    currentPos = (currentPos + 1) % positions.length;
-                    
-                    setTimeout(moveFinger, 2000);
-                };
-                
-                moveFinger();
-            }
-            
-            // Эффект колоды карт
-            function addDeckEffect() {
-                const slides = document.querySelectorAll('.swiper-slide');
-                slides.forEach((slide, index) => {
-                    if (index > 0) {
-                        slide.style.transform = `scale(${0.9 - index * 0.05}) translateY(${index * 8}px) rotateX(5deg)`;
-                        slide.style.opacity = 0.8 - index * 0.1;
-                        slide.style.zIndex = 10 - index;
-                    }
-                });
-            }
-            
-            // Анимация раздачи карты
-            function dealCardAnimation() {
-                const activeSlide = document.querySelector('.swiper-slide-active');
-                if (activeSlide) {
-                    activeSlide.style.animation = 'cardDeal 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards';
-                    
-                    // Добавляем звуковой эффект (опционально)
-                    setTimeout(() => {
-                        activeSlide.style.animation = '';
-                    }, 800);
-                }
-            }
-            
-            function hideTutorial() {
-                const tutorial = document.getElementById('swipeTutorial');
-                const fingerCursor = document.getElementById('fingerCursor');
-                
-                if (tutorial) {
-                    tutorial.style.opacity = '0';
-                    tutorial.style.transform = 'translate(-50%, -50%) scale(0.9)';
-                    localStorage.setItem('reviewsTutorialShown', 'true');
-                }
-                
-                if (fingerCursor) {
-                    fingerCursor.style.opacity = '0';
-                }
-            }
-            
-            // Функция анимации пальца (УПРОЩЕНО)
-            function animateFinger() {
-                // Упрощенная версия - палец просто исчезает через 3 секунды
-                const fingerCursor = document.getElementById('fingerCursor');
-                if (fingerCursor) {
-                    setTimeout(() => {
-                        fingerCursor.style.opacity = '0';
-                    }, 3000);
-                }
-            }
-            
-            // Обновление прогресс бара
-            function updateProgressBar() {
-                const progressBar = document.getElementById('progressBar');
-                if (!progressBar || !reviewsSwiper) return;
-                
-                const progress = ((reviewsSwiper.realIndex + 1) / reviewsSwiper.slides.length) * 100;
-                progressBar.style.width = progress + '%';
-            }
-            
-            // Анимация активного слайда (УПРОЩЕНО)
-            function animateActiveSlide() {
-                const activeSlide = document.querySelector('.swiper-slide-active .review-card');
-                if (activeSlide) {
-                    activeSlide.style.animation = 'none';
-                    setTimeout(() => {
-                        activeSlide.style.animation = 'simpleFadeIn 0.4s ease forwards';
-                    }, 10);
-                }
-            }
-            
-            // Интерактивные эффекты при наведении
+            // Интерактивные эффекты для карт колоды
             document.querySelectorAll('.review-card').forEach(card => {
                 card.addEventListener('mouseenter', function() {
-                    this.style.transform = 'translateY(-8px) scale(1.02)';
-                    this.style.boxShadow = '0 30px 60px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.4), 0 0 40px rgba(236, 72, 153, 0.2)';
+                    if (this.closest('.swiper-slide-active')) {
+                        this.style.transform = 'translateY(-15px) scale(1.05) rotateY(5deg)';
+                        this.style.boxShadow = '0 40px 80px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.9), 0 15px 30px rgba(236, 72, 153, 0.2)';
+                        this.style.borderColor = '#cbd5e1';
+                    }
                 });
                 
                 card.addEventListener('mouseleave', function() {
-                    this.style.transform = 'translateY(0) scale(1)';
-                    this.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.2)';
+                    if (this.closest('.swiper-slide-active')) {
+                        this.style.transform = 'translateY(0) scale(1) rotateY(0deg)';
+                        this.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.8), 0 8px 16px rgba(236, 72, 153, 0.1)';
+                        this.style.borderColor = '#e2e8f0';
+                    }
                 });
                 
-                // Эффект при клике
+                // Эффект при клике - перелистывание карты
                 card.addEventListener('click', function() {
-                    this.style.transform = 'translateY(-4px) scale(1.01)';
-                    setTimeout(() => {
-                        this.style.transform = 'translateY(-8px) scale(1.02)';
-                    }, 150);
+                    if (this.closest('.swiper-slide-active')) {
+                        this.style.transform = 'translateY(-20px) scale(1.08) rotateY(10deg)';
+                        setTimeout(() => {
+                            reviewsSwiper.slideNext();
+                        }, 300);
+                    }
                 });
             });
             
             // Анимация звездочек при загрузке
             setTimeout(() => {
-                document.querySelectorAll('.review-card .text-yellow-400 i').forEach((star, index) => {
+                document.querySelectorAll('.review-card .stars i').forEach((star, index) => {
                     setTimeout(() => {
                         star.style.animation = 'starTwinkle 2s ease-in-out infinite';
                     }, index * 200);
                 });
             }, 1000);
             
-            // Эффект параллакса при движении мыши
-            document.querySelector('.reviews-carousel-container').addEventListener('mousemove', function(e) {
-                const cards = document.querySelectorAll('.review-card');
-                const rect = this.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                
-                cards.forEach((card, index) => {
-                    const speed = (index + 1) * 0.02;
-                    const xOffset = (x - rect.width / 2) * speed;
-                    const yOffset = (y - rect.height / 2) * speed;
+            // Эффект параллакса при движении мыши для колоды
+            document.querySelector('.reviews-deck-container').addEventListener('mousemove', function(e) {
+                const activeCard = document.querySelector('.swiper-slide-active .review-card');
+                if (activeCard) {
+                    const rect = this.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
                     
-                    card.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
-                });
-            });
-            
-            // Сброс параллакса при уходе мыши
-            document.querySelector('.reviews-carousel-container').addEventListener('mouseleave', function() {
-                const cards = document.querySelectorAll('.review-card');
-                cards.forEach(card => {
-                    card.style.transform = 'translate(0, 0)';
-                });
-            });
-            
-            // Автоматическое переключение с паузой при наведении
-            const container = document.querySelector('.reviews-carousel-container');
-            container.addEventListener('mouseenter', () => {
-                if (reviewsSwiper.autoplay) {
-                    reviewsSwiper.autoplay.stop();
+                    const xOffset = (x - rect.width / 2) * 0.02;
+                    const yOffset = (y - rect.height / 2) * 0.02;
+                    
+                    activeCard.style.transform = `translateY(-15px) scale(1.05) rotateY(${xOffset}deg) translateX(${xOffset}px)`;
                 }
             });
             
-            container.addEventListener('mouseleave', () => {
-                if (reviewsSwiper.autoplay) {
-                    reviewsSwiper.autoplay.start();
+            // Сброс параллакса при уходе мыши
+            document.querySelector('.reviews-deck-container').addEventListener('mouseleave', function() {
+                const activeCard = document.querySelector('.swiper-slide-active .review-card');
+                if (activeCard) {
+                    activeCard.style.transform = 'translateY(0) scale(1) rotateY(0deg) translateX(0px)';
                 }
             });
             
             // Эффект пульсации для индикаторов
             setInterval(() => {
-                const indicators = document.querySelectorAll('.swipe-indicator');
-                indicators.forEach((indicator, index) => {
+                const activeBullet = document.querySelector('.reviews-pagination .swiper-pagination-bullet-active');
+                if (activeBullet) {
+                    activeBullet.style.animation = 'none';
                     setTimeout(() => {
-                        indicator.style.transform = 'scale(1.3)';
-                        setTimeout(() => {
-                            indicator.style.transform = 'scale(1)';
-                        }, 300);
-                    }, index * 500);
-                });
+                        activeBullet.style.animation = 'pulse 2s ease-in-out infinite';
+                    }, 10);
+                }
             }, 3000);
         });
         
-        // Функция для сброса обучающего интерфейса (для тестирования)
-        function resetReviewsTutorial() {
-            localStorage.removeItem('reviewsTutorialShown');
-            location.reload();
-        }
-        
         // Экспорт для глобального доступа
         window.reviewsSwiper = reviewsSwiper;
-        window.resetReviewsTutorial = resetReviewsTutorial;
         
         // 🎨 СУПЕР ПЛАВНЫЕ АНИМАЦИИ ПОЯВЛЕНИЯ ДЛЯ КАРТОЧЕК УСЛУГ
         function initServiceAnimations() {

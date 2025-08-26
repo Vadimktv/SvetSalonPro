@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reviews Stack Component - Демо</title>
+    <link rel="stylesheet" href="reviews-stack.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f7;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .demo-container {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .demo-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1d1d1f;
+            margin-bottom: 8px;
+        }
+        
+        .demo-subtitle {
+            font-size: 18px;
+            color: #86868b;
+            margin-bottom: 40px;
+        }
+        
+        .reviews-section {
+            margin: 40px 0;
+            position: relative;
+        }
+        
+        .auto-play-status {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 122, 255, 0.1);
+            color: #007aff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .auto-play-status::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #007aff;
+            animation: pulse 2s infinite;
+        }
+        
+        .controls {
+            margin: 30px 0;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            background: #007aff;
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .btn:hover {
+            background: #0056cc;
+            transform: translateY(-1px);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn.secondary {
+            background: #e5e5ea;
+            color: #1d1d1f;
+        }
+        
+        .btn.secondary:hover {
+            background: #d1d1d6;
+        }
+        
+        .btn.danger {
+            background: #ff3b30;
+        }
+        
+        .btn.danger:hover {
+            background: #d70015;
+        }
+        
+        .info-panel {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 30px 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            text-align: left;
+        }
+        
+        .info-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 15px;
+        }
+        
+        .info-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .info-list li {
+            padding: 8px 0;
+            color: #424245;
+            position: relative;
+            padding-left: 20px;
+        }
+        
+        .info-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #34c759;
+            font-weight: bold;
+        }
+        
+        .status {
+            font-size: 14px;
+            color: #86868b;
+            margin-top: 20px;
+        }
+        
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+            
+            .demo-title {
+                font-size: 24px;
+            }
+            
+            .demo-subtitle {
+                font-size: 16px;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <h1 class="demo-title">Reviews Stack Component</h1>
+        <p class="demo-subtitle">Компонент колоды отзывов с автоматическим пролистыванием</p>
+        
+        <div class="reviews-section">
+            <div class="auto-play-status" id="autoPlayStatus">
+                Автоматическое пролистывание активно
+            </div>
+            <div class="reviews" id="reviewsRoot"></div>
+        </div>
+        
+        <div class="controls">
+            <button class="btn secondary" id="prevBtn">← Назад</button>
+            <button class="btn" id="nextBtn">Вперед →</button>
+            <button class="btn secondary" id="shuffleBtn">Перемешать</button>
+            <button class="btn secondary" id="toggleAutoPlayBtn">Остановить автопролистывание</button>
+        </div>
+        
+        <div class="status" id="status">
+            Отзыв 1 из 8 • Автоматическое пролистывание каждые 5 секунд
+        </div>
+        
+        <div class="info-panel">
+            <h3 class="info-title">Новые возможности</h3>
+            <ul class="info-list">
+                <li>Автоматическое пролистывание каждые 5 секунд</li>
+                <li>Пауза при наведении мыши</li>
+                <li>Пауза при взаимодействии пользователя</li>
+                <li>Максимально плавные анимации без подергиваний</li>
+                <li>GPU-ускоренные переходы (60fps)</li>
+                <li>Оптимизация для слабых устройств</li>
+                <li>Поддержка prefers-reduced-motion</li>
+                <li>Автоматическое возобновление после взаимодействия</li>
+                <li>Пауза при скрытии вкладки</li>
+            </ul>
+        </div>
+        
+        <div class="info-panel">
+            <h3 class="info-title">Управление</h3>
+            <ul class="info-list">
+                <li><strong>Автоматическое пролистывание</strong> — каждые 5 секунд</li>
+                <li><strong>Свайп влево/вправо</strong> — перелистнуть карточку</li>
+                <li><strong>Стрелки ←/→</strong> — навигация с клавиатуры</li>
+                <li><strong>Enter/Space</strong> — прочитать текущий отзыв</li>
+                <li><strong>Наведение мыши</strong> — пауза автопролистывания</li>
+                <li><strong>Кнопки</strong> — программное управление</li>
+            </ul>
+        </div>
+    </div>
+
+    <script type="module">
+        import { ReviewsStack, defaultReviewsData } from './reviews-stack.js';
+        
+        // Инициализация компонента
+        const reviewsRoot = document.getElementById('reviewsRoot');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const shuffleBtn = document.getElementById('shuffleBtn');
+        const toggleAutoPlayBtn = document.getElementById('toggleAutoPlayBtn');
+        const statusEl = document.getElementById('status');
+        const autoPlayStatusEl = document.getElementById('autoPlayStatus');
+        
+        let stack;
+        let autoPlayEnabled = true;
+        
+        // Создание экземпляра компонента
+        function initReviewsStack() {
+            stack = new ReviewsStack(reviewsRoot, {
+                data: defaultReviewsData,
+                loop: true,
+                cardsInDom: 4,
+                autoPlay: true,
+                autoPlayInterval: 5000,
+                autoPlayPauseOnHover: true,
+                onChange: (index, review) => {
+                    updateStatus(index + 1, defaultReviewsData.length, review.author);
+                }
+            });
+        }
+        
+        // Обновление статуса
+        function updateStatus(current, total, author) {
+            const autoPlayText = autoPlayEnabled ? ' • Автоматическое пролистывание активно' : ' • Автоматическое пролистывание остановлено';
+            statusEl.textContent = `Отзыв ${current} из ${total} • ${author}${autoPlayText}`;
+        }
+        
+        // Переключение автопролистывания
+        function toggleAutoPlay() {
+            autoPlayEnabled = !autoPlayEnabled;
+            
+            if (autoPlayEnabled) {
+                stack.startAutoPlay();
+                toggleAutoPlayBtn.textContent = 'Остановить автопролистывание';
+                autoPlayStatusEl.style.display = 'flex';
+                autoPlayStatusEl.textContent = 'Автоматическое пролистывание активно';
+            } else {
+                stack.pauseAutoPlay();
+                toggleAutoPlayBtn.textContent = 'Запустить автопролистывание';
+                autoPlayStatusEl.style.display = 'none';
+            }
+            
+            updateStatus(1, defaultReviewsData.length, defaultReviewsData[0].author);
+        }
+        
+        // Обработчики кнопок
+        prevBtn.addEventListener('click', () => {
+            if (stack) stack.prev();
+        });
+        
+        nextBtn.addEventListener('click', () => {
+            if (stack) stack.next();
+        });
+        
+        shuffleBtn.addEventListener('click', () => {
+            if (stack) {
+                const shuffled = [...defaultReviewsData].sort(() => Math.random() - 0.5);
+                stack.updateData(shuffled);
+            }
+        });
+        
+        toggleAutoPlayBtn.addEventListener('click', toggleAutoPlay);
+        
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', () => {
+            initReviewsStack();
+            updateStatus(1, defaultReviewsData.length, defaultReviewsData[0].author);
+        });
+        
+        // Глобальные переменные для отладки
+        window.reviewsStack = stack;
+        window.reviewsData = defaultReviewsData;
+    </script>
+</body>
+</html>
