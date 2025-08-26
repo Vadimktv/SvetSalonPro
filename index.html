@@ -1472,128 +1472,86 @@
             padding-bottom: 3rem !important;
         }
         
-        /* 🎨 КРАСИВЫЕ АНИМАЦИИ ПОЯВЛЕНИЯ ДЛЯ УСЛУГ */
+        /* 🎨 УЛУЧШЕННЫЕ АНИМАЦИИ ПОЯВЛЕНИЯ ДЛЯ ВСЕХ ЭЛЕМЕНТОВ */
         
-        /* Базовые стили для карточек услуг */
-        .service-card {
+        /* Базовые стили для всех анимируемых элементов */
+        .animate-on-scroll {
             opacity: 0 !important;
-            transform: translateY(50px) scale(0.9) !important;
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            transform: translateY(30px) !important;
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
         }
         
-        /* Анимация появления при прокрутке */
+        .animate-on-scroll.animate-in {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+        
+        /* Специальные стили для карточек услуг */
+        .service-card {
+            opacity: 0 !important;
+            transform: translateY(40px) scale(0.95) !important;
+            transition: all 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+        }
+        
         .service-card.animate-in {
             opacity: 1 !important;
             transform: translateY(0) scale(1) !important;
         }
         
-        /* Разные задержки для каскадного эффекта */
+        /* Плавные задержки для каскадного эффекта */
         .service-card:nth-child(1) { transition-delay: 0.1s !important; }
-        .service-card:nth-child(2) { transition-delay: 0.2s !important; }
-        .service-card:nth-child(3) { transition-delay: 0.3s !important; }
-        .service-card:nth-child(4) { transition-delay: 0.4s !important; }
-        .service-card:nth-child(5) { transition-delay: 0.5s !important; }
-        .service-card:nth-child(6) { transition-delay: 0.6s !important; }
-        .service-card:nth-child(7) { transition-delay: 0.7s !important; }
-        .service-card:nth-child(8) { transition-delay: 0.8s !important; }
-        .service-card:nth-child(9) { transition-delay: 0.9s !important; }
-        .service-card:nth-child(10) { transition-delay: 1.0s !important; }
-        .service-card:nth-child(11) { transition-delay: 1.1s !important; }
-        .service-card:nth-child(12) { transition-delay: 1.2s !important; }
-        .service-card:nth-child(13) { transition-delay: 1.3s !important; }
-        .service-card:nth-child(14) { transition-delay: 1.4s !important; }
+        .service-card:nth-child(2) { transition-delay: 0.15s !important; }
+        .service-card:nth-child(3) { transition-delay: 0.2s !important; }
+        .service-card:nth-child(4) { transition-delay: 0.25s !important; }
+        .service-card:nth-child(5) { transition-delay: 0.3s !important; }
+        .service-card:nth-child(6) { transition-delay: 0.35s !important; }
+        .service-card:nth-child(7) { transition-delay: 0.4s !important; }
+        .service-card:nth-child(8) { transition-delay: 0.45s !important; }
+        .service-card:nth-child(9) { transition-delay: 0.5s !important; }
+        .service-card:nth-child(10) { transition-delay: 0.55s !important; }
+        .service-card:nth-child(11) { transition-delay: 0.6s !important; }
+        .service-card:nth-child(12) { transition-delay: 0.65s !important; }
+        .service-card:nth-child(13) { transition-delay: 0.7s !important; }
+        .service-card:nth-child(14) { transition-delay: 0.75s !important; }
         
-        /* Эффект параллакса при появлении */
-        .service-card.animate-in:nth-child(odd) {
-            animation: slideInLeft 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
-        }
-        
-        .service-card.animate-in:nth-child(even) {
-            animation: slideInRight 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
-        }
-        
-        /* Анимации появления */
-        @keyframes slideInLeft {
+        /* Плавные анимации появления */
+        @keyframes smoothFadeInUp {
             0% {
                 opacity: 0;
-                transform: translateX(-100px) translateY(50px) scale(0.9);
+                transform: translateY(40px);
             }
             100% {
                 opacity: 1;
-                transform: translateX(0) translateY(0) scale(1);
+                transform: translateY(0);
             }
         }
         
-        @keyframes slideInRight {
+        @keyframes smoothFadeInLeft {
             0% {
                 opacity: 0;
-                transform: translateX(100px) translateY(50px) scale(0.9);
+                transform: translateX(-60px);
             }
             100% {
                 opacity: 1;
-                transform: translateX(0) translateY(0) scale(1);
+                transform: translateX(0);
             }
         }
         
-        /* Эффект пульсации при появлении */
-        .service-card.animate-in {
-            animation: cardPulse 1.2s ease-out forwards !important;
+        @keyframes smoothFadeInRight {
+            0% {
+                opacity: 0;
+                transform: translateX(60px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
         
-        @keyframes cardPulse {
+        @keyframes smoothScaleIn {
             0% {
+                opacity: 0;
                 transform: scale(0.9);
-                opacity: 0;
-            }
-            50% {
-                transform: scale(1.05);
-                opacity: 0.8;
-            }
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-        
-        /* Эффект свечения при появлении */
-        .service-card.animate-in::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, transparent, rgba(236, 72, 153, 0.1), transparent);
-            border-radius: inherit;
-            animation: glowEffect 1.5s ease-out forwards;
-            pointer-events: none;
-            z-index: 1;
-        }
-        
-        @keyframes glowEffect {
-            0% {
-                opacity: 0;
-                transform: scale(0.8);
-            }
-            50% {
-                opacity: 1;
-                transform: scale(1.1);
-            }
-            100% {
-                opacity: 0;
-                transform: scale(1.2);
-            }
-        }
-        
-        /* Анимация изображений в карточках */
-        .service-card.animate-in img {
-            animation: imageReveal 1s ease-out 0.3s forwards !important;
-        }
-        
-        @keyframes imageReveal {
-            0% {
-                opacity: 0;
-                transform: scale(1.2);
             }
             100% {
                 opacity: 1;
@@ -1601,33 +1559,168 @@
             }
         }
         
-        /* Анимация текста в карточках */
-        .service-card.animate-in h3,
-        .service-card.animate-in p,
-        .service-card.animate-in .text-2xl {
-            animation: textReveal 0.8s ease-out 0.5s forwards !important;
-            opacity: 0;
-            transform: translateY(20px);
+        /* Анимации для разных типов элементов */
+        .animate-on-scroll.animate-in:nth-child(odd) {
+            animation: smoothFadeInLeft 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards !important;
         }
         
-        @keyframes textReveal {
-            100% {
-                opacity: 1;
-                transform: translateY(0);
+        .animate-on-scroll.animate-in:nth-child(even) {
+            animation: smoothFadeInRight 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards !important;
+        }
+        
+        /* Анимации для заголовков секций */
+        .section-header.animate-in {
+            animation: smoothFadeInUp 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards !important;
+        }
+        
+        /* Анимации для изображений */
+        .animate-on-scroll.animate-in img {
+            animation: smoothScaleIn 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards !important;
+        }
+        
+        /* Анимации для текста */
+        .animate-on-scroll.animate-in h2,
+        .animate-on-scroll.animate-in h3,
+        .animate-on-scroll.animate-in p {
+            animation: smoothFadeInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s forwards !important;
+        }
+        
+        /* Анимации для кнопок */
+        .animate-on-scroll.animate-in a,
+        .animate-on-scroll.animate-in button {
+            animation: smoothFadeInUp 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards !important;
+        }
+        
+        /* Анимации для карточек мастеров */
+        .master-card {
+            opacity: 0 !important;
+            transform: translateY(30px) scale(0.95) !important;
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+        }
+        
+        .master-card.animate-in {
+            opacity: 1 !important;
+            transform: translateY(0) scale(1) !important;
+        }
+        
+        /* Анимации для карточек отзывов */
+        .review-card {
+            opacity: 0 !important;
+            transform: translateY(20px) !important;
+            transition: all 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+        }
+        
+        .review-card.animate-in {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+        
+        /* Анимации для контактных карточек */
+        .contact-card {
+            opacity: 0 !important;
+            transform: translateY(25px) !important;
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+        }
+        
+        .contact-card.animate-in {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+        
+        /* Плавные задержки для всех элементов */
+        .animate-on-scroll:nth-child(1) { transition-delay: 0.1s !important; }
+        .animate-on-scroll:nth-child(2) { transition-delay: 0.15s !important; }
+        .animate-on-scroll:nth-child(3) { transition-delay: 0.2s !important; }
+        .animate-on-scroll:nth-child(4) { transition-delay: 0.25s !important; }
+        .animate-on-scroll:nth-child(5) { transition-delay: 0.3s !important; }
+        .animate-on-scroll:nth-child(6) { transition-delay: 0.35s !important; }
+        
+        /* 📱 МОБИЛЬНАЯ ОПТИМИЗАЦИЯ - СКРЫТИЕ ЭЛЕМЕНТОВ */
+        
+        /* Скрываем элементы только на мобильных устройствах */
+        @media (max-width: 768px) {
+            /* Скрываем обучающий интерфейс отзывов на мобильных */
+            #tutorialOverlay,
+            #swipeTutorial,
+            #fingerCursor {
+                display: none !important;
+            }
+            
+            /* Скрываем сложные анимации на мобильных */
+            .animate-on-scroll:hover {
+                transform: none !important;
+            }
+            
+            /* Упрощаем hover эффекты на мобильных */
+            .service-card:hover,
+            .master-card:hover,
+            .review-card:hover {
+                transform: none !important;
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1) !important;
+            }
+            
+            /* Скрываем некоторые декоративные элементы на мобильных */
+            .absolute.-top-40.-right-40,
+            .absolute.-bottom-40.-left-40 {
+                display: none !important;
+            }
+            
+            /* Уменьшаем отступы на мобильных */
+            .pt-32 {
+                padding-top: 2rem !important;
+            }
+            
+            .pb-56 {
+                padding-bottom: 3rem !important;
+            }
+            
+            /* Скрываем пагинацию отзывов на мобильных */
+            .reviews-pagination {
+                display: none !important;
+            }
+            
+            /* Упрощаем карточки на мобильных */
+            .service-card,
+            .master-card,
+            .review-card {
+                margin-bottom: 1rem !important;
             }
         }
         
-        /* Анимация кнопок в карточках */
-        .service-card.animate-in a {
-            animation: buttonReveal 0.6s ease-out 0.7s forwards !important;
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        
-        @keyframes buttonReveal {
-            100% {
-                opacity: 1;
-                transform: translateY(0);
+        /* 💻 КОМПЬЮТЕРНАЯ ВЕРСИЯ - ПОЛНЫЕ ЭФФЕКТЫ */
+        @media (min-width: 769px) {
+            /* Показываем все элементы на компьютере */
+            #tutorialOverlay,
+            #swipeTutorial,
+            #fingerCursor {
+                display: block !important;
+            }
+            
+            /* Полные hover эффекты на компьютере */
+            .service-card:hover,
+            .master-card:hover,
+            .review-card:hover {
+                transform: translateY(-5px) scale(1.02) !important;
+            }
+            
+            /* Показываем все декоративные элементы */
+            .absolute.-top-40.-right-40,
+            .absolute.-bottom-40.-left-40 {
+                display: block !important;
+            }
+            
+            /* Полные отступы на компьютере */
+            .pt-32 {
+                padding-top: 8rem !important;
+            }
+            
+            .pb-56 {
+                padding-bottom: 14rem !important;
+            }
+            
+            /* Показываем пагинацию отзывов */
+            .reviews-pagination {
+                display: flex !important;
             }
         }
         
@@ -2541,7 +2634,7 @@
             <!-- Masters Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-5xl mx-auto">
                 <!-- Master 1 - Светлана -->
-                <div class="group relative bg-white/80 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 overflow-hidden animate-on-scroll hover:scale-105 transition-all duration-500 transform hover:rotate-1 p-4">
+                <div class="group relative master-card bg-white/80 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 overflow-hidden animate-on-scroll hover:scale-105 transition-all duration-500 transform hover:rotate-1 p-4">
                     <!-- Image Container -->
                     <div class="relative overflow-hidden h-80">
                         <img src="images/ui/Светлана.webp" alt="Мастер Светлана" 
@@ -2605,7 +2698,7 @@
                 </div>
                 
                 <!-- Master 2 - Анна -->
-                <div class="group relative bg-white/80 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 overflow-hidden animate-on-scroll delay-100 hover:scale-105 transition-all duration-500 transform hover:-rotate-1 p-4">
+                <div class="group relative master-card bg-white/80 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 overflow-hidden animate-on-scroll delay-100 hover:scale-105 transition-all duration-500 transform hover:-rotate-1 p-4">
                     <!-- Image Container -->
                     <div class="relative overflow-hidden h-80">
                         <img src="images/ui/Анна.webp" alt="Мастер Анна" 
@@ -2697,7 +2790,7 @@
             
             <div class="flex flex-col md:flex-row">
                 <div class="md:w-1/2 mb-10 md:mb-0 md:pr-10 animate-on-scroll">
-                    <div class="bg-white/80 backdrop-blur-md p-8 rounded-2xl shadow-xl border border-white/20 mb-8">
+                                            <div class="contact-card bg-white/80 backdrop-blur-md p-8 rounded-2xl shadow-xl border border-white/20 mb-8">
                         <h3 class="text-xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent mb-6">Контактная информация</h3>
                         <div class="space-y-6">
                             <div class="flex items-start">
@@ -2774,8 +2867,25 @@
                 </div>
                 
                 <div class="md:w-1/2 animate-on-scroll delay-100">
-                    <div class="bg-white/80 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-white/20 h-full">
-                        <iframe src="https://yandex.ru/map-widget/v1/-/CHck7A3J" width="100%" height="500" frameborder="0" class="rounded-lg"></iframe>
+                    <div class="bg-white/80 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-white/20">
+                        <h3 class="text-xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent mb-4 text-center">
+                            <i class="fas fa-map-marker-alt mr-2"></i>Наше расположение
+                        </h3>
+                        <div class="relative">
+                            <iframe src="https://yandex.ru/map-widget/v1/-/CHck7A3J" width="100%" height="250" frameborder="0" class="rounded-lg shadow-md md:h-[350px] h-[250px]"></iframe>
+                            <div class="absolute bottom-2 left-2 right-2 md:bottom-4 md:left-4 md:right-4 bg-white/90 backdrop-blur-sm rounded-lg p-2 md:p-3 shadow-lg">
+                                <div class="flex items-center justify-between">
+                                    <div class="text-xs md:text-sm text-gray-700">
+                                        <i class="fas fa-map-pin text-pink-500 mr-1"></i>
+                                        <span class="font-semibold">Одесская 3А, корпус 10</span>
+                                    </div>
+                                    <a href="https://yandex.ru/maps/-/CHck7A3J" target="_blank" 
+                                       class="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-2 py-1 md:px-3 md:py-1 rounded-lg text-xs font-semibold hover:from-pink-600 hover:to-purple-700 transition-all duration-300">
+                                        <i class="fas fa-external-link-alt mr-1"></i>Открыть
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -4949,6 +5059,11 @@
             
             // Обучающий интерфейс (УПРОЩЕНО)
             function showTutorial() {
+                // Проверяем, что это не мобильное устройство
+                if (window.innerWidth <= 768) {
+                    return; // Не показываем на мобильных
+                }
+                
                 const tutorial = document.getElementById('swipeTutorial');
                 const fingerCursor = document.getElementById('fingerCursor');
                 
@@ -5106,69 +5221,104 @@
         window.reviewsSwiper = reviewsSwiper;
         window.resetReviewsTutorial = resetReviewsTutorial;
         
-        // 🎨 АНИМАЦИИ ПОЯВЛЕНИЯ ДЛЯ УСЛУГ И ЗАГОЛОВКОВ
-        function initServiceAnimations() {
-            const serviceCards = document.querySelectorAll('.service-card');
-            const sectionHeaders = document.querySelectorAll('.text-center.mb-16');
+        // 🎨 УЛУЧШЕННАЯ СИСТЕМА АНИМАЦИЙ ПОЯВЛЕНИЯ
+        function initScrollAnimations() {
+            // Все элементы для анимации
+            const animatedElements = document.querySelectorAll(`
+                .service-card,
+                .master-card,
+                .review-card,
+                .contact-card,
+                .text-center.mb-16,
+                .animate-on-scroll,
+                .bg-white\\/80.backdrop-blur-md,
+                .flex.flex-col.md\\:flex-row,
+                .grid.grid-cols-1.md\\:grid-cols-2,
+                .grid.grid-cols-1.md\\:grid-cols-3
+            `);
             
             const observerOptions = {
-                threshold: 0.3,
-                rootMargin: '0px 0px -100px 0px'
+                threshold: 0.2,
+                rootMargin: '0px 0px -50px 0px'
             };
             
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
+                        // Добавляем класс анимации
                         entry.target.classList.add('animate-in');
                         
-                        // Добавляем задержку для каскадного эффекта карточек
+                        // Специальная обработка для карточек услуг
                         if (entry.target.classList.contains('service-card')) {
+                            const serviceCards = document.querySelectorAll('.service-card');
                             const index = Array.from(serviceCards).indexOf(entry.target);
+                            entry.target.style.transitionDelay = `${index * 0.05}s`;
+                        }
+                        
+                        // Специальная обработка для карточек мастеров
+                        if (entry.target.classList.contains('master-card')) {
+                            const masterCards = document.querySelectorAll('.master-card');
+                            const index = Array.from(masterCards).indexOf(entry.target);
                             entry.target.style.transitionDelay = `${index * 0.1}s`;
                         }
                         
+                        // Специальная обработка для карточек отзывов
+                        if (entry.target.classList.contains('review-card')) {
+                            const reviewCards = document.querySelectorAll('.review-card');
+                            const index = Array.from(reviewCards).indexOf(entry.target);
+                            entry.target.style.transitionDelay = `${index * 0.08}s`;
+                        }
+                        
                         // Убираем наблюдение после анимации
-                        observer.unobserve(entry.target);
+                        setTimeout(() => {
+                            observer.unobserve(entry.target);
+                        }, 1000);
                     }
                 });
             }, observerOptions);
             
-            // Начинаем наблюдение за карточками и заголовками
-            serviceCards.forEach(card => {
-                observer.observe(card);
-            });
-            
-            sectionHeaders.forEach(header => {
-                header.classList.add('section-header');
-                observer.observe(header);
+            // Начинаем наблюдение за всеми элементами
+            animatedElements.forEach(element => {
+                observer.observe(element);
             });
         }
         
         // Инициализация анимаций при загрузке страницы
         document.addEventListener('DOMContentLoaded', function() {
-            initServiceAnimations();
+            initScrollAnimations();
             
             // Переинициализация при изменении размера окна
             window.addEventListener('resize', () => {
-                setTimeout(initServiceAnimations, 100);
+                setTimeout(initScrollAnimations, 100);
             });
         });
         
         // Функция для принудительного запуска анимаций (для тестирования)
-        function replayServiceAnimations() {
-            const serviceCards = document.querySelectorAll('.service-card');
-            serviceCards.forEach(card => {
-                card.classList.remove('animate-in');
-                card.style.transitionDelay = '0s';
+        function replayAllAnimations() {
+            const allAnimatedElements = document.querySelectorAll(`
+                .service-card,
+                .master-card,
+                .review-card,
+                .contact-card,
+                .text-center.mb-16,
+                .animate-on-scroll,
+                .bg-white\\/80.backdrop-blur-md
+            `);
+            
+            allAnimatedElements.forEach(element => {
+                element.classList.remove('animate-in');
+                element.style.transitionDelay = '0s';
             });
             
             setTimeout(() => {
-                initServiceAnimations();
+                initScrollAnimations();
             }, 100);
         }
         
         // Экспорт функций для глобального доступа
-        window.replayServiceAnimations = replayServiceAnimations;
+        window.replayAllAnimations = replayAllAnimations;
     </script>
 </body>
+</html>
+
 </html>
