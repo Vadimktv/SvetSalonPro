@@ -1472,51 +1472,49 @@
             padding-bottom: 3rem !important;
         }
         
-        /* 🎨 АНИМАЦИИ ПОЯВЛЕНИЯ ТОЛЬКО ДЛЯ КАРТОЧЕК УСЛУГ */
+        /* 🎨 СУПЕР ПЛАВНЫЕ АНИМАЦИИ ПОЯВЛЕНИЯ ДЛЯ КАРТОЧЕК УСЛУГ */
         
-        /* Специальные стили только для карточек услуг */
+        /* Базовые стили для карточек услуг */
         .service-card {
             opacity: 0 !important;
-            transform: translateY(40px) scale(0.95) !important;
-            transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+            transform: translateY(30px) !important;
+            transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            will-change: opacity, transform !important;
         }
         
         .service-card.animate-in {
             opacity: 1 !important;
-            transform: translateY(0) scale(1) !important;
+            transform: translateY(0) !important;
         }
         
-        /* Плавные задержки для каскадного эффекта услуг */
-        .service-card:nth-child(1) { transition-delay: 0.1s !important; }
-        .service-card:nth-child(2) { transition-delay: 0.15s !important; }
-        .service-card:nth-child(3) { transition-delay: 0.2s !important; }
-        .service-card:nth-child(4) { transition-delay: 0.25s !important; }
-        .service-card:nth-child(5) { transition-delay: 0.3s !important; }
-        .service-card:nth-child(6) { transition-delay: 0.35s !important; }
-        .service-card:nth-child(7) { transition-delay: 0.4s !important; }
-        .service-card:nth-child(8) { transition-delay: 0.45s !important; }
-        .service-card:nth-child(9) { transition-delay: 0.5s !important; }
-        .service-card:nth-child(10) { transition-delay: 0.55s !important; }
-        .service-card:nth-child(11) { transition-delay: 0.6s !important; }
-        .service-card:nth-child(12) { transition-delay: 0.65s !important; }
-        .service-card:nth-child(13) { transition-delay: 0.7s !important; }
-        .service-card:nth-child(14) { transition-delay: 0.75s !important; }
+        /* Очень плавные задержки для каскадного эффекта */
+        .service-card:nth-child(1) { transition-delay: 0.05s !important; }
+        .service-card:nth-child(2) { transition-delay: 0.1s !important; }
+        .service-card:nth-child(3) { transition-delay: 0.15s !important; }
+        .service-card:nth-child(4) { transition-delay: 0.2s !important; }
+        .service-card:nth-child(5) { transition-delay: 0.25s !important; }
+        .service-card:nth-child(6) { transition-delay: 0.3s !important; }
+        .service-card:nth-child(7) { transition-delay: 0.35s !important; }
+        .service-card:nth-child(8) { transition-delay: 0.4s !important; }
+        .service-card:nth-child(9) { transition-delay: 0.45s !important; }
+        .service-card:nth-child(10) { transition-delay: 0.5s !important; }
+        .service-card:nth-child(11) { transition-delay: 0.55s !important; }
+        .service-card:nth-child(12) { transition-delay: 0.6s !important; }
+        .service-card:nth-child(13) { transition-delay: 0.65s !important; }
+        .service-card:nth-child(14) { transition-delay: 0.7s !important; }
         
-        /* Плавная анимация появления для услуг */
-        @keyframes smoothServiceAppear {
-            0% {
-                opacity: 0;
-                transform: translateY(40px) scale(0.95);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-        
-        /* Применяем анимацию только к карточкам услуг */
+        /* Убираем любые дополнительные анимации */
         .service-card.animate-in {
-            animation: smoothServiceAppear 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards !important;
+            animation: none !important;
+        }
+        
+        /* Отключаем hover эффекты во время анимации */
+        .service-card {
+            pointer-events: none !important;
+        }
+        
+        .service-card.animate-in {
+            pointer-events: auto !important;
         }
         
         /* 📱 МОБИЛЬНАЯ ОПТИМИЗАЦИЯ - СКРЫТИЕ ЭЛЕМЕНТОВ */
@@ -1535,13 +1533,25 @@
                 transform: none !important;
             }
             
-            /* Упрощаем hover эффекты на мобильных */
-            .service-card:hover,
-            .master-card:hover,
-            .review-card:hover {
-                transform: none !important;
-                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1) !important;
-            }
+                    /* Упрощаем hover эффекты на мобильных */
+        .service-card:hover,
+        .master-card:hover,
+        .review-card:hover {
+            transform: none !important;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1) !important;
+        }
+        
+        /* Убираем подпрыгивание карточек услуг */
+        .service-card {
+            transform: none !important;
+            transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), 
+                        transform 1.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-2px) !important;
+            transition: transform 0.3s ease !important;
+        }
             
             /* Скрываем некоторые декоративные элементы на мобильных */
             .absolute.-top-40.-right-40,
@@ -5105,30 +5115,33 @@
         window.reviewsSwiper = reviewsSwiper;
         window.resetReviewsTutorial = resetReviewsTutorial;
         
-        // 🎨 АНИМАЦИИ ПОЯВЛЕНИЯ ТОЛЬКО ДЛЯ КАРТОЧЕК УСЛУГ
+        // 🎨 СУПЕР ПЛАВНЫЕ АНИМАЦИИ ПОЯВЛЕНИЯ ДЛЯ КАРТОЧЕК УСЛУГ
         function initServiceAnimations() {
             // Только карточки услуг
             const serviceCards = document.querySelectorAll('.service-card');
             
             const observerOptions = {
-                threshold: 0.3,
-                rootMargin: '0px 0px -100px 0px'
+                threshold: 0.2,
+                rootMargin: '0px 0px -50px 0px'
             };
             
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        // Добавляем класс анимации
-                        entry.target.classList.add('animate-in');
+                        // Добавляем класс анимации плавно
+                        requestAnimationFrame(() => {
+                            entry.target.classList.add('animate-in');
+                        });
                         
                         // Добавляем задержку для каскадного эффекта
                         const index = Array.from(serviceCards).indexOf(entry.target);
-                        entry.target.style.transitionDelay = `${index * 0.05}s`;
+                        const delay = index * 0.05;
+                        entry.target.style.transitionDelay = `${delay}s`;
                         
                         // Убираем наблюдение после анимации
                         setTimeout(() => {
                             observer.unobserve(entry.target);
-                        }, 1500);
+                        }, 2000);
                     }
                 });
             }, observerOptions);
