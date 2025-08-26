@@ -1263,15 +1263,15 @@
                     <!-- Profile Button -->
                     <div class="relative">
                         <button id="profileBtn" 
-                                class="flex items-center space-x-3 bg-white/80 hover:bg-white border border-gray-200 hover:border-pink-300 rounded-xl px-4 py-2 transition-all duration-200 transform hover:scale-105 shadow-sm hover:shadow-md">
-                            <div class="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center">
+                                class="flex items-center space-x-3 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 border border-pink-300 hover:border-pink-400 rounded-xl px-4 py-2 transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl text-white">
+                            <div class="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/30">
                                 <i class="fas fa-user text-white text-sm"></i>
                             </div>
                             <div class="hidden sm:block text-left">
-                                <div class="text-sm font-medium text-gray-700">Профиль</div>
-                                <div class="text-xs text-gray-500">Войти в аккаунт</div>
+                                <div class="text-sm font-semibold text-white">Профиль</div>
+                                <div class="text-xs text-white/80">Войти в аккаунт</div>
                             </div>
-                            <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
+                            <i class="fas fa-chevron-down text-white/80 text-xs transition-transform duration-200"></i>
                         </button>
 
                         <!-- Profile Dropdown - iOS Style -->
@@ -2684,12 +2684,25 @@
         if (profileBtn && profileDropdown) {
             profileBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                profileDropdown.classList.toggle('opacity-0');
-                profileDropdown.classList.toggle('invisible');
-                profileDropdown.classList.toggle('scale-95');
-                profileDropdown.classList.toggle('opacity-100');
-                profileDropdown.classList.toggle('visible');
-                profileDropdown.classList.toggle('scale-100');
+                
+                // Toggle dropdown visibility
+                const isVisible = !profileDropdown.classList.contains('opacity-0');
+                
+                if (isVisible) {
+                    // Hide dropdown
+                    profileDropdown.classList.add('opacity-0', 'invisible', 'scale-95');
+                    profileDropdown.classList.remove('opacity-100', 'visible', 'scale-100');
+                } else {
+                    // Show dropdown
+                    profileDropdown.classList.remove('opacity-0', 'invisible', 'scale-95');
+                    profileDropdown.classList.add('opacity-100', 'visible', 'scale-100');
+                }
+                
+                // Animate chevron
+                const chevron = profileBtn.querySelector('.fa-chevron-down');
+                if (chevron) {
+                    chevron.style.transform = isVisible ? 'rotate(0deg)' : 'rotate(180deg)';
+                }
             });
         }
         
@@ -2698,6 +2711,12 @@
             if (profileDropdown && !profileBtn.contains(e.target) && !profileDropdown.contains(e.target)) {
                 profileDropdown.classList.add('opacity-0', 'invisible', 'scale-95');
                 profileDropdown.classList.remove('opacity-100', 'visible', 'scale-100');
+                
+                // Reset chevron
+                const chevron = profileBtn.querySelector('.fa-chevron-down');
+                if (chevron) {
+                    chevron.style.transform = 'rotate(0deg)';
+                }
             }
         });
         
