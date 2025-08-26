@@ -1011,6 +1011,72 @@
             transform: translateY(-2px);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
+        
+        /* Booking Form Styles */
+        .booking-form input,
+        .booking-form select {
+            transition: all 0.3s ease;
+        }
+        
+        .booking-form input:focus,
+        .booking-form select:focus {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 25px rgba(236, 72, 153, 0.15);
+        }
+        
+        /* Gradient Text Animation */
+        .gradient-text {
+            background: linear-gradient(45deg, #ec4899, #8b5cf6, #ec4899);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        /* Glassmorphism Effects */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Floating Animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        /* Button Hover Effects */
+        .gradient-button {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .gradient-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .gradient-button:hover::before {
+            left: 100%;
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-pink-50 via-white to-purple-50">
@@ -1215,82 +1281,179 @@
             <!-- Booking Section (moved here) -->
             <section id="booking" class="py-20">
                 <div class="container mx-auto px-4">
-                    <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-xl overflow-hidden">
-                        <div class="md:flex">
-                            <div class="md:w-1/2 bg-pink-600 text-white p-10 flex flex-col justify-center">
-                                <h2 class="text-3xl font-bold mb-6 animate-on-scroll">Запись онлайн</h2>
-                                <p class="mb-6 animate-on-scroll delay-100">Оставьте свои данные, и наш администратор свяжется с вами для подтверждения записи.</p>
-                                <div class="animate-on-scroll delay-200">
-                                    <div class="flex items-center mb-4">
-                                        <div class="w-10 h-10 rounded-full bg-pink-500 flex items-center justify-center mr-4">
-                                            <i class="fas fa-phone"></i>
-                                        </div>
-                                        <div>
-                                            <p class="font-bold">+7 928 280 62 94</p>
-                                            <p class="text-sm text-pink-100">Звоните с 9:00 до 21:00</p>
-                                        </div>
+                    <div class="max-w-5xl mx-auto">
+                        <!-- Header -->
+                        <div class="text-center mb-12">
+                            <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-pink-500 to-purple-600 rounded-2xl shadow-lg mb-6">
+                                <i class="fas fa-calendar-plus text-white text-2xl"></i>
+                            </div>
+                            <h2 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent mb-4 animate-on-scroll">
+                                Запись онлайн
+                            </h2>
+                            <p class="text-xl text-gray-600 max-w-2xl mx-auto animate-on-scroll delay-100">
+                                Оставьте свои данные, и наш администратор свяжется с вами для подтверждения записи
+                            </p>
+                        </div>
+
+                        <!-- Main Booking Card -->
+                        <div class="bg-white/80 backdrop-blur-md rounded-3xl shadow-2xl border border-white/20 overflow-hidden">
+                            <div class="lg:flex">
+                                <!-- Left Side - Info -->
+                                <div class="lg:w-2/5 bg-gradient-to-br from-pink-500 via-purple-500 to-pink-600 text-white p-8 lg:p-12 relative overflow-hidden">
+                                    <!-- Background Pattern -->
+                                    <div class="absolute inset-0 opacity-10">
+                                        <div class="absolute top-0 right-0 w-32 h-32 bg-white rounded-full -translate-y-16 translate-x-16"></div>
+                                        <div class="absolute bottom-0 left-0 w-24 h-24 bg-white rounded-full translate-y-12 -translate-x-12"></div>
+                                        <div class="absolute top-1/2 left-1/2 w-16 h-16 bg-white rounded-full -translate-x-8 -translate-y-8"></div>
                                     </div>
-                                    <div class="flex items-center">
-                                        <div class="w-10 h-10 rounded-full bg-pink-500 flex items-center justify-center mr-4">
-                                            <i class="fas fa-envelope"></i>
+                                    
+                                    <div class="relative z-10">
+                                        <h3 class="text-3xl font-bold mb-6 animate-on-scroll">Запишитесь прямо сейчас</h3>
+                                        <p class="text-lg mb-8 animate-on-scroll delay-100 opacity-90">
+                                            Получите профессиональные услуги в нашем салоне красоты
+                                        </p>
+                                        
+                                        <div class="space-y-6 animate-on-scroll delay-200">
+                                            <!-- Contact Info -->
+                                            <div class="flex items-center p-4 bg-white/10 rounded-2xl backdrop-blur-sm">
+                                                <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mr-4">
+                                                    <i class="fas fa-phone text-xl"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="font-bold text-lg">+7 928 280 62 94</p>
+                                                    <p class="text-sm opacity-80">Звоните с 9:00 до 21:00</p>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="flex items-center p-4 bg-white/10 rounded-2xl backdrop-blur-sm">
+                                                <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mr-4">
+                                                    <i class="fas fa-envelope text-xl"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="font-bold text-lg">my@SvetSalonPro.ru</p>
+                                                    <p class="text-sm opacity-80">Пишите в любое время</p>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="flex items-center p-4 bg-white/10 rounded-2xl backdrop-blur-sm">
+                                                <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mr-4">
+                                                    <i class="fas fa-map-marker-alt text-xl"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="font-bold text-lg">Одесская 3А, корпус 10</p>
+                                                    <p class="text-sm opacity-80">Геленджик</p>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <p class="font-bold">my@SvetSalonPro.ru</p>
-                                            <p class="text-sm text-pink-100">Пишите в любое время</p>
+                                        
+                                        <!-- Social Links -->
+                                        <div class="mt-8 pt-6 border-t border-white/20">
+                                            <p class="text-sm opacity-80 mb-4">Следите за нами:</p>
+                                            <div class="flex space-x-3">
+                                                <a href="https://t.me/SvetSalonPro" target="_blank" 
+                                                   class="w-10 h-10 bg-white/20 hover:bg-white/30 rounded-xl flex items-center justify-center transition-all duration-200 transform hover:scale-110">
+                                                    <i class="fab fa-telegram text-lg"></i>
+                                                </a>
+                                                <a href="https://wa.me/79282806294" target="_blank" 
+                                                   class="w-10 h-10 bg-white/20 hover:bg-white/30 rounded-xl flex items-center justify-center transition-all duration-200 transform hover:scale-110">
+                                                    <i class="fab fa-whatsapp text-lg"></i>
+                                                </a>
+                                                <a href="#" 
+                                                   class="w-10 h-10 bg-white/20 hover:bg-white/30 rounded-xl flex items-center justify-center transition-all duration-200 transform hover:scale-110">
+                                                    <i class="fab fa-instagram text-lg"></i>
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="md:w-1/2 p-10">
-                                <!--
-                                <script>
-                                  function sendToTelegram(event) {
-                                    event.preventDefault();
-                                    // Старая отправка формы отключена
-                                  }
-                                </script>
-                                -->
-                                <form class="animate-on-scroll" id="bookingForm" onsubmit="handleFormSubmit(event)">
-                                    <div class="mb-6">
-                                        <label for="name" class="block text-gray-700 font-medium mb-2">Ваше имя</label>
-                                        <input type="text" id="name" name="name" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" placeholder="" required oninput="if(this.value.length>0){this.value=this.value.charAt(0).toUpperCase()+this.value.slice(1);} ">
-                                    </div>
-                                    <div class="mb-6">
-                                        <label for="phone" class="block text-gray-700 font-medium mb-2">Телефон</label>
-                                        <input type="tel" id="phone" name="phone" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" placeholder="+7 (___) ___-__-__" value="+7" oninput="if(!this.value.startsWith('+7'))this.value='+7';" required>
-                                    </div>
-                                    <div class="mb-6">
-                                        <label for="date" class="block text-gray-700 font-medium mb-2">Дата визита</label>
-                                        <input type="date" id="date" name="date" min="" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent mb-4" required>
-                                    </div>
-                                    <div class="mb-6">
-                                        <label for="time" class="block text-gray-700 font-medium mb-2">Время визита</label>
-                                        <input type="time" id="time" name="time" min="09:00" max="20:00" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent" required>
-                                        <p class="text-sm text-gray-500 mt-1">Время работы: с 09:00 до 20:00</p>
-                                    </div>
-                                    <div class="mb-6">
-                                        <label for="serviceCategory" class="block text-gray-700 font-medium mb-2">Категория услуг</label>
-                                        <select id="serviceCategory" name="serviceCategory" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent form-select" required onchange="updateServiceOptions()">
-                                            <option value="">Выберите категорию</option>
-                                            <option value="hair">Парикмахерские услуги</option>
-                                            <option value="manicure">Услуги маникюра</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-8 relative">
-                                        <label for="service" class="block text-gray-700 font-medium mb-2">Услуга</label>
-                                        <select id="service" name="service" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent form-select" required disabled>
-                                            <option value="">Сначала выберите категорию</option>
-                                        </select>
-                                    </div>
-                                    <button type="submit" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-medium py-4 px-8 rounded-lg transition shadow-md hover:shadow-lg text-lg">Записаться</button>
-                                    
-                                    <!-- Отладочная информация (убрать после исправления) -->
-                                    <div id="debug-info" class="mt-4 p-3 bg-gray-100 rounded text-xs text-gray-600 hidden">
-                                        <p><strong>Отладка:</strong></p>
-                                        <p>Категория: <span id="debug-category">-</span></p>
-                                        <p>Услуга: <span id="debug-service">-</span></p>
-                                    </div>
-                                </form>
+
+                                <!-- Right Side - Form -->
+                                <div class="lg:w-3/5 p-8 lg:p-12">
+                                    <form class="animate-on-scroll booking-form" id="bookingForm" onsubmit="handleFormSubmit(event)">
+                                        <div class="grid md:grid-cols-2 gap-6 mb-6">
+                                            <div>
+                                                <label for="name" class="block text-gray-700 font-semibold mb-3 text-sm uppercase tracking-wide">
+                                                    <i class="fas fa-user mr-2 text-pink-500"></i>Ваше имя
+                                                </label>
+                                                <input type="text" id="name" name="name" 
+                                                       class="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all duration-200 bg-white/50 backdrop-blur-sm" 
+                                                       placeholder="Введите ваше имя" required 
+                                                       oninput="if(this.value.length>0){this.value=this.value.charAt(0).toUpperCase()+this.value.slice(1);}">
+                                            </div>
+                                            <div>
+                                                <label for="phone" class="block text-gray-700 font-semibold mb-3 text-sm uppercase tracking-wide">
+                                                    <i class="fas fa-phone mr-2 text-pink-500"></i>Телефон
+                                                </label>
+                                                <input type="tel" id="phone" name="phone" 
+                                                       class="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all duration-200 bg-white/50 backdrop-blur-sm" 
+                                                       placeholder="+7 (___) ___-__-__" value="+7" 
+                                                       oninput="if(!this.value.startsWith('+7'))this.value='+7';" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="grid md:grid-cols-2 gap-6 mb-6">
+                                            <div>
+                                                <label for="date" class="block text-gray-700 font-semibold mb-3 text-sm uppercase tracking-wide">
+                                                    <i class="fas fa-calendar mr-2 text-pink-500"></i>Дата визита
+                                                </label>
+                                                <input type="date" id="date" name="date" min="" 
+                                                       class="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all duration-200 bg-white/50 backdrop-blur-sm" required>
+                                            </div>
+                                            <div>
+                                                <label for="time" class="block text-gray-700 font-semibold mb-3 text-sm uppercase tracking-wide">
+                                                    <i class="fas fa-clock mr-2 text-pink-500"></i>Время визита
+                                                </label>
+                                                <input type="time" id="time" name="time" min="09:00" max="20:00" 
+                                                       class="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all duration-200 bg-white/50 backdrop-blur-sm" required>
+                                                <p class="text-sm text-gray-500 mt-2">
+                                                    <i class="fas fa-info-circle mr-1"></i>Время работы: с 09:00 до 20:00
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div class="grid md:grid-cols-2 gap-6 mb-8">
+                                            <div>
+                                                <label for="serviceCategory" class="block text-gray-700 font-semibold mb-3 text-sm uppercase tracking-wide">
+                                                    <i class="fas fa-tag mr-2 text-pink-500"></i>Категория услуг
+                                                </label>
+                                                <select id="serviceCategory" name="serviceCategory" 
+                                                        class="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all duration-200 bg-white/50 backdrop-blur-sm form-select appearance-none" 
+                                                        required onchange="updateServiceOptions()">
+                                                    <option value="">Выберите категорию</option>
+                                                    <option value="hair">Парикмахерские услуги</option>
+                                                    <option value="manicure">Услуги маникюра</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label for="service" class="block text-gray-700 font-semibold mb-3 text-sm uppercase tracking-wide">
+                                                    <i class="fas fa-spa mr-2 text-pink-500"></i>Услуга
+                                                </label>
+                                                <select id="service" name="service" 
+                                                        class="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all duration-200 bg-white/50 backdrop-blur-sm form-select appearance-none" 
+                                                        required disabled>
+                                                    <option value="">Сначала выберите категорию</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <!-- Submit Button -->
+                                        <button type="submit" 
+                                                class="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold py-5 px-8 rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl text-lg relative overflow-hidden group gradient-button">
+                                            <span class="relative z-10 flex items-center justify-center">
+                                                <i class="fas fa-paper-plane mr-3 text-xl"></i>
+                                                Записаться онлайн
+                                            </span>
+                                            <div class="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                        </button>
+                                        
+                                        <!-- Debug Info -->
+                                        <div id="debug-info" class="mt-4 p-4 bg-gray-100/50 rounded-xl text-xs text-gray-600 hidden backdrop-blur-sm">
+                                            <p><strong>Отладка:</strong></p>
+                                            <p>Категория: <span id="debug-category">-</span></p>
+                                            <p>Услуга: <span id="debug-service">-</span></p>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
