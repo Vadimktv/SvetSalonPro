@@ -1235,6 +1235,9 @@
                     <a href="#services" class="nav-link text-gray-700 hover:text-pink-600 font-medium transition-colors duration-200">
                         <i class="fas fa-spa mr-2"></i>Услуги
                     </a>
+                    <a href="pages/portfolio.html" class="nav-link text-gray-700 hover:text-pink-600 font-medium transition-colors duration-200">
+                        <i class="fas fa-images mr-2"></i>Портфолио
+                    </a>
                     <a href="#masters" class="nav-link text-gray-700 hover:text-pink-600 font-medium transition-colors duration-200">
                         <i class="fas fa-users mr-2"></i>Мастера
                     </a>
@@ -1271,41 +1274,100 @@
                             <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
                         </button>
 
-                        <!-- Profile Dropdown -->
-                        <div id="profileDropdown" class="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-gray-200 opacity-0 invisible transform scale-95 transition-all duration-200 z-50">
-                            <div class="p-4 border-b border-gray-100">
-                                <div class="flex items-center space-x-3">
-                                    <div class="w-12 h-12 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center">
-                                        <i class="fas fa-user text-white text-lg"></i>
+                        <!-- Profile Dropdown - iOS Style -->
+                        <div id="profileDropdown" class="absolute right-0 mt-2 w-72 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 opacity-0 invisible transform scale-95 transition-all duration-300 z-50 overflow-hidden">
+                            <!-- Header -->
+                            <div class="p-6 bg-gradient-to-br from-pink-50 to-purple-50 border-b border-pink-100/50">
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-16 h-16 bg-gradient-to-br from-pink-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
+                                        <i class="fas fa-user text-white text-xl"></i>
                                     </div>
                                     <div>
-                                        <div class="font-medium text-gray-800">Гость</div>
-                                        <div class="text-sm text-gray-500">Войдите в аккаунт</div>
+                                        <div class="font-bold text-gray-800 text-lg">Гость</div>
+                                        <div class="text-sm text-gray-600">Войдите в аккаунт</div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="p-2">
-                                <a href="pages/account.html" 
-                                   class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-pink-50 hover:text-pink-600 rounded-lg transition-colors duration-200">
-                                    <i class="fas fa-sign-in-alt text-gray-400"></i>
-                                    <span>Войти / Регистрация</span>
-                                </a>
-                                <a href="pages/portfolio.html" 
-                                   class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-pink-50 hover:text-pink-600 rounded-lg transition-colors duration-200">
-                                    <i class="fas fa-images text-gray-400"></i>
-                                    <span>Портфолио</span>
-                                </a>
-                                <div class="border-t border-gray-100 my-2"></div>
-                                <a href="https://t.me/SvetSalonPro" target="_blank" 
-                                   class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors duration-200">
-                                    <i class="fab fa-telegram text-gray-400"></i>
-                                    <span>Telegram</span>
-                                </a>
-                                <a href="https://wa.me/79282806294" target="_blank" 
-                                   class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-lg transition-colors duration-200">
-                                    <i class="fab fa-whatsapp text-gray-400"></i>
-                                    <span>WhatsApp</span>
-                                </a>
+                            
+                            <!-- Menu Items -->
+                            <div class="p-3">
+                                <!-- Account Actions -->
+                                <div class="mb-3">
+                                    <a href="pages/account.html" 
+                                       class="flex items-center space-x-4 px-4 py-3 text-gray-700 hover:bg-gradient-to-r hover:from-pink-50 hover:to-purple-50 rounded-xl transition-all duration-200 group">
+                                        <div class="w-10 h-10 bg-gradient-to-br from-pink-500 to-purple-600 rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-200">
+                                            <i class="fas fa-sign-in-alt text-white text-sm"></i>
+                                        </div>
+                                        <div class="flex-1">
+                                            <div class="font-semibold text-gray-800">Войти / Регистрация</div>
+                                            <div class="text-xs text-gray-500">Создать аккаунт или войти</div>
+                                        </div>
+                                        <i class="fas fa-chevron-right text-gray-400 text-xs group-hover:text-pink-500 transition-colors duration-200"></i>
+                                    </a>
+                                </div>
+                                
+                                <!-- Portfolio -->
+                                <div class="mb-3">
+                                    <a href="pages/portfolio.html" 
+                                       class="flex items-center space-x-4 px-4 py-3 text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 rounded-xl transition-all duration-200 group">
+                                        <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-200">
+                                            <i class="fas fa-images text-white text-sm"></i>
+                                        </div>
+                                        <div class="flex-1">
+                                            <div class="font-semibold text-gray-800">Портфолио</div>
+                                            <div class="text-xs text-gray-500">Наши работы и достижения</div>
+                                        </div>
+                                        <i class="fas fa-chevron-right text-gray-400 text-xs group-hover:text-blue-500 transition-colors duration-200"></i>
+                                    </a>
+                                </div>
+                                
+                                <!-- Divider -->
+                                <div class="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent my-3"></div>
+                                
+                                <!-- Social Links -->
+                                <div class="mb-3">
+                                    <a href="https://t.me/SvetSalonPro" target="_blank" 
+                                       class="flex items-center space-x-4 px-4 py-3 text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-cyan-50 rounded-xl transition-all duration-200 group">
+                                        <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-200">
+                                            <i class="fab fa-telegram text-white text-sm"></i>
+                                        </div>
+                                        <div class="flex-1">
+                                            <div class="font-semibold text-gray-800">Telegram</div>
+                                            <div class="text-xs text-gray-500">Связаться с нами</div>
+                                        </div>
+                                        <i class="fas fa-external-link-alt text-gray-400 text-xs group-hover:text-blue-500 transition-colors duration-200"></i>
+                                    </a>
+                                </div>
+                                
+                                <!-- WhatsApp -->
+                                <div class="mb-3">
+                                    <a href="https://wa.me/79282806294" target="_blank" 
+                                       class="flex items-center space-x-4 px-4 py-3 text-gray-700 hover:bg-gradient-to-r hover:from-green-50 hover:to-emerald-50 rounded-xl transition-all duration-200 group">
+                                        <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-200">
+                                            <i class="fab fa-whatsapp text-white text-sm"></i>
+                                        </div>
+                                        <div class="flex-1">
+                                            <div class="font-semibold text-gray-800">WhatsApp</div>
+                                            <div class="text-xs text-gray-500">Написать в WhatsApp</div>
+                                        </div>
+                                        <i class="fas fa-external-link-alt text-gray-400 text-xs group-hover:text-green-500 transition-colors duration-200"></i>
+                                    </a>
+                                </div>
+                                
+                                <!-- Booking -->
+                                <div>
+                                    <a href="#booking" 
+                                       class="flex items-center space-x-4 px-4 py-3 text-gray-700 hover:bg-gradient-to-r hover:from-green-50 hover:to-emerald-50 rounded-xl transition-all duration-200 group">
+                                        <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-200">
+                                            <i class="fas fa-calendar-plus text-white text-sm"></i>
+                                        </div>
+                                        <div class="flex-1">
+                                            <div class="font-semibold text-gray-800">Записаться</div>
+                                            <div class="text-xs text-gray-500">Забронировать услугу</div>
+                                        </div>
+                                        <i class="fas fa-chevron-right text-gray-400 text-xs group-hover:text-green-500 transition-colors duration-200"></i>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1328,6 +1390,10 @@
                 <a href="#services" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-pink-50 hover:text-pink-600 rounded-lg transition-colors duration-200">
                     <i class="fas fa-spa text-gray-400"></i>
                     <span>Услуги</span>
+                </a>
+                <a href="pages/portfolio.html" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-pink-50 hover:text-pink-600 rounded-lg transition-colors duration-200">
+                    <i class="fas fa-images text-gray-400"></i>
+                    <span>Портфолио</span>
                 </a>
                 <a href="#masters" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-pink-50 hover:text-pink-600 rounded-lg transition-colors duration-200">
                     <i class="fas fa-users text-gray-400"></i>
