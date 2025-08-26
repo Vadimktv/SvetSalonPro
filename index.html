@@ -1270,60 +1270,115 @@
             box-shadow: 0 0 20px rgba(236, 72, 153, 0.6) !important;
         }
         
-        /* Карточки отзывов (ОПТИМИЗИРОВАНО) */
+        /* Карточки отзывов (МИНИ-ИГРА КОЛОДА) */
         .reviews-swiper {
             width: 100% !important;
-            height: auto !important;
-            overflow: hidden !important;
+            height: 450px !important;
+            overflow: visible !important;
+            padding: 30px 0 !important;
+            perspective: 1000px !important;
         }
         
         .swiper-slide {
             width: 100% !important;
-            height: auto !important;
+            height: 100% !important;
             display: flex !important;
             justify-content: center !important;
             align-items: center !important;
+            transform-style: preserve-3d !important;
         }
         
         .review-card {
             position: relative;
             width: 100% !important;
-            max-width: 100% !important;
-            height: auto !important;
-            min-height: 200px !important;
-            background: rgba(255, 255, 255, 0.95) !important;
+            max-width: 500px !important;
+            height: 100% !important;
+            min-height: 350px !important;
+            background: rgba(255, 255, 255, 0.98) !important;
             backdrop-filter: blur(20px) !important;
-            border: 1px solid rgba(255, 255, 255, 0.4) !important;
-            border-radius: 20px !important;
+            border: 2px solid rgba(255, 255, 255, 0.6) !important;
+            border-radius: 25px !important;
             box-shadow: 
-                0 25px 50px rgba(0, 0, 0, 0.1),
-                0 0 0 1px rgba(255, 255, 255, 0.3) !important;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
-            padding: 2rem !important;
+                0 30px 60px rgba(0, 0, 0, 0.15),
+                0 0 0 1px rgba(255, 255, 255, 0.4),
+                0 10px 30px rgba(236, 72, 153, 0.1) !important;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            padding: 2.5rem !important;
             margin: 0 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: space-between !important;
+            transform-origin: center bottom !important;
         }
         
         .review-card:hover {
-            transform: translateY(-3px) !important;
+            transform: translateY(-5px) scale(1.02) !important;
             box-shadow: 
-                0 30px 60px rgba(0, 0, 0, 0.15),
-                0 0 0 1px rgba(255, 255, 255, 0.5) !important;
+                0 40px 80px rgba(0, 0, 0, 0.2),
+                0 0 0 1px rgba(255, 255, 255, 0.6),
+                0 15px 40px rgba(236, 72, 153, 0.2) !important;
+        }
+        
+        /* Эффект колоды карт - мини-игра */
+        .swiper-slide:not(.swiper-slide-active) {
+            opacity: 0.8 !important;
+            transform: scale(0.85) translateY(30px) rotateX(5deg) !important;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            filter: brightness(0.9) !important;
+        }
+        
+        .swiper-slide-active {
+            opacity: 1 !important;
+            transform: scale(1) translateY(0) rotateX(0deg) !important;
+            z-index: 10 !important;
+            filter: brightness(1) !important;
+        }
+        
+        /* Анимация перехода карт */
+        .swiper-slide-prev {
+            transform: scale(0.9) translateY(15px) rotateX(3deg) translateX(-20px) !important;
+            opacity: 0.9 !important;
+            z-index: 5 !important;
+        }
+        
+        .swiper-slide-next {
+            transform: scale(0.9) translateY(15px) rotateX(3deg) translateX(20px) !important;
+            opacity: 0.9 !important;
+            z-index: 5 !important;
         }
         
         /* Анимация появления карточек */
         .swiper-slide-active .review-card {
-            animation: reviewCardAppear 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            animation: cardDeal 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
         }
         
-        @keyframes reviewCardAppear {
-            from {
+        @keyframes cardDeal {
+            0% {
                 opacity: 0;
-                transform: translateY(30px) scale(0.95);
+                transform: translateY(-100px) scale(0.8) rotateX(-15deg);
             }
-            to {
+            50% {
+                opacity: 0.8;
+                transform: translateY(-20px) scale(0.95) rotateX(-5deg);
+            }
+            100% {
                 opacity: 1;
-                transform: translateY(0) scale(1);
+                transform: translateY(0) scale(1) rotateX(0deg);
             }
+        }
+        
+        /* Эффект тени для колоды */
+        .reviews-swiper::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 20px;
+            background: radial-gradient(ellipse, rgba(0,0,0,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
         }
         
         @keyframes slideInUp {
@@ -1557,6 +1612,17 @@
                 width: 30px !important;
                 height: 30px !important;
                 font-size: 1.2rem !important;
+            }
+            
+            /* Адаптивность отзывов для мобильных */
+            .reviews-swiper {
+                height: 350px !important;
+            }
+            
+            .review-card {
+                max-width: 100% !important;
+                min-height: 250px !important;
+                padding: 1.5rem !important;
             }
             
             /* Скрываем сложные анимации на мобильных */
@@ -4956,18 +5022,23 @@
         let reviewsSwiper;
         
         document.addEventListener('DOMContentLoaded', function() {
-            // Инициализация Swiper для отзывов (ОПТИМИЗИРОВАНО)
+            // Инициализация Swiper для отзывов (МИНИ-ИГРА КОЛОДА)
             reviewsSwiper = new Swiper('.reviews-swiper', {
                 slidesPerView: 1,
                 spaceBetween: 0,
                 loop: true,
-                autoplay: false, // Отключаем автопрокрутку
-                effect: 'slide',
-                speed: 400,
+                autoplay: false, // Полностью отключаем автопрокрутку
+                effect: 'cards', // Эффект колоды карт
+                speed: 800,
                 grabCursor: true,
                 allowTouchMove: true,
                 touchRatio: 1,
                 touchAngle: 45,
+                cardsEffect: {
+                    slideShadows: true,
+                    rotate: true,
+                    perSlideOffset: 12,
+                },
                 pagination: {
                     el: '.reviews-pagination',
                     clickable: true,
@@ -4987,21 +5058,37 @@
                     init: function() {
                         showTutorial();
                         updateProgressBar();
+                        // Полностью отключаем автопрокрутку
+                        this.autoplay.stop();
+                        // Добавляем эффект колоды
+                        addDeckEffect();
                     },
                     slideChange: function() {
                         updateProgressBar();
                         animateActiveSlide();
+                        // Останавливаем автопрокрутку при каждом изменении
+                        this.autoplay.stop();
+                        // Анимация раздачи карты
+                        dealCardAnimation();
                     },
                     touchStart: function() {
                         hideTutorial();
+                        // Останавливаем автопрокрутку при касании
+                        this.autoplay.stop();
                     },
                     click: function() {
                         hideTutorial();
+                        // Останавливаем автопрокрутку при клике
+                        this.autoplay.stop();
+                    },
+                    beforeInit: function() {
+                        // Отключаем автопрокрутку при инициализации
+                        this.params.autoplay = false;
                     }
                 }
             });
             
-            // Обучающий интерфейс (ОПТИМИЗИРОВАНО)
+            // Обучающий интерфейс (МИНИ-ИГРА КОЛОДА)
             function showTutorial() {
                 const tutorial = document.getElementById('swipeTutorial');
                 const fingerCursor = document.getElementById('fingerCursor');
@@ -5011,9 +5098,16 @@
                         tutorial.style.opacity = '1';
                         tutorial.style.transform = 'translate(-50%, -50%) scale(1)';
                         
-                        // Анимация пальца для свайпа
+                        // Обновляем текст для мини-игры
+                        const tutorialText = tutorial.querySelector('p');
+                        if (tutorialText) {
+                            tutorialText.innerHTML = '🎴 <strong>Колода отзывов!</strong><br>Свайпните влево или вправо, чтобы раздать карту';
+                        }
+                        
+                        // Анимация пальца для раздачи карт
                         if (fingerCursor) {
                             fingerCursor.style.opacity = '1';
+                            fingerCursor.innerHTML = '🎴';
                             animateFingerSwipe();
                         }
                     }, 1000);
@@ -5047,6 +5141,31 @@
                 };
                 
                 moveFinger();
+            }
+            
+            // Эффект колоды карт
+            function addDeckEffect() {
+                const slides = document.querySelectorAll('.swiper-slide');
+                slides.forEach((slide, index) => {
+                    if (index > 0) {
+                        slide.style.transform = `scale(${0.9 - index * 0.05}) translateY(${index * 8}px) rotateX(5deg)`;
+                        slide.style.opacity = 0.8 - index * 0.1;
+                        slide.style.zIndex = 10 - index;
+                    }
+                });
+            }
+            
+            // Анимация раздачи карты
+            function dealCardAnimation() {
+                const activeSlide = document.querySelector('.swiper-slide-active');
+                if (activeSlide) {
+                    activeSlide.style.animation = 'cardDeal 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards';
+                    
+                    // Добавляем звуковой эффект (опционально)
+                    setTimeout(() => {
+                        activeSlide.style.animation = '';
+                    }, 800);
+                }
             }
             
             function hideTutorial() {
