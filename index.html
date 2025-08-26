@@ -1238,6 +1238,254 @@
                 font-size: 0.875rem;
             }
         }
+        
+        /* 🚀 КРУТЫЕ АНИМАЦИИ ДЛЯ ОТЗЫВОВ */
+        
+        /* Контейнер карусели отзывов */
+        .reviews-carousel-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Кастомные кнопки навигации */
+        .reviews-nav-next,
+        .reviews-nav-prev {
+            width: 50px !important;
+            height: 50px !important;
+            background: linear-gradient(135deg, #ec4899, #9333ea) !important;
+            border-radius: 50% !important;
+            box-shadow: 0 8px 25px rgba(236, 72, 153, 0.3) !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            opacity: 0.8 !important;
+        }
+        
+        .reviews-nav-next:hover,
+        .reviews-nav-prev:hover {
+            transform: scale(1.1) !important;
+            box-shadow: 0 12px 35px rgba(236, 72, 153, 0.4) !important;
+            opacity: 1 !important;
+        }
+        
+        .reviews-nav-next::after,
+        .reviews-nav-prev::after {
+            font-size: 18px !important;
+            font-weight: bold !important;
+            color: white !important;
+        }
+        
+        /* Кастомная пагинация */
+        .reviews-pagination .swiper-pagination-bullet {
+            width: 12px !important;
+            height: 12px !important;
+            background: linear-gradient(135deg, #ec4899, #9333ea) !important;
+            opacity: 0.5 !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            border-radius: 50% !important;
+            margin: 0 6px !important;
+        }
+        
+        .reviews-pagination .swiper-pagination-bullet-active {
+            opacity: 1 !important;
+            transform: scale(1.3) !important;
+            box-shadow: 0 0 20px rgba(236, 72, 153, 0.6) !important;
+        }
+        
+        /* Карточки отзывов с крутыми эффектами */
+        .review-card {
+            position: relative;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.9) !important;
+            backdrop-filter: blur(15px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.1),
+                0 0 0 1px rgba(255, 255, 255, 0.2) !important;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        }
+        
+        .review-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.4),
+                rgba(255, 255, 255, 0.8),
+                rgba(255, 255, 255, 0.4),
+                transparent
+            );
+            transform: skewX(-25deg);
+            transition: left 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+            z-index: 2;
+        }
+        
+        .review-card:hover::before {
+            left: 100%;
+        }
+        
+        .review-card:hover {
+            transform: translateY(-8px) scale(1.02) !important;
+            box-shadow: 
+                0 30px 60px rgba(0, 0, 0, 0.15),
+                0 0 0 1px rgba(255, 255, 255, 0.4),
+                0 0 40px rgba(236, 72, 153, 0.2) !important;
+        }
+        
+        /* Анимация появления карточек */
+        .swiper-slide-active .review-card {
+            animation: slideInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        /* Прогресс бар */
+        .progress-container {
+            background: rgba(255, 255, 255, 0.3) !important;
+            backdrop-filter: blur(10px) !important;
+        }
+        
+        #progressBar {
+            background: linear-gradient(90deg, #ec4899, #9333ea, #ec4899) !important;
+            background-size: 200% 100% !important;
+            animation: progressShimmer 2s ease-in-out infinite !important;
+        }
+        
+        @keyframes progressShimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        /* Обучающий оверлей */
+        #tutorialOverlay {
+            pointer-events: none;
+        }
+        
+        #swipeTutorial {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(20px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15) !important;
+            animation: tutorialPulse 2s ease-in-out infinite !important;
+        }
+        
+        @keyframes tutorialPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.05); }
+        }
+        
+        /* Плавающий курсор пальца */
+        #fingerCursor {
+            animation: fingerFloat 3s ease-in-out infinite !important;
+        }
+        
+        @keyframes fingerFloat {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(20px, -10px) rotate(5deg); }
+            50% { transform: translate(40px, 0) rotate(0deg); }
+            75% { transform: translate(20px, 10px) rotate(-5deg); }
+        }
+        
+        /* Индикаторы свайпа */
+        .swipe-indicators {
+            animation: indicatorsGlow 2s ease-in-out infinite !important;
+        }
+        
+        .swipe-indicator {
+            animation: indicatorPulse 1.5s ease-in-out infinite !important;
+        }
+        
+        @keyframes indicatorsGlow {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.3) drop-shadow(0 0 10px rgba(236, 72, 153, 0.5)); }
+        }
+        
+        @keyframes indicatorPulse {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+        
+        /* Анимация звездочек */
+        .review-card .text-yellow-400 i {
+            animation: starTwinkle 2s ease-in-out infinite !important;
+        }
+        
+        .review-card .text-yellow-400 i:nth-child(2) { animation-delay: 0.2s !important; }
+        .review-card .text-yellow-400 i:nth-child(3) { animation-delay: 0.4s !important; }
+        .review-card .text-yellow-400 i:nth-child(4) { animation-delay: 0.6s !important; }
+        .review-card .text-yellow-400 i:nth-child(5) { animation-delay: 0.8s !important; }
+        
+        @keyframes starTwinkle {
+            0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
+            50% { transform: scale(1.1) rotate(5deg); opacity: 0.8; }
+        }
+        
+        /* Анимация аватаров */
+        .review-card .w-12.h-12 {
+            animation: avatarGlow 3s ease-in-out infinite !important;
+        }
+        
+        @keyframes avatarGlow {
+            0%, 100% { 
+                box-shadow: 0 0 20px rgba(236, 72, 153, 0.3);
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 0 30px rgba(147, 51, 234, 0.4);
+                transform: scale(1.05);
+            }
+        }
+        
+        /* Эффект параллакса для карточек */
+        .swiper-slide {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        }
+        
+        .swiper-slide-active {
+            transform: scale(1.05) !important;
+            z-index: 10 !important;
+        }
+        
+        .swiper-slide-prev,
+        .swiper-slide-next {
+            transform: scale(0.95) !important;
+            opacity: 0.7 !important;
+        }
+        
+        /* Адаптивность для мобильных устройств */
+        @media (max-width: 768px) {
+            .reviews-nav-next,
+            .reviews-nav-prev {
+                width: 40px !important;
+                height: 40px !important;
+            }
+            
+            .review-card {
+                padding: 1.5rem !important;
+            }
+            
+            #swipeTutorial {
+                padding: 1rem !important;
+                font-size: 0.875rem !important;
+            }
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-pink-50 via-white to-purple-50">
@@ -1704,7 +1952,7 @@
     </section>
 
     <!-- Services Section -->
-    <section id="services" class="py-20 pb-40" data-aos="fade-up">
+    <section id="services" class="py-20 pb-56" data-aos="fade-up">
         <div class="container mx-auto px-8">
             <!-- Header -->
             <div class="text-center mb-16">
@@ -2020,7 +2268,7 @@
     </section>
 
     <!-- Masters Section -->
-    <section id="masters" class="py-20 pb-40 bg-gradient-to-br from-pink-50 via-purple-50 to-pink-100 relative overflow-hidden" data-aos="fade-up">
+    <section id="masters" class="pt-32 pb-48 bg-gradient-to-br from-pink-50 via-purple-50 to-pink-100 relative overflow-hidden" data-aos="fade-up">
         <!-- Background Decorations -->
         <div class="absolute inset-0 overflow-hidden">
             <div class="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-pink-200/30 to-purple-200/30 rounded-full blur-3xl animate-pulse"></div>
@@ -2029,7 +2277,7 @@
         
         <div class="container mx-auto px-8 relative z-10">
             <!-- Header -->
-            <div class="text-center mb-16">
+            <div class="text-center mb-16 pt-8">
                 <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-pink-500 to-purple-600 rounded-2xl shadow-lg mb-6 animate-bounce p-4">
                     <i class="fas fa-users text-white text-2xl"></i>
                 </div>
@@ -2174,25 +2422,10 @@
         </div>
     </section>
 
-    <!-- Section Divider -->
-    <div class="py-16 bg-gradient-to-br from-pink-50 via-purple-50 to-pink-100">
-        <div class="container mx-auto px-8">
-            <div class="flex items-center justify-center">
-                <div class="flex items-center space-x-4 w-full max-w-4xl">
-                    <div class="flex-1 h-px bg-gradient-to-r from-transparent via-pink-300 to-transparent"></div>
-                    <div class="flex items-center space-x-3 px-8 py-4 bg-white/80 backdrop-blur-md rounded-2xl border border-white/20 shadow-lg">
-                        <div class="w-4 h-4 bg-gradient-to-r from-pink-400 to-purple-400 rounded-full animate-pulse"></div>
-                        <span class="text-pink-600 font-bold text-lg">Свяжитесь с нами</span>
-                        <div class="w-4 h-4 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full animate-pulse" style="animation-delay: 1s;"></div>
-                    </div>
-                    <div class="flex-1 h-px bg-gradient-to-r from-transparent via-purple-300 to-transparent"></div>
-                </div>
-            </div>
-        </div>
-    </div>
+
 
     <!-- Contact Section -->
-    <section id="contact" class="py-20 pb-40 bg-gradient-to-br from-pink-50 via-purple-50 to-pink-100 relative overflow-hidden" data-aos="fade-up">
+    <section id="contact" class="pt-32 pb-40 bg-gradient-to-br from-pink-50 via-purple-50 to-pink-100 relative overflow-hidden" data-aos="fade-up">
         <!-- Background Decorations -->
         <div class="absolute inset-0 overflow-hidden">
             <div class="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-pink-200/30 to-purple-200/30 rounded-full blur-3xl animate-pulse"></div>
@@ -2201,7 +2434,7 @@
         
         <div class="container mx-auto px-8 relative z-10">
             <!-- Header -->
-            <div class="text-center mb-16">
+            <div class="text-center mb-16 pt-8">
                 <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-pink-500 to-purple-600 rounded-2xl shadow-lg mb-6 animate-bounce p-4">
                     <i class="fas fa-phone text-white text-2xl"></i>
                 </div>
@@ -2301,50 +2534,62 @@
     </section>
 
     <!-- About Section -->
-    <section id="about" class="py-20 bg-pink-50" data-aos="fade-up">
-        <div class="container mx-auto px-4">
-            <h2 class="text-3xl md:text-4xl font-bold text-center mb-16 text-gray-800 animate-on-scroll">О нашем салоне</h2>
+    <section id="about" class="pt-32 pb-40 bg-gradient-to-br from-pink-50 via-purple-50 to-pink-100 relative overflow-hidden" data-aos="fade-up">
+        <!-- Background Decorations -->
+        <div class="absolute inset-0 overflow-hidden">
+            <div class="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-pink-200/30 to-purple-200/30 rounded-full blur-3xl animate-pulse"></div>
+            <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-purple-200/30 to-pink-200/30 rounded-full blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
+        </div>
+        
+        <div class="container mx-auto px-8 relative z-10">
+            <!-- Header -->
+            <div class="text-center mb-16 pt-8">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-pink-500 to-purple-600 rounded-2xl shadow-lg mb-6 animate-bounce p-4">
+                    <i class="fas fa-home text-white text-2xl"></i>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent mb-4 animate-on-scroll">
+                    О нашем салоне
+                </h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto animate-on-scroll delay-100">
+                    Место, где каждая деталь создана для вашего комфорта и красоты
+                </p>
+            </div>
             
-            <div class="flex flex-col md:flex-row items-center">
-                <div class="md:w-1/2 mb-10 md:mb-0 md:pr-10 animate-on-scroll">
-                                            <img src="images/ui/Вход.jpeg" alt="Интерьер салона" class="rounded-lg shadow-xl w-full">
+            <div class="flex flex-col md:flex-row items-center gap-12">
+                <div class="md:w-1/2 mb-10 md:mb-0 animate-on-scroll">
+                    <div class="bg-white/80 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 overflow-hidden">
+                        <img src="images/ui/Вход.jpeg" alt="Интерьер салона" class="w-full h-auto object-cover hover:scale-105 transition-transform duration-700">
+                    </div>
                 </div>
                 <div class="md:w-1/2 animate-on-scroll delay-100">
-                    <h3 class="text-2xl font-bold text-pink-600 mb-4">Наша философия</h3>
-                    <p class="text-gray-700 mb-6 leading-relaxed">SvetSalonPro — это место, где каждая деталь создана для вашего комфорта и красоты. Мы сочетаем последние тенденции индустрии красоты с индивидуальным подходом к каждому клиенту.</p>
-                    <p class="text-gray-700 mb-6 leading-relaxed">Наша миссия — помочь вам раскрыть свою естественную красоту, подчеркнуть индивидуальность и подарить ощущение гармонии и уверенности в себе.</p>
-                    <div class="flex flex-wrap mt-8">
-                        <div class="w-full md:w-1/2 mb-6">
-                            <div class="flex items-center">
-                                <div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 mr-4">
-                                    <i class="fas fa-spa"></i>
-                                </div>
-                                <span class="font-medium">Премиальные материалы</span>
+                    <div class="bg-white/80 backdrop-blur-md p-8 rounded-2xl shadow-xl border border-white/20">
+                        <h3 class="text-2xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent mb-6">Наша философия</h3>
+                        <p class="text-gray-700 mb-6 leading-relaxed">SvetSalonPro — это место, где каждая деталь создана для вашего комфорта и красоты. Мы сочетаем последние тенденции индустрии красоты с индивидуальным подходом к каждому клиенту.</p>
+                        <p class="text-gray-700 mb-8 leading-relaxed">Наша миссия — помочь вам раскрыть свою естественную красоту, подчеркнуть индивидуальность и подарить ощущение гармонии и уверенности в себе.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+                        <div class="flex items-center p-4 bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl border border-pink-100 hover:from-pink-100 hover:to-purple-100 transition-all duration-300">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center text-white mr-4 shadow-lg">
+                                <i class="fas fa-spa"></i>
                             </div>
+                            <span class="font-semibold text-gray-800">Премиальные материалы</span>
                         </div>
-                        <div class="w-full md:w-1/2 mb-6">
-                            <div class="flex items-center">
-                                <div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 mr-4">
-                                    <i class="fas fa-award"></i>
-                                </div>
-                                <span class="font-medium">Опытные мастера</span>
+                        <div class="flex items-center p-4 bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl border border-pink-100 hover:from-pink-100 hover:to-purple-100 transition-all duration-300">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center text-white mr-4 shadow-lg">
+                                <i class="fas fa-award"></i>
                             </div>
+                            <span class="font-semibold text-gray-800">Опытные мастера</span>
                         </div>
-                        <div class="w-full md:w-1/2 mb-6">
-                            <div class="flex items-center">
-                                <div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 mr-4">
-                                    <i class="fas fa-heart"></i>
-                                </div>
-                                <span class="font-medium">Индивидуальный подход</span>
+                        <div class="flex items-center p-4 bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl border border-pink-100 hover:from-pink-100 hover:to-purple-100 transition-all duration-300">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center text-white mr-4 shadow-lg">
+                                <i class="fas fa-heart"></i>
                             </div>
+                            <span class="font-semibold text-gray-800">Индивидуальный подход</span>
                         </div>
-                        <div class="w-full md:w-1/2 mb-6">
-                            <div class="flex items-center">
-                                <div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 mr-4">
-                                    <i class="fas fa-leaf"></i>
-                                </div>
-                                <span class="font-medium">Экологичные продукты</span>
+                        <div class="flex items-center p-4 bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl border border-pink-100 hover:from-pink-100 hover:to-purple-100 transition-all duration-300">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center text-white mr-4 shadow-lg">
+                                <i class="fas fa-leaf"></i>
                             </div>
+                            <span class="font-semibold text-gray-800">Экологичные продукты</span>
                         </div>
                     </div>
                 </div>
@@ -2353,33 +2598,155 @@
     </section>
 
     <!-- Reviews Section -->
-    <section id="reviews" class="py-20 bg-pink-50" data-aos="fade-up">
-      <div class="container mx-auto px-4">
-        <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800 animate-on-scroll">Отзывы клиентов</h2>
-        <div class="swiper">
-          <div class="swiper-wrapper">
-            <div class="swiper-slide"><div class="bg-white rounded-lg shadow-md p-6 animate-on-scroll" data-aos="fade-up"><div class="font-bold text-pink-600 mb-2">Анна, Геленджик</div><div class="text-gray-700 mb-2">Очень понравился сервис и атмосфера! Мастер учёл все мои пожелания. Приду ещё!</div></div></div>
-            <div class="swiper-slide"><div class="bg-white rounded-lg shadow-md p-6 animate-on-scroll" data-aos="fade-up"><div class="font-bold text-pink-600 mb-2">Мария, Краснодар</div><div class="text-gray-700 mb-2">Потрясающий салон! Делала окрашивание — результат превзошёл ожидания.</div></div></div>
-            <div class="swiper-slide"><div class="bg-white rounded-lg shadow-md p-6 animate-on-scroll" data-aos="fade-up"><div class="font-bold text-pink-600 mb-2">Екатерина, Москва</div><div class="text-gray-700 mb-2">Очень уютно, чисто и профессионально. Спасибо мастеру Светлане!</div></div></div>
-            <div class="swiper-slide"><div class="bg-white rounded-lg shadow-md p-6 animate-on-scroll" data-aos="fade-up"><div class="font-bold text-pink-600 mb-2">Ольга, Геленджик</div><div class="text-gray-700 mb-2">Маникюр держится уже 3 недели! Очень довольна качеством услуг.</div></div></div>
-            <div class="swiper-slide"><div class="bg-white rounded-lg shadow-md p-6 animate-on-scroll" data-aos="fade-up"><div class="font-bold text-pink-600 mb-2">Светлана, Новороссийск</div><div class="text-gray-700 mb-2">Делала стрижку и укладку — всё на высшем уровне. Рекомендую!</div></div></div>
-            <div class="swiper-slide"><div class="bg-white rounded-lg shadow-md p-6 animate-on-scroll" data-aos="fade-up"><div class="font-bold text-pink-600 mb-2">Ирина, Анапа</div><div class="text-gray-700 mb-2">Очень понравился подход мастеров и приятная атмосфера в салоне.</div></div></div>
-            <div class="swiper-slide"><div class="bg-white rounded-lg shadow-md p-6 animate-on-scroll" data-aos="fade-up"><div class="font-bold text-pink-600 mb-2">Татьяна, Геленджик</div><div class="text-gray-700 mb-2">Записалась онлайн, всё быстро и удобно. Спасибо за сервис!</div></div></div>
-            <div class="swiper-slide"><div class="bg-white rounded-lg shadow-md p-6 animate-on-scroll" data-aos="fade-up"><div class="font-bold text-pink-600 mb-2">Виктория, Сочи</div><div class="text-gray-700 mb-2">Лучший салон в городе! Всегда выхожу с отличным настроением.</div></div></div>
-            <div class="swiper-slide"><div class="bg-white rounded-lg shadow-md p-6 animate-on-scroll" data-aos="fade-up"><div class="font-bold text-pink-600 mb-2">Александра, Геленджик</div><div class="text-gray-700 mb-2">Делала ламинирование волос — волосы блестят и выглядят шикарно!</div></div></div>
-            <div class="swiper-slide"><div class="bg-white rounded-lg shadow-md p-6 animate-on-scroll" data-aos="fade-up"><div class="font-bold text-pink-600 mb-2">Елена, Краснодар</div><div class="text-gray-700 mb-2">Очень понравился педикюр, мастер очень аккуратная и внимательная.</div></div></div>
-            <div class="swiper-slide"><div class="bg-white rounded-lg shadow-md p-6 animate-on-scroll" data-aos="fade-up"><div class="font-bold text-pink-600 mb-2">Дарья, Москва</div><div class="text-gray-700 mb-2">Записалась на SPA-процедуры — получила море удовольствия и релакса!</div></div></div>
-            <div class="swiper-slide"><div class="bg-white rounded-lg shadow-md p-6 animate-on-scroll" data-aos="fade-up"><div class="font-bold text-pink-600 mb-2">Юлия, Геленджик</div><div class="text-gray-700 mb-2">Очень понравился результат окрашивания, цвет получился идеальным.</div></div></div>
-            <div class="swiper-slide"><div class="bg-white rounded-lg shadow-md p-6 animate-on-scroll" data-aos="fade-up"><div class="font-bold text-pink-600 mb-2">Валентина, Ростов-на-Дону</div><div class="text-gray-700 mb-2">Делала маникюр и педикюр — всё стерильно и красиво. Спасибо!</div></div></div>
-            <div class="swiper-slide"><div class="bg-white rounded-lg shadow-md p-6 animate-on-scroll" data-aos="fade-up"><div class="font-bold text-pink-600 mb-2">Анастасия, Геленджик</div><div class="text-gray-700 mb-2">Очень понравился сервис, мастера — настоящие профессионалы!</div></div></div>
-            <div class="swiper-slide"><div class="bg-white rounded-lg shadow-md p-6 animate-on-scroll" data-aos="fade-up"><div class="font-bold text-pink-600 mb-2">Маргарита, Сочи</div><div class="text-gray-700 mb-2">Делала колористику — результат просто вау! Спасибо!</div></div></div>
-            <div class="swiper-slide"><div class="bg-white rounded-lg shadow-md p-6 animate-on-scroll" data-aos="fade-up"><div class="font-bold text-pink-600 mb-2">Полина, Анапа</div><div class="text-gray-700 mb-2">Очень понравился уход за волосами, волосы стали мягкими и блестящими.</div></div></div>
-            <div class="swiper-slide"><div class="bg-white rounded-lg shadow-md p-6 animate-on-scroll" data-aos="fade-up"><div class="font-bold text-pink-600 mb-2">Ксения, Геленджик</div><div class="text-gray-700 mb-2">Записалась на стрижку — всё быстро, качественно и по доступной цене.</div></div></div>
-            <div class="swiper-slide"><div class="bg-white rounded-lg shadow-md p-6 animate-on-scroll" data-aos="fade-up"><div class="font-bold text-pink-600 mb-2">София, Москва</div><div class="text-gray-700 mb-2">Очень понравился салон, обязательно приду ещё!</div></div></div>
-            <div class="swiper-slide"><div class="bg-white rounded-lg shadow-md p-6 animate-on-scroll" data-aos="fade-up"><div class="font-bold text-pink-600 mb-2">Вероника, Краснодар</div><div class="text-gray-700 mb-2">Мастера очень внимательные, всегда советуют лучший уход.</div></div></div>
-            <div class="swiper-slide"><div class="bg-white rounded-lg shadow-md p-6 animate-on-scroll" data-aos="fade-up"><div class="font-bold text-pink-600 mb-2">Алиса, Геленджик</div><div class="text-gray-700 mb-2">Спасибо за отличный сервис и индивидуальный подход!</div></div></div>
-          </div>
-          <div class="swiper-pagination"></div>
+    <section id="reviews" class="pt-32 pb-40 bg-gradient-to-br from-pink-50 via-purple-50 to-pink-100 relative overflow-hidden" data-aos="fade-up">
+        <!-- Background Decorations -->
+        <div class="absolute inset-0 overflow-hidden">
+            <div class="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-pink-200/30 to-purple-200/30 rounded-full blur-3xl animate-pulse"></div>
+            <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-purple-200/30 to-pink-200/30 rounded-full blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
+        </div>
+        
+        <div class="container mx-auto px-8 relative z-10">
+            <!-- Header -->
+            <div class="text-center mb-16 pt-8">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-pink-500 to-purple-600 rounded-2xl shadow-lg mb-6 animate-bounce p-4">
+                    <i class="fas fa-star text-white text-2xl"></i>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent mb-4 animate-on-scroll">
+                    Отзывы клиентов
+                </h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto animate-on-scroll delay-100">
+                    Что говорят о нас наши довольные клиенты
+                </p>
+            </div>
+        <!-- Interactive Reviews Carousel -->
+        <div class="reviews-carousel-container relative max-w-6xl mx-auto">
+            <!-- Swiper Container -->
+            <div class="swiper reviews-swiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <div class="review-card bg-white/80 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 p-8 transform transition-all duration-500 hover:scale-105 hover:rotate-1">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg mr-4">А</div>
+                                <div>
+                                    <div class="font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent text-lg">Анна, Геленджик</div>
+                                    <div class="flex text-yellow-400 text-sm">
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-gray-700 text-lg leading-relaxed">Очень понравился сервис и атмосфера! Мастер учёл все мои пожелания. Приду ещё!</div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="review-card bg-white/80 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 p-8 transform transition-all duration-500 hover:scale-105 hover:-rotate-1">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg mr-4">М</div>
+                                <div>
+                                    <div class="font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent text-lg">Мария, Краснодар</div>
+                                    <div class="flex text-yellow-400 text-sm">
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-gray-700 text-lg leading-relaxed">Потрясающий салон! Делала окрашивание — результат превзошёл ожидания.</div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="review-card bg-white/80 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 p-8 transform transition-all duration-500 hover:scale-105 hover:rotate-1">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg mr-4">Е</div>
+                                <div>
+                                    <div class="font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent text-lg">Екатерина, Москва</div>
+                                    <div class="flex text-yellow-400 text-sm">
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-gray-700 text-lg leading-relaxed">Очень уютно, чисто и профессионально. Спасибо мастеру Светлане!</div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="review-card bg-white/80 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 p-8 transform transition-all duration-500 hover:scale-105 hover:-rotate-1">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-600 rounded-full flex items-center justify-center text-white font-bold text-lg mr-4">О</div>
+                                <div>
+                                    <div class="font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent text-lg">Ольга, Геленджик</div>
+                                    <div class="flex text-yellow-400 text-sm">
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-gray-700 text-lg leading-relaxed">Маникюр держится уже 3 недели! Очень довольна качеством услуг.</div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="review-card bg-white/80 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 p-8 transform transition-all duration-500 hover:scale-105 hover:rotate-1">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center text-white font-bold text-lg mr-4">С</div>
+                                <div>
+                                    <div class="font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent text-lg">Светлана, Новороссийск</div>
+                                    <div class="flex text-yellow-400 text-sm">
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-gray-700 text-lg leading-relaxed">Делала стрижку и укладку — всё на высшем уровне. Рекомендую!</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Custom Navigation -->
+            <div class="swiper-button-next reviews-nav-next"></div>
+            <div class="swiper-button-prev reviews-nav-prev"></div>
+            
+            <!-- Custom Pagination -->
+            <div class="swiper-pagination reviews-pagination"></div>
+            
+            <!-- Interactive Tutorial Overlay -->
+            <div id="tutorialOverlay" class="absolute inset-0 pointer-events-none z-20">
+                <!-- Swipe Tutorial -->
+                <div id="swipeTutorial" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-md rounded-2xl p-6 shadow-2xl border border-white/20 opacity-0 transition-all duration-500">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center text-white text-2xl mb-4 mx-auto">
+                            <i class="fas fa-hand-pointer"></i>
+                        </div>
+                        <h3 class="text-xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent mb-2">Листайте отзывы</h3>
+                        <p class="text-gray-600 mb-4">Проведите пальцем влево или вправо</p>
+                        <div class="flex justify-center space-x-4">
+                            <div class="w-8 h-8 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center text-white">
+                                <i class="fas fa-arrow-left text-sm"></i>
+                            </div>
+                            <div class="w-8 h-8 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center text-white">
+                                <i class="fas fa-arrow-right text-sm"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Floating Finger Cursor -->
+                <div id="fingerCursor" class="absolute w-8 h-8 pointer-events-none opacity-0 transition-all duration-300">
+                    <div class="w-full h-full bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center text-white text-sm shadow-lg">
+                        <i class="fas fa-hand-pointer"></i>
+                    </div>
+                </div>
+                
+                <!-- Swipe Indicators -->
+                <div class="swipe-indicators absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                    <div class="swipe-indicator w-3 h-3 bg-pink-300 rounded-full animate-pulse"></div>
+                    <div class="swipe-indicator w-3 h-3 bg-purple-300 rounded-full animate-pulse" style="animation-delay: 0.5s;"></div>
+                    <div class="swipe-indicator w-3 h-3 bg-pink-300 rounded-full animate-pulse" style="animation-delay: 1s;"></div>
+                </div>
+            </div>
+            
+            <!-- Progress Bar -->
+            <div class="progress-container absolute bottom-0 left-0 right-0 h-1 bg-gray-200 rounded-full overflow-hidden">
+                <div id="progressBar" class="h-full bg-gradient-to-r from-pink-500 to-purple-600 transition-all duration-300" style="width: 0%"></div>
+            </div>
         </div>
       </div>
     </section>
@@ -4266,5 +4633,234 @@
             </div>
         </div>
     </div>
+    
+    <!-- 🚀 ИНТЕРАКТИВНЫЕ ОТЗЫВЫ - JAVASCRIPT -->
+    <script>
+        // Инициализация Swiper для отзывов
+        let reviewsSwiper;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Инициализация Swiper
+            reviewsSwiper = new Swiper('.reviews-swiper', {
+                slidesPerView: 1,
+                spaceBetween: 30,
+                loop: true,
+                autoplay: {
+                    delay: 5000,
+                    disableOnInteraction: false,
+                },
+                effect: 'slide',
+                speed: 800,
+                grabCursor: true,
+                navigation: {
+                    nextEl: '.reviews-nav-next',
+                    prevEl: '.reviews-nav-prev',
+                },
+                pagination: {
+                    el: '.reviews-pagination',
+                    clickable: true,
+                    dynamicBullets: true,
+                },
+                breakpoints: {
+                    768: {
+                        slidesPerView: 2,
+                        spaceBetween: 40,
+                    },
+                    1024: {
+                        slidesPerView: 3,
+                        spaceBetween: 50,
+                    }
+                },
+                on: {
+                    init: function() {
+                        showTutorial();
+                        updateProgressBar();
+                    },
+                    slideChange: function() {
+                        updateProgressBar();
+                        animateActiveSlide();
+                    },
+                    touchStart: function() {
+                        hideTutorial();
+                    },
+                    click: function() {
+                        hideTutorial();
+                    }
+                }
+            });
+            
+            // Обучающий интерфейс
+            function showTutorial() {
+                const tutorial = document.getElementById('swipeTutorial');
+                const fingerCursor = document.getElementById('fingerCursor');
+                
+                if (tutorial && !localStorage.getItem('reviewsTutorialShown')) {
+                    setTimeout(() => {
+                        tutorial.style.opacity = '1';
+                        tutorial.style.transform = 'translate(-50%, -50%) scale(1)';
+                        
+                        // Анимация пальца
+                        if (fingerCursor) {
+                            fingerCursor.style.opacity = '1';
+                            animateFinger();
+                        }
+                    }, 1000);
+                }
+            }
+            
+            function hideTutorial() {
+                const tutorial = document.getElementById('swipeTutorial');
+                const fingerCursor = document.getElementById('fingerCursor');
+                
+                if (tutorial) {
+                    tutorial.style.opacity = '0';
+                    tutorial.style.transform = 'translate(-50%, -50%) scale(0.9)';
+                    localStorage.setItem('reviewsTutorialShown', 'true');
+                }
+                
+                if (fingerCursor) {
+                    fingerCursor.style.opacity = '0';
+                }
+            }
+            
+            function animateFinger() {
+                const fingerCursor = document.getElementById('fingerCursor');
+                if (!fingerCursor) return;
+                
+                const positions = [
+                    { x: '20%', y: '50%' },
+                    { x: '80%', y: '50%' },
+                    { x: '50%', y: '50%' }
+                ];
+                
+                let currentPos = 0;
+                
+                const moveFinger = () => {
+                    if (fingerCursor.style.opacity === '0') return;
+                    
+                    const pos = positions[currentPos];
+                    fingerCursor.style.left = pos.x;
+                    fingerCursor.style.top = pos.y;
+                    
+                    currentPos = (currentPos + 1) % positions.length;
+                    
+                    setTimeout(moveFinger, 2000);
+                };
+                
+                moveFinger();
+            }
+            
+            // Обновление прогресс бара
+            function updateProgressBar() {
+                const progressBar = document.getElementById('progressBar');
+                if (!progressBar || !reviewsSwiper) return;
+                
+                const progress = ((reviewsSwiper.realIndex + 1) / reviewsSwiper.slides.length) * 100;
+                progressBar.style.width = progress + '%';
+            }
+            
+            // Анимация активного слайда
+            function animateActiveSlide() {
+                const activeSlide = document.querySelector('.swiper-slide-active .review-card');
+                if (activeSlide) {
+                    activeSlide.style.animation = 'none';
+                    setTimeout(() => {
+                        activeSlide.style.animation = 'slideInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards';
+                    }, 10);
+                }
+            }
+            
+            // Интерактивные эффекты при наведении
+            document.querySelectorAll('.review-card').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-8px) scale(1.02)';
+                    this.style.boxShadow = '0 30px 60px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.4), 0 0 40px rgba(236, 72, 153, 0.2)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                    this.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.2)';
+                });
+                
+                // Эффект при клике
+                card.addEventListener('click', function() {
+                    this.style.transform = 'translateY(-4px) scale(1.01)';
+                    setTimeout(() => {
+                        this.style.transform = 'translateY(-8px) scale(1.02)';
+                    }, 150);
+                });
+            });
+            
+            // Анимация звездочек при загрузке
+            setTimeout(() => {
+                document.querySelectorAll('.review-card .text-yellow-400 i').forEach((star, index) => {
+                    setTimeout(() => {
+                        star.style.animation = 'starTwinkle 2s ease-in-out infinite';
+                    }, index * 200);
+                });
+            }, 1000);
+            
+            // Эффект параллакса при движении мыши
+            document.querySelector('.reviews-carousel-container').addEventListener('mousemove', function(e) {
+                const cards = document.querySelectorAll('.review-card');
+                const rect = this.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                cards.forEach((card, index) => {
+                    const speed = (index + 1) * 0.02;
+                    const xOffset = (x - rect.width / 2) * speed;
+                    const yOffset = (y - rect.height / 2) * speed;
+                    
+                    card.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
+                });
+            });
+            
+            // Сброс параллакса при уходе мыши
+            document.querySelector('.reviews-carousel-container').addEventListener('mouseleave', function() {
+                const cards = document.querySelectorAll('.review-card');
+                cards.forEach(card => {
+                    card.style.transform = 'translate(0, 0)';
+                });
+            });
+            
+            // Автоматическое переключение с паузой при наведении
+            const container = document.querySelector('.reviews-carousel-container');
+            container.addEventListener('mouseenter', () => {
+                if (reviewsSwiper.autoplay) {
+                    reviewsSwiper.autoplay.stop();
+                }
+            });
+            
+            container.addEventListener('mouseleave', () => {
+                if (reviewsSwiper.autoplay) {
+                    reviewsSwiper.autoplay.start();
+                }
+            });
+            
+            // Эффект пульсации для индикаторов
+            setInterval(() => {
+                const indicators = document.querySelectorAll('.swipe-indicator');
+                indicators.forEach((indicator, index) => {
+                    setTimeout(() => {
+                        indicator.style.transform = 'scale(1.3)';
+                        setTimeout(() => {
+                            indicator.style.transform = 'scale(1)';
+                        }, 300);
+                    }, index * 500);
+                });
+            }, 3000);
+        });
+        
+        // Функция для сброса обучающего интерфейса (для тестирования)
+        function resetReviewsTutorial() {
+            localStorage.removeItem('reviewsTutorialShown');
+            location.reload();
+        }
+        
+        // Экспорт для глобального доступа
+        window.reviewsSwiper = reviewsSwiper;
+        window.resetReviewsTutorial = resetReviewsTutorial;
+    </script>
 </body>
 </html>
