@@ -1486,6 +1486,75 @@
                 font-size: 0.875rem !important;
             }
         }
+        
+        /* Дополнительные отступы для предотвращения обрезания теней */
+        .service-card,
+        .review-card,
+        .bg-white\/80.backdrop-blur-md {
+            margin-bottom: 2rem !important;
+        }
+        
+        /* Увеличенные отступы для секций (только основные секции) */
+        section[id] {
+            padding-bottom: 14rem !important;
+        }
+        
+        /* Отступы для контейнеров карточек (только в секциях) */
+        .grid.grid-cols-1,
+        .grid.grid-cols-1.md\:grid-cols-2,
+        .grid.grid-cols-1.md\:grid-cols-3 {
+            gap: 2rem !important;
+        }
+        
+        /* Дополнительное пространство для теней (только в секциях) */
+        section .container {
+            padding-bottom: 3rem !important;
+        }
+        
+        /* Исправление z-index для выпадающего меню профиля */
+        #profileDropdown {
+            z-index: 99999 !important;
+            position: fixed !important;
+            top: 5rem !important;
+            right: 1rem !important;
+        }
+        
+        /* Убеждаемся, что меню отображается поверх всех элементов */
+        #profileDropdown.show {
+            opacity: 1 !important;
+            visibility: visible !important;
+            transform: scale(1) translateY(0) !important;
+        }
+        
+        /* Предотвращение увеличения кнопок в хедере */
+        .profile-header .btn,
+        .profile-header button,
+        .profile-header a {
+            transform: none !important;
+            scale: 1 !important;
+        }
+        
+        /* Сохранение оригинальных размеров кнопок в хедере */
+        .profile-header .w-8.h-8 {
+            width: 2rem !important;
+            height: 2rem !important;
+        }
+        
+        /* Исправление размеров иконок в кнопках */
+        .profile-header .fab.fa-telegram {
+            font-size: 1.125rem !important;
+        }
+        
+        .profile-header .fas.fa-user {
+            font-size: 0.875rem !important;
+        }
+        
+        /* Предотвращение hover эффектов для кнопок в хедере */
+        .profile-header button:hover,
+        .profile-header a:hover {
+            transform: none !important;
+            scale: 1 !important;
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-pink-50 via-white to-purple-50">
@@ -1554,7 +1623,7 @@
                         </button>
 
                         <!-- Profile Dropdown - iOS Style -->
-                        <div id="profileDropdown" class="absolute right-0 mt-3 w-72 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 opacity-0 invisible transform scale-95 transition-all duration-300 z-50 overflow-hidden origin-top-right">
+                        <div id="profileDropdown" class="fixed right-4 top-20 w-72 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 opacity-0 invisible transform scale-95 transition-all duration-300 z-[99999] overflow-hidden origin-top-right">
                             <!-- iOS Bubble Arrow -->
                             <div class="absolute -top-2 right-6 w-4 h-4 bg-white/95 backdrop-blur-xl border-l border-t border-white/20 transform rotate-45"></div>
                             
@@ -1762,7 +1831,7 @@
         <div class="hero-gradient-decor" style="width: 320px; height: 320px; bottom: -80px; right: -80px; background: radial-gradient(circle, #f0fdfa 0%, #fdf2f8 80%, transparent 100%);"></div>
         <div class="container mx-auto px-4 text-center">
             <!-- Booking Section (moved here) -->
-            <section id="booking" class="py-20 pb-32">
+            <section id="booking" class="py-20 pb-48">
                 <div class="container mx-auto px-8">
                     <div class="max-w-6xl mx-auto">
                         <!-- Header -->
@@ -2268,7 +2337,7 @@
     </section>
 
     <!-- Masters Section -->
-    <section id="masters" class="pt-32 pb-48 bg-gradient-to-br from-pink-50 via-purple-50 to-pink-100 relative overflow-hidden" data-aos="fade-up">
+    <section id="masters" class="pt-32 pb-56 bg-gradient-to-br from-pink-50 via-purple-50 to-pink-100 relative overflow-hidden" data-aos="fade-up">
         <!-- Background Decorations -->
         <div class="absolute inset-0 overflow-hidden">
             <div class="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-pink-200/30 to-purple-200/30 rounded-full blur-3xl animate-pulse"></div>
@@ -2425,7 +2494,7 @@
 
 
     <!-- Contact Section -->
-    <section id="contact" class="pt-32 pb-40 bg-gradient-to-br from-pink-50 via-purple-50 to-pink-100 relative overflow-hidden" data-aos="fade-up">
+    <section id="contact" class="pt-32 pb-56 bg-gradient-to-br from-pink-50 via-purple-50 to-pink-100 relative overflow-hidden" data-aos="fade-up">
         <!-- Background Decorations -->
         <div class="absolute inset-0 overflow-hidden">
             <div class="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-pink-200/30 to-purple-200/30 rounded-full blur-3xl animate-pulse"></div>
@@ -2534,7 +2603,7 @@
     </section>
 
     <!-- About Section -->
-    <section id="about" class="pt-32 pb-40 bg-gradient-to-br from-pink-50 via-purple-50 to-pink-100 relative overflow-hidden" data-aos="fade-up">
+    <section id="about" class="pt-32 pb-56 bg-gradient-to-br from-pink-50 via-purple-50 to-pink-100 relative overflow-hidden" data-aos="fade-up">
         <!-- Background Decorations -->
         <div class="absolute inset-0 overflow-hidden">
             <div class="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-pink-200/30 to-purple-200/30 rounded-full blur-3xl animate-pulse"></div>
@@ -2598,7 +2667,7 @@
     </section>
 
     <!-- Reviews Section -->
-    <section id="reviews" class="pt-32 pb-40 bg-gradient-to-br from-pink-50 via-purple-50 to-pink-100 relative overflow-hidden" data-aos="fade-up">
+    <section id="reviews" class="pt-32 pb-56 bg-gradient-to-br from-pink-50 via-purple-50 to-pink-100 relative overflow-hidden" data-aos="fade-up">
         <!-- Background Decorations -->
         <div class="absolute inset-0 overflow-hidden">
             <div class="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-pink-200/30 to-purple-200/30 rounded-full blur-3xl animate-pulse"></div>
@@ -2619,7 +2688,7 @@
                 </p>
             </div>
         <!-- Interactive Reviews Carousel -->
-        <div class="reviews-carousel-container relative max-w-6xl mx-auto">
+        <div class="reviews-carousel-container relative max-w-6xl mx-auto mb-16">
             <!-- Swiper Container -->
             <div class="swiper reviews-swiper">
                 <div class="swiper-wrapper">
@@ -3247,6 +3316,11 @@
                     profileDropdown.style.transform = 'scale(1) translateY(0)';
                     profileDropdown.style.opacity = '1';
                     
+                    // Позиционируем меню относительно кнопки
+                    const buttonRect = profileBtn.getBoundingClientRect();
+                    profileDropdown.style.top = (buttonRect.bottom + 10) + 'px';
+                    profileDropdown.style.right = (window.innerWidth - buttonRect.right) + 'px';
+                    
                     // Add active state to button
                     profileBtn.classList.remove('bg-white/90');
                     profileBtn.classList.add('bg-gradient-to-r', 'from-pink-500', 'to-purple-600', 'text-white');
@@ -3304,6 +3378,15 @@
                     chevronIcon.classList.add('text-gray-400');
                     chevronIcon.style.transform = 'rotate(0deg)';
                 }
+            }
+        });
+        
+        // Обновление позиции меню при изменении размера окна
+        window.addEventListener('resize', () => {
+            if (profileDropdown && !profileDropdown.classList.contains('opacity-0')) {
+                const buttonRect = profileBtn.getBoundingClientRect();
+                profileDropdown.style.top = (buttonRect.bottom + 10) + 'px';
+                profileDropdown.style.right = (window.innerWidth - buttonRect.right) + 'px';
             }
         });
         
