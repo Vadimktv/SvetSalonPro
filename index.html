@@ -1270,39 +1270,59 @@
             box-shadow: 0 0 20px rgba(236, 72, 153, 0.6) !important;
         }
         
-        /* Карточки отзывов (УПРОЩЕНО) */
+        /* Карточки отзывов (ОПТИМИЗИРОВАНО) */
+        .reviews-swiper {
+            width: 100% !important;
+            height: auto !important;
+            overflow: hidden !important;
+        }
+        
+        .swiper-slide {
+            width: 100% !important;
+            height: auto !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+        }
+        
         .review-card {
             position: relative;
-            overflow: hidden;
-            background: rgba(255, 255, 255, 0.9) !important;
-            backdrop-filter: blur(15px) !important;
-            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            height: auto !important;
+            min-height: 200px !important;
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(20px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.4) !important;
+            border-radius: 20px !important;
             box-shadow: 
-                0 20px 40px rgba(0, 0, 0, 0.1),
-                0 0 0 1px rgba(255, 255, 255, 0.2) !important;
-            transition: all 0.3s ease !important;
+                0 25px 50px rgba(0, 0, 0, 0.1),
+                0 0 0 1px rgba(255, 255, 255, 0.3) !important;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            padding: 2rem !important;
+            margin: 0 !important;
         }
         
         .review-card:hover {
-            transform: translateY(-5px) !important;
+            transform: translateY(-3px) !important;
             box-shadow: 
-                0 25px 50px rgba(0, 0, 0, 0.15),
-                0 0 0 1px rgba(255, 255, 255, 0.4) !important;
+                0 30px 60px rgba(0, 0, 0, 0.15),
+                0 0 0 1px rgba(255, 255, 255, 0.5) !important;
         }
         
-        /* Простая анимация появления карточек */
+        /* Анимация появления карточек */
         .swiper-slide-active .review-card {
-            animation: simpleFadeIn 0.4s ease forwards;
+            animation: reviewCardAppear 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
         }
         
-        @keyframes simpleFadeIn {
+        @keyframes reviewCardAppear {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(30px) scale(0.95);
             }
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translateY(0) scale(1);
             }
         }
         
@@ -1521,11 +1541,22 @@
         
         /* Скрываем элементы только на мобильных устройствах */
         @media (max-width: 768px) {
-            /* Скрываем обучающий интерфейс отзывов на мобильных */
-            #tutorialOverlay,
-            #swipeTutorial,
+            /* Упрощаем обучающий интерфейс на мобильных */
+            #tutorialOverlay {
+                background: rgba(0, 0, 0, 0.3) !important;
+            }
+            
+            #swipeTutorial {
+                background: rgba(255, 255, 255, 0.95) !important;
+                padding: 1rem !important;
+                border-radius: 15px !important;
+                font-size: 0.9rem !important;
+            }
+            
             #fingerCursor {
-                display: none !important;
+                width: 30px !important;
+                height: 30px !important;
+                font-size: 1.2rem !important;
             }
             
             /* Скрываем сложные анимации на мобильных */
@@ -1588,6 +1619,25 @@
             #swipeTutorial,
             #fingerCursor {
                 display: block !important;
+            }
+            
+            /* Улучшенный обучающий интерфейс для десктопа */
+            #tutorialOverlay {
+                background: rgba(0, 0, 0, 0.4) !important;
+            }
+            
+            #swipeTutorial {
+                background: rgba(255, 255, 255, 0.98) !important;
+                padding: 1.5rem !important;
+                border-radius: 20px !important;
+                font-size: 1rem !important;
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2) !important;
+            }
+            
+            #fingerCursor {
+                width: 40px !important;
+                height: 40px !important;
+                font-size: 1.5rem !important;
             }
             
             /* Полные hover эффекты на компьютере */
@@ -4906,18 +4956,18 @@
         let reviewsSwiper;
         
         document.addEventListener('DOMContentLoaded', function() {
-            // Инициализация Swiper (УПРОЩЕНО)
+            // Инициализация Swiper для отзывов (ОПТИМИЗИРОВАНО)
             reviewsSwiper = new Swiper('.reviews-swiper', {
                 slidesPerView: 1,
-                spaceBetween: 30,
+                spaceBetween: 0,
                 loop: true,
-                autoplay: {
-                    delay: 6000,
-                    disableOnInteraction: false,
-                },
+                autoplay: false, // Отключаем автопрокрутку
                 effect: 'slide',
-                speed: 600,
+                speed: 400,
                 grabCursor: true,
+                allowTouchMove: true,
+                touchRatio: 1,
+                touchAngle: 45,
                 pagination: {
                     el: '.reviews-pagination',
                     clickable: true,
@@ -4925,12 +4975,12 @@
                 },
                 breakpoints: {
                     768: {
-                        slidesPerView: 2,
-                        spaceBetween: 40,
+                        slidesPerView: 1,
+                        spaceBetween: 0,
                     },
                     1024: {
-                        slidesPerView: 3,
-                        spaceBetween: 50,
+                        slidesPerView: 1,
+                        spaceBetween: 0,
                     }
                 },
                 on: {
@@ -4951,13 +5001,8 @@
                 }
             });
             
-            // Обучающий интерфейс (УПРОЩЕНО)
+            // Обучающий интерфейс (ОПТИМИЗИРОВАНО)
             function showTutorial() {
-                // Проверяем, что это не мобильное устройство
-                if (window.innerWidth <= 768) {
-                    return; // Не показываем на мобильных
-                }
-                
                 const tutorial = document.getElementById('swipeTutorial');
                 const fingerCursor = document.getElementById('fingerCursor');
                 
@@ -4966,15 +5011,42 @@
                         tutorial.style.opacity = '1';
                         tutorial.style.transform = 'translate(-50%, -50%) scale(1)';
                         
-                        // Простая анимация пальца
+                        // Анимация пальца для свайпа
                         if (fingerCursor) {
                             fingerCursor.style.opacity = '1';
-                            setTimeout(() => {
-                                fingerCursor.style.opacity = '0';
-                            }, 3000);
+                            animateFingerSwipe();
                         }
-                    }, 2000);
+                    }, 1000);
                 }
+            }
+            
+            // Анимация пальца для свайпа
+            function animateFingerSwipe() {
+                const fingerCursor = document.getElementById('fingerCursor');
+                if (!fingerCursor) return;
+                
+                const positions = [
+                    { x: '30%', y: '50%' },
+                    { x: '70%', y: '50%' },
+                    { x: '50%', y: '50%' }
+                ];
+                
+                let currentPos = 0;
+                
+                const moveFinger = () => {
+                    if (fingerCursor.style.opacity === '0') return;
+                    
+                    const pos = positions[currentPos];
+                    fingerCursor.style.left = pos.x;
+                    fingerCursor.style.top = pos.y;
+                    fingerCursor.style.transform = 'translate(-50%, -50%)';
+                    
+                    currentPos = (currentPos + 1) % positions.length;
+                    
+                    setTimeout(moveFinger, 2000);
+                };
+                
+                moveFinger();
             }
             
             function hideTutorial() {
