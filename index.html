@@ -1263,61 +1263,84 @@
                     <!-- Profile Button -->
                     <div class="relative">
                         <button id="profileBtn" 
-                                class="flex items-center space-x-3 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 border border-pink-300 hover:border-pink-400 rounded-xl px-4 py-2 transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl text-white">
-                            <div class="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/30">
+                                class="flex items-center space-x-3 bg-white/90 backdrop-blur-sm border border-gray-200 hover:border-pink-300 rounded-xl px-4 py-2 transition-all duration-200 transform hover:scale-105 shadow-sm hover:shadow-md text-gray-700 focus:outline-none focus:ring-0 active:bg-gradient-to-r active:from-pink-500 active:to-purple-600 active:text-white">
+                            <div class="w-8 h-8 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center shadow-sm">
                                 <i class="fas fa-user text-white text-sm"></i>
                             </div>
                             <div class="hidden sm:block text-left">
-                                <div class="text-sm font-semibold text-white">Профиль</div>
-                                <div class="text-xs text-white/80">Войти в аккаунт</div>
+                                <div class="text-sm font-semibold text-gray-700">Профиль</div>
+                                <div class="text-xs text-gray-500">Войти в аккаунт</div>
                             </div>
-                            <i class="fas fa-chevron-down text-white/80 text-xs transition-transform duration-200"></i>
+                            <i class="fas fa-chevron-down text-gray-400 text-xs transition-transform duration-200"></i>
                         </button>
 
                         <!-- Profile Dropdown - iOS Style -->
-                        <div id="profileDropdown" class="absolute right-0 mt-2 w-72 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 opacity-0 invisible transform scale-95 transition-all duration-300 z-50 overflow-hidden">
-                            <!-- Header -->
-                            <div class="p-6 bg-gradient-to-br from-pink-50 to-purple-50 border-b border-pink-100/50">
-                                <div class="flex items-center space-x-4">
-                                    <div class="w-16 h-16 bg-gradient-to-br from-pink-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
-                                        <i class="fas fa-user text-white text-xl"></i>
-                                    </div>
-                                    <div>
-                                        <div class="font-bold text-gray-800 text-lg">Гость</div>
-                                        <div class="text-sm text-gray-600">Войдите в аккаунт</div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div id="profileDropdown" class="absolute right-0 mt-3 w-72 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 opacity-0 invisible transform scale-95 transition-all duration-300 z-50 overflow-hidden origin-top-right">
+                            <!-- iOS Bubble Arrow -->
+                            <div class="absolute -top-2 right-6 w-4 h-4 bg-white/95 backdrop-blur-xl border-l border-t border-white/20 transform rotate-45"></div>
                             
                             <!-- Menu Items -->
                             <div class="p-3">
-                                <!-- Account Actions -->
+                                <!-- Personal Cabinet -->
                                 <div class="mb-3">
                                     <a href="pages/account.html" 
-                                       class="flex items-center space-x-4 px-4 py-3 text-gray-700 hover:bg-gradient-to-r hover:from-pink-50 hover:to-purple-50 rounded-xl transition-all duration-200 group">
-                                        <div class="w-10 h-10 bg-gradient-to-br from-pink-500 to-purple-600 rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-200">
-                                            <i class="fas fa-sign-in-alt text-white text-sm"></i>
+                                       class="flex items-center space-x-4 px-4 py-4 text-gray-700 hover:bg-gradient-to-r hover:from-pink-50 hover:to-purple-50 rounded-xl transition-all duration-200 group">
+                                        <div class="w-12 h-12 bg-gradient-to-br from-pink-500 to-purple-600 rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-200">
+                                            <i class="fas fa-user-circle text-white text-lg"></i>
                                         </div>
                                         <div class="flex-1">
-                                            <div class="font-semibold text-gray-800">Войти / Регистрация</div>
-                                            <div class="text-xs text-gray-500">Создать аккаунт или войти</div>
+                                            <div class="font-bold text-gray-800 text-lg">Войти в личный кабинет</div>
+                                            <div class="text-sm text-gray-500">Управление профилем и записями</div>
                                         </div>
-                                        <i class="fas fa-chevron-right text-gray-400 text-xs group-hover:text-pink-500 transition-colors duration-200"></i>
+                                        <i class="fas fa-chevron-right text-gray-400 text-sm group-hover:text-pink-500 transition-colors duration-200"></i>
                                     </a>
                                 </div>
+                                
+                                <!-- Registration -->
+                                <div class="mb-3">
+                                    <a href="pages/account.html" 
+                                       class="flex items-center space-x-4 px-4 py-4 text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 rounded-xl transition-all duration-200 group">
+                                        <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-200">
+                                            <i class="fas fa-user-plus text-white text-lg"></i>
+                                        </div>
+                                        <div class="flex-1">
+                                            <div class="font-bold text-gray-800 text-lg">Регистрация</div>
+                                            <div class="text-sm text-gray-500">Создать новый аккаунт</div>
+                                        </div>
+                                        <i class="fas fa-chevron-right text-gray-400 text-sm group-hover:text-blue-500 transition-colors duration-200"></i>
+                                    </a>
+                                </div>
+                                
+                                <!-- Divider -->
+                                <div class="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent my-3"></div>
                                 
                                 <!-- Portfolio -->
                                 <div class="mb-3">
                                     <a href="pages/portfolio.html" 
-                                       class="flex items-center space-x-4 px-4 py-3 text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 rounded-xl transition-all duration-200 group">
-                                        <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-200">
+                                       class="flex items-center space-x-4 px-4 py-3 text-gray-700 hover:bg-gradient-to-r hover:from-green-50 hover:to-emerald-50 rounded-xl transition-all duration-200 group">
+                                        <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-200">
                                             <i class="fas fa-images text-white text-sm"></i>
                                         </div>
                                         <div class="flex-1">
                                             <div class="font-semibold text-gray-800">Портфолио</div>
                                             <div class="text-xs text-gray-500">Наши работы и достижения</div>
                                         </div>
-                                        <i class="fas fa-chevron-right text-gray-400 text-xs group-hover:text-blue-500 transition-colors duration-200"></i>
+                                        <i class="fas fa-chevron-right text-gray-400 text-xs group-hover:text-green-500 transition-colors duration-200"></i>
+                                    </a>
+                                </div>
+                                
+                                <!-- Booking -->
+                                <div class="mb-3">
+                                    <a href="#booking" 
+                                       class="flex items-center space-x-4 px-4 py-3 text-gray-700 hover:bg-gradient-to-r hover:from-orange-50 hover:to-red-50 rounded-xl transition-all duration-200 group">
+                                        <div class="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-600 rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-200">
+                                            <i class="fas fa-calendar-plus text-white text-sm"></i>
+                                        </div>
+                                        <div class="flex-1">
+                                            <div class="font-semibold text-gray-800">Записаться</div>
+                                            <div class="text-xs text-gray-500">Забронировать услугу</div>
+                                        </div>
+                                        <i class="fas fa-chevron-right text-gray-400 text-xs group-hover:text-orange-500 transition-colors duration-200"></i>
                                     </a>
                                 </div>
                                 
@@ -1340,7 +1363,7 @@
                                 </div>
                                 
                                 <!-- WhatsApp -->
-                                <div class="mb-3">
+                                <div>
                                     <a href="https://wa.me/79282806294" target="_blank" 
                                        class="flex items-center space-x-4 px-4 py-3 text-gray-700 hover:bg-gradient-to-r hover:from-green-50 hover:to-emerald-50 rounded-xl transition-all duration-200 group">
                                         <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-200">
@@ -1351,84 +1374,6 @@
                                             <div class="text-xs text-gray-500">Написать в WhatsApp</div>
                                         </div>
                                         <i class="fas fa-external-link-alt text-gray-400 text-xs group-hover:text-green-500 transition-colors duration-200"></i>
-                                    </a>
-                                </div>
-                                
-                                <!-- Booking -->
-                                <div class="mb-3">
-                                    <a href="#booking" 
-                                       class="flex items-center space-x-4 px-4 py-3 text-gray-700 hover:bg-gradient-to-r hover:from-green-50 hover:to-emerald-50 rounded-xl transition-all duration-200 group">
-                                        <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-200">
-                                            <i class="fas fa-calendar-plus text-white text-sm"></i>
-                                        </div>
-                                        <div class="flex-1">
-                                            <div class="font-semibold text-gray-800">Записаться</div>
-                                            <div class="text-xs text-gray-500">Забронировать услугу</div>
-                                        </div>
-                                        <i class="fas fa-chevron-right text-gray-400 text-xs group-hover:text-green-500 transition-colors duration-200"></i>
-                                    </a>
-                                </div>
-                                
-                                <!-- Divider -->
-                                <div class="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent my-3"></div>
-                                
-                                <!-- Services -->
-                                <div class="mb-3">
-                                    <a href="#services" 
-                                       class="flex items-center space-x-4 px-4 py-3 text-gray-700 hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50 rounded-xl transition-all duration-200 group">
-                                        <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-200">
-                                            <i class="fas fa-spa text-white text-sm"></i>
-                                        </div>
-                                        <div class="flex-1">
-                                            <div class="font-semibold text-gray-800">Наши услуги</div>
-                                            <div class="text-xs text-gray-500">Посмотреть все услуги</div>
-                                        </div>
-                                        <i class="fas fa-chevron-right text-gray-400 text-xs group-hover:text-purple-500 transition-colors duration-200"></i>
-                                    </a>
-                                </div>
-                                
-                                <!-- Masters -->
-                                <div class="mb-3">
-                                    <a href="#masters" 
-                                       class="flex items-center space-x-4 px-4 py-3 text-gray-700 hover:bg-gradient-to-r hover:from-orange-50 hover:to-red-50 rounded-xl transition-all duration-200 group">
-                                        <div class="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-600 rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-200">
-                                            <i class="fas fa-users text-white text-sm"></i>
-                                        </div>
-                                        <div class="flex-1">
-                                            <div class="font-semibold text-gray-800">Наши мастера</div>
-                                            <div class="text-xs text-gray-500">Познакомиться с командой</div>
-                                        </div>
-                                        <i class="fas fa-chevron-right text-gray-400 text-xs group-hover:text-orange-500 transition-colors duration-200"></i>
-                                    </a>
-                                </div>
-                                
-                                <!-- Contact -->
-                                <div class="mb-3">
-                                    <a href="#contact" 
-                                       class="flex items-center space-x-4 px-4 py-3 text-gray-700 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-blue-50 rounded-xl transition-all duration-200 group">
-                                        <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-blue-600 rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-200">
-                                            <i class="fas fa-phone text-white text-sm"></i>
-                                        </div>
-                                        <div class="flex-1">
-                                            <div class="font-semibold text-gray-800">Контакты</div>
-                                            <div class="text-xs text-gray-500">Адрес и телефоны</div>
-                                        </div>
-                                        <i class="fas fa-chevron-right text-gray-400 text-xs group-hover:text-indigo-500 transition-colors duration-200"></i>
-                                    </a>
-                                </div>
-                                
-                                <!-- Settings -->
-                                <div>
-                                    <a href="#" 
-                                       class="flex items-center space-x-4 px-4 py-3 text-gray-700 hover:bg-gradient-to-r hover:from-gray-50 hover:to-slate-50 rounded-xl transition-all duration-200 group">
-                                        <div class="w-10 h-10 bg-gradient-to-br from-gray-500 to-slate-600 rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-200">
-                                            <i class="fas fa-cog text-white text-sm"></i>
-                                        </div>
-                                        <div class="flex-1">
-                                            <div class="font-semibold text-gray-800">Настройки</div>
-                                            <div class="text-xs text-gray-500">Персональные настройки</div>
-                                        </div>
-                                        <i class="fas fa-chevron-right text-gray-400 text-xs group-hover:text-gray-500 transition-colors duration-200"></i>
                                     </a>
                                 </div>
                             </div>
@@ -2044,30 +1989,154 @@
     </section>
 
     <!-- Masters Section -->
-    <section id="masters" class="py-20 bg-pink-50" data-aos="fade-up">
-        <div class="container mx-auto px-4">
-            <h2 class="text-3xl md:text-4xl font-bold text-center mb-4 text-gray-800 animate-on-scroll">Наши мастера</h2>
-            <p class="text-center text-gray-600 mb-16 max-w-2xl mx-auto animate-on-scroll delay-100">Профессионалы с большим опытом, которые помогут вам выглядеть безупречно</p>
+    <section id="masters" class="py-20 pb-40 bg-gradient-to-br from-pink-50 via-purple-50 to-pink-100 relative overflow-hidden" data-aos="fade-up">
+        <!-- Background Decorations -->
+        <div class="absolute inset-0 overflow-hidden">
+            <div class="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-pink-200/30 to-purple-200/30 rounded-full blur-3xl animate-pulse"></div>
+            <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-purple-200/30 to-pink-200/30 rounded-full blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
+        </div>
+        
+        <div class="container mx-auto px-8 relative z-10">
+            <!-- Header -->
+            <div class="text-center mb-16">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-pink-500 to-purple-600 rounded-2xl shadow-lg mb-6 animate-bounce p-4">
+                    <i class="fas fa-users text-white text-2xl"></i>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent mb-4 animate-on-scroll">
+                    Наши мастера
+                </h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto animate-on-scroll delay-100">
+                    Профессионалы с большим опытом, которые помогут вам выглядеть безупречно
+                </p>
+            </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <!-- Master 1 -->
-                <div class="bg-white rounded-lg shadow-md overflow-hidden animate-on-scroll">
-                                            <img src="images/ui/Светлана.webp" alt="Мастер Светлана" class="w-full h-64 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-1">Светлана</h3>
-                        <p class="text-pink-600 mb-3">Топ-стилист</p>
-                        <p class="text-gray-600 text-sm">Опыт работы 12 лет. Специализация: сложное окрашивание, креативные стрижки.</p>
+            <!-- Masters Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-5xl mx-auto">
+                <!-- Master 1 - Светлана -->
+                <div class="group relative bg-white/80 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 overflow-hidden animate-on-scroll hover:scale-105 transition-all duration-500 transform hover:rotate-1 p-4">
+                    <!-- Image Container -->
+                    <div class="relative overflow-hidden h-80">
+                        <img src="images/ui/Светлана.webp" alt="Мастер Светлана" 
+                             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <!-- Gradient Overlay -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        <!-- Floating Badge -->
+                        <div class="absolute top-4 right-4 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg transform translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 z-10">
+                            <i class="fas fa-star mr-1"></i>Топ-мастер
+                        </div>
+                    </div>
+                    
+                    <!-- Content -->
+                    <div class="p-6 relative">
+                        <!-- Name and Title -->
+                        <div class="mb-4">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-2 group-hover:text-pink-600 transition-colors duration-300">Светлана</h3>
+                            <div class="flex items-center space-x-2">
+                                <div class="w-8 h-8 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center shadow-md">
+                                    <i class="fas fa-cut text-white text-sm"></i>
+                                </div>
+                                <span class="text-lg font-semibold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">Топ-стилист</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Experience -->
+                        <div class="mb-4 p-3 bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl border border-pink-100">
+                            <div class="flex items-center space-x-2 mb-2">
+                                <i class="fas fa-clock text-pink-600"></i>
+                                <span class="font-semibold text-gray-800">Опыт работы: 12 лет</span>
+                            </div>
+                            <p class="text-gray-600 text-sm leading-relaxed">
+                                Специализация: сложное окрашивание, креативные стрижки, колористика
+                            </p>
+                        </div>
+                        
+                        <!-- Skills -->
+                        <div class="space-y-2">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-2 h-2 bg-pink-500 rounded-full animate-pulse"></div>
+                                <span class="text-sm text-gray-600">Сложное окрашивание</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <div class="w-2 h-2 bg-purple-500 rounded-full animate-pulse" style="animation-delay: 0.5s;"></div>
+                                <span class="text-sm text-gray-600">Креативные стрижки</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <div class="w-2 h-2 bg-pink-500 rounded-full animate-pulse" style="animation-delay: 1s;"></div>
+                                <span class="text-sm text-gray-600">Колористика</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Action Button -->
+                        <div class="mt-6">
+                            <a href="#booking" onclick="selectMaster('Светлана')" 
+                               class="block w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-center">
+                                <i class="fas fa-calendar-plus mr-2"></i>Записаться к Светлане
+                            </a>
+                        </div>
                     </div>
                 </div>
                 
-                <!-- Master 2 -->
-                <div class="bg-white rounded-lg shadow-md overflow-hidden animate-on-scroll delay-100">
-                                            <img src="images/ui/Анна.webp" alt="Мастер Анна" class="w-full h-64 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-1">Анна</h3>
-                        <p class="text-pink-600 mb-3">Мастер по маникюру</p>
-                        <p class="text-gray-600 text-sm mb-3">Стажер. Специализация: классический маникюр, гель-лак, дизайн ногтей.</p>
-                        <p class="text-gray-600 text-sm">Обучается у опытных мастеров салона. Внимательная к деталям, использует качественные материалы. Создает аккуратные и стильные образы для ваших ногтей.</p>
+                <!-- Master 2 - Анна -->
+                <div class="group relative bg-white/80 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 overflow-hidden animate-on-scroll delay-100 hover:scale-105 transition-all duration-500 transform hover:-rotate-1 p-2">
+                    <!-- Image Container -->
+                    <div class="relative overflow-hidden h-80">
+                        <img src="images/ui/Анна.webp" alt="Мастер Анна" 
+                             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <!-- Gradient Overlay -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        <!-- Floating Badge -->
+                        <div class="absolute top-4 right-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg transform translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 z-10">
+                            <i class="fas fa-graduation-cap mr-1"></i>Стажер
+                        </div>
+                    </div>
+                    
+                    <!-- Content -->
+                    <div class="p-6 relative">
+                        <!-- Name and Title -->
+                        <div class="mb-4">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors duration-300">Анна</h3>
+                            <div class="flex items-center space-x-2">
+                                <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-md">
+                                    <i class="fas fa-paint-brush text-white text-sm"></i>
+                                </div>
+                                <span class="text-lg font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Мастер по маникюру</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Experience -->
+                        <div class="mb-4 p-3 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border border-blue-100">
+                            <div class="flex items-center space-x-2 mb-2">
+                                <i class="fas fa-heart text-blue-600"></i>
+                                <span class="font-semibold text-gray-800">Внимательная к деталям</span>
+                            </div>
+                            <p class="text-gray-600 text-sm leading-relaxed">
+                                Обучается у опытных мастеров салона. Использует качественные материалы
+                            </p>
+                        </div>
+                        
+                        <!-- Skills -->
+                        <div class="space-y-2">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                                <span class="text-sm text-gray-600">Классический маникюр</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <div class="w-2 h-2 bg-purple-500 rounded-full animate-pulse" style="animation-delay: 0.5s;"></div>
+                                <span class="text-sm text-gray-600">Гель-лак</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <div class="w-2 h-2 bg-blue-500 rounded-full animate-pulse" style="animation-delay: 1s;"></div>
+                                <span class="text-sm text-gray-600">Дизайн ногтей</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Action Button -->
+                        <div class="mt-6">
+                            <a href="#booking" onclick="selectMaster('Анна')" 
+                               class="block w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-center">
+                                <i class="fas fa-calendar-plus mr-2"></i>Записаться к Анне
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -2548,6 +2617,34 @@
         }, 100);
     }
 
+    // Функция для выбора мастера при клике на кнопку в карточке мастера
+    function selectMaster(masterName) {
+        console.log('selectMaster called:', masterName);
+        
+        // Прокручиваем к форме записи
+        const bookingSection = document.getElementById('booking');
+        if (bookingSection) {
+            bookingSection.scrollIntoView({ behavior: 'smooth' });
+        } else {
+            console.error('Booking section not found');
+        }
+        
+        // Показываем уведомление о выборе мастера
+        showNotification(`Выбран мастер: ${masterName}`, 'success');
+        
+        // Сохраняем выбранного мастера в localStorage
+        localStorage.setItem('selectedMaster', masterName);
+        
+        // Можно добавить логику для автоматического выбора услуг мастера
+        if (masterName === 'Светлана') {
+            // Светлана - парикмахерские услуги
+            selectService('hair', 'female_haircut');
+        } else if (masterName === 'Анна') {
+            // Анна - маникюр
+            selectService('manicure', 'classic_manicure');
+        }
+    }
+
     // Функция обновления списка услуг при выборе категории
     function updateServiceOptions() {
         const categorySelect = document.getElementById('serviceCategory');
@@ -2689,13 +2786,50 @@
                 const isVisible = !profileDropdown.classList.contains('opacity-0');
                 
                 if (isVisible) {
-                    // Hide dropdown
-                    profileDropdown.classList.add('opacity-0', 'invisible', 'scale-95');
-                    profileDropdown.classList.remove('opacity-100', 'visible', 'scale-100');
+                    // Hide dropdown with slide-out animation
+                    profileDropdown.style.transform = 'scale(0.95) translateY(-10px)';
+                    profileDropdown.style.opacity = '0';
+                    setTimeout(() => {
+                        profileDropdown.classList.add('invisible');
+                    }, 150);
+                    
+                    // Remove active state from button
+                    profileBtn.classList.remove('bg-gradient-to-r', 'from-pink-500', 'to-purple-600', 'text-white');
+                    profileBtn.classList.add('bg-white/90');
+                    
+                    // Update text colors
+                    const profileText = profileBtn.querySelector('.text-sm.font-semibold');
+                    const profileSubtext = profileBtn.querySelector('.text-xs');
+                    const chevronIcon = profileBtn.querySelector('.fa-chevron-down');
+                    
+                    if (profileText) profileText.classList.remove('text-white');
+                    if (profileText) profileText.classList.add('text-gray-700');
+                    if (profileSubtext) profileSubtext.classList.remove('text-white/80');
+                    if (profileSubtext) profileSubtext.classList.add('text-gray-500');
+                    if (chevronIcon) chevronIcon.classList.remove('text-white/80');
+                    if (chevronIcon) chevronIcon.classList.add('text-gray-400');
+                    
                 } else {
-                    // Show dropdown
-                    profileDropdown.classList.remove('opacity-0', 'invisible', 'scale-95');
-                    profileDropdown.classList.add('opacity-100', 'visible', 'scale-100');
+                    // Show dropdown with slide-in animation from button
+                    profileDropdown.classList.remove('invisible');
+                    profileDropdown.style.transform = 'scale(1) translateY(0)';
+                    profileDropdown.style.opacity = '1';
+                    
+                    // Add active state to button
+                    profileBtn.classList.remove('bg-white/90');
+                    profileBtn.classList.add('bg-gradient-to-r', 'from-pink-500', 'to-purple-600', 'text-white');
+                    
+                    // Update text colors
+                    const profileText = profileBtn.querySelector('.text-sm.font-semibold');
+                    const profileSubtext = profileBtn.querySelector('.text-xs');
+                    const chevronIcon = profileBtn.querySelector('.fa-chevron-down');
+                    
+                    if (profileText) profileText.classList.remove('text-gray-700');
+                    if (profileText) profileText.classList.add('text-white');
+                    if (profileSubtext) profileSubtext.classList.remove('text-gray-500');
+                    if (profileSubtext) profileSubtext.classList.add('text-white/80');
+                    if (chevronIcon) chevronIcon.classList.remove('text-gray-400');
+                    if (chevronIcon) chevronIcon.classList.add('text-white/80');
                 }
                 
                 // Animate chevron
@@ -2709,13 +2843,34 @@
         // Close dropdown when clicking outside
         document.addEventListener('click', (e) => {
             if (profileDropdown && !profileBtn.contains(e.target) && !profileDropdown.contains(e.target)) {
-                profileDropdown.classList.add('opacity-0', 'invisible', 'scale-95');
-                profileDropdown.classList.remove('opacity-100', 'visible', 'scale-100');
+                // Hide dropdown with slide-out animation
+                profileDropdown.style.transform = 'scale(0.95) translateY(-10px)';
+                profileDropdown.style.opacity = '0';
+                setTimeout(() => {
+                    profileDropdown.classList.add('invisible');
+                }, 150);
                 
-                // Reset chevron
-                const chevron = profileBtn.querySelector('.fa-chevron-down');
-                if (chevron) {
-                    chevron.style.transform = 'rotate(0deg)';
+                // Reset button state
+                profileBtn.classList.remove('bg-gradient-to-r', 'from-pink-500', 'to-purple-600', 'text-white');
+                profileBtn.classList.add('bg-white/90');
+                
+                // Reset text colors
+                const profileText = profileBtn.querySelector('.text-sm.font-semibold');
+                const profileSubtext = profileBtn.querySelector('.text-xs');
+                const chevronIcon = profileBtn.querySelector('.fa-chevron-down');
+                
+                if (profileText) {
+                    profileText.classList.remove('text-white');
+                    profileText.classList.add('text-gray-700');
+                }
+                if (profileSubtext) {
+                    profileSubtext.classList.remove('text-white/80');
+                    profileSubtext.classList.add('text-gray-500');
+                }
+                if (chevronIcon) {
+                    chevronIcon.classList.remove('text-white/80');
+                    chevronIcon.classList.add('text-gray-400');
+                    chevronIcon.style.transform = 'rotate(0deg)';
                 }
             }
         });
