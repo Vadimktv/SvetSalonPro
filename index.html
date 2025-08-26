@@ -39,12 +39,11 @@
             background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(251, 207, 232, 0.7) 100%), url('https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80') center/cover no-repeat;
         }
         
-        /* Стили для навигационных ссылок */
         .nav-link {
             position: relative;
             transition: color 0.3s ease;
         }
-
+        
         .nav-link::after {
             content: '';
             position: absolute;
@@ -55,46 +54,21 @@
             background-color: #ec4899;
             transition: width 0.3s ease;
         }
-
+        
         .nav-link:hover::after {
             width: 100%;
         }
 
-        /* iOS Style Side Menu */
-        #sideMenu {
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
-        
-        #sideMenu.open {
-            pointer-events: all;
-        }
-        
+        /* iOS Style Menu Styles */
         #sideMenu.open #menuBackdrop {
             opacity: 1;
             pointer-events: all;
-            backdrop-filter: blur(2px);
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        #sideMenu.open #menuContainer {
-            transform: scale(1) translateX(0);
-            opacity: 1;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        #sideMenu:not(.open) #menuContainer {
-            transform: scale(0.75) translateX(0) !important;
-            opacity: 0 !important;
         }
 
-        /* Prevent body scroll when menu is open */
-        body.menu-open {
-            overflow: hidden;
+        #sideMenu.open #menuContainer {
+            transform: scale(1);
+            opacity: 1;
+            pointer-events: all;
         }
 
         /* Menu Items */
@@ -170,13 +144,13 @@
         }
 
         .menu-icon i {
-            color: #6b7280;
-            font-size: 14px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 18px;
+            color: #ec4899;
+            transition: all 0.3s ease;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
         }
 
         .menu-item:hover .menu-icon i {
-            color: white;
             transform: scale(1.1);
         }
 
@@ -190,12 +164,222 @@
             color: #ec4899;
         }
 
+        /* Bubble Animation */
+        @keyframes bubblePop {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .menu-item.bubble-animation::before {
+            animation: bubblePop 0.2s ease-out;
+        }
+
+        /* iOS Haptic Feedback Simulation */
+        @keyframes hapticFeedback {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-1px); }
+            75% { transform: translateX(1px); }
+        }
+
+        .haptic-feedback {
+            animation: hapticFeedback 0.1s ease-in-out;
+        }
+
+        /* Glassmorphism Effects */
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Smooth Scrolling */
+        #menuContainer {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(236, 72, 153, 0.3) transparent;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        #menuContainer::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        #menuContainer::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        #menuContainer::-webkit-scrollbar-thumb {
+            background: rgba(236, 72, 153, 0.3);
+            border-radius: 2px;
+        }
+
+        #menuContainer::-webkit-scrollbar-thumb:hover {
+            background: rgba(236, 72, 153, 0.5);
+        }
+
+        /* Touch improvements */
+        .menu-item, #iosMenuBtn, #closeMenuBtn {
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+
+        /* iOS Style Side Menu */
+        #sideMenu {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        #sideMenu.open {
+            pointer-events: all;
+        }
+        
+        #sideMenu.open #menuBackdrop {
+            opacity: 1;
+            pointer-events: all;
+            backdrop-filter: blur(2px);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        #sideMenu.open #menuContainer {
+            transform: scale(1) translateX(0);
+            opacity: 1;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        #sideMenu:not(.open) #menuContainer {
+            transform: scale(0.75) translateX(0) !important;
+            opacity: 0 !important;
+        }
+        
+        /* Prevent body scroll when menu is open */
+        body.menu-open {
+            overflow: hidden;
+        }
+        
+        /* Menu Button Animation */
+        .menu-icon-container {
+            position: relative;
+            width: 20px;
+            height: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .menu-line {
+            width: 100%;
+            height: 2px;
+            background-color: #374151;
+            border-radius: 1px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: center;
+        }
+        
+        /* Menu Button Active State */
+        #iosMenuBtn.active .menu-line:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+        
+        #iosMenuBtn.active .menu-line:nth-child(2) {
+            opacity: 0;
+            transform: scaleX(0);
+        }
+        
+        #iosMenuBtn.active .menu-line:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+        
+        /* Hover effects for menu lines */
+        #iosMenuBtn:hover .menu-line {
+            background-color: #ec4899;
+        }
+        
+        /* Menu Items */
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: #1f2937;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+        }
+        
+        .menu-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(236, 72, 153, 0.08);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .menu-item:hover::before {
+            opacity: 1;
+        }
+        
+        .menu-item:hover {
+            background: rgba(236, 72, 153, 0.05);
+            transform: translateX(4px);
+            box-shadow: 0 2px 8px rgba(236, 72, 153, 0.15);
+        }
+        
+        .menu-item:active {
+            transform: translateX(2px) scale(0.98);
+            background: rgba(236, 72, 153, 0.1);
+        }
+        
+        .menu-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .menu-item:hover .menu-icon {
+            background: linear-gradient(135deg, #ec4899, #db2777);
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3);
+        }
+        
+        .menu-item:hover .menu-icon i {
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        .menu-icon i {
+            color: #6b7280;
+            font-size: 14px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
         /* Better focus states */
         .menu-item:focus, #iosMenuBtn:focus, #closeMenuBtn:focus {
             outline: none;
             box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.3);
         }
-
+        
         /* Bubble Animation */
         @keyframes bubblePop {
             0% { transform: scale(0.9); opacity: 0; }
@@ -1274,7 +1458,13 @@
                         </div>
                         <span>Контакты</span>
                     </a>
-                    
+                </div>
+                
+                <!-- Divider -->
+                <div class="mx-4 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
+                
+                <!-- Profile Section -->
+                <div class="p-2">
                     <a href="pages/account.html" class="menu-item group">
                         <div class="menu-icon">
                             <i class="fas fa-user"></i>
@@ -1282,6 +1472,8 @@
                         <span>Личный кабинет</span>
                     </a>
                 </div>
+                
+
             </div>
         </div>
     </div>
