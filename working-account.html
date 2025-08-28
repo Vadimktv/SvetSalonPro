@@ -19,9 +19,290 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            padding: 16px;
+            max-width: 300px;
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.success {
+            border-left: 4px solid #10b981;
+        }
+        
+        .notification.error {
+            border-left: 4px solid #ef4444;
+        }
+        
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .avatar-option {
+            cursor: pointer;
+            border: 2px solid transparent;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+        
+        .avatar-option:hover {
+            border-color: #ec4899;
+            transform: scale(1.05);
+        }
+        
+        .avatar-option.selected {
+            border-color: #ec4899;
+            box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.2);
+        }
+        
+        .booking-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+            transition: all 0.2s;
+        }
+        
+        .booking-card:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .status-confirmed { background: #d1fae5; color: #065f46; }
+        .status-pending { background: #fef3c7; color: #92400e; }
+        .status-completed { background: #dbeafe; color: #1e40af; }
+        .status-cancelled { background: #fee2e2; color: #991b1b; }
+        
+        /* iOS Style Side Menu */
+        #sideMenu {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        #sideMenu.open {
+            pointer-events: all;
+        }
+
+        #sideMenu.open #menuBackdrop {
+            opacity: 1;
+            pointer-events: all;
+            backdrop-filter: blur(2px);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        #sideMenu.open #menuContainer {
+            transform: scale(1) translateX(0);
+            opacity: 1;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        #sideMenu:not(.open) #menuContainer {
+            transform: scale(0.75) translateX(0) !important;
+            opacity: 0 !important;
+        }
+
+        /* Prevent body scroll when menu is open */
+        body.menu-open {
+            overflow: hidden;
+        }
+
+        /* Menu Items */
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: #1f2937;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+        }
+
+        .menu-item:hover {
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.1) 0%, rgba(236, 72, 153, 0.05) 100%);
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(236, 72, 153, 0.15);
+        }
+
+        .menu-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.1) 0%, rgba(236, 72, 153, 0.05) 100%);
+            color: #ec4899;
+            font-size: 14px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .menu-item:hover .menu-icon {
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.2) 0%, rgba(236, 72, 153, 0.1) 100%);
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(236, 72, 153, 0.2);
+        }
+
+        /* Bubble Animation */
+        @keyframes bubblePop {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .bubble-animation {
+            animation: bubblePop 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Haptic Feedback */
+        .haptic-feedback {
+            animation: hapticShake 0.1s ease-in-out;
+        }
+
+        @keyframes hapticShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-1px); }
+            75% { transform: translateX(1px); }
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-pink-50 via-white to-purple-50 min-h-screen">
+    <!-- Notification Container -->
+    <div id="notificationContainer"></div>
+
+    <!-- iOS Style Side Menu -->
+    <div id="sideMenu" class="fixed inset-0 z-50 pointer-events-none">
+        <!-- Backdrop -->
+        <div id="menuBackdrop" class="absolute inset-0 bg-black/20 opacity-0 transition-all duration-250 ease-out pointer-events-none"></div>
+        
+        <!-- Menu Container -->
+        <div id="menuContainer" class="absolute top-24 right-4 h-auto max-h-[80vh] w-72 bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl transform scale-75 opacity-0 transition-all duration-250 ease-out border border-white/30">
+            <!-- Menu Header -->
+            <div class="flex items-center justify-between p-3 border-b border-white/10">
+                <div class="flex items-center space-x-2">
+                    <img src="../images/ui/logo.png" alt="SvetSalonPro" class="w-8 h-8 rounded-full">
+                    <div>
+                        <h2 class="text-base font-semibold text-gray-800">SvetSalonPro</h2>
+                        <p class="text-xs text-gray-600">Салон красоты</p>
+                    </div>
+                </div>
+                <button id="closeMenuBtn" class="w-8 h-8 rounded-full bg-gray-100/50 backdrop-blur-sm flex items-center justify-center hover:bg-gray-200/50 active:bg-gray-300/50 transition-all duration-200 transform hover:scale-105 active:scale-95 cursor-pointer">
+                    <i class="fas fa-times text-gray-600 text-sm"></i>
+                </button>
+            </div>
+            
+            <!-- Menu Content -->
+            <div class="flex-1 overflow-y-auto">
+                <!-- Navigation Links -->
+                <div class="p-2 space-y-0.5">
+                    <a href="../index.html#home" class="menu-item group">
+                        <div class="menu-icon">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        <span>Главная</span>
+                    </a>
+                    
+                    <a href="../index.html#about" class="menu-item group">
+                        <div class="menu-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <span>О нас</span>
+                    </a>
+                    
+                    <a href="../index.html#services" class="menu-item group">
+                        <div class="menu-icon">
+                            <i class="fas fa-spa"></i>
+                        </div>
+                        <span>Услуги</span>
+                    </a>
+                    
+                    <a href="../index.html#masters" class="menu-item group">
+                        <div class="menu-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <span>Мастера</span>
+                    </a>
+                    
+                    <a href="portfolio.html" class="menu-item group">
+                        <div class="menu-icon">
+                            <i class="fas fa-images"></i>
+                        </div>
+                        <span>Примеры работ</span>
+                    </a>
+                    
+                    <a href="../index.html#contact" class="menu-item group">
+                        <div class="menu-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <span>Контакты</span>
+                    </a>
+                    
+                    <a href="account.html" class="menu-item group">
+                        <div class="menu-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <span>Личный кабинет</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Header -->
     <header class="fixed w-full bg-white shadow-sm z-50">
         <div class="container mx-auto px-4 py-4 flex justify-between items-center">
@@ -35,13 +316,19 @@
                 <a href="portfolio.html" class="text-gray-700 hover:text-pink-600 transition">Примеры работ</a>
                 <a href="account.html" class="text-pink-600 font-semibold">Личный кабинет</a>
             </nav>
+            <div class="flex items-center space-x-4">
+                <!-- iOS Style Menu Button -->
+                <button id="iosMenuBtn" class="md:hidden w-10 h-10 rounded-full bg-gray-100/50 backdrop-blur-sm flex items-center justify-center hover:bg-gray-200/50 active:bg-gray-300/50 transition-all duration-200 transform hover:scale-105 active:scale-95 cursor-pointer">
+                    <i class="fas fa-bars text-gray-600 text-sm"></i>
+                </button>
+            </div>
         </div>
     </header>
 
     <!-- Main Content -->
     <main class="pt-32 pb-20">
         <div class="container mx-auto px-4">
-            <div class="max-w-4xl mx-auto">
+            <div class="max-w-6xl mx-auto">
                 <!-- Loading Section -->
                 <div id="loadingSection" class="max-w-md mx-auto mb-8">
                     <div class="bg-white rounded-xl shadow-lg p-8 text-center">
@@ -80,47 +367,101 @@
 
                 <!-- Profile Section -->
                 <div id="profileSection" class="hidden">
-                    <div class="grid md:grid-cols-3 gap-8">
+                    <div class="grid lg:grid-cols-4 gap-8">
                         <!-- Profile Info -->
-                        <div class="md:col-span-1">
+                        <div class="lg:col-span-1">
                             <div class="bg-white rounded-xl shadow-lg p-6">
                                 <div class="text-center mb-6">
-                                    <div class="w-24 h-24 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                        <i class="fas fa-user text-3xl text-pink-600" id="mainProfileIcon"></i>
+                                    <div class="relative inline-block">
+                                        <div id="profileAvatar" class="w-24 h-24 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4 overflow-hidden">
+                                            <i class="fas fa-user text-3xl text-pink-600" id="defaultAvatar"></i>
+                                            <img id="customAvatar" class="w-full h-full object-cover hidden" alt="Аватар">
+                                        </div>
+                                        <button id="changeAvatarBtn" class="absolute bottom-0 right-0 bg-pink-600 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-pink-700 transition">
+                                            <i class="fas fa-camera text-sm"></i>
+                                        </button>
                                     </div>
                                     <h3 id="userName" class="text-xl font-semibold text-gray-800">Пользователь</h3>
                                     <p id="userEmail" class="text-gray-600">user@example.com</p>
                                     <p id="userPhone" class="text-gray-600">+7 (___) ___-__-__</p>
                                 </div>
                                 
-                                <button id="editProfileBtn" class="w-full py-2 px-4 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition mb-3">
-                                    Редактировать профиль
-                                </button>
-                                <button id="logoutBtn" class="w-full py-2 px-4 border border-pink-300 text-pink-600 rounded-lg hover:bg-pink-50 transition">
-                                    Выйти
-                                </button>
+                                <div class="space-y-3">
+                                    <button id="editProfileBtn" class="w-full py-2 px-4 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition">
+                                        <i class="fas fa-edit mr-2"></i>Редактировать профиль
+                                    </button>
+                                    <button id="newBookingBtn" class="w-full py-2 px-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
+                                        <i class="fas fa-plus mr-2"></i>Новая запись
+                                    </button>
+                                    <button id="logoutBtn" class="w-full py-2 px-4 border border-pink-300 text-pink-600 rounded-lg hover:bg-pink-50 transition">
+                                        <i class="fas fa-sign-out-alt mr-2"></i>Выйти
+                                    </button>
+                                </div>
+                                
+                                <!-- Statistics -->
+                                <div class="mt-6 pt-6 border-t border-gray-200">
+                                    <h4 class="font-semibold text-gray-800 mb-3">Статистика</h4>
+                                    <div class="space-y-2">
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Всего записей:</span>
+                                            <span id="totalBookings" class="font-semibold">0</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Выполнено:</span>
+                                            <span id="completedBookings" class="font-semibold text-green-600">0</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Ожидает:</span>
+                                            <span id="pendingBookings" class="font-semibold text-yellow-600">0</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
                         <!-- Bookings -->
-                        <div class="md:col-span-2">
+                        <div class="lg:col-span-3">
                             <div class="bg-white rounded-xl shadow-lg p-6">
                                 <div class="flex justify-between items-center mb-6">
                                     <h3 class="text-2xl font-semibold text-gray-800">Мои записи</h3>
-                                    <button id="newBookingBtn" class="bg-pink-600 hover:bg-pink-700 text-white font-semibold py-2 px-4 rounded-lg transition">
-                                        Новая запись
-                                    </button>
+                                    <div class="flex space-x-2">
+                                        <button id="refreshBookingsBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition">
+                                            <i class="fas fa-sync-alt mr-2"></i>Обновить
+                                        </button>
+                                        <button id="showHistoryBtn" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition">
+                                            <i class="fas fa-history mr-2"></i>История
+                                        </button>
+                                    </div>
                                 </div>
                                 
-                                <div id="bookingsList" class="space-y-4">
-                                    <!-- Bookings will be loaded here -->
+                                <!-- Tabs -->
+                                <div class="border-b border-gray-200 mb-6">
+                                    <nav class="flex space-x-8">
+                                        <button id="activeTab" class="py-2 px-1 border-b-2 border-pink-500 text-pink-600 font-medium">
+                                            Активные записи
+                                        </button>
+                                        <button id="historyTab" class="py-2 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium">
+                                            История
+                                        </button>
+                                    </nav>
                                 </div>
                                 
-                                <div id="noBookings" class="text-center py-12">
+                                <!-- Active Bookings -->
+                                <div id="activeBookings" class="space-y-4">
+                                    <!-- Active bookings will be loaded here -->
+                                </div>
+                                
+                                <!-- History Bookings -->
+                                <div id="historyBookings" class="space-y-4 hidden">
+                                    <!-- History bookings will be loaded here -->
+                                </div>
+                                
+                                <!-- Empty State -->
+                                <div id="emptyBookings" class="text-center py-12">
                                     <i class="fas fa-calendar-times text-4xl text-gray-300 mb-4"></i>
-                                    <p class="text-gray-500">У вас пока нет записей</p>
-                                    <button id="bookFirstBtn" class="bg-pink-600 hover:bg-pink-700 text-white font-semibold mt-4 py-2 px-6 rounded-lg transition">
-                                        Записаться на услугу
+                                    <p class="text-gray-500 mb-4">У вас пока нет записей</p>
+                                    <button id="bookFirstBtn" class="bg-pink-600 hover:bg-pink-700 text-white font-semibold py-2 px-6 rounded-lg transition">
+                                        <i class="fas fa-plus mr-2"></i>Записаться на услугу
                                     </button>
                                 </div>
                             </div>
@@ -131,11 +472,117 @@
         </div>
     </main>
 
+    <!-- Avatar Selection Modal -->
+    <div id="avatarModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-semibold text-gray-800">Выберите аватар</h3>
+                <button id="closeAvatarModal" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <div class="mb-6">
+                <label for="customAvatarUpload" class="block text-gray-700 font-medium mb-2">Загрузить свое фото</label>
+                <input type="file" id="customAvatarUpload" accept="image/*" 
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                <p class="text-sm text-gray-500 mt-1">Поддерживаются форматы: JPG, PNG, WebP (макс. 5MB)</p>
+            </div>
+            
+            <div class="mb-6">
+                <label class="block text-gray-700 font-medium mb-3">Выберите из доступных аватаров</label>
+                <div id="avatarOptions" class="grid grid-cols-6 gap-3">
+                    <!-- Avatar options will be loaded here -->
+                </div>
+            </div>
+            
+            <div class="flex justify-end space-x-3">
+                <button id="cancelAvatarBtn" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50">
+                    Отмена
+                </button>
+                <button id="saveAvatarBtn" class="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700">
+                    Сохранить
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div id="editProfileModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-semibold text-gray-800">Редактировать профиль</h3>
+                <button id="closeEditModal" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <form id="editProfileForm" class="space-y-4">
+                <div>
+                    <label for="editName" class="block text-gray-700 font-medium mb-2">Имя</label>
+                    <input type="text" id="editName" name="name" required 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500">
+                </div>
+                
+                <div>
+                    <label for="editPhone" class="block text-gray-700 font-medium mb-2">Телефон</label>
+                    <input type="tel" id="editPhone" name="phone" 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+                           placeholder="+7 (___) ___-__-__">
+                </div>
+                
+                <div class="flex justify-end space-x-3 pt-4">
+                    <button type="button" id="cancelEditBtn" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50">
+                        Отмена
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700">
+                        Сохранить
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
-        console.log('Working account page loaded');
+        console.log('Enhanced working account page loaded');
         
         // Global variables
         let currentUser = null;
+        let selectedAvatar = null;
+        let bookings = [];
+        
+        // Notification system
+        function showNotification(message, type = 'success') {
+            const container = document.getElementById('notificationContainer');
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'} mr-3 text-${type === 'success' ? 'green' : 'red'}-500"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            container.appendChild(notification);
+            
+            // Show notification
+            setTimeout(() => notification.classList.add('show'), 100);
+            
+            // Remove notification
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+        
+        // Modal functions
+        function showModal(modalId) {
+            document.getElementById(modalId).classList.remove('hidden');
+        }
+        
+        function hideModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
         
         // Show loading state
         function showLoadingState() {
@@ -170,6 +617,8 @@
                     console.log('Found saved user:', currentUser.email);
                     showProfile();
                     updateUserInfo(currentUser);
+                    loadBookings();
+                    loadAvatar();
                 } catch (e) {
                     console.error('Error parsing saved user:', e);
                     showAuth();
@@ -182,74 +631,542 @@
         
         // Update user info
         function updateUserInfo(user) {
-            document.getElementById('userName').textContent = user.user_metadata?.full_name || user.email?.split('@')[0] || 'Пользователь';
+            document.getElementById('userName').textContent = user.user_metadata?.full_name || user.name || user.email?.split('@')[0] || 'Пользователь';
             document.getElementById('userEmail').textContent = user.email || 'user@example.com';
             document.getElementById('userPhone').textContent = user.phone || user.user_metadata?.phone || 'Не указан';
+            
+            // Update edit form
+            document.getElementById('editName').value = user.user_metadata?.full_name || user.name || '';
+            document.getElementById('editPhone').value = user.phone || user.user_metadata?.phone || '';
         }
         
-        // Handle login form
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const email = document.getElementById('email').value;
-            const loginBtn = document.getElementById('loginBtn');
-            const loginBtnText = document.getElementById('loginBtnText');
-            const loginBtnLoading = document.getElementById('loginBtnLoading');
-            
-            // Show loading
-            loginBtn.disabled = true;
-            loginBtnText.classList.add('hidden');
-            loginBtnLoading.classList.remove('hidden');
-            
-            // Simulate login (replace with real Supabase logic)
-            setTimeout(() => {
-                // Create mock user
-                const mockUser = {
-                    email: email,
-                    user_metadata: {
-                        full_name: 'Тестовый пользователь'
+        // Load avatar
+        function loadAvatar() {
+            const savedAvatar = localStorage.getItem('userAvatar');
+            if (savedAvatar) {
+                if (savedAvatar.startsWith('data:')) {
+                    // Custom uploaded image
+                    document.getElementById('customAvatar').src = savedAvatar;
+                    document.getElementById('customAvatar').classList.remove('hidden');
+                    document.getElementById('defaultAvatar').classList.add('hidden');
+                } else {
+                    // Icon avatar
+                    const iconIndex = parseInt(savedAvatar.split('-')[1]);
+                    const iconClasses = [
+                        'fas fa-user', 'fas fa-user-tie', 'fas fa-user-graduate', 'fas fa-user-ninja',
+                        'fas fa-user-astronaut', 'fas fa-user-cowboy', 'fas fa-user-doctor', 'fas fa-user-nurse',
+                        'fas fa-user-secret', 'fas fa-user-tag', 'fas fa-user-check', 'fas fa-user-clock',
+                        'fas fa-heart', 'fas fa-star', 'fas fa-crown', 'fas fa-gem', 'fas fa-sparkles',
+                        'fas fa-fire', 'fas fa-leaf', 'fas fa-sun', 'fas fa-moon', 'fas fa-cloud',
+                        'fas fa-flower', 'fas fa-butterfly'
+                    ];
+                    const iconColors = [
+                        'text-pink-600', 'text-blue-600', 'text-green-600', 'text-purple-600',
+                        'text-indigo-600', 'text-yellow-600', 'text-red-600', 'text-teal-600',
+                        'text-gray-600', 'text-orange-600', 'text-emerald-600', 'text-cyan-600',
+                        'text-rose-600', 'text-amber-600', 'text-yellow-600', 'text-violet-600',
+                        'text-sky-600', 'text-orange-600', 'text-green-600', 'text-yellow-600',
+                        'text-indigo-600', 'text-blue-600', 'text-pink-600', 'text-purple-600'
+                    ];
+                    
+                    if (iconIndex < iconClasses.length) {
+                        document.getElementById('defaultAvatar').className = `${iconClasses[iconIndex]} text-3xl ${iconColors[iconIndex]}`;
                     }
-                };
-                
-                // Save to localStorage
-                localStorage.setItem('currentUser', JSON.stringify(mockUser));
-                currentUser = mockUser;
-                
-                // Show profile
-                showProfile();
-                updateUserInfo(mockUser);
-                
-                // Reset button
-                loginBtn.disabled = false;
-                loginBtnText.classList.remove('hidden');
-                loginBtnLoading.classList.add('hidden');
-                
-                console.log('Login successful');
-            }, 2000);
-        });
+                }
+            }
+        }
         
-        // Handle logout
-        document.getElementById('logoutBtn').addEventListener('click', function() {
-            localStorage.removeItem('currentUser');
-            currentUser = null;
-            showAuth();
-            console.log('Logout successful');
-        });
+        // Load avatar options
+        function loadAvatarOptions() {
+            const container = document.getElementById('avatarOptions');
+            let html = '';
+            
+            // Icon avatars
+            const iconClasses = [
+                'fas fa-user', 'fas fa-user-tie', 'fas fa-user-graduate', 'fas fa-user-ninja',
+                'fas fa-user-astronaut', 'fas fa-user-cowboy', 'fas fa-user-doctor', 'fas fa-user-nurse',
+                'fas fa-user-secret', 'fas fa-user-tag', 'fas fa-user-check', 'fas fa-user-clock',
+                'fas fa-heart', 'fas fa-star', 'fas fa-crown', 'fas fa-gem', 'fas fa-sparkles',
+                'fas fa-fire', 'fas fa-leaf', 'fas fa-sun', 'fas fa-moon', 'fas fa-cloud',
+                'fas fa-flower', 'fas fa-butterfly'
+            ];
+            const iconColors = [
+                'bg-pink-500', 'bg-blue-500', 'bg-green-500', 'bg-purple-500',
+                'bg-indigo-500', 'bg-yellow-500', 'bg-red-500', 'bg-teal-500',
+                'bg-gray-500', 'bg-orange-500', 'bg-emerald-500', 'bg-cyan-500',
+                'bg-rose-500', 'bg-amber-500', 'bg-yellow-500', 'bg-violet-500',
+                'bg-sky-500', 'bg-orange-500', 'bg-green-500', 'bg-yellow-500',
+                'bg-indigo-500', 'bg-blue-500', 'bg-pink-500', 'bg-purple-500'
+            ];
+            
+            iconClasses.forEach((icon, index) => {
+                html += `
+                    <div class="avatar-option w-12 h-12 ${iconColors[index]} rounded-full flex items-center justify-center" 
+                         data-avatar="icon-${index}" onclick="selectAvatar('icon-${index}')">
+                        <i class="${icon} text-white text-lg"></i>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
         
-        // Handle new booking
-        document.getElementById('newBookingBtn').addEventListener('click', function() {
-            alert('Функция записи будет доступна в полной версии');
-        });
+        // Select avatar
+        function selectAvatar(avatarType) {
+            selectedAvatar = avatarType;
+            
+            // Remove previous selection
+            document.querySelectorAll('.avatar-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Add selection to clicked option
+            event.target.closest('.avatar-option').classList.add('selected');
+        }
         
-        // Handle book first
-        document.getElementById('bookFirstBtn').addEventListener('click', function() {
-            alert('Функция записи будет доступна в полной версии');
-        });
+        // Load bookings
+        function loadBookings() {
+            // Load from localStorage (simulate database)
+            const savedBookings = localStorage.getItem('userBookings');
+            if (savedBookings) {
+                bookings = JSON.parse(savedBookings);
+            } else {
+                // Create sample bookings
+                bookings = [
+                    {
+                        id: 1,
+                        service: 'Женская стрижка',
+                        date: '2024-01-15',
+                        time: '14:00',
+                        status: 'confirmed',
+                        price: 700
+                    },
+                    {
+                        id: 2,
+                        service: 'Маникюр',
+                        date: '2024-01-10',
+                        time: '16:00',
+                        status: 'completed',
+                        price: 500
+                    },
+                    {
+                        id: 3,
+                        service: 'Окрашивание волос',
+                        date: '2024-01-20',
+                        time: '12:00',
+                        status: 'pending',
+                        price: 1500
+                    }
+                ];
+                localStorage.setItem('userBookings', JSON.stringify(bookings));
+            }
+            
+            displayBookings();
+            updateStatistics();
+        }
         
-        // Initialize
+        // Display bookings
+        function displayBookings() {
+            const activeContainer = document.getElementById('activeBookings');
+            const historyContainer = document.getElementById('historyBookings');
+            const emptyContainer = document.getElementById('emptyBookings');
+            
+            const activeBookings = bookings.filter(b => b.status === 'confirmed' || b.status === 'pending');
+            const historyBookings = bookings.filter(b => b.status === 'completed' || b.status === 'cancelled');
+            
+            if (bookings.length === 0) {
+                activeContainer.innerHTML = '';
+                historyContainer.innerHTML = '';
+                emptyContainer.classList.remove('hidden');
+            } else {
+                emptyContainer.classList.add('hidden');
+                
+                // Display active bookings
+                activeContainer.innerHTML = activeBookings.map(booking => createBookingCard(booking)).join('');
+                
+                // Display history bookings
+                historyContainer.innerHTML = historyBookings.map(booking => createBookingCard(booking)).join('');
+            }
+        }
+        
+        // Create booking card
+        function createBookingCard(booking) {
+            const statusText = {
+                'confirmed': 'Подтверждено',
+                'pending': 'Ожидает подтверждения',
+                'completed': 'Завершено',
+                'cancelled': 'Отменено'
+            };
+            
+            const statusClass = {
+                'confirmed': 'status-confirmed',
+                'pending': 'status-pending',
+                'completed': 'status-completed',
+                'cancelled': 'status-cancelled'
+            };
+            
+            return `
+                <div class="booking-card">
+                    <div class="flex justify-between items-start">
+                        <div class="flex-1">
+                            <h4 class="font-semibold text-gray-800">${booking.service}</h4>
+                            <p class="text-gray-600 text-sm">${new Date(booking.date).toLocaleDateString('ru-RU')} в ${booking.time}</p>
+                            <p class="text-pink-600 font-medium">${booking.price} ₽</p>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="status-badge ${statusClass[booking.status]}">${statusText[booking.status]}</span>
+                            ${booking.status === 'confirmed' ? `
+                                <button onclick="cancelBooking(${booking.id})" class="text-red-600 hover:text-red-700 text-sm">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Update statistics
+        function updateStatistics() {
+            const total = bookings.length;
+            const completed = bookings.filter(b => b.status === 'completed').length;
+            const pending = bookings.filter(b => b.status === 'pending').length;
+            
+            document.getElementById('totalBookings').textContent = total;
+            document.getElementById('completedBookings').textContent = completed;
+            document.getElementById('pendingBookings').textContent = pending;
+        }
+        
+        // Cancel booking
+        function cancelBooking(bookingId) {
+            if (confirm('Вы уверены, что хотите отменить запись?')) {
+                const booking = bookings.find(b => b.id === bookingId);
+                if (booking) {
+                    booking.status = 'cancelled';
+                    localStorage.setItem('userBookings', JSON.stringify(bookings));
+                    displayBookings();
+                    updateStatistics();
+                    showNotification('Запись отменена', 'success');
+                }
+            }
+        }
+        
+        // Tab switching
+        function switchTab(tabName) {
+            const activeTab = document.getElementById('activeTab');
+            const historyTab = document.getElementById('historyTab');
+            const activeBookings = document.getElementById('activeBookings');
+            const historyBookings = document.getElementById('historyBookings');
+            
+            if (tabName === 'active') {
+                activeTab.classList.add('border-pink-500', 'text-pink-600');
+                activeTab.classList.remove('border-transparent', 'text-gray-500');
+                historyTab.classList.remove('border-pink-500', 'text-pink-600');
+                historyTab.classList.add('border-transparent', 'text-gray-500');
+                activeBookings.classList.remove('hidden');
+                historyBookings.classList.add('hidden');
+            } else {
+                historyTab.classList.add('border-pink-500', 'text-pink-600');
+                historyTab.classList.remove('border-transparent', 'text-gray-500');
+                activeTab.classList.remove('border-pink-500', 'text-pink-600');
+                activeTab.classList.add('border-transparent', 'text-gray-500');
+                historyBookings.classList.remove('hidden');
+                activeBookings.classList.add('hidden');
+            }
+        }
+        
+        // Menu functionality
+        let isMenuOpen = false;
+        const sideMenu = document.getElementById('sideMenu');
+        const iosMenuBtn = document.getElementById('iosMenuBtn');
+        const closeMenuBtn = document.getElementById('closeMenuBtn');
+        const menuBackdrop = document.getElementById('menuBackdrop');
+
+        // Haptic feedback function
+        function triggerHapticFeedback() {
+            if (navigator.vibrate) {
+                navigator.vibrate(10);
+            }
+            document.body.classList.add('haptic-feedback');
+            setTimeout(() => {
+                document.body.classList.remove('haptic-feedback');
+            }, 100);
+        }
+
+        // Open menu function
+        function openMenu() {
+            if (isMenuOpen) return;
+            
+            triggerHapticFeedback();
+            isMenuOpen = true;
+            sideMenu.classList.add('open');
+            document.body.classList.add('menu-open');
+            iosMenuBtn.classList.add('active');
+            
+            setTimeout(() => {
+                sideMenu.style.pointerEvents = 'all';
+            }, 50);
+        }
+
+        // Close menu function
+        function closeMenu() {
+            if (!isMenuOpen) return;
+            
+            triggerHapticFeedback();
+            isMenuOpen = false;
+            sideMenu.classList.remove('open');
+            document.body.classList.remove('menu-open');
+            iosMenuBtn.classList.remove('active');
+            sideMenu.style.pointerEvents = 'none';
+        }
+
+        // Menu item click handlers
+        function setupMenuHandlers() {
+            const menuItems = document.querySelectorAll('.menu-item');
+            
+            menuItems.forEach((item, index) => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    triggerHapticFeedback();
+                    
+                    // Add bubble animation
+                    item.classList.add('bubble-animation');
+                    setTimeout(() => {
+                        item.classList.remove('bubble-animation');
+                    }, 400);
+                    
+                    // Get the href and navigate
+                    const href = item.getAttribute('href');
+                    if (href) {
+                        // Close menu immediately
+                        closeMenu();
+                        
+                        // Navigate after a short delay for haptic feedback
+                        setTimeout(() => {
+                            if (href.startsWith('#')) {
+                                // Smooth scroll to section
+                                const target = document.querySelector(href);
+                                if (target) {
+                                    target.scrollIntoView({ behavior: 'smooth' });
+                                }
+                            } else {
+                                // Navigate to page
+                                window.location.href = href;
+                            }
+                        }, 200);
+                    }
+                });
+            });
+        }
+
+        // Event Listeners
         document.addEventListener('DOMContentLoaded', function() {
             console.log('DOM loaded, checking auth...');
             checkAuth();
+            
+            // Setup menu handlers
+            setupMenuHandlers();
+            
+            // Menu event listeners
+            if (iosMenuBtn) {
+                iosMenuBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    if (isMenuOpen) {
+                        closeMenu();
+                    } else {
+                        openMenu();
+                    }
+                });
+            }
+
+            if (closeMenuBtn) {
+                closeMenuBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    closeMenu();
+                });
+            }
+
+            if (menuBackdrop) {
+                menuBackdrop.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    closeMenu();
+                });
+            }
+
+            // Keyboard event listener for Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && isMenuOpen) {
+                    closeMenu();
+                }
+            });
+            
+            // Login form
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const email = document.getElementById('email').value;
+                const loginBtn = document.getElementById('loginBtn');
+                const loginBtnText = document.getElementById('loginBtnText');
+                const loginBtnLoading = document.getElementById('loginBtnLoading');
+                
+                // Show loading
+                loginBtn.disabled = true;
+                loginBtnText.classList.add('hidden');
+                loginBtnLoading.classList.remove('hidden');
+                
+                // Simulate login
+                setTimeout(() => {
+                    const mockUser = {
+                        email: email,
+                        user_metadata: {
+                            full_name: 'Тестовый пользователь'
+                        }
+                    };
+                    
+                    localStorage.setItem('currentUser', JSON.stringify(mockUser));
+                    currentUser = mockUser;
+                    
+                    showProfile();
+                    updateUserInfo(mockUser);
+                    loadBookings();
+                    
+                    // Reset button
+                    loginBtn.disabled = false;
+                    loginBtnText.classList.remove('hidden');
+                    loginBtnLoading.classList.add('hidden');
+                    
+                    showNotification('Вход выполнен успешно!', 'success');
+                }, 2000);
+            });
+            
+            // Logout
+            document.getElementById('logoutBtn').addEventListener('click', function() {
+                localStorage.removeItem('currentUser');
+                localStorage.removeItem('userAvatar');
+                currentUser = null;
+                showAuth();
+                showNotification('Выход выполнен', 'success');
+            });
+            
+            // Change avatar
+            document.getElementById('changeAvatarBtn').addEventListener('click', function() {
+                loadAvatarOptions();
+                showModal('avatarModal');
+            });
+            
+            // Close avatar modal
+            document.getElementById('closeAvatarModal').addEventListener('click', function() {
+                hideModal('avatarModal');
+            });
+            
+            // Cancel avatar
+            document.getElementById('cancelAvatarBtn').addEventListener('click', function() {
+                hideModal('avatarModal');
+            });
+            
+            // Save avatar
+            document.getElementById('saveAvatarBtn').addEventListener('click', function() {
+                if (selectedAvatar) {
+                    localStorage.setItem('userAvatar', selectedAvatar);
+                    loadAvatar();
+                    hideModal('avatarModal');
+                    showNotification('Аватар обновлен', 'success');
+                }
+            });
+            
+            // Custom avatar upload
+            document.getElementById('customAvatarUpload').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    if (file.size > 5 * 1024 * 1024) {
+                        showNotification('Файл слишком большой (макс. 5MB)', 'error');
+                        return;
+                    }
+                    
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        selectedAvatar = e.target.result;
+                        localStorage.setItem('userAvatar', selectedAvatar);
+                        loadAvatar();
+                        hideModal('avatarModal');
+                        showNotification('Аватар загружен', 'success');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // Edit profile
+            document.getElementById('editProfileBtn').addEventListener('click', function() {
+                showModal('editProfileModal');
+            });
+            
+            // Close edit modal
+            document.getElementById('closeEditModal').addEventListener('click', function() {
+                hideModal('editProfileModal');
+            });
+            
+            // Cancel edit
+            document.getElementById('cancelEditBtn').addEventListener('click', function() {
+                hideModal('editProfileModal');
+            });
+            
+            // Edit profile form
+            document.getElementById('editProfileForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const name = document.getElementById('editName').value;
+                const phone = document.getElementById('editPhone').value;
+                
+                // Update user
+                currentUser.user_metadata = currentUser.user_metadata || {};
+                currentUser.user_metadata.full_name = name;
+                currentUser.phone = phone;
+                
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                updateUserInfo(currentUser);
+                
+                hideModal('editProfileModal');
+                showNotification('Профиль обновлен', 'success');
+            });
+            
+            // Tab switching
+            document.getElementById('activeTab').addEventListener('click', function() {
+                switchTab('active');
+            });
+            
+            document.getElementById('historyTab').addEventListener('click', function() {
+                switchTab('history');
+            });
+            
+            // Refresh bookings
+            document.getElementById('refreshBookingsBtn').addEventListener('click', function() {
+                loadBookings();
+                showNotification('Записи обновлены', 'success');
+            });
+            
+            // New booking
+            document.getElementById('newBookingBtn').addEventListener('click', function() {
+                showNotification('Функция записи будет доступна в полной версии', 'success');
+            });
+            
+            // Book first
+            document.getElementById('bookFirstBtn').addEventListener('click', function() {
+                showNotification('Функция записи будет доступна в полной версии', 'success');
+            });
+            
+            // Close modals on outside click
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === modal) {
+                        modal.classList.add('hidden');
+                    }
+                });
+            });
         });
     </script>
 </body>
