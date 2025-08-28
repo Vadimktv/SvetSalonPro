@@ -1,576 +1,420 @@
 /**
- * ReviewsStack - Компонент колоды отзывов с бесконечным пролистыванием
- * Поддерживает touch, mouse, keyboard с GPU-ускоренными анимациями
+ * Modern Reviews Component - Simple & Functional
+ * Чистый и простой компонент отзывов без сложных анимаций
  */
-export class ReviewsStack {
-  constructor(rootEl, options = {}) {
-    this.root = rootEl;
+export class ReviewsComponent {
+  constructor(container, options = {}) {
+    this.container = container;
     this.options = {
       data: [],
-      loop: true,
-      cardsInDom: 4,
-      onChange: null,
-      autoPlay: true,           // Автоматическое пролистывание
-      autoPlayInterval: 5000,   // Интервал в миллисекундах
-      autoPlayPauseOnHover: true, // Пауза при наведении
+      itemsPerPage: 6,
+      showControls: true,
+      showNavigation: true,
+      autoPlay: false,
+      autoPlayInterval: 5000,
       ...options
     };
     
     this.data = [...this.options.data];
-    this.currentIndex = 0;
-    this.isDragging = false;
-    this.dragStart = { x: 0, y: 0 };
-    this.dragCurrent = { x: 0, y: 0 };
-    this.velocity = { x: 0, y: 0 };
-    this.lastMoveTime = 0;
-    this.animationFrame = null;
-    
-    // DOM elements
-    this.stack = null;
-    this.cards = [];
-    
-    // Performance settings
-    this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    this.isLowPerformance = this.detectLowPerformance();
-    
-    // Auto-play settings
+    this.currentPage = 0;
+    this.totalPages = Math.ceil(this.data.length / this.options.itemsPerPage);
     this.autoPlayTimer = null;
-    this.isHovered = false;
-    this.isTransitioning = false;
     
     this.init();
   }
   
   init() {
-    if (!this.root) {
-      console.error('ReviewsStack: root element is required');
+    if (!this.container) {
+      console.error('ReviewsComponent: container is required');
       return;
     }
     
-    if (this.data.length < 3) {
-      console.warn('ReviewsStack: at least 3 reviews required for smooth operation');
-    }
-    
-    this.createDOM();
-    this.bindEvents();
     this.render();
-    this.updateAccessibility();
+    this.bindEvents();
     
-    // Запуск автоматического пролистывания
-    if (this.options.autoPlay && this.data.length > 1) {
+    if (this.options.autoPlay && this.data.length > this.options.itemsPerPage) {
       this.startAutoPlay();
     }
-  }
-  
-  createDOM() {
-    this.root.innerHTML = `
-      <div class="reviews-stack" id="reviewsStack" role="group" aria-label="Колода отзывов">
-      </div>
-      <div aria-live="polite" class="sr-only"></div>
-    `;
-    
-    this.stack = this.root.querySelector('.reviews-stack');
-    this.liveRegion = this.root.querySelector('[aria-live]');
-  }
-  
-  bindEvents() {
-    // Touch events
-    this.stack.addEventListener('touchstart', this.handlePointerStart.bind(this), { passive: false });
-    this.stack.addEventListener('touchmove', this.handlePointerMove.bind(this), { passive: false });
-    this.stack.addEventListener('touchend', this.handlePointerEnd.bind(this), { passive: false });
-    
-    // Mouse events
-    this.stack.addEventListener('mousedown', this.handlePointerStart.bind(this));
-    this.stack.addEventListener('mousemove', this.handlePointerMove.bind(this));
-    this.stack.addEventListener('mouseup', this.handlePointerEnd.bind(this));
-    this.stack.addEventListener('mouseleave', this.handlePointerEnd.bind(this));
-    
-    // Keyboard events
-    this.stack.addEventListener('keydown', this.handleKeydown.bind(this));
-    
-    // Hover events for auto-play pause
-    if (this.options.autoPlayPauseOnHover) {
-      this.root.addEventListener('mouseenter', this.handleMouseEnter.bind(this));
-      this.root.addEventListener('mouseleave', this.handleMouseLeave.bind(this));
-    }
-    
-    // Prevent context menu on long press
-    this.stack.addEventListener('contextmenu', e => e.preventDefault());
-    
-    // Reduced motion changes
-    window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', (e) => {
-      this.reducedMotion = e.matches;
-    });
-    
-    // Visibility change events for auto-play
-    document.addEventListener('visibilitychange', this.handleVisibilityChange.bind(this));
-  }
-  
-  handlePointerStart(e) {
-    if (this.isDragging || this.isTransitioning) return;
-    
-    e.preventDefault();
-    this.isDragging = true;
-    
-    // Пауза автопролистывания при взаимодействии
-    this.pauseAutoPlay();
-    
-    const point = this.getPointerPosition(e);
-    this.dragStart = { x: point.x, y: point.y };
-    this.dragCurrent = { x: point.x, y: point.y };
-    this.velocity = { x: 0, y: 0 };
-    this.lastMoveTime = Date.now();
-    
-    const topCard = this.cards[0];
-    if (topCard) {
-      topCard.classList.add('dragging');
-      topCard.setPointerCapture?.(e.pointerId);
-    }
-    
-    this.animationFrame = requestAnimationFrame(this.updateDrag.bind(this));
-  }
-  
-  handlePointerMove(e) {
-    if (!this.isDragging) return;
-    
-    e.preventDefault();
-    
-    const point = this.getPointerPosition(e);
-    const now = Date.now();
-    const deltaTime = now - this.lastMoveTime;
-    
-    if (deltaTime > 0) {
-      this.velocity.x = (point.x - this.dragCurrent.x) / deltaTime;
-      this.velocity.y = (point.y - this.dragCurrent.y) / deltaTime;
-    }
-    
-    this.dragCurrent = { x: point.x, y: point.y };
-    this.lastMoveTime = now;
-  }
-  
-  handlePointerEnd(e) {
-    if (!this.isDragging) return;
-    
-    e.preventDefault();
-    this.isDragging = false;
-    
-    const topCard = this.cards[0];
-    if (topCard) {
-      topCard.classList.remove('dragging');
-      topCard.releasePointerCapture?.(e.pointerId);
-    }
-    
-    if (this.animationFrame) {
-      cancelAnimationFrame(this.animationFrame);
-    }
-    
-    this.handleSwipeDecision();
-    
-    // Возобновление автопролистывания через небольшую задержку
-    setTimeout(() => {
-      if (this.options.autoPlay && !this.isHovered) {
-        this.startAutoPlay();
-      }
-    }, 2000);
-  }
-  
-  handleKeydown(e) {
-    switch (e.key) {
-      case 'ArrowLeft':
-        e.preventDefault();
-        this.pauseAutoPlay();
-        this.prev();
-        break;
-      case 'ArrowRight':
-        e.preventDefault();
-        this.pauseAutoPlay();
-        this.next();
-        break;
-      case 'Enter':
-      case ' ':
-        e.preventDefault();
-        this.announceCurrentReview();
-        break;
-    }
-  }
-  
-  handleMouseEnter() {
-    this.isHovered = true;
-    this.pauseAutoPlay();
-  }
-  
-  handleMouseLeave() {
-    this.isHovered = false;
-    if (this.options.autoPlay) {
-      this.startAutoPlay();
-    }
-  }
-  
-  handleVisibilityChange() {
-    if (document.hidden) {
-      this.pauseAutoPlay();
-    } else if (this.options.autoPlay && !this.isHovered) {
-      this.startAutoPlay();
-    }
-  }
-  
-  getPointerPosition(e) {
-    const rect = this.stack.getBoundingClientRect();
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-    
-    return {
-      x: clientX - rect.left,
-      y: clientY - rect.top
-    };
-  }
-  
-  updateDrag() {
-    if (!this.isDragging) return;
-    
-    const dx = this.dragCurrent.x - this.dragStart.x;
-    const dy = this.dragCurrent.y - this.dragStart.y;
-    
-    const topCard = this.cards[0];
-    if (topCard) {
-      const cardWidth = this.root.offsetWidth;
-      
-      // Расчет поворота на основе горизонтального движения
-      const tiltMax = this.reducedMotion ? 2 : 8;
-      const rotation = Math.max(-tiltMax, Math.min(tiltMax, (dx / cardWidth) * tiltMax));
-      
-      // Применение transform3d для GPU-ускорения
-      const transform = `translate3d(${dx}px, ${dy}px, 0) rotateZ(${rotation}deg)`;
-      topCard.style.transform = transform;
-      
-      // Обновление стопки карт с плавной анимацией
-      this.updateStackCards(dx);
-    }
-    
-    this.animationFrame = requestAnimationFrame(this.updateDrag.bind(this));
-  }
-  
-  updateStackCards(dx) {
-    const intensity = Math.min(Math.abs(dx) / this.root.offsetWidth, 1);
-    const easeIntensity = this.easeOutCubic(intensity);
-    
-    for (let i = 1; i < this.cards.length; i++) {
-      const card = this.cards[i];
-      if (!card) continue;
-      
-      const baseScale = 1 - (i * 0.03);
-      const baseTranslateY = i * 8;
-      
-      const scale = baseScale + (easeIntensity * 0.02);
-      const translateY = baseTranslateY - (easeIntensity * 1.5);
-      
-      card.style.transform = `translate3d(0, ${translateY}px, 0) scale(${scale})`;
-    }
-  }
-  
-  handleSwipeDecision() {
-    const dx = this.dragCurrent.x - this.dragStart.x;
-    const cardWidth = this.root.offsetWidth;
-    const threshold = cardWidth * 0.25;
-    const velocityThreshold = 0.5; // пикселей в миллисекунду
-    
-    const shouldSwipe = Math.abs(dx) > threshold || Math.abs(this.velocity.x) > velocityThreshold;
-    
-    if (shouldSwipe) {
-      this.swipeCard(dx > 0 ? 1 : -1);
-    } else {
-      this.snapBack();
-    }
-  }
-  
-  swipeCard(direction) {
-    if (this.isTransitioning) return;
-    
-    this.isTransitioning = true;
-    const topCard = this.cards[0];
-    if (!topCard) return;
-    
-    topCard.classList.add('swiping');
-    
-    const cardWidth = this.root.offsetWidth;
-    const translateX = direction * cardWidth * 1.5;
-    const translateY = this.dragCurrent.y - this.dragStart.y;
-    
-    // Плавное исчезновение с поворотом
-    topCard.style.transform = `translate3d(${translateX}px, ${translateY}px, 0) rotateZ(${direction * 15}deg)`;
-    topCard.style.opacity = '0';
-    
-    setTimeout(() => {
-      this.moveCardToEnd();
-      this.render();
-      this.updateAccessibility();
-      this.isTransitioning = false;
-      
-      if (this.options.onChange) {
-        this.options.onChange(this.currentIndex, this.data[this.currentIndex]);
-      }
-    }, this.reducedMotion ? 150 : 300);
-  }
-  
-  snapBack() {
-    const topCard = this.cards[0];
-    if (!topCard) return;
-    
-    topCard.classList.add('snapping');
-    topCard.style.transform = 'translate3d(0, 0, 0) rotateZ(0deg)';
-    topCard.style.opacity = '1';
-    
-    // Сброс позиций карт в стопке
-    for (let i = 1; i < this.cards.length; i++) {
-      const card = this.cards[i];
-      if (card) {
-        card.style.transform = '';
-      }
-    }
-    
-    setTimeout(() => {
-      topCard.classList.remove('snapping');
-    }, this.reducedMotion ? 200 : 400);
-  }
-  
-  moveCardToEnd() {
-    if (this.data.length < 2) return;
-    
-    const firstReview = this.data.shift();
-    this.data.push(firstReview);
   }
   
   render() {
-    this.stack.innerHTML = '';
-    this.cards = [];
-    
-    const cardsToRender = Math.min(this.options.cardsInDom, this.data.length);
-    
-    for (let i = 0; i < cardsToRender; i++) {
-      const review = this.data[i];
-      const card = this.createCard(review, i);
-      this.stack.appendChild(card);
-      this.cards.push(card);
-    }
-  }
-  
-  createCard(review, index) {
-    const card = document.createElement('div');
-    card.className = 'review-card';
-    card.setAttribute('data-index', index);
-    card.setAttribute('role', 'article');
-    card.setAttribute('aria-roledescription', 'review card');
-    card.setAttribute('tabindex', index === 0 ? '0' : '-1');
-    card.setAttribute('aria-label', `Отзыв от ${review.author}, рейтинг ${review.rating} из 5`);
-    
-    const stars = this.createStars(review.rating);
-    const date = new Date(review.dateISO).toLocaleDateString('ru-RU', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-    
-    card.innerHTML = `
-      <div class="review-header">
-        <h3 class="review-author">${this.escapeHtml(review.author)}</h3>
-        <time class="review-date" datetime="${review.dateISO}">${date}</time>
+    this.container.innerHTML = `
+      <div class="reviews-container">
+        <div class="reviews-header">
+          <h2 class="reviews-title">Отзывы наших клиентов</h2>
+          <p class="reviews-subtitle">Что говорят о нас довольные клиенты</p>
+        </div>
+        
+        ${this.options.showControls ? this.renderControls() : ''}
+        
+        <div class="reviews-grid" id="reviewsGrid">
+          ${this.renderReviews()}
+        </div>
+        
+        ${this.options.showNavigation ? this.renderNavigation() : ''}
+        
+        <div class="reviews-status" id="reviewsStatus">
+          ${this.getStatusText()}
+        </div>
       </div>
-      <div class="review-rating" aria-label="Рейтинг: ${review.rating} из 5 звезд">
-        ${stars}
-      </div>
-      <p class="review-text">${this.escapeHtml(review.text)}</p>
     `;
     
-    return card;
+    this.grid = this.container.querySelector('#reviewsGrid');
+    this.status = this.container.querySelector('#reviewsStatus');
   }
   
-  createStars(rating) {
+  renderControls() {
+    return `
+      <div class="reviews-controls">
+        <button class="control-btn" id="prevBtn" ${this.currentPage === 0 ? 'disabled' : ''}>
+          <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+          </svg>
+          Назад
+        </button>
+        
+        <button class="control-btn" id="nextBtn" ${this.currentPage >= this.totalPages - 1 ? 'disabled' : ''}>
+          Вперед
+          <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+          </svg>
+        </button>
+        
+        <button class="control-btn" id="shuffleBtn">
+          <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M8 3a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5H6a.5.5 0 0 1 0-1h1.5V3.5A.5.5 0 0 1 8 3zm3.732 1.732a.5.5 0 0 1 .707 0l2.002 2.002a.5.5 0 0 1-.707.707L12.732 5.44a.5.5 0 0 1 0-.708z"/>
+            <path d="M8 6a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.732 4.732a.5.5 0 0 1 .707 0L8 6.207l2.561-2.561a.5.5 0 0 1 .707.707L8.707 7l2.561 2.561a.5.5 0 0 1-.707.707L8 7.707l-2.561 2.561a.5.5 0 0 1-.707-.707L7.293 7 4.732 4.439a.5.5 0 0 1 0-.707z"/>
+          </svg>
+          Перемешать
+        </button>
+        
+        <button class="control-btn" id="autoPlayBtn">
+          <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+            <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445z"/>
+          </svg>
+          Автопролистывание
+        </button>
+      </div>
+    `;
+  }
+  
+  renderReviews() {
+    const startIndex = this.currentPage * this.options.itemsPerPage;
+    const endIndex = startIndex + this.options.itemsPerPage;
+    const pageData = this.data.slice(startIndex, endIndex);
+    
+    return pageData.map((review, index) => {
+      const variant = (startIndex + index) % 5 + 1;
+      const avatarLetter = review.author.charAt(0).toUpperCase();
+      
+      return `
+        <div class="review-card variant-${variant}" data-index="${startIndex + index}">
+          <div class="review-header">
+            <div class="review-avatar variant-${variant}">
+              ${avatarLetter}
+            </div>
+            <div class="review-info">
+              <h3 class="review-author">${review.author}</h3>
+              <p class="review-location">${review.location || 'Клиент'}</p>
+            </div>
+          </div>
+          
+          <div class="review-rating">
+            <div class="stars">
+              ${this.generateStars(review.rating)}
+            </div>
+            <span class="rating-text">${review.rating}/5</span>
+          </div>
+          
+          <p class="review-text">${review.text}</p>
+          <p class="review-date">${review.date}</p>
+        </div>
+      `;
+    }).join('');
+  }
+  
+  renderNavigation() {
+    if (this.totalPages <= 1) return '';
+    
+    const dots = [];
+    for (let i = 0; i < this.totalPages; i++) {
+      dots.push(`
+        <div class="nav-dot ${i === this.currentPage ? 'active' : ''}" 
+             data-page="${i}" 
+             title="Страница ${i + 1}">
+        </div>
+      `);
+    }
+    
+    return `<div class="reviews-nav">${dots.join('')}</div>`;
+  }
+  
+  generateStars(rating) {
     let stars = '';
     for (let i = 1; i <= 5; i++) {
-      const isFilled = i <= rating;
-      stars += `<span class="star ${isFilled ? 'filled' : ''}" aria-hidden="true"></span>`;
+      stars += `
+        <svg class="star ${i <= rating ? 'filled' : ''}" viewBox="0 0 24 24">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+        </svg>
+      `;
     }
     return stars;
   }
   
-  updateAccessibility() {
-    const currentReview = this.data[0];
-    if (currentReview) {
-      const message = `Показан отзыв от ${currentReview.author}, рейтинг ${currentReview.rating} из 5`;
-      this.liveRegion.textContent = message;
-    }
+  getStatusText() {
+    const start = this.currentPage * this.options.itemsPerPage + 1;
+    const end = Math.min((this.currentPage + 1) * this.options.itemsPerPage, this.data.length);
+    const total = this.data.length;
+    
+    return `Показано ${start}-${end} из ${total} отзывов`;
   }
   
-  announceCurrentReview() {
-    const currentReview = this.data[0];
-    if (currentReview) {
-      const message = `Отзыв от ${currentReview.author}. ${currentReview.text}`;
-      this.liveRegion.textContent = message;
-    }
-  }
-  
-  // Автоматическое пролистывание
-  startAutoPlay() {
-    if (this.autoPlayTimer) {
-      clearInterval(this.autoPlayTimer);
+  bindEvents() {
+    // Кнопки управления
+    const prevBtn = this.container.querySelector('#prevBtn');
+    const nextBtn = this.container.querySelector('#nextBtn');
+    const shuffleBtn = this.container.querySelector('#shuffleBtn');
+    const autoPlayBtn = this.container.querySelector('#autoPlayBtn');
+    
+    if (prevBtn) {
+      prevBtn.addEventListener('click', () => this.prev());
     }
     
-    if (this.options.autoPlay && this.data.length > 1 && !this.isHovered && !document.hidden) {
-      this.autoPlayTimer = setInterval(() => {
-        if (!this.isDragging && !this.isTransitioning) {
-          this.next();
-        }
-      }, this.options.autoPlayInterval);
+    if (nextBtn) {
+      nextBtn.addEventListener('click', () => this.next());
     }
+    
+    if (shuffleBtn) {
+      shuffleBtn.addEventListener('click', () => this.shuffle());
+    }
+    
+    if (autoPlayBtn) {
+      autoPlayBtn.addEventListener('click', () => this.toggleAutoPlay());
+    }
+    
+    // Навигационные точки
+    const navDots = this.container.querySelectorAll('.nav-dot');
+    navDots.forEach(dot => {
+      dot.addEventListener('click', () => {
+        const page = parseInt(dot.dataset.page);
+        this.goToPage(page);
+      });
+    });
+    
+    // Клавиатурная навигация
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        this.prev();
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        this.next();
+      }
+    });
   }
   
-  pauseAutoPlay() {
-    if (this.autoPlayTimer) {
-      clearInterval(this.autoPlayTimer);
-      this.autoPlayTimer = null;
+  prev() {
+    if (this.currentPage > 0) {
+      this.goToPage(this.currentPage - 1);
     }
   }
   
   next() {
-    if (this.data.length < 2 || this.isTransitioning) return;
-    
-    this.isTransitioning = true;
-    this.moveCardToEnd();
-    this.render();
-    this.updateAccessibility();
-    
-    // Плавная анимация смены
-    setTimeout(() => {
-      this.isTransitioning = false;
-    }, 100);
-    
-    if (this.options.onChange) {
-      this.options.onChange(this.currentIndex, this.data[this.currentIndex]);
+    if (this.currentPage < this.totalPages - 1) {
+      this.goToPage(this.currentPage + 1);
     }
   }
   
-  prev() {
-    if (this.data.length < 2 || this.isTransitioning) return;
+  goToPage(page) {
+    if (page < 0 || page >= this.totalPages || page === this.currentPage) return;
     
-    this.isTransitioning = true;
-    const lastReview = this.data.pop();
-    this.data.unshift(lastReview);
+    this.currentPage = page;
     this.render();
-    this.updateAccessibility();
+    this.bindEvents();
+    this.updateStatus();
+  }
+  
+  shuffle() {
+    // Перемешиваем данные
+    for (let i = this.data.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [this.data[i], this.data[j]] = [this.data[j], this.data[i]];
+    }
     
-    // Плавная анимация смены
-    setTimeout(() => {
-      this.isTransitioning = false;
-    }, 100);
+    this.currentPage = 0;
+    this.render();
+    this.bindEvents();
+    this.updateStatus();
     
-    if (this.options.onChange) {
-      this.options.onChange(this.currentIndex, this.data[this.currentIndex]);
+    // Анимация успеха
+    const cards = this.container.querySelectorAll('.review-card');
+    cards.forEach((card, index) => {
+      setTimeout(() => {
+        card.style.transform = 'scale(1.05)';
+        setTimeout(() => {
+          card.style.transform = '';
+        }, 200);
+      }, index * 100);
+    });
+  }
+  
+  toggleAutoPlay() {
+    if (this.autoPlayTimer) {
+      this.stopAutoPlay();
+    } else {
+      this.startAutoPlay();
+    }
+  }
+  
+  startAutoPlay() {
+    if (this.totalPages <= 1) return;
+    
+    this.autoPlayTimer = setInterval(() => {
+      if (this.currentPage >= this.totalPages - 1) {
+        this.goToPage(0);
+      } else {
+        this.next();
+      }
+    }, this.options.autoPlayInterval);
+    
+    const autoPlayBtn = this.container.querySelector('#autoPlayBtn');
+    if (autoPlayBtn) {
+      autoPlayBtn.classList.add('active');
+      autoPlayBtn.innerHTML = `
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+          <path d="M5 6.25a1.25 1.25 0 1 1 2.5 0v3.5a1.25 1.25 0 1 1-2.5 0v-3.5z"/>
+        </svg>
+        Остановить
+      `;
+    }
+  }
+  
+  stopAutoPlay() {
+    if (this.autoPlayTimer) {
+      clearInterval(this.autoPlayTimer);
+      this.autoPlayTimer = null;
+    }
+    
+    const autoPlayBtn = this.container.querySelector('#autoPlayBtn');
+    if (autoPlayBtn) {
+      autoPlayBtn.classList.remove('active');
+      autoPlayBtn.innerHTML = `
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+          <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445z"/>
+        </svg>
+        Автопролистывание
+      `;
+    }
+  }
+  
+  updateStatus() {
+    if (this.status) {
+      this.status.textContent = this.getStatusText();
     }
   }
   
   updateData(newData) {
     this.data = [...newData];
-    this.currentIndex = 0;
+    this.currentPage = 0;
+    this.totalPages = Math.ceil(this.data.length / this.options.itemsPerPage);
     this.render();
-    this.updateAccessibility();
-  }
-  
-  // Utility methods
-  escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-  }
-  
-  easeOutCubic(t) {
-    return 1 - Math.pow(1 - t, 3);
-  }
-  
-  detectLowPerformance() {
-    // Simple heuristic for low performance devices
-    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-    const isSlowConnection = connection && (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g');
-    
-    return isSlowConnection || navigator.hardwareConcurrency <= 2;
+    this.bindEvents();
+    this.updateStatus();
   }
   
   destroy() {
-    this.pauseAutoPlay();
-    
-    if (this.animationFrame) {
-      cancelAnimationFrame(this.animationFrame);
-    }
-    
-    // Remove event listeners
-    this.stack.removeEventListener('touchstart', this.handlePointerStart);
-    this.stack.removeEventListener('touchmove', this.handlePointerMove);
-    this.stack.removeEventListener('touchend', this.handlePointerEnd);
-    this.stack.removeEventListener('mousedown', this.handlePointerStart);
-    this.stack.removeEventListener('mousemove', this.handlePointerMove);
-    this.stack.removeEventListener('mouseup', this.handlePointerEnd);
-    this.stack.removeEventListener('mouseleave', this.handlePointerEnd);
-    this.stack.removeEventListener('keydown', this.handleKeydown);
-    
-    this.root.innerHTML = '';
+    this.stopAutoPlay();
+    this.container.innerHTML = '';
   }
 }
 
-// Default mock data
-export const defaultReviewsData = [
+// Данные отзывов
+export const reviewsData = [
   {
-    id: 1,
     author: "Анна Петрова",
+    location: "Краснодар",
+    date: "15.12.2024",
     rating: 5,
-    text: "Отличный салон! Мастер Светлана сделала мне идеальную стрижку и окрашивание. Очень довольна результатом, буду рекомендовать всем подругам.",
-    dateISO: "2024-01-15T10:30:00Z"
+    text: "Потрясающий сервис! Мастер Светлана сделала мне идеальную стрижку и окрашивание. Результат превзошел все ожидания. Обязательно вернусь еще!"
   },
   {
-    id: 2,
     author: "Мария Сидорова",
+    location: "Геленджик",
+    date: "12.12.2024",
     rating: 5,
-    text: "Прекрасный маникюр! Девушки работают аккуратно и профессионально. Цвет держится долго, очень довольна качеством услуг.",
-    dateISO: "2024-01-14T14:20:00Z"
+    text: "Лучший салон в городе! Профессиональные мастера, уютная атмосфера, качественные материалы. Делаю маникюр уже полгода - всегда довольна."
   },
   {
-    id: 3,
     author: "Елена Козлова",
-    rating: 4,
-    text: "Хороший салон, приятная атмосфера. Мастер внимательно выслушала мои пожелания и выполнила работу качественно. Рекомендую!",
-    dateISO: "2024-01-13T16:45:00Z"
+    location: "Сочи",
+    date: "10.12.2024",
+    rating: 5,
+    text: "Впервые была в этом салоне. Очень понравилось отношение к клиентам и качество работы. Маникюр держится уже 3 недели!"
   },
   {
-    id: 4,
     author: "Ольга Новикова",
+    location: "Анапа",
+    date: "08.12.2024",
     rating: 5,
-    text: "Впервые была в этом салоне, осталась в восторге! Профессиональный подход, современное оборудование, отличный результат.",
-    dateISO: "2024-01-12T11:15:00Z"
+    text: "Спасибо за прекрасный сервис! Делала SPA-процедуры - чувствую себя обновленной. Персонал очень внимательный и профессиональный."
   },
   {
-    id: 5,
-    author: "Татьяна Морозова",
-    rating: 5,
-    text: "Лучший салон в городе! Делаю здесь все процедуры уже больше года. Мастера настоящие профессионалы, всегда довольна результатом.",
-    dateISO: "2024-01-11T13:30:00Z"
-  },
-  {
-    id: 6,
     author: "Ирина Волкова",
-    rating: 4,
-    text: "Приятная атмосфера, вежливый персонал. Сделали мне красивый маникюр, цвет подобрали идеально. Обязательно приду еще!",
-    dateISO: "2024-01-10T15:20:00Z"
+    location: "Новороссийск",
+    date: "05.12.2024",
+    rating: 5,
+    text: "Отличный салон! Делаю здесь все процедуры уже год. Мастера настоящие профессионалы, всегда советуют что лучше подойдет."
   },
   {
-    id: 7,
+    author: "Татьяна Морозова",
+    location: "Туапсе",
+    date: "03.12.2024",
+    rating: 5,
+    text: "Превосходное качество услуг! Особенно нравится работа с волосами. Мастер подобрала идеальный цвет и форму стрижки."
+  },
+  {
     author: "Наталья Соколова",
+    location: "Армавир",
+    date: "01.12.2024",
     rating: 5,
-    text: "Отличный сервис! Мастер Анна сделала мне потрясающую прическу на выпускной. Все гости были в восторге, спасибо большое!",
-    dateISO: "2024-01-09T12:00:00Z"
+    text: "Очень довольна посещением салона! Чистота, порядок, профессиональный подход. Рекомендую всем подругам."
   },
   {
-    id: 8,
     author: "Юлия Лебедева",
+    location: "Майкоп",
+    date: "28.11.2024",
     rating: 5,
-    text: "Профессиональный подход к каждому клиенту. Делаю здесь стрижки и окрашивание уже полгода, всегда довольна результатом.",
-    dateISO: "2024-01-08T17:30:00Z"
+    text: "Лучший выбор для ухода за собой! Делаю здесь и маникюр, и прически. Всегда отличный результат и хорошее настроение."
+  },
+  {
+    author: "Александра Иванова",
+    location: "Краснодар",
+    date: "25.11.2024",
+    rating: 5,
+    text: "Потрясающий мастер! Сделала мне идеальную прическу на свадьбу. Все гости были в восторге от результата!"
+  },
+  {
+    author: "Виктория Смирнова",
+    location: "Геленджик",
+    date: "22.11.2024",
+    rating: 5,
+    text: "Отличный салон! Делаю здесь все процедуры уже больше года. Мастера настоящие профессионалы своего дела."
+  },
+  {
+    author: "Екатерина Попова",
+    location: "Сочи",
+    date: "20.11.2024",
+    rating: 5,
+    text: "Великолепный сервис! Особенно понравилось отношение к клиентам. Мастер внимательно выслушала все пожелания."
+  },
+  {
+    author: "Дарья Соколова",
+    location: "Анапа",
+    date: "18.11.2024",
+    rating: 5,
+    text: "Прекрасный салон! Делала окрашивание волос - результат превзошел все ожидания. Обязательно вернусь!"
   }
 ];

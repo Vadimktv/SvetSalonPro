@@ -3171,10 +3171,7 @@
         </div>
     </footer>
 
-    <!-- Back to Top Button -->
-    <button id="backToTop" class="fixed bottom-6 right-6 w-10 h-10 bg-pink-600 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-pink-700 hover:scale-110 transition-all duration-300 opacity-0 invisible z-50">
-        <i class="fas fa-arrow-up text-sm"></i>
-    </button>
+
 
     <script>
         // Custom Notification System
@@ -3240,20 +3237,10 @@
         window.addEventListener('scroll', animateOnScroll);
         window.addEventListener('load', animateOnScroll);
         
-        // Back to top button and header scroll effect
-        const backToTopButton = document.getElementById('backToTop');
+        // Header scroll effect
         const profileHeader = document.querySelector('.profile-header');
         
         window.addEventListener('scroll', () => {
-            // Back to top button
-            if (window.pageYOffset > 300) {
-                backToTopButton.classList.remove('opacity-0', 'invisible');
-                backToTopButton.classList.add('opacity-100', 'visible');
-            } else {
-                backToTopButton.classList.remove('opacity-100', 'visible');
-                backToTopButton.classList.add('opacity-0', 'invisible');
-            }
-            
             // Header scroll effect
             if (profileHeader) {
                 if (window.pageYOffset > 50) {
@@ -3263,10 +3250,6 @@
                 }
             }
         });
-        
-        backToTopButton.addEventListener('click', () => {
-            window.scrollTo({
-                top: 0,
                 behavior: 'smooth'
             });
         });
