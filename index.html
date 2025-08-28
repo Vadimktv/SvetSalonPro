@@ -1962,32 +1962,32 @@
                             <div class="p-3">
                                 <!-- Personal Cabinet -->
                                 <div class="mb-3">
-                                    <a href="pages/account.html" 
-                                       class="flex items-center space-x-4 px-4 py-4 text-gray-700 hover:bg-gradient-to-r hover:from-pink-50 hover:to-purple-50 rounded-xl transition-all duration-200 group">
+                                    <button onclick="openLoginModal()" 
+                                       class="w-full flex items-center space-x-4 px-4 py-4 text-gray-700 hover:bg-gradient-to-r hover:from-pink-50 hover:to-purple-50 rounded-xl transition-all duration-200 group">
                                         <div class="w-12 h-12 bg-gradient-to-br from-pink-500 to-purple-600 rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-200">
                                             <i class="fas fa-user-circle text-white text-lg"></i>
                                         </div>
-                                        <div class="flex-1">
+                                        <div class="flex-1 text-left">
                                             <div class="font-bold text-gray-800 text-lg">Войти в личный кабинет</div>
                                             <div class="text-sm text-gray-500">Управление профилем и записями</div>
                                         </div>
                                         <i class="fas fa-chevron-right text-gray-400 text-sm group-hover:text-pink-500 transition-colors duration-200"></i>
-                                    </a>
+                                    </button>
                                 </div>
                                 
                                 <!-- Registration -->
                                 <div class="mb-3">
-                                    <a href="pages/account.html" 
-                                       class="flex items-center space-x-4 px-4 py-4 text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 rounded-xl transition-all duration-200 group">
+                                    <button onclick="openLoginModal()" 
+                                       class="w-full flex items-center space-x-4 px-4 py-4 text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 rounded-xl transition-all duration-200 group">
                                         <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-200">
                                             <i class="fas fa-user-plus text-white text-lg"></i>
                                         </div>
-                                        <div class="flex-1">
+                                        <div class="flex-1 text-left">
                                             <div class="font-bold text-gray-800 text-lg">Регистрация</div>
                                             <div class="text-sm text-gray-500">Создать новый аккаунт</div>
                                         </div>
                                         <i class="fas fa-chevron-right text-gray-400 text-sm group-hover:text-blue-500 transition-colors duration-200"></i>
-                                    </a>
+                                    </button>
                                 </div>
                                 
                                 <!-- Divider -->
@@ -2026,45 +2026,19 @@
                         </div>
                     </div>
 
-                    <!-- Mobile Menu Button -->
-                    <button id="mobileMenuBtn" class="md:hidden w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center transition-colors duration-200">
-                        <i class="fas fa-bars text-gray-600"></i>
+                    <!-- iOS Style Menu Button -->
+                    <button id="iosMenuBtn" class="md:hidden w-10 h-10 rounded-full bg-gray-100/50 backdrop-blur-sm flex items-center justify-center hover:bg-gray-200/50 active:bg-gray-300/50 transition-all duration-200 transform hover:scale-105 active:scale-95 cursor-pointer">
+                        <div class="menu-icon-container">
+                            <div class="menu-line"></div>
+                            <div class="menu-line"></div>
+                            <div class="menu-line"></div>
+                        </div>
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- Mobile Menu -->
-        <div id="mobileMenu" class="md:hidden hidden bg-white border-t border-gray-200">
-            <div class="px-4 py-4 space-y-3">
-                <a href="#home" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-pink-50 hover:text-pink-600 rounded-lg transition-colors duration-200">
-                    <i class="fas fa-home text-gray-400"></i>
-                    <span>Главная</span>
-                </a>
-                <a href="#services" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-pink-50 hover:text-pink-600 rounded-lg transition-colors duration-200">
-                    <i class="fas fa-spa text-gray-400"></i>
-                    <span>Услуги</span>
-                </a>
-                <a href="pages/portfolio.html" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-pink-50 hover:text-pink-600 rounded-lg transition-colors duration-200">
-                    <i class="fas fa-images text-gray-400"></i>
-                    <span>Портфолио</span>
-                </a>
-                <a href="#masters" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-pink-50 hover:text-pink-600 rounded-lg transition-colors duration-200">
-                    <i class="fas fa-users text-gray-400"></i>
-                    <span>Мастера</span>
-                </a>
-                <a href="#contact" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:bg-pink-50 hover:text-pink-600 rounded-lg transition-colors duration-200">
-                    <i class="fas fa-phone text-gray-400"></i>
-                    <span>Контакты</span>
-                </a>
-                <div class="border-t border-gray-200 pt-3">
-                    <button onclick="window.location.href='#booking'" 
-                            class="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white px-4 py-3 rounded-lg font-medium transition-all duration-200">
-                        <i class="fas fa-calendar-plus mr-2"></i>Записаться онлайн
-                    </button>
-                </div>
-            </div>
-        </div>
+
     </header>
 
     <!-- Custom Notification System -->
@@ -2121,7 +2095,76 @@
       }
     </script>
 
-
+    <!-- iOS Style Side Menu -->
+    <div id="sideMenu" class="fixed inset-0 z-50 pointer-events-none">
+        <!-- Backdrop -->
+        <div id="menuBackdrop" class="absolute inset-0 bg-black/20 opacity-0 transition-all duration-250 ease-out pointer-events-none"></div>
+        
+        <!-- Menu Container -->
+        <div id="menuContainer" class="absolute top-24 right-4 h-auto max-h-[80vh] w-72 bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl transform scale-75 opacity-0 transition-all duration-250 ease-out border border-white/30">
+            <!-- Menu Header -->
+            <div class="flex items-center justify-between p-3 border-b border-white/10">
+                <div class="flex items-center space-x-2">
+                    <img src="images/ui/logo.png" alt="SvetSalonPro" class="w-8 h-8 rounded-full">
+                    <div>
+                        <h2 class="text-base font-semibold text-gray-800">SvetSalonPro</h2>
+                        <p class="text-xs text-gray-600">Салон красоты</p>
+                    </div>
+                </div>
+                <button id="closeMenuBtn" class="w-8 h-8 rounded-full bg-gray-100/50 backdrop-blur-sm flex items-center justify-center hover:bg-gray-200/50 active:bg-gray-300/50 transition-all duration-200 transform hover:scale-105 active:scale-95 cursor-pointer">
+                    <i class="fas fa-times text-gray-600 text-sm"></i>
+                </button>
+            </div>
+            
+            <!-- Menu Content -->
+            <div class="flex-1 overflow-y-auto">
+                <!-- Navigation Links -->
+                <div class="p-2 space-y-0.5">
+                    <a href="#home" class="menu-item group">
+                        <div class="menu-icon">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        <span>Главная</span>
+                    </a>
+                    
+                    <a href="#services" class="menu-item group">
+                        <div class="menu-icon">
+                            <i class="fas fa-spa"></i>
+                        </div>
+                        <span>Услуги</span>
+                    </a>
+                    
+                    <a href="pages/portfolio.html" class="menu-item group">
+                        <div class="menu-icon">
+                            <i class="fas fa-images"></i>
+                        </div>
+                        <span>Портфолио</span>
+                    </a>
+                    
+                    <a href="#masters" class="menu-item group">
+                        <div class="menu-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <span>Мастера</span>
+                    </a>
+                    
+                    <a href="#contact" class="menu-item group">
+                        <div class="menu-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <span>Контакты</span>
+                    </a>
+                    
+                    <button onclick="openLoginModal()" class="menu-item group w-full text-left">
+                        <div class="menu-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <span>Личный кабинет</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Hero Section -->
     <section id="home" class="hero-section pt-20 pb-20 md:pt-32 md:pb-32 relative mt-16" data-aos="fade-up">
@@ -3540,24 +3583,10 @@
         }
     }
     
-    // Мобильное меню и авторизация
+    // Боковое меню и авторизация
     document.addEventListener('DOMContentLoaded', function() {
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const mobileMenu = document.getElementById('mobileMenu');
         const profileBtn = document.getElementById('profileBtn');
         const profileDropdown = document.getElementById('profileDropdown');
-        
-        // Mobile menu toggle
-        if (mobileMenuBtn && mobileMenu) {
-            mobileMenuBtn.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-                const icon = mobileMenuBtn.querySelector('i');
-                if (icon) {
-                    icon.classList.toggle('fa-bars');
-                    icon.classList.toggle('fa-times');
-                }
-            });
-        }
         
         // Profile dropdown toggle
         if (profileBtn && profileDropdown) {
@@ -3673,20 +3702,73 @@
             }
         });
         
-        // Close mobile menu when clicking on links
-        const mobileMenuLinks = mobileMenu?.querySelectorAll('a');
-        if (mobileMenuLinks) {
-            mobileMenuLinks.forEach(link => {
-                link.addEventListener('click', () => {
-                    mobileMenu.classList.add('hidden');
-                    const icon = mobileMenuBtn.querySelector('i');
-                    if (icon) {
-                        icon.classList.add('fa-bars');
-                        icon.classList.remove('fa-times');
-                    }
-                });
-            });
+
+
+        // iOS Style Side Menu functionality
+        const sideMenu = document.getElementById('sideMenu');
+        const iosMenuBtn = document.getElementById('iosMenuBtn');
+        const closeMenuBtn = document.getElementById('closeMenuBtn');
+        const menuBackdrop = document.getElementById('menuBackdrop');
+        const menuContainer = document.getElementById('menuContainer');
+
+        // Open side menu
+        function openSideMenu() {
+            if (sideMenu && menuBackdrop && menuContainer) {
+                sideMenu.classList.add('open');
+                document.body.classList.add('menu-open');
+                
+                // Add active state to menu button
+                if (iosMenuBtn) {
+                    iosMenuBtn.classList.add('active');
+                }
+            }
         }
+
+        // Close side menu
+        function closeSideMenu() {
+            if (sideMenu && menuBackdrop && menuContainer) {
+                sideMenu.classList.remove('open');
+                document.body.classList.remove('menu-open');
+                
+                // Remove active state from menu button
+                if (iosMenuBtn) {
+                    iosMenuBtn.classList.remove('active');
+                }
+            }
+        }
+
+        // Event listeners for side menu
+        if (iosMenuBtn) {
+            iosMenuBtn.addEventListener('click', openSideMenu);
+        }
+
+        if (closeMenuBtn) {
+            closeMenuBtn.addEventListener('click', closeSideMenu);
+        }
+
+        if (menuBackdrop) {
+            menuBackdrop.addEventListener('click', closeSideMenu);
+        }
+
+        // Close menu when clicking on menu items
+        const menuItems = document.querySelectorAll('.menu-item');
+        menuItems.forEach(item => {
+            item.addEventListener('click', () => {
+                // Don't close immediately for the login modal button
+                if (item.getAttribute('onclick') && item.getAttribute('onclick').includes('openLoginModal')) {
+                    setTimeout(closeSideMenu, 100);
+                } else {
+                    closeSideMenu();
+                }
+            });
+        });
+
+        // Close menu on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && sideMenu && sideMenu.classList.contains('open')) {
+                closeSideMenu();
+            }
+        });
 
         // Проверка авторизации при загрузке страницы
         async function checkAuthOnLoad() {
@@ -5214,7 +5296,333 @@
         // Экспорт функций для глобального доступа
         window.replayServiceAnimations = replayServiceAnimations;
     </script>
-</body>
-</html>
 
+    <!-- Login Modal -->
+    <div id="loginModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-[99999] flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+            <div class="p-8">
+                <!-- Header -->
+                <div class="flex justify-between items-center mb-8">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-pink-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                            <i class="fas fa-user-circle text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-800">Личный кабинет</h3>
+                            <p class="text-gray-600">Вход в систему</p>
+                        </div>
+                    </div>
+                    <button onclick="closeLoginModal()" class="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center transition-colors duration-200">
+                        <i class="fas fa-times text-gray-600"></i>
+                    </button>
+                </div>
+
+                <!-- Loading State -->
+                <div id="loginLoadingState" class="hidden text-center py-12">
+                    <div class="inline-block w-8 h-8 border-4 border-pink-200 border-t-pink-600 rounded-full animate-spin mb-4"></div>
+                    <h4 class="text-lg font-semibold text-gray-800 mb-2">Проверяем авторизацию...</h4>
+                    <p class="text-gray-600">Пожалуйста, подождите</p>
+                </div>
+
+                <!-- Auth State -->
+                <div id="loginAuthState" class="hidden">
+                    <div class="text-center py-8">
+                        <div class="w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-check text-white text-2xl"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-gray-800 mb-2">Вы авторизованы!</h4>
+                        <p class="text-gray-600 mb-6">Добро пожаловать в личный кабинет</p>
+                        <div class="space-y-3">
+                            <button onclick="window.location.href='pages/account.html'" 
+                                    class="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                                <i class="fas fa-user-circle mr-2"></i>Открыть личный кабинет
+                            </button>
+                            <button onclick="logoutUser()" 
+                                    class="w-full border-2 border-gray-300 text-gray-700 hover:border-pink-300 hover:text-pink-600 font-semibold py-3 px-6 rounded-xl transition-all duration-300">
+                                <i class="fas fa-sign-out-alt mr-2"></i>Выйти
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Login Form -->
+                <div id="loginFormContainer">
+                    <div class="text-center mb-8">
+                        <h4 class="text-xl font-bold text-gray-800 mb-2">Вход в личный кабинет</h4>
+                        <p class="text-gray-600">Введите ваш email для получения ссылки для входа</p>
+                    </div>
+
+                    <form id="loginForm" class="space-y-6">
+                        <div>
+                            <label for="loginEmail" class="block text-gray-700 font-semibold mb-3">
+                                <i class="fas fa-envelope mr-2 text-pink-500"></i>Email адрес
+                            </label>
+                            <input type="email" id="loginEmail" name="email" required 
+                                   class="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all duration-200 bg-white/50 backdrop-blur-sm" 
+                                   placeholder="your@email.com">
+                        </div>
+                        
+                        <button type="submit" id="loginSubmitBtn" 
+                                class="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl relative overflow-hidden group">
+                            <span id="loginBtnText" class="relative z-10 flex items-center justify-center">
+                                <i class="fas fa-paper-plane mr-3 text-xl"></i>
+                                Отправить ссылку для входа
+                            </span>
+                            <span id="loginBtnLoading" class="hidden relative z-10 flex items-center justify-center">
+                                <div class="inline-block w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-3"></div>
+                                Отправка...
+                            </span>
+                            <div class="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        </button>
+                    </form>
+
+                    <div class="mt-6 text-center">
+                        <p class="text-sm text-gray-500 mb-4">
+                            <i class="fas fa-info-circle mr-2 text-blue-500"></i>
+                            Мы отправим ссылку для входа на ваш email
+                        </p>
+                        <div class="flex items-center justify-center space-x-4 text-sm text-gray-500">
+                            <span class="flex items-center">
+                                <i class="fas fa-shield-alt mr-1 text-green-500"></i>
+                                Безопасно
+                            </span>
+                            <span class="flex items-center">
+                                <i class="fas fa-clock mr-1 text-blue-500"></i>
+                                Быстро
+                            </span>
+                            <span class="flex items-center">
+                                <i class="fas fa-mobile-alt mr-1 text-purple-500"></i>
+                                Удобно
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Success State -->
+                <div id="loginSuccessState" class="hidden text-center py-8">
+                    <div class="w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-check-circle text-white text-2xl"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-gray-800 mb-2">Ссылка отправлена!</h4>
+                    <p class="text-gray-600 mb-6">Проверьте ваш email и перейдите по ссылке для входа в личный кабинет</p>
+                    <button onclick="closeLoginModal()" 
+                            class="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                        <i class="fas fa-check mr-2"></i>Понятно
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal JavaScript -->
+    <script>
+        // Глобальные переменные для авторизации
+        let currentUser = null;
+        let supabaseClient = null;
+
+        // Функции для работы с модальным окном
+        function openLoginModal() {
+            const modal = document.getElementById('loginModal');
+            const dropdown = document.getElementById('profileDropdown');
+            
+            // Закрываем выпадающее меню
+            if (dropdown) {
+                dropdown.classList.remove('show');
+            }
+            
+            // Показываем модальное окно
+            modal.classList.remove('hidden');
+            document.body.classList.add('overflow-hidden');
+            
+            // Проверяем авторизацию
+            checkAuthStatus();
+        }
+
+        function closeLoginModal() {
+            const modal = document.getElementById('loginModal');
+            modal.classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+            
+            // Сбрасываем состояние формы
+            resetLoginForm();
+        }
+
+        function resetLoginForm() {
+            // Показываем форму входа
+            document.getElementById('loginFormContainer').classList.remove('hidden');
+            document.getElementById('loginLoadingState').classList.add('hidden');
+            document.getElementById('loginAuthState').classList.add('hidden');
+            document.getElementById('loginSuccessState').classList.add('hidden');
+            
+            // Очищаем поле email
+            document.getElementById('loginEmail').value = '';
+            
+            // Сбрасываем состояние кнопки
+            const btn = document.getElementById('loginSubmitBtn');
+            const btnText = document.getElementById('loginBtnText');
+            const btnLoading = document.getElementById('loginBtnLoading');
+            
+            btn.disabled = false;
+            btnText.classList.remove('hidden');
+            btnLoading.classList.add('hidden');
+        }
+
+        // Проверка статуса авторизации
+        async function checkAuthStatus() {
+            try {
+                // Показываем состояние загрузки
+                document.getElementById('loginFormContainer').classList.add('hidden');
+                document.getElementById('loginLoadingState').classList.remove('hidden');
+                
+                // Проверяем localStorage
+                const savedUser = localStorage.getItem('currentUser');
+                if (savedUser) {
+                    const user = JSON.parse(savedUser);
+                    const currentTime = Math.floor(Date.now() / 1000);
+                    
+                    if (user.exp && user.exp < currentTime) {
+                        // Токен истек
+                        localStorage.removeItem('currentUser');
+                        showLoginForm();
+                    } else {
+                        // Пользователь авторизован
+                        currentUser = user;
+                        showAuthState();
+                    }
+                } else {
+                    showLoginForm();
+                }
+            } catch (error) {
+                console.error('Ошибка проверки авторизации:', error);
+                showLoginForm();
+            }
+        }
+
+        function showLoginForm() {
+            document.getElementById('loginLoadingState').classList.add('hidden');
+            document.getElementById('loginAuthState').classList.add('hidden');
+            document.getElementById('loginSuccessState').classList.add('hidden');
+            document.getElementById('loginFormContainer').classList.remove('hidden');
+        }
+
+        function showAuthState() {
+            document.getElementById('loginLoadingState').classList.add('hidden');
+            document.getElementById('loginFormContainer').classList.add('hidden');
+            document.getElementById('loginSuccessState').classList.add('hidden');
+            document.getElementById('loginAuthState').classList.remove('hidden');
+        }
+
+        function showSuccessState() {
+            document.getElementById('loginLoadingState').classList.add('hidden');
+            document.getElementById('loginFormContainer').classList.add('hidden');
+            document.getElementById('loginAuthState').classList.add('hidden');
+            document.getElementById('loginSuccessState').classList.remove('hidden');
+        }
+
+        // Обработка формы входа
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginForm = document.getElementById('loginForm');
+            if (loginForm) {
+                loginForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    
+                    const email = document.getElementById('loginEmail').value;
+                    const btn = document.getElementById('loginSubmitBtn');
+                    const btnText = document.getElementById('loginBtnText');
+                    const btnLoading = document.getElementById('loginBtnLoading');
+                    
+                    try {
+                        // Показываем состояние загрузки
+                        btn.disabled = true;
+                        btnText.classList.add('hidden');
+                        btnLoading.classList.remove('hidden');
+                        
+                        // Инициализируем Supabase если нужно
+                        if (!supabaseClient) {
+                            await initSupabase();
+                        }
+                        
+                        // Отправляем Magic Link
+                        const { error } = await supabaseClient.auth.signInWithOtp({
+                            email: email,
+                            options: {
+                                emailRedirectTo: window.location.origin + '/pages/account.html'
+                            }
+                        });
+                        
+                        if (error) throw error;
+                        
+                        // Показываем успешное состояние
+                        showSuccessState();
+                        
+                    } catch (error) {
+                        console.error('Ошибка отправки Magic Link:', error);
+                        alert('Ошибка отправки ссылки: ' + error.message);
+                        
+                        // Возвращаем кнопку в исходное состояние
+                        btn.disabled = false;
+                        btnText.classList.remove('hidden');
+                        btnLoading.classList.add('hidden');
+                    }
+                });
+            }
+        });
+
+        // Функция выхода
+        function logoutUser() {
+            localStorage.removeItem('currentUser');
+            currentUser = null;
+            showLoginForm();
+        }
+
+        // Инициализация Supabase
+        async function initSupabase() {
+            if (supabaseClient) return supabaseClient;
+            
+            try {
+                // Загружаем Supabase SDK
+                if (typeof window.supabase === 'undefined') {
+                    await loadSupabaseSDK();
+                }
+                
+                // Создаем клиент
+                supabaseClient = window.supabase.createClient(
+                    'https://iaezefurqmmgubdgqakt.supabase.co',
+                    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlhZXplZnVycW1tZ3ViZGdxYWt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU5NTk3NjQsImV4cCI6MjA3MTUzNTc2NH0.-Puoiddwu_xIx9BaHM0BBfbsULdU0Ljzh6uQleVToBQ'
+                );
+                
+                return supabaseClient;
+            } catch (error) {
+                console.error('Ошибка инициализации Supabase:', error);
+                throw error;
+            }
+        }
+
+        // Загрузка Supabase SDK
+        function loadSupabaseSDK() {
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/@supabase/supabase-js@2';
+                script.onload = resolve;
+                script.onerror = reject;
+                document.head.appendChild(script);
+            });
+        }
+
+        // Закрытие модального окна при клике вне его
+        document.addEventListener('click', function(e) {
+            const modal = document.getElementById('loginModal');
+            if (e.target === modal) {
+                closeLoginModal();
+            }
+        });
+
+        // Закрытие модального окна по Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeLoginModal();
+            }
+        });
+    </script>
+</body>
 </html>
