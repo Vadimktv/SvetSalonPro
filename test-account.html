@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест личного кабинета</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin: 10px;
+            transition: transform 0.2s;
+        }
+        .button:hover {
+            transform: translateY(-2px);
+        }
+        .status {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Тест личного кабинета</h1>
+        
+        <div class="status info">
+            <strong>Информация:</strong> Эта страница предназначена для тестирования работы личного кабинета.
+        </div>
+        
+        <h2>Проверка доступности:</h2>
+        <div id="status"></div>
+        
+        <h2>Ссылки для тестирования:</h2>
+        <a href="pages/account.html" class="button">📱 Открыть личный кабинет</a>
+        <a href="index.html" class="button">🏠 Вернуться на главную</a>
+        
+        <h2>Проверка сервера:</h2>
+        <div id="serverStatus"></div>
+        
+        <h2>Логи:</h2>
+        <div id="logs" style="background: #f8f9fa; padding: 15px; border-radius: 8px; font-family: monospace; font-size: 12px; max-height: 300px; overflow-y: auto;"></div>
+    </div>
+
+    <script>
+        function log(message) {
+            const logsDiv = document.getElementById('logs');
+            const timestamp = new Date().toLocaleTimeString();
+            logsDiv.innerHTML += `[${timestamp}] ${message}\n`;
+            logsDiv.scrollTop = logsDiv.scrollHeight;
+        }
+
+        function checkServer() {
+            log('Проверяем сервер...');
+            
+            fetch('/pages/account.html')
+                .then(response => {
+                    if (response.ok) {
+                        log('✅ Сервер работает, страница account.html доступна');
+                        document.getElementById('serverStatus').innerHTML = 
+                            '<div class="status success">✅ Сервер работает корректно</div>';
+                    } else {
+                        log(`❌ Ошибка сервера: ${response.status} ${response.statusText}`);
+                        document.getElementById('serverStatus').innerHTML = 
+                            '<div class="status error">❌ Ошибка сервера</div>';
+                    }
+                })
+                .catch(error => {
+                    log(`❌ Ошибка сети: ${error.message}`);
+                    document.getElementById('serverStatus').innerHTML = 
+                        '<div class="status error">❌ Ошибка сети</div>';
+                });
+        }
+
+        function checkPageLoad() {
+            log('Проверяем загрузку страницы...');
+            
+            const iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            iframe.src = 'pages/account.html';
+            
+            iframe.onload = function() {
+                log('✅ Страница account.html загрузилась успешно');
+                document.getElementById('status').innerHTML = 
+                    '<div class="status success">✅ Личный кабинет доступен</div>';
+            };
+            
+            iframe.onerror = function() {
+                log('❌ Ошибка загрузки страницы account.html');
+                document.getElementById('status').innerHTML = 
+                    '<div class="status error">❌ Ошибка загрузки личного кабинета</div>';
+            };
+            
+            document.body.appendChild(iframe);
+        }
+
+        // Запускаем проверки при загрузке страницы
+        window.addEventListener('load', function() {
+            log('Страница загружена, начинаем тестирование...');
+            checkServer();
+            setTimeout(checkPageLoad, 1000);
+        });
+
+        // Проверяем каждые 5 секунд
+        setInterval(checkServer, 5000);
+    </script>
+</body>
+</html>

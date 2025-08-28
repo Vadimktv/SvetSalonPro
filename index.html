@@ -5333,10 +5333,14 @@
                         <h4 class="text-xl font-bold text-gray-800 mb-2">Вы авторизованы!</h4>
                         <p class="text-gray-600 mb-6">Добро пожаловать в личный кабинет</p>
                         <div class="space-y-3">
-                            <button onclick="window.location.href='pages/account.html'" 
+                                                                                <button onclick="testAccountPage()" 
                                     class="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
                                 <i class="fas fa-user-circle mr-2"></i>Открыть личный кабинет
                             </button>
+                            <a href="working-account.html" 
+                               class="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-center block">
+                                <i class="fas fa-check-circle mr-2"></i>Рабочая версия
+                            </a>
                             <button onclick="logoutUser()" 
                                     class="w-full border-2 border-gray-300 text-gray-700 hover:border-pink-300 hover:text-pink-600 font-semibold py-3 px-6 rounded-xl transition-all duration-300">
                                 <i class="fas fa-sign-out-alt mr-2"></i>Выйти
@@ -5573,6 +5577,36 @@
             localStorage.removeItem('currentUser');
             currentUser = null;
             showLoginForm();
+        }
+        
+        // Функция для проверки доступности личного кабинета
+        function testAccountPage() {
+            console.log('Testing account page accessibility...');
+            
+            // Сначала пробуем рабочую версию
+            fetch('/working-account.html')
+                .then(response => {
+                    if (response.ok) {
+                        console.log('✅ Working account page is accessible');
+                        window.location.href = 'working-account.html';
+                    } else {
+                        // Если рабочая версия недоступна, пробуем основную
+                        return fetch('/pages/account.html');
+                    }
+                })
+                .then(response => {
+                    if (response && response.ok) {
+                        console.log('✅ Account page is accessible');
+                        window.location.href = 'pages/account.html';
+                    } else {
+                        console.log('❌ Account page returned status:', response?.status);
+                        alert('Ошибка доступа к личному кабинету. Попробуйте позже.');
+                    }
+                })
+                .catch(error => {
+                    console.error('❌ Error accessing account page:', error);
+                    alert('Ошибка сети при доступе к личному кабинету: ' + error.message);
+                });
         }
 
         // Инициализация Supabase

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Отладка личного кабинета - SvetSalonPro</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .success { background: #d4edda; border-color: #c3e6cb; }
+        .error { background: #f8d7da; border-color: #f5c6cb; }
+        .info { background: #d1ecf1; border-color: #bee5eb; }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 5px;
+        }
+        .button:hover { background: #0056b3; }
+        .log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Отладка личного кабинета</h1>
+        
+        <div class="test-section info">
+            <h3>Информация о системе</h3>
+            <p><strong>URL:</strong> <span id="currentUrl"></span></p>
+            <p><strong>User Agent:</strong> <span id="userAgent"></span></p>
+            <p><strong>Время загрузки:</strong> <span id="loadTime"></span></p>
+        </div>
+        
+        <div class="test-section">
+            <h3>Тест 1: Проверка сервера</h3>
+            <button onclick="testServer()" class="button">Проверить сервер</button>
+            <div id="serverResult"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Тест 2: Загрузка account.html</h3>
+            <button onclick="testAccountPage()" class="button">Загрузить account.html</button>
+            <div id="accountResult"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Тест 3: Проверка JavaScript</h3>
+            <button onclick="testJavaScript()" class="button">Проверить JavaScript</button>
+            <div id="jsResult"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Тест 4: Проверка CSS</h3>
+            <button onclick="testCSS()" class="button">Проверить CSS</button>
+            <div id="cssResult"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Тест 5: Прямой переход</h3>
+            <a href="pages/account.html" class="button" target="_blank">Открыть account.html в новой вкладке</a>
+            <a href="simple-account.html" class="button" target="_blank">Открыть simple-account.html в новой вкладке</a>
+        </div>
+        
+        <div class="test-section">
+            <h3>Логи</h3>
+            <div id="logs" class="log"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Быстрые ссылки</h3>
+            <a href="../index.html" class="button">Главная страница</a>
+            <a href="portfolio.html" class="button">Портфолио</a>
+            <a href="test-account.html" class="button">Тестовая страница</a>
+        </div>
+    </div>
+
+    <script>
+        const startTime = Date.now();
+        
+        function log(message) {
+            const logs = document.getElementById('logs');
+            const timestamp = new Date().toLocaleTimeString();
+            logs.innerHTML += `[${timestamp}] ${message}\n`;
+            logs.scrollTop = logs.scrollHeight;
+        }
+        
+        function testServer() {
+            log('Тестируем сервер...');
+            const result = document.getElementById('serverResult');
+            
+            fetch('/pages/account.html')
+                .then(response => {
+                    if (response.ok) {
+                        result.innerHTML = '<div class="success">✅ Сервер работает, account.html доступен</div>';
+                        log('✅ Сервер работает корректно');
+                    } else {
+                        result.innerHTML = `<div class="error">❌ Ошибка сервера: ${response.status} ${response.statusText}</div>`;
+                        log(`❌ Ошибка сервера: ${response.status}`);
+                    }
+                })
+                .catch(error => {
+                    result.innerHTML = `<div class="error">❌ Ошибка сети: ${error.message}</div>`;
+                    log(`❌ Ошибка сети: ${error.message}`);
+                });
+        }
+        
+        function testAccountPage() {
+            log('Тестируем загрузку account.html...');
+            const result = document.getElementById('accountResult');
+            
+            const iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            iframe.src = 'pages/account.html';
+            
+            iframe.onload = function() {
+                result.innerHTML = '<div class="success">✅ account.html загрузился успешно</div>';
+                log('✅ account.html загружен');
+            };
+            
+            iframe.onerror = function() {
+                result.innerHTML = '<div class="error">❌ Ошибка загрузки account.html</div>';
+                log('❌ Ошибка загрузки account.html');
+            };
+            
+            document.body.appendChild(iframe);
+        }
+        
+        function testJavaScript() {
+            log('Тестируем JavaScript...');
+            const result = document.getElementById('jsResult');
+            
+            try {
+                // Проверяем базовые возможности JavaScript
+                const test = {
+                    date: new Date(),
+                    math: Math.random(),
+                    array: [1, 2, 3].map(x => x * 2),
+                    object: { test: 'value' }
+                };
+                
+                result.innerHTML = '<div class="success">✅ JavaScript работает корректно</div>';
+                log('✅ JavaScript работает');
+            } catch (error) {
+                result.innerHTML = `<div class="error">❌ Ошибка JavaScript: ${error.message}</div>`;
+                log(`❌ Ошибка JavaScript: ${error.message}`);
+            }
+        }
+        
+        function testCSS() {
+            log('Тестируем CSS...');
+            const result = document.getElementById('cssResult');
+            
+            try {
+                // Проверяем, что CSS загружается
+                const computedStyle = window.getComputedStyle(document.body);
+                const backgroundColor = computedStyle.backgroundColor;
+                
+                result.innerHTML = '<div class="success">✅ CSS работает корректно</div>';
+                log('✅ CSS работает');
+            } catch (error) {
+                result.innerHTML = `<div class="error">❌ Ошибка CSS: ${error.message}</div>`;
+                log(`❌ Ошибка CSS: ${error.message}`);
+            }
+        }
+        
+        // Инициализация
+        window.addEventListener('load', function() {
+            const loadTime = Date.now() - startTime;
+            
+            document.getElementById('currentUrl').textContent = window.location.href;
+            document.getElementById('userAgent').textContent = navigator.userAgent;
+            document.getElementById('loadTime').textContent = loadTime + 'ms';
+            
+            log('Страница отладки загружена');
+            log(`Время загрузки: ${loadTime}ms`);
+            
+            // Автоматически запускаем тесты
+            setTimeout(testServer, 500);
+            setTimeout(testJavaScript, 1000);
+            setTimeout(testCSS, 1500);
+        });
+    </script>
+</body>
+</html>

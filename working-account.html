@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет - SvetSalonPro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-pink-50 via-white to-purple-50 min-h-screen">
+    <!-- Header -->
+    <header class="fixed w-full bg-white shadow-sm z-50">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <a href="../index.html" class="text-2xl font-bold text-pink-600 hover:text-pink-700 transition-colors duration-200">
+                    SvetSalonPro
+                </a>
+            </div>
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="../index.html" class="text-gray-700 hover:text-pink-600 transition">Главная</a>
+                <a href="portfolio.html" class="text-gray-700 hover:text-pink-600 transition">Примеры работ</a>
+                <a href="account.html" class="text-pink-600 font-semibold">Личный кабинет</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="pt-32 pb-20">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <!-- Loading Section -->
+                <div id="loadingSection" class="max-w-md mx-auto mb-8">
+                    <div class="bg-white rounded-xl shadow-lg p-8 text-center">
+                        <div class="flex flex-col items-center justify-center py-12">
+                            <div class="loading mb-4"></div>
+                            <h2 class="text-xl font-semibold text-gray-800 mb-2">Загрузка профиля...</h2>
+                            <p class="text-gray-600">Проверяем авторизацию</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Auth Section -->
+                <div id="authSection" class="hidden max-w-md mx-auto mb-8">
+                    <div class="bg-white rounded-xl shadow-lg p-8 text-center">
+                        <h2 class="text-3xl font-bold text-gray-800 mb-6">Вход в личный кабинет</h2>
+                        
+                        <form id="loginForm" class="space-y-6">
+                            <div>
+                                <label for="email" class="block text-gray-700 font-medium mb-3 text-left">Email</label>
+                                <input type="email" id="email" name="email" required 
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+                                       placeholder="your@email.com">
+                            </div>
+                            
+                            <button type="submit" id="loginBtn" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-semibold py-3 px-6 rounded-lg transition">
+                                <span id="loginBtnText">Отправить ссылку</span>
+                                <span id="loginBtnLoading" class="loading hidden"></span>
+                            </button>
+                        </form>
+                        
+                        <div class="mt-6 text-sm text-gray-600">
+                            <p>Мы отправим ссылку для входа на ваш email</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Section -->
+                <div id="profileSection" class="hidden">
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <!-- Profile Info -->
+                        <div class="md:col-span-1">
+                            <div class="bg-white rounded-xl shadow-lg p-6">
+                                <div class="text-center mb-6">
+                                    <div class="w-24 h-24 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                        <i class="fas fa-user text-3xl text-pink-600" id="mainProfileIcon"></i>
+                                    </div>
+                                    <h3 id="userName" class="text-xl font-semibold text-gray-800">Пользователь</h3>
+                                    <p id="userEmail" class="text-gray-600">user@example.com</p>
+                                    <p id="userPhone" class="text-gray-600">+7 (___) ___-__-__</p>
+                                </div>
+                                
+                                <button id="editProfileBtn" class="w-full py-2 px-4 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition mb-3">
+                                    Редактировать профиль
+                                </button>
+                                <button id="logoutBtn" class="w-full py-2 px-4 border border-pink-300 text-pink-600 rounded-lg hover:bg-pink-50 transition">
+                                    Выйти
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Bookings -->
+                        <div class="md:col-span-2">
+                            <div class="bg-white rounded-xl shadow-lg p-6">
+                                <div class="flex justify-between items-center mb-6">
+                                    <h3 class="text-2xl font-semibold text-gray-800">Мои записи</h3>
+                                    <button id="newBookingBtn" class="bg-pink-600 hover:bg-pink-700 text-white font-semibold py-2 px-4 rounded-lg transition">
+                                        Новая запись
+                                    </button>
+                                </div>
+                                
+                                <div id="bookingsList" class="space-y-4">
+                                    <!-- Bookings will be loaded here -->
+                                </div>
+                                
+                                <div id="noBookings" class="text-center py-12">
+                                    <i class="fas fa-calendar-times text-4xl text-gray-300 mb-4"></i>
+                                    <p class="text-gray-500">У вас пока нет записей</p>
+                                    <button id="bookFirstBtn" class="bg-pink-600 hover:bg-pink-700 text-white font-semibold mt-4 py-2 px-6 rounded-lg transition">
+                                        Записаться на услугу
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        console.log('Working account page loaded');
+        
+        // Global variables
+        let currentUser = null;
+        
+        // Show loading state
+        function showLoadingState() {
+            document.getElementById('loadingSection').classList.remove('hidden');
+            document.getElementById('authSection').classList.add('hidden');
+            document.getElementById('profileSection').classList.add('hidden');
+        }
+        
+        // Show auth section
+        function showAuth() {
+            document.getElementById('loadingSection').classList.add('hidden');
+            document.getElementById('authSection').classList.remove('hidden');
+            document.getElementById('profileSection').classList.add('hidden');
+        }
+        
+        // Show profile section
+        function showProfile() {
+            document.getElementById('loadingSection').classList.add('hidden');
+            document.getElementById('authSection').classList.add('hidden');
+            document.getElementById('profileSection').classList.remove('hidden');
+        }
+        
+        // Check authentication
+        function checkAuth() {
+            console.log('Checking authentication...');
+            
+            // Check localStorage for saved user
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                try {
+                    currentUser = JSON.parse(savedUser);
+                    console.log('Found saved user:', currentUser.email);
+                    showProfile();
+                    updateUserInfo(currentUser);
+                } catch (e) {
+                    console.error('Error parsing saved user:', e);
+                    showAuth();
+                }
+            } else {
+                console.log('No saved user found');
+                showAuth();
+            }
+        }
+        
+        // Update user info
+        function updateUserInfo(user) {
+            document.getElementById('userName').textContent = user.user_metadata?.full_name || user.email?.split('@')[0] || 'Пользователь';
+            document.getElementById('userEmail').textContent = user.email || 'user@example.com';
+            document.getElementById('userPhone').textContent = user.phone || user.user_metadata?.phone || 'Не указан';
+        }
+        
+        // Handle login form
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const loginBtn = document.getElementById('loginBtn');
+            const loginBtnText = document.getElementById('loginBtnText');
+            const loginBtnLoading = document.getElementById('loginBtnLoading');
+            
+            // Show loading
+            loginBtn.disabled = true;
+            loginBtnText.classList.add('hidden');
+            loginBtnLoading.classList.remove('hidden');
+            
+            // Simulate login (replace with real Supabase logic)
+            setTimeout(() => {
+                // Create mock user
+                const mockUser = {
+                    email: email,
+                    user_metadata: {
+                        full_name: 'Тестовый пользователь'
+                    }
+                };
+                
+                // Save to localStorage
+                localStorage.setItem('currentUser', JSON.stringify(mockUser));
+                currentUser = mockUser;
+                
+                // Show profile
+                showProfile();
+                updateUserInfo(mockUser);
+                
+                // Reset button
+                loginBtn.disabled = false;
+                loginBtnText.classList.remove('hidden');
+                loginBtnLoading.classList.add('hidden');
+                
+                console.log('Login successful');
+            }, 2000);
+        });
+        
+        // Handle logout
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            localStorage.removeItem('currentUser');
+            currentUser = null;
+            showAuth();
+            console.log('Logout successful');
+        });
+        
+        // Handle new booking
+        document.getElementById('newBookingBtn').addEventListener('click', function() {
+            alert('Функция записи будет доступна в полной версии');
+        });
+        
+        // Handle book first
+        document.getElementById('bookFirstBtn').addEventListener('click', function() {
+            alert('Функция записи будет доступна в полной версии');
+        });
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, checking auth...');
+            checkAuth();
+        });
+    </script>
+</body>
+</html>
