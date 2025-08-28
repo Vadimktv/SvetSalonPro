@@ -1248,6 +1248,12 @@
             padding: 40px 0;
         }
         
+        @media (max-width: 768px) {
+            .reviews-deck-container {
+                padding: 20px 0;
+            }
+        }
+        
         /* Кастомная пагинация */
         .reviews-pagination .swiper-pagination-bullet {
             width: 12px !important;
@@ -1273,6 +1279,14 @@
             perspective: 1200px !important;
         }
         
+        @media (max-width: 768px) {
+            .reviews-swiper {
+                height: auto !important;
+                min-height: 400px !important;
+                overflow: hidden !important;
+            }
+        }
+        
         .swiper-slide {
             width: 100% !important;
             height: 100% !important;
@@ -1280,6 +1294,14 @@
             justify-content: center !important;
             align-items: center !important;
             transform-style: preserve-3d !important;
+        }
+        
+        @media (max-width: 768px) {
+            .swiper-slide {
+                height: auto !important;
+                align-items: flex-start !important;
+                padding: 10px 0 !important;
+            }
         }
         
         /* Карточки отзывов - настоящая колода */
@@ -1303,6 +1325,7 @@
             justify-content: space-between !important;
             transform-origin: center bottom !important;
             cursor: pointer !important;
+            box-sizing: border-box !important;
         }
         
         /* Эффект поднятия карты при наведении */
@@ -1322,6 +1345,12 @@
             margin-bottom: 1.5rem !important;
         }
         
+        @media (max-width: 768px) {
+            .card-header {
+                margin-bottom: 1rem !important;
+            }
+        }
+        
         .avatar {
             width: 60px !important;
             height: 60px !important;
@@ -1335,6 +1364,15 @@
             font-size: 1.5rem !important;
             margin-right: 1rem !important;
             box-shadow: 0 8px 16px rgba(236, 72, 153, 0.3) !important;
+        }
+        
+        @media (max-width: 768px) {
+            .avatar {
+                width: 45px !important;
+                height: 45px !important;
+                font-size: 1.2rem !important;
+                margin-right: 0.75rem !important;
+            }
         }
         
         .client-info {
@@ -1351,6 +1389,13 @@
             margin-bottom: 0.5rem !important;
         }
         
+        @media (max-width: 768px) {
+            .client-name {
+                font-size: 1rem !important;
+                margin-bottom: 0.25rem !important;
+            }
+        }
+        
         .stars {
             display: flex !important;
             gap: 2px !important;
@@ -1360,6 +1405,12 @@
             color: #fbbf24 !important;
             font-size: 1rem !important;
             animation: starTwinkle 2s ease-in-out infinite !important;
+        }
+        
+        @media (max-width: 768px) {
+            .stars i {
+                font-size: 0.9rem !important;
+            }
         }
         
         .stars i:nth-child(1) { animation-delay: 0s !important; }
@@ -1389,6 +1440,13 @@
             margin: 0 !important;
         }
         
+        @media (max-width: 768px) {
+            .card-content p {
+                font-size: 0.95rem !important;
+                line-height: 1.5 !important;
+            }
+        }
+        
         /* Эффект колоды - карты в заднем плане */
         .swiper-slide:not(.swiper-slide-active) {
             opacity: 0.6 !important;
@@ -1398,11 +1456,25 @@
             z-index: 1 !important;
         }
         
+        @media (max-width: 768px) {
+            .swiper-slide:not(.swiper-slide-active) {
+                opacity: 0.3 !important;
+                transform: scale(0.85) translateY(20px) rotateX(5deg) !important;
+                filter: brightness(0.9) blur(0.5px) !important;
+            }
+        }
+        
         .swiper-slide-active {
             opacity: 1 !important;
             transform: scale(1) translateY(0) rotateX(0deg) !important;
             z-index: 10 !important;
             filter: brightness(1) blur(0px) !important;
+        }
+        
+        @media (max-width: 768px) {
+            .swiper-slide-active {
+                transform: scale(1) translateY(0) rotateX(0deg) !important;
+            }
         }
         
         /* Анимация перехода карт в колоде */
@@ -1416,6 +1488,18 @@
             transform: scale(0.8) translateY(40px) rotateX(8deg) translateX(30px) !important;
             opacity: 0.7 !important;
             z-index: 5 !important;
+        }
+        
+        @media (max-width: 768px) {
+            .swiper-slide-prev {
+                transform: scale(0.9) translateY(15px) rotateX(3deg) translateX(-15px) !important;
+                opacity: 0.5 !important;
+            }
+            
+            .swiper-slide-next {
+                transform: scale(0.9) translateY(15px) rotateX(3deg) translateX(15px) !important;
+                opacity: 0.5 !important;
+            }
         }
         
         /* Анимация появления карточек из колоды */
@@ -1549,11 +1633,46 @@
             
             .review-card {
                 padding: 1.5rem !important;
+                height: auto !important;
+                min-height: 280px !important;
+                max-width: 100% !important;
+            }
+            
+            .card-header {
+                margin-bottom: 1rem !important;
+            }
+            
+            .avatar {
+                width: 45px !important;
+                height: 45px !important;
+                font-size: 1.2rem !important;
+            }
+            
+            .client-name {
+                font-size: 1rem !important;
+            }
+            
+            .card-content p {
+                font-size: 0.95rem !important;
+                line-height: 1.5 !important;
+            }
+            
+            .stars i {
+                font-size: 0.9rem !important;
             }
             
             #swipeTutorial {
                 padding: 1rem !important;
                 font-size: 0.875rem !important;
+            }
+            
+            .reviews-swiper {
+                height: auto !important;
+                min-height: 320px !important;
+            }
+            
+            .swiper-slide {
+                height: auto !important;
             }
         }
         
@@ -1650,27 +1769,30 @@
             
             /* Адаптивность колоды карт для мобильных */
             .reviews-swiper {
-                height: 400px !important;
+                height: auto !important;
+                min-height: 320px !important;
             }
             
             .review-card {
                 max-width: 100% !important;
-                height: 350px !important;
+                height: auto !important;
+                min-height: 280px !important;
                 padding: 1.5rem !important;
             }
             
             .avatar {
-                width: 50px !important;
-                height: 50px !important;
-                font-size: 1.25rem !important;
+                width: 45px !important;
+                height: 45px !important;
+                font-size: 1.2rem !important;
             }
             
             .client-name {
-                font-size: 1.1rem !important;
+                font-size: 1rem !important;
             }
             
             .card-content p {
-                font-size: 1rem !important;
+                font-size: 0.95rem !important;
+                line-height: 1.5 !important;
             }
             
             /* Скрываем сложные анимации на мобильных */
@@ -3139,18 +3261,12 @@
             
             <!-- Custom Pagination -->
             <div class="swiper-pagination reviews-pagination"></div>
-        </div>
-                    <div class="w-full h-full bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center text-white text-sm shadow-lg">
-                        <i class="fas fa-hand-pointer"></i>
-                    </div>
-                </div>
-                
-                <!-- Swipe Indicators -->
-                <div class="swipe-indicators absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2">
-                    <div class="swipe-indicator w-3 h-3 bg-pink-300 rounded-full animate-pulse"></div>
-                    <div class="swipe-indicator w-3 h-3 bg-purple-300 rounded-full animate-pulse" style="animation-delay: 0.5s;"></div>
-                    <div class="swipe-indicator w-3 h-3 bg-pink-300 rounded-full animate-pulse" style="animation-delay: 1s;"></div>
-                </div>
+            
+            <!-- Swipe Indicators -->
+            <div class="swipe-indicators absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                <div class="swipe-indicator w-3 h-3 bg-pink-300 rounded-full animate-pulse"></div>
+                <div class="swipe-indicator w-3 h-3 bg-purple-300 rounded-full animate-pulse" style="animation-delay: 0.5s;"></div>
+                <div class="swipe-indicator w-3 h-3 bg-pink-300 rounded-full animate-pulse" style="animation-delay: 1s;"></div>
             </div>
             
             <!-- Progress Bar -->
