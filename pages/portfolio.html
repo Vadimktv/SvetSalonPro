@@ -5,13 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Примеры работ - SvetSalonPro</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     
     <style>
+        /* Оптимизация производительности */
+        * {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        /* Основные стили */
         .nav-link {
             position: relative;
             transition: color 0.3s ease;
@@ -34,254 +41,20 @@
         
         .animate-on-scroll {
             opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.6s ease;
+            transform: translateY(30px) translateZ(0);
+            transition: all 0.4s ease-out;
+            will-change: opacity, transform;
         }
         
         .animate-on-scroll.animate {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateY(0) translateZ(0);
         }
         
         .delay-100 { transition-delay: 0.1s; }
         .delay-200 { transition-delay: 0.2s; }
         .delay-300 { transition-delay: 0.3s; }
         
-        /* Улучшенная бегущая строка для фильтров */
-        .marquee-container {
-            overflow: hidden;
-            position: relative;
-            background: linear-gradient(90deg, rgba(253, 242, 248, 0.8) 0%, rgba(252, 231, 243, 0.8) 50%, rgba(253, 242, 248, 0.8) 100%);
-            border-radius: 30px;
-            padding: 12px;
-            box-shadow: 
-                0 4px 6px -1px rgba(0, 0, 0, 0.1),
-                0 2px 4px -1px rgba(0, 0, 0, 0.06),
-                0 0 0 1px rgba(255, 255, 255, 0.1);
-            cursor: grab;
-            user-select: none;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-        }
-        
-        .marquee-container:active {
-            cursor: grabbing;
-        }
-        
-        .marquee-content {
-            display: flex;
-            transition: transform 0.5s ease-out;
-            white-space: nowrap;
-            will-change: transform;
-        }
-        
-        .marquee-content.dragging {
-            transition: none;
-        }
-        
-        .filter-button {
-            background: rgba(255, 255, 255, 0.9);
-            color: #6b7280;
-            padding: 14px 28px;
-            margin: 0 10px;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 
-                0 4px 6px -1px rgba(0, 0, 0, 0.1),
-                0 2px 4px -1px rgba(0, 0, 0, 0.06),
-                0 0 0 1px rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            cursor: pointer;
-            user-select: none;
-            flex-shrink: 0;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-        }
-        
-        .filter-button:hover {
-            transform: translateY(-4px);
-            box-shadow: 
-                0 10px 15px -3px rgba(0, 0, 0, 0.1),
-                0 4px 6px -2px rgba(0, 0, 0, 0.05),
-                0 0 0 1px rgba(255, 255, 255, 0.2);
-        }
-        
-        .filter-button.active {
-            background: linear-gradient(135deg, #ec4899, #be185d);
-            color: white;
-            border-color: rgba(236, 72, 153, 0.3);
-            box-shadow: 
-                0 10px 15px -3px rgba(236, 72, 153, 0.3),
-                0 4px 6px -2px rgba(236, 72, 153, 0.2),
-                0 0 0 1px rgba(236, 72, 153, 0.1);
-        }
-
-        /* iOS Style Menu Styles */
-        #sideMenu.open #menuBackdrop {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        #sideMenu.open #menuContainer {
-            transform: scale(1);
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        /* Menu Items */
-        .menu-item {
-            display: flex;
-            align-items: center;
-            padding: 12px 16px;
-            border-radius: 12px;
-            color: #374151;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .menu-item::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(236, 72, 153, 0.08);
-            border-radius: 12px;
-            opacity: 0;
-            transform: scale(0.8);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            pointer-events: none;
-        }
-
-        .menu-item:hover::before {
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        .menu-item:hover {
-            transform: translateX(8px);
-            color: #ec4899;
-        }
-
-        .menu-item:active {
-            transform: translateX(8px) scale(0.95);
-        }
-
-        .menu-item:active::before {
-            background: rgba(236, 72, 153, 0.12);
-            transform: scale(1.05);
-        }
-
-        /* Menu Icons */
-        .menu-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            background: rgba(236, 72, 153, 0.08);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 12px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            flex-shrink: 0;
-        }
-
-        .menu-item:hover .menu-icon {
-            background: rgba(236, 72, 153, 0.15);
-            transform: scale(1.05);
-        }
-
-        .menu-item:active .menu-icon {
-            transform: scale(0.98);
-        }
-
-        .menu-icon i {
-            font-size: 18px;
-            color: #ec4899;
-            transition: all 0.3s ease;
-            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
-        }
-
-        .menu-item:hover .menu-icon i {
-            transform: scale(1.1);
-        }
-
-        .menu-item span {
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .menu-item:hover span {
-            transform: translateX(2px);
-            color: #ec4899;
-        }
-
-        /* Bubble Animation */
-        @keyframes bubblePop {
-            0% { transform: scale(0.9); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        .menu-item.bubble-animation::before {
-            animation: bubblePop 0.2s ease-out;
-        }
-
-        /* iOS Haptic Feedback Simulation */
-        @keyframes hapticFeedback {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-1px); }
-            75% { transform: translateX(1px); }
-        }
-
-        .haptic-feedback {
-            animation: hapticFeedback 0.1s ease-in-out;
-        }
-
-        /* Glassmorphism Effects */
-        .glass-effect {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        /* Smooth Scrolling */
-        #menuContainer {
-            scrollbar-width: thin;
-            scrollbar-color: rgba(236, 72, 153, 0.3) transparent;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        #menuContainer::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        #menuContainer::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        #menuContainer::-webkit-scrollbar-thumb {
-            background: rgba(236, 72, 153, 0.3);
-            border-radius: 2px;
-        }
-
-        #menuContainer::-webkit-scrollbar-thumb:hover {
-            background: rgba(236, 72, 153, 0.5);
-        }
-
-        /* Touch improvements */
-        .menu-item, #iosMenuBtn, #closeMenuBtn {
-            -webkit-tap-highlight-color: transparent;
-            touch-action: manipulation;
-        }
-
         /* iOS Style Side Menu */
         #sideMenu {
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -290,73 +63,35 @@
             -ms-user-select: none;
             user-select: none;
         }
-        
+
         #sideMenu.open {
             pointer-events: all;
         }
-        
+
         #sideMenu.open #menuBackdrop {
             opacity: 1;
             pointer-events: all;
             backdrop-filter: blur(2px);
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
+
         #sideMenu.open #menuContainer {
             transform: scale(1) translateX(0);
             opacity: 1;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
+
         #sideMenu:not(.open) #menuContainer {
             transform: scale(0.75) translateX(0) !important;
             opacity: 0 !important;
         }
-        
+
         /* Prevent body scroll when menu is open */
         body.menu-open {
             overflow: hidden;
         }
-        
-        /* Menu Button Animation */
-        .menu-icon-container {
-            position: relative;
-            width: 20px;
-            height: 16px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-        
-        .menu-line {
-            width: 100%;
-            height: 2px;
-            background-color: #374151;
-            border-radius: 1px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            transform-origin: center;
-        }
-        
-        /* Menu Button Active State */
-        #iosMenuBtn.active .menu-line:nth-child(1) {
-            transform: translateY(7px) rotate(45deg);
-        }
-        
-        #iosMenuBtn.active .menu-line:nth-child(2) {
-            opacity: 0;
-            transform: scaleX(0);
-        }
-        
-        #iosMenuBtn.active .menu-line:nth-child(3) {
-            transform: translateY(-7px) rotate(-45deg);
-        }
-        
-        /* Hover effects for menu lines */
-        #iosMenuBtn:hover .menu-line {
-            background-color: #ec4899;
-        }
-        
+
         /* Menu Items */
         .menu-item {
             display: flex;
@@ -375,381 +110,242 @@
             -webkit-tap-highlight-color: transparent;
             text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
         }
-        
-        .menu-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(236, 72, 153, 0.08);
-            opacity: 0;
-            transition: all 0.3s ease;
-        }
-        
-        .menu-item:hover::before {
-            opacity: 1;
-        }
-        
+
         .menu-item:hover {
-            background: rgba(236, 72, 153, 0.05);
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.1) 0%, rgba(236, 72, 153, 0.05) 100%);
             transform: translateX(4px);
-            box-shadow: 0 2px 8px rgba(236, 72, 153, 0.15);
+            box-shadow: 0 4px 12px rgba(236, 72, 153, 0.15);
         }
-        
-        .menu-item:active {
-            transform: translateX(2px) scale(0.98);
-            background: rgba(236, 72, 153, 0.1);
-        }
-        
+
         .menu-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+            width: 24px;
+            height: 24px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin-right: 12px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        }
-        
-        .menu-item:hover .menu-icon {
-            background: linear-gradient(135deg, #ec4899, #db2777);
-            transform: scale(1.1) rotate(5deg);
-            box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3);
-        }
-        
-        .menu-item:hover .menu-icon i {
-            color: white;
-            transform: scale(1.1);
-        }
-        
-        .menu-icon i {
-            color: #6b7280;
+            border-radius: 8px;
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.1) 0%, rgba(236, 72, 153, 0.05) 100%);
+            color: #ec4899;
             font-size: 14px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Better focus states */
-        .menu-item:focus, #iosMenuBtn:focus, #closeMenuBtn:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.3);
+        .menu-item:hover .menu-icon {
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.2) 0%, rgba(236, 72, 153, 0.1) 100%);
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(236, 72, 153, 0.2);
         }
-        
-        /* Слайдшоу для фотографий */
-        .slideshow-container {
-            position: relative;
-            max-width: 1200px;
-            margin: 0 auto;
-            overflow: hidden;
-            border-radius: 24px;
-            box-shadow: 
-                0 25px 50px -12px rgba(0, 0, 0, 0.25),
-                0 0 0 1px rgba(255, 255, 255, 0.1);
-            transition: opacity 0.3s ease-in-out;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+
+        /* Bubble Animation */
+        @keyframes bubblePop {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
         }
-        
-        .slideshow-slide {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            transition: opacity 0.6s ease-in-out;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+
+        .bubble-animation {
+            animation: bubblePop 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
-        .slideshow-slide.active {
-            opacity: 1;
+
+        /* Haptic Feedback */
+        .haptic-feedback {
+            animation: hapticShake 0.1s ease-in-out;
         }
-        
-        .slideshow-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;
-            border-radius: 24px;
-            image-rendering: -webkit-optimize-contrast;
-            image-rendering: crisp-edges;
+
+        @keyframes hapticShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-1px); }
+            75% { transform: translateX(1px); }
         }
-        
-        .slideshow-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
-            color: white;
-            padding: 50px 40px 40px;
-            border-radius: 0 0 24px 24px;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-        }
-        
-        .slideshow-title {
-            font-size: 1.5rem;
+
+        /* Фильтры портфолио */
+        .filter-button {
+            background: rgba(255, 255, 255, 0.9);
+            color: #6b7280;
+            padding: 14px 28px;
+            margin: 0 10px;
+            border-radius: 20px;
             font-weight: 600;
-            margin-bottom: 8px;
-        }
-        
-        .slideshow-category {
-            font-size: 0.9rem;
-            opacity: 0.9;
-            margin-bottom: 5px;
-        }
-        
-        .slideshow-counter {
-            font-size: 0.8rem;
-            opacity: 0.7;
-            font-weight: 500;
-        }
-        
-        /* Навигация слайдшоу */
-        .slideshow-nav {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 8px;
-            z-index: 10;
-        }
-        
-        .slideshow-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.4);
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .slideshow-dot.active {
-            background: #ec4899;
-            transform: scale(1.3);
-            box-shadow: 0 0 0 2px rgba(236, 72, 153, 0.3);
-        }
-        
-        .slideshow-arrow {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(255, 255, 255, 0.95);
-            color: #ec4899;
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 10;
+            font-size: 0.95rem;
+            transition: all 0.3s ease-out;
             box-shadow: 
                 0 4px 6px -1px rgba(0, 0, 0, 0.1),
                 0 2px 4px -1px rgba(0, 0, 0, 0.06),
                 0 0 0 1px rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            user-select: none;
+            flex-shrink: 0;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
+            will-change: transform, box-shadow;
+            transform: translateZ(0);
         }
-        
-        .slideshow-arrow:hover {
-            background: #ec4899;
-            color: white;
-            transform: translateY(-50%) scale(1.15);
+
+        .filter-button:hover {
+            background: rgba(255, 255, 255, 0.95);
+            color: #ec4899;
+            transform: translateY(-2px) translateZ(0);
             box-shadow: 
-                0 10px 15px -3px rgba(236, 72, 153, 0.3),
-                0 4px 6px -2px rgba(236, 72, 153, 0.2);
+                0 8px 15px -3px rgba(0, 0, 0, 0.1),
+                0 4px 6px -2px rgba(0, 0, 0, 0.05),
+                0 0 0 1px rgba(255, 255, 255, 0.2);
         }
-        
-        .slideshow-arrow.prev {
-            left: 20px;
+
+        .filter-button.active {
+            background: linear-gradient(135deg, #ec4899, #9333ea);
+            color: white;
+            transform: translateY(-2px) translateZ(0);
+            box-shadow: 
+                0 8px 15px -3px rgba(236, 72, 153, 0.3),
+                0 4px 6px -2px rgba(147, 51, 234, 0.2),
+                0 0 0 1px rgba(255, 255, 255, 0.2);
         }
-        
-        .slideshow-arrow.next {
-            right: 20px;
-        }
-        
-        /* Анимации для фотографий */
-        .photo-fade-in {
-            animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        }
-        
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px) scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-        
-        .photo-scale-in {
-            animation: scaleIn 0.6s ease-out;
-        }
-        
-        @keyframes scaleIn {
-            from {
-                opacity: 0;
-                transform: scale(0.8);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-        
-        /* Сетка фотографий */
-        .portfolio-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 24px;
-            margin-top: 40px;
-            padding: 0 20px;
-        }
-        
-        .portfolio-item {
+
+        /* Карточки портфолио */
+        .portfolio-card {
             background: white;
             border-radius: 20px;
             overflow: hidden;
             box-shadow: 
-                0 4px 6px -1px rgba(0, 0, 0, 0.1),
-                0 2px 4px -1px rgba(0, 0, 0, 0.06),
-                0 0 0 1px rgba(255, 255, 255, 0.05);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                0 10px 25px rgba(0, 0, 0, 0.1),
+                0 0 0 1px rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease-out;
             cursor: pointer;
-            opacity: 0;
-            transform: translateY(20px);
             position: relative;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            will-change: transform, box-shadow;
+            transform: translateZ(0);
         }
-        
-        .portfolio-item:hover {
-            transform: translateY(-12px) scale(1.03);
+
+        .portfolio-card:hover {
+            transform: translateY(-8px) scale(1.02) translateZ(0);
             box-shadow: 
-                0 20px 25px -5px rgba(0, 0, 0, 0.1),
-                0 10px 10px -5px rgba(0, 0, 0, 0.04),
-                0 0 0 1px rgba(255, 255, 255, 0.1),
-                0 0 0 0 1px rgba(236, 72, 153, 0.1);
+                0 25px 50px rgba(0, 0, 0, 0.15),
+                0 0 0 1px rgba(255, 255, 255, 0.9);
         }
-        
-        .portfolio-image {
+
+        .portfolio-card img {
             width: 100%;
-            height: 280px;
+            height: 250px;
             object-fit: cover;
-            object-position: center;
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            image-rendering: -webkit-optimize-contrast;
-            image-rendering: crisp-edges;
+            transition: transform 0.3s ease-out;
+            will-change: transform;
+            transform: translateZ(0);
         }
-        
-        .portfolio-item:hover .portfolio-image {
-            transform: scale(1.08);
+
+        .portfolio-card:hover img {
+            transform: scale(1.05) translateZ(0);
         }
-        
-        /* Убрали подписи и даты под фотографиями */
-        
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #ec4899;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
+
+        .portfolio-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.9), rgba(147, 51, 234, 0.9));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease-out;
+            will-change: opacity;
         }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+
+        .portfolio-card:hover .portfolio-overlay {
+            opacity: 1;
         }
-        
+
+        /* Модальное окно */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 90vw;
+            max-height: 90vh;
+            overflow: hidden;
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .modal.show .modal-content {
+            transform: scale(1);
+        }
+
         /* Адаптивность */
         @media (max-width: 768px) {
-            .marquee-container {
-                border-radius: 25px;
-                padding: 8px;
-            }
-            
             .filter-button {
-                padding: 12px 24px;
-                margin: 0 8px;
+                padding: 12px 20px;
                 font-size: 0.9rem;
-                border-radius: 18px;
+                margin: 0 6px;
             }
             
-            .slideshow-container {
-                border-radius: 15px;
-                margin: 0 10px;
+            .portfolio-card img {
+                height: 200px;
+            }
+        }
+        
+        /* Оптимизация для мобильных устройств */
+        @media (max-width: 768px) {
+            .portfolio-card {
+                transition: all 0.2s ease-out;
             }
             
-            .slideshow-arrow {
-                width: 40px;
-                height: 40px;
+            .portfolio-card:hover {
+                transform: translateY(-4px) scale(1.01) translateZ(0);
             }
             
-            .slideshow-arrow.prev {
-                left: 10px;
+            .portfolio-card img {
+                transition: transform 0.2s ease-out;
             }
             
-            .slideshow-arrow.next {
-                right: 10px;
+            .portfolio-card:hover img {
+                transform: scale(1.03) translateZ(0);
             }
-            
-            .portfolio-grid {
-                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-                gap: 20px;
-                margin: 0 15px;
-                padding: 0 10px;
+        }
+        
+        /* Предотвращение мерцания анимаций */
+        @media (prefers-reduced-motion: reduce) {
+            .portfolio-card,
+            .portfolio-card img,
+            .portfolio-overlay,
+            .filter-button,
+            .animate-on-scroll {
+                transition: none !important;
+                animation: none !important;
             }
         }
     </style>
 </head>
-<body class="bg-gradient-to-br from-pink-50 via-white to-purple-50">
-    <!-- Header -->
-    <header class="fixed w-full bg-white shadow-sm z-50">
-        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <div class="flex items-center">
-                <a href="../index.html" class="logo-link">
-                    <h1 class="text-2xl font-bold text-pink-600 hover:text-pink-700 transition-colors duration-200 cursor-pointer">SvetSalonPro</h1>
-                </a>
-            </div>
-            <nav class="hidden md:flex items-center space-x-8">
-                <a href="../index.html#home" class="nav-link text-gray-700 hover:text-pink-600 transition">Главная</a>
-                <a href="../index.html#about" class="nav-link text-gray-700 hover:text-pink-600 transition">О нас</a>
-                <a href="../index.html#services" class="nav-link text-gray-700 hover:text-pink-600 transition">Услуги</a>
-                <a href="../index.html#masters" class="nav-link text-gray-700 hover:text-pink-600 transition">Мастера</a>
-                <a href="portfolio.html" class="nav-link text-pink-600 font-semibold">Примеры работ</a>
-                <a href="../index.html#contact" class="nav-link text-gray-700 hover:text-pink-600 transition">Контакты</a>
-                <a href="account.html" class="nav-link text-gray-700 hover:text-pink-600 transition">Личный кабинет</a>
-            </nav>
-            <div class="flex items-center space-x-4">
-                <!-- Profile Icon -->
-                <button id="profileBtn" class="hidden md:block text-gray-700 hover:text-pink-600 transition-colors duration-200">
-                    <div class="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center">
-                        <i class="fas fa-user text-white text-sm"></i>
-                    </div>
-                </button>
-                <!-- iOS Style Menu Button -->
-                <button id="iosMenuBtn" class="md:hidden w-10 h-10 rounded-full bg-gray-100/50 backdrop-blur-sm flex items-center justify-center hover:bg-gray-200/50 active:bg-gray-300/50 transition-all duration-200 transform hover:scale-105 active:scale-95 cursor-pointer">
-                    <i class="fas fa-bars text-gray-600 text-sm"></i>
-                </button>
-            </div>
-        </div>
-    </header>
-
+<body class="bg-gradient-to-br from-pink-50 via-white to-purple-50 min-h-screen">
     <!-- iOS Style Side Menu -->
     <div id="sideMenu" class="fixed inset-0 z-50 pointer-events-none">
         <!-- Backdrop -->
@@ -816,13 +412,7 @@
                         </div>
                         <span>Контакты</span>
                     </a>
-                </div>
-                
-                <!-- Divider -->
-                <div class="mx-4 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
-                
-                <!-- Profile Section -->
-                <div class="p-2">
+                    
                     <a href="account.html" class="menu-item group">
                         <div class="menu-icon">
                             <i class="fas fa-user"></i>
@@ -830,90 +420,158 @@
                         <span>Личный кабинет</span>
                     </a>
                 </div>
-                
-
             </div>
         </div>
     </div>
 
-    <!-- Hero Section -->
-    <section class="pt-32 pb-20 bg-gradient-to-br from-pink-50 to-purple-50">
-        <div class="container mx-auto px-4 text-center">
-            <h1 class="text-4xl md:text-6xl font-bold text-gray-800 mb-6 animate-on-scroll">Примеры наших работ</h1>
-            <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto animate-on-scroll delay-100">
-                Посмотрите на результаты нашей работы и вдохновитесь на создание своего идеального образа
-            </p>
-        </div>
-    </section>
-
-    <!-- Улучшенная бегущая строка фильтров -->
-    <section class="py-12 bg-white">
-        <div class="container mx-auto px-4">
-            <div class="marquee-container" id="marqueeContainer">
-                <div class="marquee-content" id="marqueeContent">
-                    <!-- Фильтры будут добавляться динамически -->
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Слайдшоу -->
-    <section class="py-20 bg-gradient-to-br from-pink-50 via-white to-purple-50">
-        <div class="container mx-auto px-4">
-            <div class="slideshow-container" id="slideshowContainer" style="height: 500px;">
-                <!-- Слайды будут добавляться динамически -->
-                
-                <!-- Навигация -->
-                <div class="slideshow-nav" id="slideshowNav"></div>
-                
-                <!-- Стрелки -->
-                <div class="slideshow-arrow prev" id="prevSlide">
-                    <i class="fas fa-chevron-left"></i>
-                </div>
-                <div class="slideshow-arrow next" id="nextSlide">
-                    <i class="fas fa-chevron-right"></i>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Сетка фотографий -->
-    <section class="py-20 bg-gradient-to-br from-white via-pink-50 to-white">
-        <div class="container mx-auto px-4">
-            <h2 class="text-4xl font-bold text-gray-800 text-center mb-16 bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">Все работы</h2>
-            <div class="portfolio-grid" id="portfolioGrid">
-                <!-- Фотографии будут загружаться динамически -->
-            </div>
-            
-            <!-- Empty State -->
-            <div id="emptyState" class="text-center py-20 hidden">
-                <i class="fas fa-images text-6xl text-gray-300 mb-6"></i>
-                <h3 class="text-2xl font-semibold text-gray-600 mb-4">Пока нет фотографий</h3>
-                <p class="text-gray-500 mb-8">Фотографии работ будут добавлены администратором</p>
-                <a href="../index.html#services" class="bg-pink-600 hover:bg-pink-700 text-white px-8 py-3 rounded-lg font-medium transition">
-                    Посмотреть услуги
+    <!-- Header -->
+    <header class="fixed w-full bg-white/90 backdrop-blur-md shadow-sm z-40">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <a href="../index.html" class="text-2xl font-bold text-pink-600 hover:text-pink-700 transition-colors duration-200">
+                    SvetSalonPro
                 </a>
             </div>
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="../index.html" class="nav-link text-gray-700 hover:text-pink-600 transition">Главная</a>
+                <a href="portfolio.html" class="nav-link text-pink-600 font-semibold">Примеры работ</a>
+                <a href="account.html" class="nav-link text-gray-700 hover:text-pink-600 transition">Личный кабинет</a>
+            </nav>
+            <div class="flex items-center space-x-4">
+                <!-- iOS Style Menu Button -->
+                <button id="iosMenuBtn" class="md:hidden w-10 h-10 rounded-full bg-gray-100/50 backdrop-blur-sm flex items-center justify-center hover:bg-gray-200/50 active:bg-gray-300/50 transition-all duration-200 transform hover:scale-105 active:scale-95 cursor-pointer">
+                    <i class="fas fa-bars text-gray-600 text-sm"></i>
+                </button>
+            </div>
         </div>
-    </section>
+    </header>
 
-    <!-- Image Modal -->
-    <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-90 z-50 hidden flex items-center justify-center p-4">
-        <div class="relative max-w-4xl w-full">
-            <button id="closeModal" class="absolute top-4 right-4 text-white text-3xl hover:text-gray-300 transition z-10">
-                <i class="fas fa-times"></i>
-            </button>
-            <img id="modalImage" src="" alt="Увеличенное изображение" class="w-full h-auto max-h-[90vh] object-contain">
+    <!-- Main Content -->
+    <main class="pt-32 pb-20">
+        <!-- Hero Section -->
+        <section class="relative overflow-hidden bg-gradient-to-br from-pink-50 via-purple-50 to-pink-100 py-20">
+            <!-- Background Decorations -->
+            <div class="absolute inset-0 overflow-hidden">
+                <div class="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-pink-200/30 to-purple-200/30 rounded-full blur-3xl animate-pulse"></div>
+                <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-purple-200/30 to-pink-200/30 rounded-full blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
+            </div>
+            
+            <div class="container mx-auto px-8 relative z-10">
+                <div class="text-center mb-16">
+                    <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-pink-500 to-purple-600 rounded-2xl shadow-lg mb-6 animate-bounce p-4">
+                        <i class="fas fa-images text-white text-2xl"></i>
+                    </div>
+                    <h1 class="text-4xl md:text-6xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent mb-6 animate-on-scroll">
+                        Примеры наших работ
+                    </h1>
+                    <p class="text-xl text-gray-600 max-w-3xl mx-auto animate-on-scroll delay-100">
+                        Посмотрите на результаты нашей работы и вдохновитесь на создание своего идеального образа
+                    </p>
+                </div>
+
+                <!-- Filter Buttons -->
+                <div class="flex justify-center mb-12">
+                    <div class="flex space-x-4 overflow-x-auto pb-4 px-4">
+                        <button class="filter-button active" data-filter="all">
+                            <i class="fas fa-th-large mr-2"></i>Все работы
+                        </button>
+                        <button class="filter-button" data-filter="стрижки">
+                            <i class="fas fa-cut mr-2"></i>Стрижки
+                        </button>
+                        <button class="filter-button" data-filter="маникюр">
+                            <i class="fas fa-hand-sparkles mr-2"></i>Маникюр
+                        </button>
+                        <button class="filter-button" data-filter="spa">
+                            <i class="fas fa-spa mr-2"></i>SPA процедуры
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Portfolio Grid -->
+        <section class="py-20">
+            <div class="container mx-auto px-8">
+                <div id="portfolioGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Portfolio items will be loaded here -->
+                </div>
+                
+                <!-- Empty State -->
+                <div id="emptyState" class="text-center py-20 hidden">
+                    <div class="w-24 h-24 bg-gradient-to-br from-pink-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-images text-3xl text-pink-600"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-4">Работы не найдены</h3>
+                    <p class="text-gray-600 mb-8">Попробуйте выбрать другую категорию</p>
+                    <button onclick="resetFilters()" class="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-8 py-3 rounded-xl font-semibold hover:from-pink-600 hover:to-purple-700 transition-all duration-300">
+                        Показать все работы
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal for Image Preview -->
+    <div id="imageModal" class="modal">
+        <div class="modal-content max-w-4xl w-full mx-4">
+            <div class="relative bg-white rounded-2xl overflow-hidden">
+                <!-- Header -->
+                <div class="bg-gradient-to-r from-pink-500 to-purple-600 text-white p-6">
+                    <div class="flex justify-between items-center">
+                        <h3 id="modalTitle" class="text-2xl font-bold"></h3>
+                        <button id="closeModal" class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center hover:bg-white/30 transition-all duration-200">
+                            <i class="fas fa-times text-white"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Image -->
+                <div class="relative">
+                    <img id="modalImage" src="" alt="" class="w-full h-auto max-h-[60vh] object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                </div>
+                
+                <!-- Content -->
+                <div class="p-8">
+                    <div class="mb-6">
+                        <h4 class="text-lg font-semibold text-gray-800 mb-3">Описание работы</h4>
+                        <p id="modalDescription" class="text-gray-600 leading-relaxed"></p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-gradient-to-r from-pink-50 to-purple-50 p-4 rounded-xl">
+                            <h5 class="font-semibold text-gray-800 mb-2">Категория</h5>
+                            <p id="modalCategory" class="text-gray-600"></p>
+                        </div>
+                        <div class="bg-gradient-to-r from-pink-50 to-purple-50 p-4 rounded-xl">
+                            <h5 class="font-semibold text-gray-800 mb-2">Мастер</h5>
+                            <p class="text-gray-600">Светлана</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="flex justify-center space-x-4 mt-8">
+                        <button onclick="bookService()" class="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-8 py-3 rounded-xl font-semibold hover:from-pink-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105">
+                            <i class="fas fa-calendar-alt mr-2"></i>Записаться
+                        </button>
+                        <button onclick="closeModal()" class="border-2 border-pink-500 text-pink-600 px-8 py-3 rounded-xl font-semibold hover:bg-pink-50 transition-all duration-300">
+                            Закрыть
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- Footer -->
-    <footer class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white py-16">
-        <div class="container mx-auto px-4">
+    <footer class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white py-16 relative overflow-hidden">
+        <!-- Убираем темные декоративные элементы -->
+        <div class="container mx-auto px-4 relative z-10">
+        <div class="container mx-auto px-4 relative z-10">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
                 <!-- Brand Section -->
                 <div class="text-center md:text-left">
-                    <a href="../index.html" class="logo-link">
+                    <a href="#" class="logo-link">
                         <h2 class="text-3xl font-bold text-pink-400 hover:text-pink-300 transition-colors duration-300 mb-2">SvetSalonPro</h2>
                     </a>
                     <p class="text-gray-300 text-sm">Салон красоты в Геленджике</p>
@@ -959,36 +617,19 @@
     </footer>
 
     <script>
-        // Инициализация AOS
+        // Initialize AOS
         AOS.init();
 
-        // Анимация при скролле
-        function animateOnScroll() {
-            const elements = document.querySelectorAll('.animate-on-scroll');
-            elements.forEach(element => {
-                const elementTop = element.getBoundingClientRect().top;
-                const elementVisible = 150;
-                
-                if (elementTop < window.innerHeight - elementVisible) {
-                    element.classList.add('animate');
-                }
-            });
-        }
-
-        window.addEventListener('scroll', animateOnScroll);
-        animateOnScroll();
-
-        // iOS Style Menu functionality
+        // Menu functionality
         let isMenuOpen = false;
-        const iosMenuBtn = document.getElementById('iosMenuBtn');
         const sideMenu = document.getElementById('sideMenu');
+        const iosMenuBtn = document.getElementById('iosMenuBtn');
         const closeMenuBtn = document.getElementById('closeMenuBtn');
         const menuBackdrop = document.getElementById('menuBackdrop');
-        const menuContainer = document.getElementById('menuContainer');
 
         // Haptic feedback function
         function triggerHapticFeedback() {
-            if ('vibrate' in navigator) {
+            if (navigator.vibrate) {
                 navigator.vibrate(10);
             }
             document.body.classList.add('haptic-feedback');
@@ -1024,7 +665,7 @@
             sideMenu.style.pointerEvents = 'none';
         }
 
-        // Event listeners
+        // Menu event listeners
         if (iosMenuBtn) {
             iosMenuBtn.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -1054,10 +695,292 @@
             });
         }
 
-        // Menu item click handlers
-        function setupMenuHandlers() {
-            const menuItems = document.querySelectorAll('.menu-item');
+        // Keyboard event listener for Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && isMenuOpen) {
+                closeMenu();
+            }
+        });
+
+        // Portfolio functionality
+        let currentFilter = 'all';
+        let portfolioItems = [];
+
+        // Portfolio data
+        const portfolioData = [
+            // Стрижки
+            {
+                id: 1,
+                category: 'стрижки',
+                src: '../images/portfolio/hair/Женская стрижка.JPG',
+                title: 'Женская стрижка',
+                description: 'Современная женская стрижка с профессиональной укладкой. Мастер подобрал идеальную форму, подчеркивающую черты лица и создающую объем. Использованы качественные средства для укладки и фиксации.'
+            },
+            {
+                id: 2,
+                category: 'стрижки',
+                src: '../images/portfolio/hair/Мужская стрижка.JPG',
+                title: 'Мужская стрижка',
+                description: 'Классическая мужская стрижка'
+            },
+            {
+                id: 3,
+                category: 'стрижки',
+                src: '../images/portfolio/hair/Мужская стрижка под машинку.JPG',
+                title: 'Мужская стрижка под машинку',
+                description: 'Современная стрижка под машинку'
+            },
+            {
+                id: 4,
+                category: 'стрижки',
+                src: '../images/portfolio/hair/Окрашивание волос.JPG',
+                title: 'Окрашивание волос',
+                description: 'Профессиональное окрашивание волос с использованием премиальных красок. Мастер подобрал идеальный оттенок, учитывая цветотип клиента. Результат - естественный и стойкий цвет без повреждения структуры волос.'
+            },
+            {
+                id: 5,
+                category: 'стрижки',
+                src: '../images/portfolio/hair/Колористика волос.JPG',
+                title: 'Колористика волос',
+                description: 'Современная колористика'
+            },
+            {
+                id: 6,
+                category: 'стрижки',
+                src: '../images/portfolio/hair/Мелирование волос.JPG',
+                title: 'Мелирование волос',
+                description: 'Красивое мелирование'
+            },
+            {
+                id: 7,
+                category: 'стрижки',
+                src: '../images/portfolio/hair/Ламинирования волос.JPG',
+                title: 'Ламинирование волос',
+                description: 'Процедура ламинирования'
+            },
+            // Маникюр
+            {
+                id: 8,
+                category: 'маникюр',
+                src: '../images/portfolio/manicure/classic-manicure.png',
+                title: 'Классический маникюр',
+                description: 'Классический маникюр с гель-лаком. Включает в себя обработку кутикулы, придание формы ногтям, нанесение базового покрытия, цветного лака и топового покрытия. Результат держится до 3 недель.'
+            },
+            {
+                id: 9,
+                category: 'маникюр',
+                src: '../images/portfolio/manicure/Комбинированный маникюр.jpg',
+                title: 'Комбинированный маникюр',
+                description: 'Комбинированный маникюр'
+            },
+            {
+                id: 10,
+                category: 'маникюр',
+                src: '../images/portfolio/manicure/Ремонт одного ногтя.jpg',
+                title: 'Ремонт ногтя',
+                description: 'Ремонт поврежденного ногтя'
+            },
+            {
+                id: 11,
+                category: 'маникюр',
+                src: '../images/portfolio/primer/маникюрIMG_9508.JPG',
+                title: 'Маникюр',
+                description: 'Современный маникюр'
+            },
+            {
+                id: 12,
+                category: 'маникюр',
+                src: '../images/portfolio/primer/маникюрIMG_9515.JPG',
+                title: 'Маникюр',
+                description: 'Красивый маникюр'
+            },
+            {
+                id: 13,
+                category: 'маникюр',
+                src: '../images/portfolio/primer/маникюрIMG_9518.JPG',
+                title: 'Маникюр',
+                description: 'Элегантный маникюр'
+            },
+            // SPA процедуры
+            {
+                id: 14,
+                category: 'spa',
+                src: '../images/portfolio/spa/SPA процедуры.JPG',
+                title: 'SPA процедуры',
+                description: 'Расслабляющие SPA процедуры для лица и тела. Включают в себя очищение, тонизирование, увлажнение и питание кожи. Используются профессиональные косметические средства для достижения максимального эффекта.'
+            }
+        ];
+
+        // Load portfolio
+        function loadPortfolio() {
+            const grid = document.getElementById('portfolioGrid');
+            if (!grid) return;
+
+            grid.innerHTML = '';
+            portfolioItems = currentFilter === 'all' ? portfolioData : portfolioData.filter(item => item.category === currentFilter);
+
+            if (portfolioItems.length === 0) {
+                document.getElementById('emptyState').classList.remove('hidden');
+                return;
+            }
+
+            document.getElementById('emptyState').classList.add('hidden');
+
+            portfolioItems.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = 'portfolio-card animate-on-scroll';
+                card.style.animationDelay = `${index * 0.1}s`;
+                
+                card.innerHTML = `
+                    <div class="relative overflow-hidden">
+                        <img src="${item.src}" alt="${item.title}" loading="lazy">
+                        <div class="portfolio-overlay">
+                            <div class="text-center text-white">
+                                <i class="fas fa-search text-2xl mb-2"></i>
+                                <p class="font-semibold">Посмотреть</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">${item.title}</h3>
+                        <p class="text-gray-600">${item.description}</p>
+                    </div>
+                `;
+
+                card.addEventListener('click', () => openModal(item));
+                grid.appendChild(card);
+            });
+
+            // Trigger animations with better performance
+            requestAnimationFrame(() => {
+                setTimeout(() => {
+                    document.querySelectorAll('.animate-on-scroll').forEach((el, index) => {
+                        setTimeout(() => {
+                            el.classList.add('animate');
+                        }, index * 50); // Stagger animation for better performance
+                    });
+                }, 100);
+            });
+        }
+
+        // Filter functionality
+        function setFilter(filter) {
+            currentFilter = filter;
             
+            // Update active button
+            document.querySelectorAll('.filter-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-filter="${filter}"]`).classList.add('active');
+            
+            loadPortfolio();
+        }
+
+        // Reset filters
+        function resetFilters() {
+            setFilter('all');
+        }
+
+        // Modal functionality
+        function openModal(item) {
+            const modal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modalImage');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalDescription = document.getElementById('modalDescription');
+            const modalCategory = document.getElementById('modalCategory');
+
+            modalImage.src = item.src;
+            modalImage.alt = item.title;
+            modalTitle.textContent = item.title;
+            modalDescription.textContent = item.description;
+            
+            // Устанавливаем категорию с правильным названием
+            const categoryNames = {
+                'стрижки': 'Стрижки и укладки',
+                'маникюр': 'Маникюр и педикюр',
+                'spa': 'SPA процедуры'
+            };
+            modalCategory.textContent = categoryNames[item.category] || item.category;
+
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('imageModal');
+            modal.classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        function bookService() {
+            // Закрываем модальное окно
+            closeModal();
+            
+            // Показываем уведомление
+            showNotification('Функция записи будет доступна в полной версии!', 'info');
+            
+            // Можно добавить переход на страницу записи
+            // window.location.href = '../index.html#contact';
+        }
+
+        function showNotification(message, type = 'info') {
+            // Создаем уведомление
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 p-4 rounded-xl shadow-lg transition-all duration-300 transform translate-x-full`;
+            
+            const colors = {
+                info: 'bg-blue-500 text-white',
+                success: 'bg-green-500 text-white',
+                error: 'bg-red-500 text-white'
+            };
+            
+            notification.className += ` ${colors[type]}`;
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas fa-${type === 'info' ? 'info-circle' : type === 'success' ? 'check-circle' : 'exclamation-circle'} mr-3"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Показываем уведомление
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+            }, 100);
+            
+            // Скрываем через 3 секунды
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 3000);
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Filter buttons
+            document.querySelectorAll('.filter-button').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const filter = btn.getAttribute('data-filter');
+                    setFilter(filter);
+                });
+            });
+
+            // Modal close
+            document.getElementById('closeModal').addEventListener('click', closeModal);
+            document.getElementById('imageModal').addEventListener('click', (e) => {
+                if (e.target.id === 'imageModal') {
+                    closeModal();
+                }
+            });
+
+            // Load initial portfolio
+            loadPortfolio();
+
+            // Menu item click handlers
+            const menuItems = document.querySelectorAll('.menu-item');
             menuItems.forEach((item, index) => {
                 item.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -1092,588 +1015,23 @@
                     }
                 });
             });
-        }
-
-        // Setup menu handlers after DOM is loaded
-        document.addEventListener('DOMContentLoaded', function() {
-            setupMenuHandlers();
         });
 
-        // Переменные для слайдшоу
-        let currentSlide = 0;
-        let slides = [];
-        let slideInterval;
-        let currentFilter = 'all';
-
-        // Переменные для улучшенной бегущей строки
-        let marqueeAnimation = null;
-        let isDragging = false;
-        let startX = 0;
-        let currentX = 0;
-        let isMovingRight = true;
-        let marqueeSpeed = 0.8; // Скорость в пикселях за кадр (замедлили)
-        let autoScroll = true;
-
-        // Создание улучшенной бегущей строки фильтров
-        function createMarqueeFilters() {
-            const marqueeContent = document.getElementById('marqueeContent');
-            const filters = [
-                { text: 'Все работы', filter: 'all' },
-                { text: 'Стрижки', filter: 'стрижки' },
-                { text: 'Маникюр', filter: 'маникюр' },
-                { text: 'SPA', filter: 'spa' }
-            ];
-            
-            // Создаем фильтры (без дублирования)
-            let html = '';
-            filters.forEach((filter, index) => {
-                const isActive = index === 0; // Первый "Все работы" активен
-                html += `
-                    <div class="filter-button ${isActive ? 'active' : ''}" 
-                         data-filter="${filter.filter}" 
-                         onclick="selectFilter('${filter.filter}')">
-                        ${filter.text}
-                    </div>
-                `;
-            });
-            
-            marqueeContent.innerHTML = html;
-            
-            // Запускаем анимацию
-            startMarqueeAnimation();
-        }
-
-        // Запуск анимации бегущей строки
-        function startMarqueeAnimation() {
-            if (marqueeAnimation) {
-                cancelAnimationFrame(marqueeAnimation);
-            }
-            
-            const marqueeContent = document.getElementById('marqueeContent');
-            const container = document.getElementById('marqueeContainer');
-            
-            if (!marqueeContent || !container) return;
-            
-            let position = 0;
-            const containerWidth = container.offsetWidth;
-            const contentWidth = marqueeContent.scrollWidth;
-            
-            function animate() {
-                if (!autoScroll || isDragging) {
-                    marqueeAnimation = requestAnimationFrame(animate);
-                    return;
-                }
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
                 
-                if (isMovingRight) {
-                    position -= marqueeSpeed;
-                    if (position <= -(contentWidth - containerWidth)) {
-                        isMovingRight = false;
-                    }
-                } else {
-                    position += marqueeSpeed;
-                    if (position >= 0) {
-                        isMovingRight = true;
-                    }
-                }
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
                 
-                marqueeContent.style.transform = `translateX(${position}px)`;
-                marqueeAnimation = requestAnimationFrame(animate);
-            }
-            
-            animate();
-        }
-
-        // Обработчики для свайпа/перетаскивания
-        function setupMarqueeDrag() {
-            const container = document.getElementById('marqueeContainer');
-            const content = document.getElementById('marqueeContent');
-            
-            if (!container || !content) return;
-            
-            // Touch events для мобильных устройств
-            container.addEventListener('touchstart', handleDragStart);
-            container.addEventListener('touchmove', handleDragMove);
-            container.addEventListener('touchend', handleDragEnd);
-            
-            // Mouse events для десктопа
-            container.addEventListener('mousedown', handleDragStart);
-            container.addEventListener('mousemove', handleDragMove);
-            container.addEventListener('mouseup', handleDragEnd);
-            container.addEventListener('mouseleave', handleDragEnd);
-            
-            // Предотвращаем выделение текста при перетаскивании
-            container.addEventListener('selectstart', (e) => e.preventDefault());
-        }
-
-        function handleDragStart(e) {
-            isDragging = true;
-            autoScroll = false;
-            
-            const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
-            startX = clientX - currentX;
-            
-            const content = document.getElementById('marqueeContent');
-            if (content) {
-                content.classList.add('dragging');
-            }
-            
-            e.preventDefault();
-        }
-
-        function handleDragMove(e) {
-            if (!isDragging) return;
-            
-            const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
-            currentX = clientX - startX;
-            
-            const content = document.getElementById('marqueeContent');
-            const container = document.getElementById('marqueeContainer');
-            
-            if (content && container) {
-                const containerWidth = container.offsetWidth;
-                const contentWidth = content.scrollWidth;
-                const maxScroll = -(contentWidth - containerWidth);
-                
-                // Ограничиваем перетаскивание
-                currentX = Math.max(maxScroll, Math.min(0, currentX));
-                content.style.transform = `translateX(${currentX}px)`;
-            }
-            
-            e.preventDefault();
-        }
-
-        function handleDragEnd(e) {
-            if (!isDragging) return;
-            
-            isDragging = false;
-            
-            const content = document.getElementById('marqueeContent');
-            if (content) {
-                content.classList.remove('dragging');
-            }
-            
-            // Возобновляем автоматическую прокрутку через 2 секунды
-            setTimeout(() => {
-                autoScroll = true;
-            }, 2000);
-            
-            e.preventDefault();
-        }
-
-        // Выбор фильтра
-        function selectFilter(filter) {
-            currentFilter = filter;
-            
-            // Обновляем активную кнопку с анимацией
-            const buttons = document.querySelectorAll('.filter-button');
-            buttons.forEach(button => {
-                button.classList.remove('active');
-                if (button.getAttribute('data-filter') === filter) {
-                    button.classList.add('active');
-                    // Добавляем небольшую анимацию для активной кнопки
-                    button.style.transform = 'scale(1.05)';
-                    setTimeout(() => {
-                        button.style.transform = '';
-                    }, 200);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
                 }
             });
-            
-            console.log(`Переключение на фильтр: ${filter}`);
-            loadPortfolioPhotos();
-        }
-
-        // Создание слайдшоу
-        function createSlideshow(photos) {
-            const container = document.getElementById('slideshowContainer');
-            const nav = document.getElementById('slideshowNav');
-            
-            // Добавляем плавную анимацию исчезновения
-            if (container.children.length > 0) {
-                container.style.opacity = '0';
-                setTimeout(() => {
-                    // Очищаем контейнер
-                    container.innerHTML = '';
-                    nav.innerHTML = '';
-                    container.style.opacity = '1';
-                    createSlideshowContent(photos, container, nav);
-                }, 300);
-            } else {
-                // Очищаем контейнер
-                container.innerHTML = '';
-                nav.innerHTML = '';
-                createSlideshowContent(photos, container, nav);
-            }
-        }
-        
-        function createSlideshowContent(photos, container, nav) {
-            
-            if (photos.length === 0) {
-                container.innerHTML = `
-                    <div class="flex items-center justify-center h-full">
-                        <div class="text-center text-gray-500">
-                            <i class="fas fa-images text-6xl mb-4"></i>
-                            <p class="text-xl">Нет фотографий для показа</p>
-                        </div>
-                    </div>
-                `;
-                return;
-            }
-            
-            // Создаем слайды
-            photos.forEach((photo, index) => {
-                const slide = document.createElement('div');
-                slide.className = `slideshow-slide ${index === 0 ? 'active' : ''}`;
-                slide.innerHTML = `
-                    <img src="${photo.src}" alt="Пример работы" class="slideshow-image">
-                    <div class="slideshow-overlay">
-                        <div class="slideshow-title">${photo.description}</div>
-                        <div class="slideshow-category">${photo.category === 'стрижки' ? 'Стрижки' : photo.category === 'маникюр' ? 'Маникюр' : photo.category === 'spa' ? 'SPA' : 'Другие услуги'}</div>
-                        <div class="slideshow-counter">${index + 1} из ${photos.length}</div>
-                    </div>
-                `;
-                container.appendChild(slide);
-                
-                // Создаем точку навигации
-                const dot = document.createElement('div');
-                dot.className = `slideshow-dot ${index === 0 ? 'active' : ''}`;
-                dot.onclick = () => goToSlide(index);
-                nav.appendChild(dot);
-            });
-            
-            // Добавляем стрелки
-            container.innerHTML += `
-                <div class="slideshow-arrow prev" id="prevSlide">
-                    <i class="fas fa-chevron-left"></i>
-                </div>
-                <div class="slideshow-arrow next" id="nextSlide">
-                    <i class="fas fa-chevron-right"></i>
-                </div>
-            `;
-            
-            // Добавляем обработчики событий
-            document.getElementById('prevSlide').onclick = () => prevSlide();
-            document.getElementById('nextSlide').onclick = () => nextSlide();
-            
-            slides = photos;
-            currentSlide = 0;
-            
-            // Запускаем автоматическое переключение
-            startSlideshow();
-        }
-
-        // Переход к слайду
-        function goToSlide(index) {
-            const slideElements = document.querySelectorAll('.slideshow-slide');
-            const dots = document.querySelectorAll('.slideshow-dot');
-            
-            slideElements.forEach(slide => slide.classList.remove('active'));
-            dots.forEach(dot => dot.classList.remove('active'));
-            
-            slideElements[index].classList.add('active');
-            dots[index].classList.add('active');
-            
-            currentSlide = index;
-        }
-
-        // Следующий слайд
-        function nextSlide() {
-            currentSlide = (currentSlide + 1) % slides.length;
-            goToSlide(currentSlide);
-        }
-
-        // Предыдущий слайд
-        function prevSlide() {
-            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-            goToSlide(currentSlide);
-        }
-
-        // Запуск автоматического слайдшоу
-        function startSlideshow() {
-            if (slideInterval) {
-                clearInterval(slideInterval);
-            }
-            
-            if (slides.length > 1) {
-                slideInterval = setInterval(nextSlide, 4000); // Переключение каждые 4 секунды
-            }
-        }
-
-        // Остановка слайдшоу при наведении
-        function pauseSlideshow() {
-            if (slideInterval) {
-                clearInterval(slideInterval);
-            }
-        }
-
-        // Загрузка фотографий портфолио
-        function loadPortfolioPhotos() {
-            console.log('Функция loadPortfolioPhotos вызвана');
-            const portfolioGrid = document.getElementById('portfolioGrid');
-            const emptyState = document.getElementById('emptyState');
-            console.log('portfolioGrid найден:', !!portfolioGrid);
-            console.log('emptyState найден:', !!emptyState);
-            
-            // Проверяем доступность изображений
-            console.log('Проверяем доступность изображений...');
-            
-            // Статические фотографии из всех папок портфолио
-            const portfolioPhotos = [
-                // Проверяем каждое изображение
-                // Фотографии из папки primer (маникюр)
-                {
-                    id: 1,
-                    category: 'маникюр',
-                    src: '../../images/portfolio/primer/маникюрIMG_9508.JPG',
-                    fileName: 'маникюрIMG_9508.JPG',
-                    description: 'Пример работы - Маникюр',
-                    uploadDate: '2025-08-25'
-                },
-                {
-                    id: 2,
-                    category: 'маникюр',
-                    src: '../../images/portfolio/primer/маникюрIMG_9515.JPG',
-                    fileName: 'маникюрIMG_9515.JPG',
-                    description: 'Пример работы - Маникюр',
-                    uploadDate: '2025-08-25'
-                },
-                {
-                    id: 3,
-                    category: 'маникюр',
-                    src: '../../images/portfolio/primer/маникюрIMG_9518.JPG',
-                    fileName: 'маникюрIMG_9518.JPG',
-                    description: 'Пример работы - Маникюр',
-                    uploadDate: '2025-08-25'
-                },
-                // Фотографии из папки manicure
-                {
-                    id: 4,
-                    category: 'маникюр',
-                    src: '../../images/portfolio/manicure/classic-manicure.png',
-                    fileName: 'classic-manicure.png',
-                    description: 'Классический маникюр',
-                    uploadDate: '2025-08-25'
-                },
-                {
-                    id: 5,
-                    category: 'маникюр',
-                    src: '../../images/portfolio/manicure/Комбинированный маникюр.jpg',
-                    fileName: 'Комбинированный маникюр.jpg',
-                    description: 'Комбинированный маникюр',
-                    uploadDate: '2025-08-25'
-                },
-                {
-                    id: 6,
-                    category: 'маникюр',
-                    src: '../../images/portfolio/manicure/Ремонт одного ногтя.jpg',
-                    fileName: 'Ремонт одного ногтя.jpg',
-                    description: 'Ремонт одного ногтя',
-                    uploadDate: '2025-08-25'
-                },
-                {
-                    id: 7,
-                    category: 'маникюр',
-                    src: '../../images/portfolio/manicure/Снятие покрытия.jpeg',
-                    fileName: 'Снятие покрытия.jpeg',
-                    description: 'Снятие покрытия',
-                    uploadDate: '2025-08-25'
-                },
-                {
-                    id: 8,
-                    category: 'маникюр',
-                    src: '../../images/portfolio/manicure/Укрепление гелем 00.37.43.JPG',
-                    fileName: 'Укрепление гелем 00.37.43.JPG',
-                    description: 'Укрепление гелем',
-                    uploadDate: '2025-08-25'
-                },
-                // Фотографии из папки hair (стрижки)
-                {
-                    id: 9,
-                    category: 'стрижки',
-                    src: '../../images/portfolio/hair/Женская стрижка.JPG',
-                    fileName: 'Женская стрижка.JPG',
-                    description: 'Женская стрижка',
-                    uploadDate: '2025-08-25'
-                },
-                {
-                    id: 10,
-                    category: 'стрижки',
-                    src: '../../images/portfolio/hair/Колористика волос.JPG',
-                    fileName: 'Колористика волос.JPG',
-                    description: 'Колористика волос',
-                    uploadDate: '2025-08-25'
-                },
-                {
-                    id: 11,
-                    category: 'стрижки',
-                    src: '../../images/portfolio/hair/Ламинирования волос.JPG',
-                    fileName: 'Ламинирования волос.JPG',
-                    description: 'Ламинирование волос',
-                    uploadDate: '2025-08-25'
-                },
-                {
-                    id: 12,
-                    category: 'стрижки',
-                    src: '../../images/portfolio/hair/Мелирование волос.JPG',
-                    fileName: 'Мелирование волос.JPG',
-                    description: 'Мелирование волос',
-                    uploadDate: '2025-08-25'
-                },
-                {
-                    id: 13,
-                    category: 'стрижки',
-                    src: '../../images/portfolio/hair/Мужская стрижка под машинку.JPG',
-                    fileName: 'Мужская стрижка под машинку.JPG',
-                    description: 'Мужская стрижка под машинку',
-                    uploadDate: '2025-08-25'
-                },
-                {
-                    id: 14,
-                    category: 'стрижки',
-                    src: '../../images/portfolio/hair/Мужская стрижка.JPG',
-                    fileName: 'Мужская стрижка.JPG',
-                    description: 'Мужская стрижка',
-                    uploadDate: '2025-08-25'
-                },
-                {
-                    id: 15,
-                    category: 'стрижки',
-                    src: '../../images/portfolio/hair/Окрашивание волос.JPG',
-                    fileName: 'Окрашивание волос.JPG',
-                    description: 'Окрашивание волос',
-                    uploadDate: '2025-08-25'
-                },
-                // Фотографии из папки spa
-                {
-                    id: 16,
-                    category: 'spa',
-                    src: '../../images/portfolio/spa/SPA процедуры.JPG',
-                    fileName: 'SPA процедуры.JPG',
-                    description: 'SPA процедуры',
-                    uploadDate: '2025-08-25'
-                }
-            ];
-            
-            // Фильтруем фотографии
-            let photosToShow = [];
-            if (currentFilter === 'all') {
-                photosToShow = portfolioPhotos;
-            } else {
-                photosToShow = portfolioPhotos.filter(photo => photo.category === currentFilter);
-            }
-            console.log('Текущий фильтр:', currentFilter);
-            console.log('Показано фотографий:', photosToShow.length);
-            
-            // Проверяем доступность каждого изображения
-            photosToShow.forEach((photo, index) => {
-                const img = new Image();
-                img.onload = () => {
-                    console.log(`✅ Изображение ${index + 1} загружено:`, photo.src);
-                };
-                img.onerror = () => {
-                    console.error(`❌ Ошибка загрузки изображения ${index + 1}:`, photo.src);
-                };
-                img.src = photo.src;
-            });
-            
-            // Создаем слайдшоу из всех фотографий выбранной категории
-            const slideshowPhotos = photosToShow;
-            console.log(`Создаем слайдшоу для категории "${currentFilter}" с ${slideshowPhotos.length} фотографиями:`, slideshowPhotos.map(p => p.description));
-            createSlideshow(slideshowPhotos);
-            
-            if (photosToShow.length === 0) {
-                portfolioGrid.classList.add('hidden');
-                emptyState.classList.remove('hidden');
-                return;
-            }
-            
-            portfolioGrid.classList.remove('hidden');
-            emptyState.classList.add('hidden');
-            
-            // Очищаем сетку
-            portfolioGrid.innerHTML = '';
-            
-            // Добавляем фотографии с анимацией
-            photosToShow.forEach((photo, index) => {
-                const photoElement = document.createElement('div');
-                photoElement.className = 'portfolio-item';
-                photoElement.style.animationDelay = `${index * 0.05}s`;
-                photoElement.innerHTML = `
-                    <img src="${photo.src}" alt="Пример работы" class="portfolio-image" 
-                         onerror="console.error('Ошибка загрузки изображения:', this.src); this.style.display='none';"
-                         onload="console.log('Изображение загружено:', this.src);">
-                `;
-                
-                photoElement.addEventListener('click', () => {
-                    openImageModal(photo.src);
-                });
-                
-                portfolioGrid.appendChild(photoElement);
-                
-                // Добавляем анимацию появления
-                setTimeout(() => {
-                    photoElement.classList.add('photo-fade-in');
-                }, index * 50);
-            });
-        }
-
-        // Модальное окно для просмотра изображений
-        const imageModal = document.getElementById('imageModal');
-        const modalImage = document.getElementById('modalImage');
-        const closeModal = document.getElementById('closeModal');
-
-        function openImageModal(src) {
-            modalImage.src = src;
-            imageModal.classList.remove('hidden');
-        }
-
-        if (closeModal) {
-            closeModal.addEventListener('click', () => {
-                imageModal.classList.add('hidden');
-            });
-        }
-
-        if (imageModal) {
-            imageModal.addEventListener('click', (e) => {
-                if (e.target === imageModal) {
-                    imageModal.classList.add('hidden');
-                }
-            });
-        }
-
-        // Обработчики для слайдшоу
-        document.addEventListener('DOMContentLoaded', () => {
-            createMarqueeFilters();
-            setupMarqueeDrag();
-            loadPortfolioPhotos();
-            
-            // Остановка слайдшоу при наведении
-            const slideshowContainer = document.getElementById('slideshowContainer');
-            if (slideshowContainer) {
-                slideshowContainer.addEventListener('mouseenter', pauseSlideshow);
-                slideshowContainer.addEventListener('mouseleave', startSlideshow);
-            }
-        });
-
-        // Обновляем фотографии каждые 30 секунд для синхронизации
-        setInterval(() => {
-            loadPortfolioPhotos();
-        }, 30000);
-
-        // Обработка клавиш для слайдшоу
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft') {
-                prevSlide();
-            } else if (e.key === 'ArrowRight') {
-                nextSlide();
-            }
-        });
-
-        // Обработка изменения размера окна для бегущей строки
-        window.addEventListener('resize', () => {
-            if (marqueeAnimation) {
-                cancelAnimationFrame(marqueeAnimation);
-            }
-            setTimeout(startMarqueeAnimation, 100);
         });
     </script>
 </body>
