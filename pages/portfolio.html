@@ -290,7 +290,7 @@
             border-radius: 20px;
             max-width: 90vw;
             max-height: 90vh;
-            overflow: hidden;
+            overflow-y: auto;
             transform: scale(0.8);
             transition: transform 0.3s ease;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
@@ -298,6 +298,25 @@
 
         .modal.show .modal-content {
             transform: scale(1);
+        }
+        
+        /* Стили для скроллбара в модальном окне */
+        .modal-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .modal-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        
+        .modal-content::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+        
+        .modal-content::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
         }
 
         /* Адаптивность */
@@ -545,16 +564,16 @@
                         </div>
                         <div class="bg-gradient-to-r from-pink-50 to-purple-50 p-4 rounded-xl">
                             <h5 class="font-semibold text-gray-800 mb-2">Мастер</h5>
-                            <p class="text-gray-600">Светлана</p>
+                            <p id="modalMaster" class="text-gray-600">Светлана</p>
                         </div>
                     </div>
                     
                     <!-- Action Buttons -->
-                    <div class="flex justify-center space-x-4 mt-8">
-                        <button onclick="bookService()" class="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-8 py-3 rounded-xl font-semibold hover:from-pink-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105">
+                    <div class="flex justify-center space-x-4 mt-8 overflow-hidden">
+                        <button onclick="bookService()" class="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-8 py-3 rounded-xl font-semibold hover:from-pink-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-102">
                             <i class="fas fa-calendar-alt mr-2"></i>Записаться
                         </button>
-                        <button onclick="closeModal()" class="border-2 border-pink-500 text-pink-600 px-8 py-3 rounded-xl font-semibold hover:bg-pink-50 transition-all duration-300">
+                        <button onclick="closeModal()" class="border-2 border-pink-500 text-pink-600 px-8 py-3 rounded-xl font-semibold hover:bg-pink-50 transition-all duration-300 transform hover:scale-102">
                             Закрыть
                         </button>
                     </div>
@@ -888,6 +907,7 @@
             const modalTitle = document.getElementById('modalTitle');
             const modalDescription = document.getElementById('modalDescription');
             const modalCategory = document.getElementById('modalCategory');
+            const modalMaster = document.getElementById('modalMaster');
 
             modalImage.src = item.src;
             modalImage.alt = item.title;
@@ -901,6 +921,15 @@
                 'spa': 'SPA процедуры'
             };
             modalCategory.textContent = categoryNames[item.category] || item.category;
+            
+            // Устанавливаем мастера в зависимости от категории
+            const masterNames = {
+                'стрижки': 'Светлана',
+                'маникюр': 'Анна',
+                'spa': 'Светлана',
+                'брови': 'Виолетта'
+            };
+            modalMaster.textContent = masterNames[item.category] || 'Светлана';
 
             modal.classList.add('show');
             document.body.style.overflow = 'hidden';
@@ -916,11 +945,8 @@
             // Закрываем модальное окно
             closeModal();
             
-            // Показываем уведомление
-            showNotification('Функция записи будет доступна в полной версии!', 'info');
-            
-            // Можно добавить переход на страницу записи
-            // window.location.href = '../index.html#contact';
+            // Переходим на главную страницу к форме записи
+            window.location.href = '../index.html#booking';
         }
 
         function showNotification(message, type = 'info') {

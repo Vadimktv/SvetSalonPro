@@ -85,6 +85,24 @@
             text-shadow: 0 2px 8px rgba(236,72,153,0.08);
         }
         
+        /* Исправление проблемы с выходом кнопок за границы */
+        .service-card {
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .service-card .btn,
+        .service-card a[href="#booking"] {
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* Ограничиваем максимальное смещение кнопок */
+        .service-card .btn:hover,
+        .service-card a[href="#booking"]:hover {
+            transform: translateY(-1px) scale(1.02);
+        }
+        
         /* Стили для формы записи */
         .form-select:focus {
             border-color: #ec4899;
@@ -2483,6 +2501,7 @@
                                                     <option value="">Выберите категорию</option>
                                                     <option value="hair">Парикмахерские услуги</option>
                                                     <option value="manicure">Услуги маникюра</option>
+                                                    <option value="eyebrows">Услуги бровей</option>
                                                 </select>
                                             </div>
                                             <div>
@@ -2574,7 +2593,7 @@
                             <p class="text-gray-600 text-sm mb-4 leading-relaxed">Расслабляющие и оздоравливающие процедуры для волос и кожи головы.</p>
                             <div class="mt-auto w-full">
                                 <a href="#booking" onclick="selectService('hair', 'spa')" 
-                                   class="block bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl cursor-pointer">
+                                   class="block bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-102 shadow-lg hover:shadow-xl cursor-pointer">
                                     <i class="fas fa-calendar-plus mr-2"></i>Записаться
                                 </a>
                             </div>
@@ -2592,7 +2611,7 @@
                             <p class="text-gray-600 text-sm mb-4 leading-relaxed">Современные женские стрижки любой сложности с учетом ваших пожеланий.</p>
                             <div class="mt-auto w-full">
                                 <a href="#booking" onclick="selectService('hair', 'female_haircut')" 
-                                   class="block bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl cursor-pointer">
+                                   class="block bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-102 shadow-lg hover:shadow-xl cursor-pointer">
                                     <i class="fas fa-calendar-plus mr-2"></i>Записаться
                                 </a>
                             </div>
@@ -2756,7 +2775,7 @@
                             <p class="text-gray-600 text-sm mb-4 leading-relaxed">Комбинированный маникюр с укреплением ногтевой пластины для здоровых и красивых ногтей.</p>
                             <div class="mt-auto w-full">
                                 <a href="#booking" onclick="selectService('manicure', 'combined_manicure')" 
-                                   class="block bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl cursor-pointer">
+                                   class="block bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-102 shadow-lg hover:shadow-xl cursor-pointer">
                                     <i class="fas fa-calendar-plus mr-2"></i>Записаться
                                 </a>
                             </div>
@@ -2992,6 +3011,70 @@
                             <a href="#booking" onclick="selectMaster('Анна')" 
                                class="block w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-center">
                                 <i class="fas fa-calendar-plus mr-2"></i>Записаться к Анне
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Master 3 - Виолетта -->
+                <div class="group relative master-card bg-white/80 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 overflow-hidden animate-on-scroll delay-200 hover:scale-105 transition-all duration-500 transform hover:rotate-1 p-4">
+                    <!-- Image Container -->
+                    <div class="relative overflow-hidden h-80">
+                        <img src="images/ui/Виолетта.webp" alt="Мастер Виолетта" 
+                             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <!-- Gradient Overlay -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        <!-- Floating Badge -->
+                        <div class="absolute top-4 right-4 bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg transform translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 z-10">
+                            <i class="fas fa-seedling mr-1"></i>Стажер
+                        </div>
+                    </div>
+                    
+                    <!-- Content -->
+                    <div class="p-6 relative">
+                        <!-- Name and Title -->
+                        <div class="mb-4">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-2 group-hover:text-emerald-600 transition-colors duration-300">Виолетта</h3>
+                            <div class="flex items-center space-x-2">
+                                <div class="w-8 h-8 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full flex items-center justify-center shadow-md">
+                                    <i class="fas fa-eye text-white text-sm"></i>
+                                </div>
+                                <span class="text-lg font-semibold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">Бровист-стажер</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Experience -->
+                        <div class="mb-4 p-3 bg-gradient-to-r from-emerald-50 to-teal-50 rounded-xl border border-emerald-100">
+                            <div class="flex items-center space-x-2 mb-2">
+                                <i class="fas fa-star text-emerald-600"></i>
+                                <span class="font-semibold text-gray-800">Обучается у опытных мастеров</span>
+                            </div>
+                            <p class="text-gray-600 text-sm leading-relaxed">
+                                Специализация: коррекция бровей, окрашивание, ламинирование бровей
+                            </p>
+                        </div>
+                        
+                        <!-- Skills -->
+                        <div class="space-y-2">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                                <span class="text-sm text-gray-600">Коррекция бровей</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <div class="w-2 h-2 bg-teal-500 rounded-full animate-pulse" style="animation-delay: 0.5s;"></div>
+                                <span class="text-sm text-gray-600">Окрашивание бровей</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" style="animation-delay: 1s;"></div>
+                                <span class="text-sm text-gray-600">Ламинирование бровей</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Action Button -->
+                        <div class="mt-6">
+                            <a href="#booking" onclick="selectMaster('Виолетта')" 
+                               class="block w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-center">
+                                <i class="fas fa-calendar-plus mr-2"></i>Записаться к Виолетте
                             </a>
                         </div>
                     </div>
@@ -3572,6 +3655,12 @@
             { value: 'nail_repair', name: 'Ремонт одного ногтя', price: '300 ₽' },
             { value: 'nail_strengthening', name: 'Укрепление базой или биогелем', price: '800 ₽' },
             { value: 'coating_removal', name: 'Снятие покрытия', price: '400 ₽' }
+        ],
+        eyebrows: [
+            { value: 'eyebrow_correction', name: 'Коррекция бровей', price: '500 ₽' },
+            { value: 'eyebrow_coloring', name: 'Окрашивание бровей', price: '400 ₽' },
+            { value: 'eyebrow_laminating', name: 'Ламинирование бровей', price: '800 ₽' },
+            { value: 'eyebrow_complex', name: 'Комплекс бровей (коррекция + окрашивание)', price: '700 ₽' }
         ]
     };
 
@@ -3637,6 +3726,9 @@
         } else if (masterName === 'Анна') {
             // Анна - маникюр
             selectService('manicure', 'classic_manicure');
+        } else if (masterName === 'Виолетта') {
+            // Виолетта - услуги бровей
+            selectService('eyebrows', 'eyebrow_correction');
         }
     }
 
