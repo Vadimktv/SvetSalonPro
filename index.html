@@ -1993,39 +1993,6 @@
                                 <!-- Divider -->
                                 <div class="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent my-3"></div>
                                 
-                                <!-- Portfolio -->
-                                <div class="mb-3">
-                                    <a href="pages/portfolio.html" 
-                                       class="flex items-center space-x-4 px-4 py-3 text-gray-700 hover:bg-gradient-to-r hover:from-green-50 hover:to-emerald-50 rounded-xl transition-all duration-200 group">
-                                        <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-200">
-                                            <i class="fas fa-images text-white text-sm"></i>
-                                        </div>
-                                        <div class="flex-1">
-                                            <div class="font-semibold text-gray-800">Портфолио</div>
-                                            <div class="text-xs text-gray-500">Наши работы и достижения</div>
-                                        </div>
-                                        <i class="fas fa-chevron-right text-gray-400 text-xs group-hover:text-green-500 transition-colors duration-200"></i>
-                                    </a>
-                                </div>
-                                
-                                <!-- Booking -->
-                                <div class="mb-3">
-                                    <a href="#booking" 
-                                       class="flex items-center space-x-4 px-4 py-3 text-gray-700 hover:bg-gradient-to-r hover:from-orange-50 hover:to-red-50 rounded-xl transition-all duration-200 group">
-                                        <div class="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-600 rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-200">
-                                            <i class="fas fa-calendar-plus text-white text-sm"></i>
-                                        </div>
-                                        <div class="flex-1">
-                                            <div class="font-semibold text-gray-800">Записаться</div>
-                                            <div class="text-xs text-gray-500">Забронировать услугу</div>
-                                        </div>
-                                        <i class="fas fa-chevron-right text-gray-400 text-xs group-hover:text-orange-500 transition-colors duration-200"></i>
-                                    </a>
-                                </div>
-                                
-                                <!-- Divider -->
-                                <div class="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent my-3"></div>
-                                
                                 <!-- Social Links -->
                                 <div class="mb-3">
                                     <a href="https://t.me/SvetSalonPro" target="_blank" 
@@ -3615,7 +3582,8 @@
                 e.stopPropagation();
                 
                 // Toggle dropdown visibility
-                const isVisible = !profileDropdown.classList.contains('opacity-0');
+                const isVisible = profileDropdown.classList.contains('invisible') === false && 
+                                 profileDropdown.style.opacity !== '0';
                 
                 if (isVisible) {
                     // Hide dropdown with slide-out animation
@@ -3714,7 +3682,8 @@
         
         // Обновление позиции меню при изменении размера окна
         window.addEventListener('resize', () => {
-            if (profileDropdown && !profileDropdown.classList.contains('opacity-0')) {
+            if (profileDropdown && profileDropdown.classList.contains('invisible') === false && 
+                profileDropdown.style.opacity !== '0') {
                 const buttonRect = profileBtn.getBoundingClientRect();
                 profileDropdown.style.top = (buttonRect.bottom + 10) + 'px';
                 profileDropdown.style.right = (window.innerWidth - buttonRect.right) + 'px';
