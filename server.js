@@ -12,6 +12,7 @@ const uploadPhotosAPI = require('./pages/api/upload-photos.js');
 // Импортируем API для SMS-кода
 const sendSmsCodeAPI = require('./pages/api/send-sms-code.js');
 const verifySmsCodeAPI = require('./pages/api/verify-sms-code.js');
+const sendMagicLinkAPI = require('./pages/api/send-magic-link.js');
 
 // MIME типы для статических файлов
 const mimeTypes = {
@@ -56,10 +57,16 @@ const server = http.createServer((req, res) => {
         sendSmsCodeAPI.handleRequest(req, res);
         return;
     }
-    
+
     // Обработка API запросов для проверки SMS-кода
     if (pathname === '/api/verify-sms-code.js' || pathname === '/pages/api/verify-sms-code.js') {
         verifySmsCodeAPI.handleRequest(req, res);
+        return;
+    }
+
+    // Обработка API запросов для отправки Magic Link через Supabase
+    if (pathname === '/api/send-magic-link.js' || pathname === '/pages/api/send-magic-link.js') {
+        sendMagicLinkAPI.handleRequest(req, res);
         return;
     }
     
