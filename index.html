@@ -12,7 +12,6 @@
     <link rel="icon" type="image/png" href="images/ui/logo.png">
     <link rel="shortcut icon" type="image/png" href="images/ui/logo.png">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <style>
 
         @keyframes fadeIn {
@@ -1257,513 +1256,146 @@
             }
         }
         
-        /* 🃏 КОЛОДА КАРТ С ОТЗЫВАМИ */
-        
-        /* Контейнер колоды */
-        .reviews-deck-container {
+        /* ✨ Обновлённые отзывы */
+        #reviews {
             position: relative;
-            overflow: visible;
-            padding: 40px 0;
         }
-        
-        @media (max-width: 768px) {
-            .reviews-deck-container {
-                padding: 20px 0;
-                display: flex !important;
-                flex-direction: column !important;
-                align-items: center !important;
-                justify-content: center !important;
-                width: 100% !important;
-            }
-            
-            .container {
-                display: flex !important;
-                flex-direction: column !important;
-                align-items: center !important;
-                justify-content: center !important;
+
+        #reviews .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+            gap: 2.5rem;
+        }
+
+        @media (min-width: 768px) {
+            #reviews .testimonial-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
             }
         }
-        
-        /* Кастомная пагинация */
-        .reviews-pagination .swiper-pagination-bullet {
-            width: 12px !important;
-            height: 12px !important;
-            background: linear-gradient(135deg, #ec4899, #9333ea) !important;
-            opacity: 0.5 !important;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-            border-radius: 50% !important;
-            margin: 0 6px !important;
-        }
-        
-        .reviews-pagination .swiper-pagination-bullet-active {
-            opacity: 1 !important;
-            transform: scale(1.3) !important;
-            box-shadow: 0 0 20px rgba(236, 72, 153, 0.6) !important;
-        }
-        
-        /* Swiper контейнер для колоды */
-        .reviews-swiper {
-            width: 100% !important;
-            height: 500px !important;
-            overflow: visible !important;
-            perspective: 1200px !important;
-        }
-        
-        @media (max-width: 768px) {
-            .reviews-swiper {
-                height: auto !important;
-                min-height: 400px !important;
-                overflow: hidden !important;
-                display: flex !important;
-                justify-content: center !important;
-                align-items: center !important;
-            }
-            
-            .swiper-wrapper {
-                display: flex !important;
-                align-items: center !important;
-                justify-content: center !important;
-                width: 100% !important;
-            }
-            
-            .swiper-slide {
-                display: flex !important;
-                justify-content: center !important;
-                align-items: center !important;
-                width: 100% !important;
+
+        @media (min-width: 1280px) {
+            #reviews .testimonial-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
             }
         }
-        
-        .swiper-slide {
-            width: 100% !important;
-            height: 100% !important;
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-            transform-style: preserve-3d !important;
-        }
-        
-        @media (max-width: 768px) {
-            .swiper-slide {
-                height: auto !important;
-                align-items: center !important;
-                justify-content: center !important;
-                padding: 10px 0 !important;
-            }
-        }
-        
-        /* Карточки отзывов - настоящая колода */
-        .review-card {
+
+        .testimonial-card {
             position: relative;
-            width: 100% !important;
-            max-width: 600px !important;
-            height: 400px !important;
-            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important;
-            border: 3px solid #e2e8f0 !important;
-            border-radius: 20px !important;
-            box-shadow: 
-                0 20px 40px rgba(0, 0, 0, 0.1),
-                0 0 0 1px rgba(255, 255, 255, 0.8),
-                0 8px 16px rgba(236, 72, 153, 0.1) !important;
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1) !important;
-            padding: 2rem !important;
-            margin: 0 !important;
-            display: flex !important;
-            flex-direction: column !important;
-            justify-content: space-between !important;
-            transform-origin: center bottom !important;
-            cursor: pointer !important;
-            box-sizing: border-box !important;
+            height: 100%;
+            padding: 2.25rem;
+            border-radius: 24px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 252, 0.92));
+            border: 1px solid rgba(236, 72, 153, 0.18);
+            box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+            overflow: hidden;
+            transition: transform 0.35s ease, box-shadow 0.35s ease;
+            backdrop-filter: blur(12px);
         }
-        
-        /* Эффект поднятия карты при наведении */
-        .review-card:hover {
-            transform: translateY(-15px) scale(1.05) rotateY(5deg) !important;
-            box-shadow: 
-                0 40px 80px rgba(0, 0, 0, 0.15),
-                0 0 0 1px rgba(255, 255, 255, 0.9),
-                0 15px 30px rgba(236, 72, 153, 0.2) !important;
-            border-color: #cbd5e1 !important;
-        }
-        
-        /* Заголовок карты */
-        .card-header {
-            display: flex !important;
-            align-items: center !important;
-            margin-bottom: 1.5rem !important;
-        }
-        
-        @media (max-width: 768px) {
-            .card-header {
-                margin-bottom: 1rem !important;
-            }
-        }
-        
-        .avatar {
-            width: 60px !important;
-            height: 60px !important;
-            background: linear-gradient(135deg, #ec4899, #9333ea) !important;
-            border-radius: 50% !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            color: white !important;
-            font-weight: bold !important;
-            font-size: 1.5rem !important;
-            margin-right: 1rem !important;
-            box-shadow: 0 8px 16px rgba(236, 72, 153, 0.3) !important;
-        }
-        
-        @media (max-width: 768px) {
-            .avatar {
-                width: 45px !important;
-                height: 45px !important;
-                font-size: 1.2rem !important;
-                margin-right: 0.75rem !important;
-            }
-        }
-        
-        .client-info {
-            flex: 1 !important;
-        }
-        
-        .client-name {
-            font-size: 1.25rem !important;
-            font-weight: bold !important;
-            background: linear-gradient(135deg, #ec4899, #9333ea) !important;
-            -webkit-background-clip: text !important;
-            -webkit-text-fill-color: transparent !important;
-            background-clip: text !important;
-            margin-bottom: 0.5rem !important;
-        }
-        
-        @media (max-width: 768px) {
-            .client-name {
-                font-size: 1rem !important;
-                margin-bottom: 0.25rem !important;
-            }
-        }
-        
-        .stars {
-            display: flex !important;
-            gap: 2px !important;
-        }
-        
-        .stars i {
-            color: #fbbf24 !important;
-            font-size: 1rem !important;
-            animation: starTwinkle 2s ease-in-out infinite !important;
-        }
-        
-        @media (max-width: 768px) {
-            .stars i {
-                font-size: 0.9rem !important;
-            }
-        }
-        
-        .stars i:nth-child(1) { animation-delay: 0s !important; }
-        .stars i:nth-child(2) { animation-delay: 0.2s !important; }
-        .stars i:nth-child(3) { animation-delay: 0.4s !important; }
-        .stars i:nth-child(4) { animation-delay: 0.6s !important; }
-        .stars i:nth-child(5) { animation-delay: 0.8s !important; }
-        
-        @keyframes starTwinkle {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(1.1); }
-        }
-        
-        /* Содержимое карты */
-        .card-content {
-            flex: 1 !important;
-            display: flex !important;
-            align-items: center !important;
-        }
-        
-        .card-content p {
-            font-size: 1.125rem !important;
-            line-height: 1.7 !important;
-            color: #374151 !important;
-            font-style: italic !important;
-            text-align: center !important;
-            margin: 0 !important;
-        }
-        
-        @media (max-width: 768px) {
-            .card-content p {
-                font-size: 0.95rem !important;
-                line-height: 1.5 !important;
-            }
-        }
-        
-        /* Эффект колоды - карты в заднем плане */
-        .swiper-slide:not(.swiper-slide-active) {
-            opacity: 0.6 !important;
-            transform: scale(0.75) translateY(60px) rotateX(10deg) !important;
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important;
-            filter: brightness(0.8) blur(1px) !important;
-            z-index: 1 !important;
-        }
-        
-        @media (max-width: 768px) {
-            .swiper-slide:not(.swiper-slide-active) {
-                opacity: 0.3 !important;
-                transform: scale(0.85) translateY(20px) rotateX(5deg) !important;
-                filter: brightness(0.9) blur(0.5px) !important;
-            }
-        }
-        
-        .swiper-slide-active {
-            opacity: 1 !important;
-            transform: scale(1) translateY(0) rotateX(0deg) !important;
-            z-index: 10 !important;
-            filter: brightness(1) blur(0px) !important;
-        }
-        
-        @media (max-width: 768px) {
-            .swiper-slide-active {
-                transform: scale(1) translateY(0) rotateX(0deg) !important;
-            }
-        }
-        
-        /* Анимация перехода карт в колоде */
-        .swiper-slide-prev {
-            transform: scale(0.8) translateY(40px) rotateX(8deg) translateX(-30px) !important;
-            opacity: 0.7 !important;
-            z-index: 5 !important;
-        }
-        
-        .swiper-slide-next {
-            transform: scale(0.8) translateY(40px) rotateX(8deg) translateX(30px) !important;
-            opacity: 0.7 !important;
-            z-index: 5 !important;
-        }
-        
-        @media (max-width: 768px) {
-            .swiper-slide-prev {
-                transform: scale(0.9) translateY(15px) rotateX(3deg) translateX(-15px) !important;
-                opacity: 0.5 !important;
-            }
-            
-            .swiper-slide-next {
-                transform: scale(0.9) translateY(15px) rotateX(3deg) translateX(15px) !important;
-                opacity: 0.5 !important;
-            }
-        }
-        
-        /* Анимация появления карточек из колоды */
-        .swiper-slide-active .review-card {
-            animation: cardDealFromDeck 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        }
-        
-        @keyframes cardDealFromDeck {
-            0% {
-                opacity: 0;
-                transform: translateY(-200px) scale(0.6) rotateX(-20deg);
-            }
-            50% {
-                opacity: 0.8;
-                transform: translateY(-50px) scale(0.9) rotateX(-10deg);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0) scale(1) rotateX(0deg);
-            }
-        }
-        
-        /* Эффект тени для колоды */
-        .reviews-swiper::after {
+
+        .testimonial-card::before {
             content: '';
             position: absolute;
-            bottom: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
-            height: 30px;
-            background: radial-gradient(ellipse, rgba(0,0,0,0.08) 0%, transparent 70%);
-            border-radius: 50%;
-            z-index: -1;
+            inset: 0;
+            background: radial-gradient(circle at top right, rgba(236, 72, 153, 0.16), transparent 60%);
+            opacity: 0;
+            transition: opacity 0.35s ease;
+            pointer-events: none;
         }
-        
-        @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px) scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-        
-        /* Прогресс бар */
-        .progress-container {
-            background: rgba(255, 255, 255, 0.3) !important;
-            backdrop-filter: blur(10px) !important;
-        }
-        
-        #progressBar {
-            background: linear-gradient(90deg, #ec4899, #9333ea, #ec4899) !important;
-            background-size: 200% 100% !important;
-            animation: progressShimmer 2s ease-in-out infinite !important;
-        }
-        
-        @keyframes progressShimmer {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-        
 
-        
-        @keyframes indicatorsGlow {
-            0%, 100% { filter: brightness(1); }
-            50% { filter: brightness(1.3) drop-shadow(0 0 10px rgba(236, 72, 153, 0.5)); }
+        .testimonial-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 24px 55px rgba(236, 72, 153, 0.2);
         }
-        
-        @keyframes indicatorPulse {
-            0%, 100% { transform: scale(1); opacity: 0.7; }
-            50% { transform: scale(1.2); opacity: 1; }
+
+        .testimonial-card:hover::before {
+            opacity: 1;
         }
-        
-        /* Анимация звездочек */
-        .review-card .text-yellow-400 i {
-            animation: starTwinkle 2s ease-in-out infinite !important;
+
+        .testimonial-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #ec4899, #9333ea);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.5rem;
+            box-shadow: 0 15px 30px rgba(236, 72, 153, 0.25);
+            flex-shrink: 0;
         }
-        
-        .review-card .text-yellow-400 i:nth-child(2) { animation-delay: 0.2s !important; }
-        .review-card .text-yellow-400 i:nth-child(3) { animation-delay: 0.4s !important; }
-        .review-card .text-yellow-400 i:nth-child(4) { animation-delay: 0.6s !important; }
-        .review-card .text-yellow-400 i:nth-child(5) { animation-delay: 0.8s !important; }
-        
-        @keyframes starTwinkle {
-            0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
-            50% { transform: scale(1.1) rotate(5deg); opacity: 0.8; }
+
+        .testimonial-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
         }
-        
-        /* Анимация аватаров */
-        .review-card .w-12.h-12 {
-            animation: avatarGlow 3s ease-in-out infinite !important;
+
+        .testimonial-rating i {
+            color: #facc15;
+            font-size: 1rem;
         }
-        
-        @keyframes avatarGlow {
-            0%, 100% { 
-                box-shadow: 0 0 20px rgba(236, 72, 153, 0.3);
-                transform: scale(1);
-            }
-            50% { 
-                box-shadow: 0 0 30px rgba(147, 51, 234, 0.4);
-                transform: scale(1.05);
-            }
+
+        .testimonial-text {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: #475569;
         }
-        
-        /* Эффект параллакса для карточек */
-        .swiper-slide {
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+
+        .testimonial-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.35rem 0.85rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background: rgba(236, 72, 153, 0.12);
+            color: #db2777;
         }
-        
-        .swiper-slide-active {
-            transform: scale(1.05) !important;
-            z-index: 10 !important;
+
+        .testimonial-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            color: #94a3b8;
+            font-size: 0.9rem;
         }
-        
-        .swiper-slide-prev,
-        .swiper-slide-next {
-            transform: scale(0.95) !important;
-            opacity: 0.7 !important;
+
+        .testimonial-meta .highlight {
+            color: #ec4899;
+            font-weight: 600;
         }
-        
-        /* Адаптивность для мобильных устройств */
-        @media (max-width: 768px) {
-            .reviews-nav-next,
-            .reviews-nav-prev {
-                width: 40px !important;
-                height: 40px !important;
-            }
-            
-            .review-card {
-                padding: 1.5rem !important;
-                height: auto !important;
-                min-height: 280px !important;
-                max-width: 90% !important;
-                width: 90% !important;
-                margin: 0 auto !important;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .review-card {
-                max-width: 95% !important;
-                width: 95% !important;
-                padding: 1rem !important;
-                min-height: 250px !important;
-            }
-            
-            .reviews-deck-container {
-                padding: 10px 0 !important;
+
+        @media (max-width: 1024px) {
+            .testimonial-card {
+                padding: 2rem;
             }
         }
-            
-            .card-header {
-                margin-bottom: 1rem !important;
+
+        @media (max-width: 640px) {
+            .testimonial-card {
+                padding: 1.75rem;
+                border-radius: 20px;
             }
-            
-            .avatar {
-                width: 45px !important;
-                height: 45px !important;
-                font-size: 1.2rem !important;
+
+            .testimonial-meta {
+                flex-direction: column;
+                align-items: flex-start;
             }
-            
-            .client-name {
-                font-size: 1rem !important;
-            }
-            
-            .card-content p {
-                font-size: 0.95rem !important;
-                line-height: 1.5 !important;
-            }
-            
-            .stars i {
-                font-size: 0.9rem !important;
-            }
-            
-            #swipeTutorial {
-                padding: 1rem !important;
-                font-size: 0.875rem !important;
-            }
-            
-            .reviews-swiper {
-                height: auto !important;
-                min-height: 320px !important;
-            }
-            
-            .swiper-slide {
-                height: auto !important;
+
+            .testimonial-avatar {
+                width: 52px;
+                height: 52px;
+                border-radius: 16px;
+                font-size: 1.35rem;
             }
         }
-        
-        /* Дополнительные отступы для предотвращения обрезания теней */
-        .service-card,
-        .review-card,
-        .bg-white\/80.backdrop-blur-md {
-            margin-bottom: 2rem !important;
-        }
-        
-        /* Увеличенные отступы для секций (только основные секции) */
-        section[id] {
-            padding-bottom: 14rem !important;
-        }
-        
-        /* Отступы для контейнеров карточек (только в секциях) */
-        .grid.grid-cols-1,
-        .grid.grid-cols-1.md\:grid-cols-2,
-        .grid.grid-cols-1.md\:grid-cols-3 {
-            gap: 2rem !important;
-        }
-        
-        /* Дополнительное пространство для теней (только в секциях) */
-        section .container {
-            padding-bottom: 3rem !important;
-        }
-        
+
         /* 🎨 СУПЕР ПЛАВНЫЕ АНИМАЦИИ ПОЯВЛЕНИЯ ДЛЯ КАРТОЧЕК УСЛУГ */
         
         /* Базовые стили для карточек услуг */
@@ -1807,165 +1439,6 @@
         
         .service-card.animate-in {
             pointer-events: auto !important;
-        }
-        
-        /* 📱 МОБИЛЬНАЯ ОПТИМИЗАЦИЯ - СКРЫТИЕ ЭЛЕМЕНТОВ */
-        
-        /* Скрываем элементы только на мобильных устройствах */
-        @media (max-width: 768px) {
-            /* Упрощаем обучающий интерфейс на мобильных */
-            #tutorialOverlay {
-                background: rgba(0, 0, 0, 0.3) !important;
-            }
-            
-            #swipeTutorial {
-                background: rgba(255, 255, 255, 0.95) !important;
-                padding: 1rem !important;
-                border-radius: 15px !important;
-                font-size: 0.9rem !important;
-            }
-            
-            #fingerCursor {
-                width: 30px !important;
-                height: 30px !important;
-                font-size: 1.2rem !important;
-            }
-            
-            /* Адаптивность колоды карт для мобильных */
-            .reviews-swiper {
-                height: auto !important;
-                min-height: 320px !important;
-            }
-            
-            .review-card {
-                max-width: 100% !important;
-                height: auto !important;
-                min-height: 280px !important;
-                padding: 1.5rem !important;
-            }
-            
-            .avatar {
-                width: 45px !important;
-                height: 45px !important;
-                font-size: 1.2rem !important;
-            }
-            
-            .client-name {
-                font-size: 1rem !important;
-            }
-            
-            .card-content p {
-                font-size: 0.95rem !important;
-                line-height: 1.5 !important;
-            }
-            
-            /* Скрываем сложные анимации на мобильных */
-            .animate-on-scroll:hover {
-                transform: none !important;
-            }
-            
-                    /* Упрощаем hover эффекты на мобильных */
-        .service-card:hover,
-        .master-card:hover,
-        .review-card:hover {
-            transform: none !important;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1) !important;
-        }
-        
-        /* Убираем подпрыгивание карточек услуг */
-        .service-card {
-            transform: none !important;
-            transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), 
-                        transform 1.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
-        }
-        
-        .service-card:hover {
-            transform: translateY(-2px) !important;
-            transition: transform 0.3s ease !important;
-        }
-            
-            /* Скрываем некоторые декоративные элементы на мобильных */
-            .absolute.-top-40.-right-40,
-            .absolute.-bottom-40.-left-40 {
-                display: none !important;
-            }
-            
-            /* Уменьшаем отступы на мобильных */
-            .pt-32 {
-                padding-top: 2rem !important;
-            }
-            
-            .pb-56 {
-                padding-bottom: 3rem !important;
-            }
-            
-            /* Скрываем пагинацию отзывов на мобильных */
-            .reviews-pagination {
-                display: none !important;
-            }
-            
-            /* Упрощаем карточки на мобильных */
-            .service-card,
-            .master-card,
-            .review-card {
-                margin-bottom: 1rem !important;
-            }
-        }
-        
-        /* 💻 КОМПЬЮТЕРНАЯ ВЕРСИЯ - ПОЛНЫЕ ЭФФЕКТЫ */
-        @media (min-width: 769px) {
-            /* Показываем все элементы на компьютере */
-            #tutorialOverlay,
-            #swipeTutorial,
-            #fingerCursor {
-                display: block !important;
-            }
-            
-            /* Улучшенный обучающий интерфейс для десктопа */
-            #tutorialOverlay {
-                background: rgba(0, 0, 0, 0.4) !important;
-            }
-            
-            #swipeTutorial {
-                background: rgba(255, 255, 255, 0.98) !important;
-                padding: 1.5rem !important;
-                border-radius: 20px !important;
-                font-size: 1rem !important;
-                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2) !important;
-            }
-            
-            #fingerCursor {
-                width: 40px !important;
-                height: 40px !important;
-                font-size: 1.5rem !important;
-            }
-            
-            /* Полные hover эффекты на компьютере */
-            .service-card:hover,
-            .master-card:hover,
-            .review-card:hover {
-                transform: translateY(-5px) scale(1.02) !important;
-            }
-            
-            /* Показываем все декоративные элементы */
-            .absolute.-top-40.-right-40,
-            .absolute.-bottom-40.-left-40 {
-                display: block !important;
-            }
-            
-            /* Полные отступы на компьютере */
-            .pt-32 {
-                padding-top: 8rem !important;
-            }
-            
-            .pb-56 {
-                padding-bottom: 14rem !important;
-            }
-            
-            /* Показываем пагинацию отзывов */
-            .reviews-pagination {
-                display: flex !important;
-            }
         }
         
         /* Анимации для заголовков секций */
@@ -3368,17 +2841,16 @@
     </section>
 
     <!-- Reviews Section -->
-    <section id="reviews" class="pt-32 pb-56 bg-gradient-to-br from-pink-50 via-purple-50 to-pink-100 relative overflow-hidden" data-aos="fade-up">
+    <section id="reviews" class="py-32 bg-gradient-to-br from-pink-50 via-purple-50 to-pink-100 relative overflow-hidden" data-aos="fade-up">
         <!-- Background Decorations -->
         <div class="absolute inset-0 overflow-hidden">
             <div class="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-pink-200/30 to-purple-200/30 rounded-full blur-3xl animate-pulse"></div>
             <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-purple-200/30 to-pink-200/30 rounded-full blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
         </div>
-        
-        <div class="container mx-auto px-8 relative z-10 flex flex-col items-center">
-            <!-- Header -->
-            <div class="text-center mb-16 pt-8 w-full">
-                <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-pink-500 to-purple-600 rounded-2xl shadow-lg mb-6 animate-bounce p-4">
+
+        <div class="container mx-auto px-6 md:px-10 relative z-10">
+            <div class="section-header text-center mb-16 pt-8">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-pink-500 to-purple-600 rounded-2xl shadow-lg mb-6 p-4">
                     <i class="fas fa-star text-white text-2xl"></i>
                 </div>
                 <h2 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent mb-4 animate-on-scroll">
@@ -3388,115 +2860,166 @@
                     Что говорят о нас наши довольные клиенты
                 </p>
             </div>
-        <!-- Колода карт с отзывами -->
-        <div class="reviews-deck-container relative max-w-7xl mx-auto mb-16 flex justify-center items-center">
-            <!-- Swiper Container -->
-            <div class="swiper reviews-swiper">
-                <div class="swiper-wrapper flex justify-center items-center">
-                    <div class="swiper-slide">
-                        <div class="review-card">
-                            <div class="card-header">
-                                <div class="avatar">А</div>
-                                <div class="client-info">
-                                    <div class="client-name">Анна, Геленджик</div>
-                                    <div class="stars">
-                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-content">
-                                <p>Очень понравился сервис и атмосфера! Мастер учёл все мои пожелания. Приду ещё!</p>
+
+            <div class="testimonial-grid">
+                <article class="testimonial-card">
+                    <div class="flex items-start justify-between gap-6">
+                        <div class="flex items-center gap-4">
+                            <div class="testimonial-avatar">А</div>
+                            <div>
+                                <p class="text-lg font-semibold text-gray-900">Анна, Геленджик</p>
+                                <span class="testimonial-badge">
+                                    <i class="fas fa-spa text-xs"></i>
+                                    Уход за волосами
+                                </span>
                             </div>
                         </div>
-                    </div>
-                    
-                    <div class="swiper-slide">
-                        <div class="review-card">
-                            <div class="card-header">
-                                <div class="avatar">М</div>
-                                <div class="client-info">
-                                    <div class="client-name">Мария, Краснодар</div>
-                                    <div class="stars">
-                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-content">
-                                <p>Потрясающий салон! Делала окрашивание — результат превзошёл ожидания.</p>
-                            </div>
+                        <div class="testimonial-rating text-lg">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
                         </div>
                     </div>
-                    
-                    <div class="swiper-slide">
-                        <div class="review-card">
-                            <div class="card-header">
-                                <div class="avatar">Е</div>
-                                <div class="client-info">
-                                    <div class="client-name">Екатерина, Москва</div>
-                                    <div class="stars">
-                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-content">
-                                <p>Очень уютно, чисто и профессионально. Спасибо мастеру Светлане!</p>
+                    <p class="testimonial-text mt-6">Очень понравился сервис и атмосфера! Мастер учёл все мои пожелания, результат превзошёл ожидания.</p>
+                    <div class="testimonial-meta mt-8">
+                        <span class="highlight flex items-center gap-2"><i class="fas fa-heart text-sm"></i>Постоянный клиент</span>
+                        <span>Март 2024</span>
+                    </div>
+                </article>
+
+                <article class="testimonial-card">
+                    <div class="flex items-start justify-between gap-6">
+                        <div class="flex items-center gap-4">
+                            <div class="testimonial-avatar">М</div>
+                            <div>
+                                <p class="text-lg font-semibold text-gray-900">Мария, Краснодар</p>
+                                <span class="testimonial-badge">
+                                    <i class="fas fa-paint-brush text-xs"></i>
+                                    Окрашивание
+                                </span>
                             </div>
                         </div>
-                    </div>
-                    
-                    <div class="swiper-slide">
-                        <div class="review-card">
-                            <div class="card-header">
-                                <div class="avatar">О</div>
-                                <div class="client-info">
-                                    <div class="client-name">Ольга, Геленджик</div>
-                                    <div class="stars">
-                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-content">
-                                <p>Маникюр держится уже 3 недели! Очень довольна качеством услуг.</p>
-                            </div>
+                        <div class="testimonial-rating text-lg">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
                         </div>
                     </div>
-                    
-                    <div class="swiper-slide">
-                        <div class="review-card">
-                            <div class="card-header">
-                                <div class="avatar">С</div>
-                                <div class="client-info">
-                                    <div class="client-name">Светлана, Новороссийск</div>
-                                    <div class="stars">
-                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-content">
-                                <p>Делала стрижку и укладку — всё на высшем уровне. Рекомендую!</p>
+                    <p class="testimonial-text mt-6">Потрясающий салон! Делала окрашивание — цвет ложится ровно и волосы выглядят живыми. Обязательно вернусь.</p>
+                    <div class="testimonial-meta mt-8">
+                        <span class="highlight flex items-center gap-2"><i class="fas fa-map-marker-alt text-sm"></i>Гость из Краснодара</span>
+                        <span>Февраль 2024</span>
+                    </div>
+                </article>
+
+                <article class="testimonial-card">
+                    <div class="flex items-start justify-between gap-6">
+                        <div class="flex items-center gap-4">
+                            <div class="testimonial-avatar">Е</div>
+                            <div>
+                                <p class="text-lg font-semibold text-gray-900">Екатерина, Москва</p>
+                                <span class="testimonial-badge">
+                                    <i class="fas fa-magic text-xs"></i>
+                                    Укладка
+                                </span>
                             </div>
                         </div>
+                        <div class="testimonial-rating text-lg">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
                     </div>
+                    <p class="testimonial-text mt-6">Очень уютно, чисто и профессионально. Спасибо мастеру Светлане за безупречную укладку и советы по уходу!</p>
+                    <div class="testimonial-meta mt-8">
+                        <span class="highlight flex items-center gap-2"><i class="fas fa-city text-sm"></i>Москва</span>
+                        <span>Январь 2024</span>
+                    </div>
+                </article>
+
+                <article class="testimonial-card">
+                    <div class="flex items-start justify-between gap-6">
+                        <div class="flex items-center gap-4">
+                            <div class="testimonial-avatar">О</div>
+                            <div>
+                                <p class="text-lg font-semibold text-gray-900">Ольга, Геленджик</p>
+                                <span class="testimonial-badge">
+                                    <i class="fas fa-hand-holding-heart text-xs"></i>
+                                    Маникюр
+                                </span>
+                            </div>
+                        </div>
+                        <div class="testimonial-rating text-lg">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></и><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="testimonial-text mt-6">Маникюр держится уже три недели без сколов! Очень довольна аккуратностью и стерильностью работы мастера.</p>
+                    <div class="testimonial-meta mt-8">
+                        <span class="highlight flex items-center gap-2"><i class="fas fa-shield-alt text-sm"></i>Гарантия качества</span>
+                        <span>Декабрь 2023</span>
+                    </div>
+                </article>
+
+                <article class="testimonial-card">
+                    <div class="flex items-start justify-between gap-6">
+                        <div class="flex items-center gap-4">
+                            <div class="testimonial-avatar">С</div>
+                            <div>
+                                <p class="text-lg font-semibold text-gray-900">Светлана, Новороссийск</p>
+                                <span class="testimonial-badge">
+                                    <i class="fas fa-cut text-xs"></i>
+                                    Стрижка
+                                </span>
+                            </div>
+                        </div>
+                        <div class="testimonial-rating text-lg">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="testimonial-text mt-6">Делала стрижку и укладку — всё на высшем уровне! Получила рекомендации по уходу, чтобы сохранить объём и блеск.</p>
+                    <div class="testimonial-meta mt-8">
+                        <span class="highlight flex items-center gap-2"><i class="fas fa-user-check text-sm"></i>Рекомендация подруг</span>
+                        <span>Ноябрь 2023</span>
+                    </div>
+                </article>
+
+                <article class="testimonial-card">
+                    <div class="flex items-start justify-between gap-6">
+                        <div class="flex items-center gap-4">
+                            <div class="testimonial-avatar">И</div>
+                            <div>
+                                <p class="text-lg font-semibold text-gray-900">Ирина, Анапа</p>
+                                <span class="testimonial-badge">
+                                    <i class="fas fa-eye text-xs"></i>
+                                    Коррекция бровей
+                                </span>
+                            </div>
+                        </div>
+                        <div class="testimonial-rating text-lg">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="testimonial-text mt-6">После коррекции у мастера Елены мои брови стали идеальной формы, а эффект держится уже второй месяц.</p>
+                    <div class="testimonial-meta mt-8">
+                        <span class="highlight flex items-center gap-2"><i class="fas fa-sun text-sm"></i>Новая гостья</span>
+                        <span>Октябрь 2023</span>
+                    </div>
+                </article>
+            </div>
+
+            <div class="mt-16">
+                <div class="flex flex-col md:flex-row md:items-center gap-4 md:gap-8 px-6 py-5 bg-white/70 backdrop-blur-lg border border-white/60 rounded-2xl shadow-lg text-gray-600">
+                    <div class="flex items-center gap-3 text-pink-600 font-semibold text-lg">
+                        <i class="fas fa-comment-dots"></i>
+                        <span>Хотите поделиться впечатлениями?</span>
+                    </div>
+                    <p class="text-sm md:text-base text-gray-500 md:flex-1">
+                        Мы внимательно относимся к каждому отзыву — расскажите о своём опыте или запишитесь, чтобы испытать сервис лично.
+                    </p>
+                    <a href="#booking" class="inline-flex items-center justify-center px-5 py-3 rounded-xl bg-gradient-to-r from-pink-500 to-purple-600 text-white font-semibold shadow-md hover:shadow-lg transition-all duration-300">
+                        Записаться
+                        <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                    </a>
                 </div>
             </div>
-            
-            <!-- Custom Pagination -->
-            <div class="swiper-pagination reviews-pagination"></div>
-            
-            <!-- Swipe Indicators -->
-            <div class="swipe-indicators absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2">
-                <div class="swipe-indicator w-3 h-3 bg-pink-300 rounded-full animate-pulse"></div>
-                <div class="swipe-indicator w-3 h-3 bg-purple-300 rounded-full animate-pulse" style="animation-delay: 0.5s;"></div>
-                <div class="swipe-indicator w-3 h-3 bg-pink-300 rounded-full animate-pulse" style="animation-delay: 1s;"></div>
-            </div>
-            
-            <!-- Progress Bar -->
-            <div class="progress-container absolute bottom-0 left-0 right-0 h-1 bg-gray-200 rounded-full overflow-hidden">
-                <div id="progressBar" class="h-full bg-gradient-to-r from-pink-500 to-purple-600 transition-all duration-300" style="width: 0%"></div>
-            </div>
         </div>
-      </div>
     </section>
+
+
 
     <!-- Footer -->
     <footer class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white py-16 relative overflow-hidden">
@@ -3696,27 +3219,8 @@
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>AOS.init();</script>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script>
-    const swiper = new Swiper('.swiper', {
-      loop: true,
-      slidesPerView: 1,
-      spaceBetween: 24,
-      pagination: {
-        el: '.swiper-pagination',
-        clickable: true
-      },
-      autoplay: {
-        delay: 5000,
-        pauseOnMouseEnter: true
-      },
-      breakpoints: {
-        640: { slidesPerView: 1 },
-        768: { slidesPerView: 2 },
-        1024: { slidesPerView: 3 }
-      }
-    });
-    </script>
+
+
 
     <script>
     document.querySelectorAll('.logo-link').forEach(function(logo) {
@@ -5436,288 +4940,7 @@
         </div>
     </div>
     
-    <!-- 🚀 ИНТЕРАКТИВНЫЕ ОТЗЫВЫ - JAVASCRIPT -->
-    <script>
-        // Инициализация Swiper для отзывов
-        let reviewsSwiper;
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            // Инициализация Swiper для колоды карт с отзывами
-            reviewsSwiper = new Swiper('.reviews-swiper', {
-                slidesPerView: 1,
-                spaceBetween: 0,
-                loop: true,
-                autoplay: false,
-                effect: 'cards',
-                speed: 1000,
-                grabCursor: true,
-                allowTouchMove: true,
-                touchRatio: 1,
-                touchAngle: 45,
-                cardsEffect: {
-                    slideShadows: false,
-                    rotate: true,
-                    perSlideOffset: 8,
-                },
-                pagination: {
-                    el: '.reviews-pagination',
-                    clickable: true,
-                    dynamicBullets: true,
-                },
-                breakpoints: {
-                    768: {
-                        slidesPerView: 1,
-                        spaceBetween: 0,
-                    },
-                    1024: {
-                        slidesPerView: 1,
-                        spaceBetween: 0,
-                    }
-                },
-                on: {
-                    init: function() {
-                        if (typeof showTutorial === 'function') {
-                            showTutorial();
-                        }
-                        if (typeof updateProgressBar === 'function') {
-                            updateProgressBar();
-                        }
-                        // Полностью отключаем автопрокрутку
-                        this.autoplay.stop();
-                        // Добавляем эффект колоды
-                        if (typeof addDeckEffect === 'function') {
-                            addDeckEffect();
-                        }
-                    },
-                    slideChange: function() {
-                        if (typeof updateProgressBar === 'function') {
-                            updateProgressBar();
-                        }
-                        if (typeof animateActiveSlide === 'function') {
-                            animateActiveSlide();
-                        }
-                        // Останавливаем автопрокрутку при каждом изменении
-                        this.autoplay.stop();
-                        // Анимация раздачи карты
-                        if (typeof dealCardAnimation === 'function') {
-                            dealCardAnimation();
-                        }
-                    },
-                    touchStart: function() {
-                        if (typeof hideTutorial === 'function') {
-                            hideTutorial();
-                        }
-                        // Останавливаем автопрокрутку при касании
-                        this.autoplay.stop();
-                    },
-                    click: function() {
-                        if (typeof hideTutorial === 'function') {
-                            hideTutorial();
-                        }
-                        // Останавливаем автопрокрутку при клике
-                        this.autoplay.stop();
-                    },
-                    beforeInit: function() {
-                        // Отключаем автопрокрутку при инициализации
-                        this.params.autoplay = false;
-                    }
-                }
-            });
-            
 
-            
-            // Интерактивные эффекты для карт колоды
-            document.querySelectorAll('.review-card').forEach(card => {
-                card.addEventListener('mouseenter', function() {
-                    if (this.closest('.swiper-slide-active')) {
-                        this.style.transform = 'translateY(-15px) scale(1.05) rotateY(5deg)';
-                        this.style.boxShadow = '0 40px 80px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.9), 0 15px 30px rgba(236, 72, 153, 0.2)';
-                        this.style.borderColor = '#cbd5e1';
-                    }
-                });
-                
-                card.addEventListener('mouseleave', function() {
-                    if (this.closest('.swiper-slide-active')) {
-                        this.style.transform = 'translateY(0) scale(1) rotateY(0deg)';
-                        this.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.8), 0 8px 16px rgba(236, 72, 153, 0.1)';
-                        this.style.borderColor = '#e2e8f0';
-                    }
-                });
-                
-                // Эффект при клике - перелистывание карты
-                card.addEventListener('click', function() {
-                    if (this.closest('.swiper-slide-active')) {
-                        this.style.transform = 'translateY(-20px) scale(1.08) rotateY(10deg)';
-                        setTimeout(() => {
-                            reviewsSwiper.slideNext();
-                        }, 300);
-                    }
-                });
-            });
-            
-            // Анимация звездочек при загрузке
-            setTimeout(() => {
-                document.querySelectorAll('.review-card .stars i').forEach((star, index) => {
-                    setTimeout(() => {
-                        star.style.animation = 'starTwinkle 2s ease-in-out infinite';
-                    }, index * 200);
-                });
-            }, 1000);
-            
-            // Эффект параллакса при движении мыши для колоды
-            document.querySelector('.reviews-deck-container').addEventListener('mousemove', function(e) {
-                const activeCard = document.querySelector('.swiper-slide-active .review-card');
-                if (activeCard) {
-                    const rect = this.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    
-                    const xOffset = (x - rect.width / 2) * 0.02;
-                    const yOffset = (y - rect.height / 2) * 0.02;
-                    
-                    activeCard.style.transform = `translateY(-15px) scale(1.05) rotateY(${xOffset}deg) translateX(${xOffset}px)`;
-                }
-            });
-            
-            // Сброс параллакса при уходе мыши
-            document.querySelector('.reviews-deck-container').addEventListener('mouseleave', function() {
-                const activeCard = document.querySelector('.swiper-slide-active .review-card');
-                if (activeCard) {
-                    activeCard.style.transform = 'translateY(0) scale(1) rotateY(0deg) translateX(0px)';
-                }
-            });
-            
-            // Функция обновления прогресс-бара
-            function updateProgressBar() {
-                const progressBar = document.getElementById('progressBar');
-                if (progressBar && reviewsSwiper) {
-                    const progress = ((reviewsSwiper.activeIndex + 1) / reviewsSwiper.slides.length) * 100;
-                    progressBar.style.width = progress + '%';
-                }
-            }
-            
-            // Функция показа обучающего интерфейса
-            function showTutorial() {
-                const tutorial = document.getElementById('swipeTutorial');
-                if (tutorial) {
-                    tutorial.style.display = 'block';
-                }
-            }
-            
-            // Функция скрытия обучающего интерфейса
-            function hideTutorial() {
-                const tutorial = document.getElementById('swipeTutorial');
-                if (tutorial) {
-                    tutorial.style.display = 'none';
-                }
-            }
-            
-            // Функция анимации активного слайда
-            function animateActiveSlide() {
-                const activeSlide = document.querySelector('.swiper-slide-active');
-                if (activeSlide) {
-                    activeSlide.style.animation = 'cardDealFromDeck 0.6s ease-out';
-                }
-            }
-            
-            // Функция добавления эффекта колоды
-            function addDeckEffect() {
-                const slides = document.querySelectorAll('.swiper-slide');
-                slides.forEach((slide, index) => {
-                    if (!slide.classList.contains('swiper-slide-active')) {
-                        slide.style.transform = `scale(0.75) translateY(60px) rotateX(10deg)`;
-                        slide.style.opacity = '0.6';
-                    }
-                });
-            }
-            
-            // Функция анимации раздачи карты
-            function dealCardAnimation() {
-                const activeCard = document.querySelector('.swiper-slide-active .review-card');
-                if (activeCard) {
-                    activeCard.style.animation = 'cardDealFromDeck 0.6s ease-out';
-                }
-            }
-            
-            // Эффект пульсации для индикаторов
-            setInterval(() => {
-                const activeBullet = document.querySelector('.reviews-pagination .swiper-pagination-bullet-active');
-                if (activeBullet) {
-                    activeBullet.style.animation = 'none';
-                    setTimeout(() => {
-                        activeBullet.style.animation = 'pulse 2s ease-in-out infinite';
-                    }, 10);
-                }
-            }, 3000);
-        });
-        
-        // Экспорт для глобального доступа
-        window.reviewsSwiper = reviewsSwiper;
-        
-        // 🎨 СУПЕР ПЛАВНЫЕ АНИМАЦИИ ПОЯВЛЕНИЯ ДЛЯ КАРТОЧЕК УСЛУГ
-        function initServiceAnimations() {
-            // Только карточки услуг
-            const serviceCards = document.querySelectorAll('.service-card');
-            
-            const observerOptions = {
-                threshold: 0.2,
-                rootMargin: '0px 0px -50px 0px'
-            };
-            
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        // Добавляем класс анимации плавно
-                        requestAnimationFrame(() => {
-                            entry.target.classList.add('animate-in');
-                        });
-                        
-                        // Добавляем задержку для каскадного эффекта
-                        const index = Array.from(serviceCards).indexOf(entry.target);
-                        const delay = index * 0.05;
-                        entry.target.style.transitionDelay = `${delay}s`;
-                        
-                        // Убираем наблюдение после анимации
-                        setTimeout(() => {
-                            observer.unobserve(entry.target);
-                        }, 2000);
-                    }
-                });
-            }, observerOptions);
-            
-            // Начинаем наблюдение только за карточками услуг
-            serviceCards.forEach(card => {
-                observer.observe(card);
-            });
-        }
-        
-        // Инициализация анимаций при загрузке страницы
-        document.addEventListener('DOMContentLoaded', function() {
-            initServiceAnimations();
-            
-            // Переинициализация при изменении размера окна
-            window.addEventListener('resize', () => {
-                setTimeout(initServiceAnimations, 100);
-            });
-        });
-        
-        // Функция для принудительного запуска анимаций услуг (для тестирования)
-        function replayServiceAnimations() {
-            const serviceCards = document.querySelectorAll('.service-card');
-            
-            serviceCards.forEach(card => {
-                card.classList.remove('animate-in');
-                card.style.transitionDelay = '0s';
-            });
-            
-            setTimeout(() => {
-                initServiceAnimations();
-            }, 100);
-        }
-        
-        // Экспорт функций для глобального доступа
-        window.replayServiceAnimations = replayServiceAnimations;
-    </script>
 
     <!-- Login Modal -->
     <div id="loginModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-[99999] flex items-center justify-center p-4">
