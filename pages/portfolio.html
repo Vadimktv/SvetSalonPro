@@ -79,6 +79,87 @@
             box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3);
         }
 
+        /* iOS glassmorphism dropdown */
+        .ios-glass {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.2)) !important;
+            border: 1px solid rgba(255, 255, 255, 0.35) !important;
+            box-shadow: 0 30px 60px rgba(15, 23, 42, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(28px) saturate(160%) !important;
+            -webkit-backdrop-filter: blur(28px) saturate(160%) !important;
+            isolation: isolate;
+        }
+
+        .ios-glass::before,
+        .ios-glass::after {
+            content: '';
+            position: absolute;
+            pointer-events: none;
+            width: 160%;
+            height: 160%;
+            border-radius: 40%;
+            filter: blur(38px);
+            opacity: 0.75;
+            transition: opacity 0.4s ease;
+        }
+
+        .ios-glass::before {
+            top: -45%;
+            left: -25%;
+            background: radial-gradient(circle at 25% 25%, rgba(236, 72, 153, 0.45), transparent 65%);
+            animation: iosGlassDrift 14s ease-in-out infinite;
+        }
+
+        .ios-glass::after {
+            bottom: -50%;
+            right: -15%;
+            background: radial-gradient(circle at 75% 75%, rgba(99, 102, 241, 0.5), transparent 60%);
+            animation: iosGlassDriftAlt 16s ease-in-out infinite;
+        }
+
+        @keyframes iosGlassDrift {
+            0% {
+                transform: translate3d(-8%, -6%, 0) scale(1.05);
+            }
+            50% {
+                transform: translate3d(6%, 6%, 0) scale(0.95);
+            }
+            100% {
+                transform: translate3d(-4%, 4%, 0) scale(1.02);
+            }
+        }
+
+        @keyframes iosGlassDriftAlt {
+            0% {
+                transform: translate3d(6%, 4%, 0) scale(0.95);
+            }
+            50% {
+                transform: translate3d(-6%, -6%, 0) scale(1.05);
+            }
+            100% {
+                transform: translate3d(4%, -4%, 0) scale(1);
+            }
+        }
+
+        .ios-glass > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .ios-glass-arrow {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.25));
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            box-shadow: 0 20px 45px rgba(15, 23, 42, 0.18);
+            backdrop-filter: blur(26px) saturate(180%);
+            -webkit-backdrop-filter: blur(26px) saturate(180%);
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .ios-glass-content {
+            position: relative;
+            z-index: 3;
+        }
+
         .menu-icon-container {
             position: relative;
             width: 20px;
@@ -582,10 +663,10 @@
                         </button>
 
                         <!-- Profile Dropdown -->
-                        <div id="profileDropdown" class="fixed right-4 top-20 w-72 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 opacity-0 invisible transform scale-95 transition-all duration-300 z-[99999] overflow-hidden origin-top-right">
-                            <div class="absolute -top-2 right-6 w-4 h-4 bg-white/95 backdrop-blur-xl border-l border-t border-white/20 transform rotate-45"></div>
+                        <div id="profileDropdown" class="fixed right-4 top-20 w-72 rounded-2xl shadow-2xl opacity-0 invisible transform scale-95 transition-all duration-300 z-[99999] overflow-hidden origin-top-right ios-glass">
+                            <div class="absolute -top-2 right-6 w-4 h-4 transform rotate-45 ios-glass-arrow"></div>
 
-                            <div class="p-3">
+                            <div class="p-3 ios-glass-content">
                                 <div class="mb-3">
                                     <a href="account.html"
                                        class="w-full flex items-center space-x-4 px-4 py-4 text-gray-700 hover:bg-gradient-to-r hover:from-pink-50 hover:to-purple-50 rounded-xl transition-all duration-200 group">
