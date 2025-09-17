@@ -2,7 +2,10 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <title>Примеры работ - SvetSalonPro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -77,6 +80,45 @@
         #profileBtn:hover .w-8 {
             background-color: #ec4899 !important;
             box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3);
+        }
+
+        #profileDropdown {
+            z-index: 99999 !important;
+            position: fixed !important;
+            top: 5rem !important;
+            right: 1rem !important;
+        }
+
+        #profileDropdown.show {
+            opacity: 1 !important;
+            visibility: visible !important;
+            transform: scale(1) translateY(0) !important;
+        }
+
+        .profile-header .btn,
+        .profile-header button,
+        .profile-header a {
+            transform: none !important;
+            scale: 1 !important;
+        }
+
+        .profile-header .w-8.h-8 {
+            width: 2rem !important;
+            height: 2rem !important;
+        }
+
+        .profile-header .fab.fa-telegram {
+            font-size: 1.125rem !important;
+        }
+
+        .profile-header .fas.fa-user {
+            font-size: 0.875rem !important;
+        }
+
+        .profile-header button:hover,
+        .profile-header a:hover {
+            transform: none !important;
+            scale: 1 !important;
         }
 
         .menu-icon-container {
@@ -507,12 +549,12 @@
                         <span>Контакты</span>
                     </a>
                     
-                    <a href="account.html" class="menu-item group">
+                    <button type="button" onclick="openLoginModal()" class="menu-item group w-full text-left">
                         <div class="menu-icon">
                             <i class="fas fa-user"></i>
                         </div>
                         <span>Личный кабинет</span>
-                    </a>
+                    </button>
                 </div>
             </div>
         </div>
@@ -587,7 +629,7 @@
 
                             <div class="p-3">
                                 <div class="mb-3">
-                                    <a href="account.html"
+                                    <button type="button" onclick="openLoginModal()"
                                        class="w-full flex items-center space-x-4 px-4 py-4 text-gray-700 hover:bg-gradient-to-r hover:from-pink-50 hover:to-purple-50 rounded-xl transition-all duration-200 group">
                                         <div class="w-12 h-12 bg-gradient-to-br from-pink-500 to-purple-600 rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-200">
                                             <i class="fas fa-user-circle text-white text-lg"></i>
@@ -597,11 +639,11 @@
                                             <div class="text-sm text-gray-500">Управление профилем и записями</div>
                                         </div>
                                         <i class="fas fa-chevron-right text-gray-400 text-sm group-hover:text-pink-500 transition-colors duration-200"></i>
-                                    </a>
+                                    </button>
                                 </div>
 
                                 <div class="mb-3">
-                                    <a href="account.html"
+                                    <button type="button" onclick="openLoginModal()"
                                        class="w-full flex items-center space-x-4 px-4 py-4 text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 rounded-xl transition-all duration-200 group">
                                         <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-200">
                                             <i class="fas fa-user-plus text-white text-lg"></i>
@@ -611,7 +653,7 @@
                                             <div class="text-sm text-gray-500">Создать новый аккаунт</div>
                                         </div>
                                         <i class="fas fa-chevron-right text-gray-400 text-sm group-hover:text-blue-500 transition-colors duration-200"></i>
-                                    </a>
+                                    </button>
                                 </div>
 
                                 <div class="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent my-3"></div>
@@ -832,6 +874,127 @@
             </div>
         </div>
     </footer>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-[99999] flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+            <div class="p-8">
+                <!-- Header -->
+                <div class="flex justify-between items-center mb-8">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-pink-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                            <i class="fas fa-user-circle text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-800">Личный кабинет</h3>
+                            <p class="text-gray-600">Вход в систему</p>
+                        </div>
+                    </div>
+                    <button onclick="closeLoginModal()" class="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center transition-colors duration-200">
+                        <i class="fas fa-times text-gray-600"></i>
+                    </button>
+                </div>
+
+                <!-- Loading State -->
+                <div id="loginLoadingState" class="hidden text-center py-12">
+                    <div class="inline-block w-8 h-8 border-4 border-pink-200 border-t-pink-600 rounded-full animate-spin mb-4"></div>
+                    <h4 class="text-lg font-semibold text-gray-800 mb-2">Проверяем авторизацию...</h4>
+                    <p class="text-gray-600">Пожалуйста, подождите</p>
+                </div>
+
+                <!-- Auth State -->
+                <div id="loginAuthState" class="hidden">
+                    <div class="text-center py-8">
+                        <div class="w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-check text-white text-2xl"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-gray-800 mb-2">Вы авторизованы!</h4>
+                        <p class="text-gray-600 mb-6">Добро пожаловать в личный кабинет</p>
+                        <div class="space-y-3">
+                            <button onclick="testAccountPage()"
+                                    class="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                                <i class="fas fa-user-circle mr-2"></i>Открыть личный кабинет
+                            </button>
+                            <a href="/working-account.html"
+                               class="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-center block">
+                                <i class="fas fa-check-circle mr-2"></i>Рабочая версия
+                            </a>
+                            <button onclick="logoutUser()"
+                                    class="w-full border-2 border-gray-300 text-gray-700 hover:border-pink-300 hover:text-pink-600 font-semibold py-3 px-6 rounded-xl transition-all duration-300">
+                                <i class="fas fa-sign-out-alt mr-2"></i>Выйти
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Login Form -->
+                <div id="loginFormContainer">
+                    <div class="text-center mb-8">
+                        <h4 class="text-xl font-bold text-gray-800 mb-2">Вход в личный кабинет</h4>
+                        <p class="text-gray-600">Введите ваш email для получения ссылки для входа</p>
+                    </div>
+
+                    <form id="loginForm" class="space-y-6">
+                        <div>
+                            <label for="loginEmail" class="block text-gray-700 font-semibold mb-3">
+                                <i class="fas fa-envelope mr-2 text-pink-500"></i>Email адрес
+                            </label>
+                            <input type="email" id="loginEmail" name="email" required
+                                   class="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all duration-200 bg-white/50 backdrop-blur-sm"
+                                   placeholder="your@email.com">
+                        </div>
+
+                        <button type="submit" id="loginSubmitBtn"
+                                class="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl relative overflow-hidden group">
+                            <span id="loginBtnText" class="relative z-10 flex items-center justify-center">
+                                <i class="fas fa-paper-plane mr-3 text-xl"></i>
+                                Отправить ссылку для входа
+                            </span>
+                            <span id="loginBtnLoading" class="hidden relative z-10 flex items-center justify-center">
+                                <div class="inline-block w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-3"></div>
+                                Отправка...
+                            </span>
+                            <div class="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        </button>
+                    </form>
+
+                    <div class="mt-6 text-center">
+                        <p class="text-sm text-gray-500 mb-4">
+                            <i class="fas fa-info-circle mr-2 text-blue-500"></i>
+                            Мы отправим ссылку для входа на ваш email
+                        </p>
+                        <div class="flex items-center justify-center space-x-4 text-sm text-gray-500">
+                            <span class="flex items-center">
+                                <i class="fas fa-shield-alt mr-1 text-green-500"></i>
+                                Безопасно
+                            </span>
+                            <span class="flex items-center">
+                                <i class="fas fa-clock mr-1 text-blue-500"></i>
+                                Быстро
+                            </span>
+                            <span class="flex items-center">
+                                <i class="fas fa-mobile-alt mr-1 text-purple-500"></i>
+                                Удобно
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Success State -->
+                <div id="loginSuccessState" class="hidden text-center py-8">
+                    <div class="w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-check-circle text-white text-2xl"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-gray-800 mb-2">Ссылка отправлена!</h4>
+                    <p class="text-gray-600 mb-6">Проверьте ваш email и перейдите по ссылке для входа в личный кабинет</p>
+                    <button onclick="closeLoginModal()"
+                            class="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                        <i class="fas fa-check mr-2"></i>Понятно
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         // Initialize AOS
@@ -1359,24 +1522,33 @@
 
             // Menu item click handlers
             const menuItems = document.querySelectorAll('.menu-item');
-            menuItems.forEach((item, index) => {
+            menuItems.forEach((item) => {
                 item.addEventListener('click', (e) => {
                     e.preventDefault();
                     e.stopPropagation();
                     triggerHapticFeedback();
-                    
+
                     // Add bubble animation
                     item.classList.add('bubble-animation');
                     setTimeout(() => {
                         item.classList.remove('bubble-animation');
                     }, 400);
-                    
+
+                    const hasLoginAction = item.getAttribute('onclick') && item.getAttribute('onclick').includes('openLoginModal');
+                    if (hasLoginAction) {
+                        closeMenu();
+                        setTimeout(() => {
+                            openLoginModal();
+                        }, 200);
+                        return;
+                    }
+
                     // Get the href and navigate
                     const href = item.getAttribute('href');
                     if (href) {
                         // Close menu immediately
                         closeMenu();
-                        
+
                         // Navigate after a short delay for haptic feedback
                         setTimeout(() => {
                             if (href.startsWith('#')) {
@@ -1412,5 +1584,519 @@
             });
         });
     </script>
+
+    <script>
+        let currentUser = null;
+        let currentUserEmail = null;
+        let supabaseClient = null;
+
+        function openLoginModal() {
+            const modal = document.getElementById('loginModal');
+            const dropdown = document.getElementById('profileDropdown');
+
+            if (dropdown) {
+                dropdown.classList.add('invisible');
+                dropdown.style.opacity = '0';
+            }
+
+            if (modal) {
+                modal.classList.remove('hidden');
+                document.body.classList.add('overflow-hidden');
+                checkAuthStatus();
+            }
+        }
+
+        function closeLoginModal() {
+            const modal = document.getElementById('loginModal');
+            if (modal) {
+                modal.classList.add('hidden');
+            }
+            document.body.classList.remove('overflow-hidden');
+            resetLoginForm();
+        }
+
+        function resetLoginForm() {
+            const formContainer = document.getElementById('loginFormContainer');
+            const loadingState = document.getElementById('loginLoadingState');
+            const authState = document.getElementById('loginAuthState');
+            const successState = document.getElementById('loginSuccessState');
+            const emailInput = document.getElementById('loginEmail');
+            const submitBtn = document.getElementById('loginSubmitBtn');
+            const btnText = document.getElementById('loginBtnText');
+            const btnLoading = document.getElementById('loginBtnLoading');
+
+            if (formContainer) formContainer.classList.remove('hidden');
+            if (loadingState) loadingState.classList.add('hidden');
+            if (authState) authState.classList.add('hidden');
+            if (successState) successState.classList.add('hidden');
+
+            if (emailInput) emailInput.value = '';
+
+            if (submitBtn) submitBtn.disabled = false;
+            if (btnText) btnText.classList.remove('hidden');
+            if (btnLoading) btnLoading.classList.add('hidden');
+        }
+
+        async function checkAuthStatus() {
+            const formContainer = document.getElementById('loginFormContainer');
+            const loadingState = document.getElementById('loginLoadingState');
+
+            if (formContainer) formContainer.classList.add('hidden');
+            if (loadingState) loadingState.classList.remove('hidden');
+
+            try {
+                const savedUser = localStorage.getItem('currentUser');
+                if (savedUser) {
+                    const user = JSON.parse(savedUser);
+                    const currentTime = Math.floor(Date.now() / 1000);
+
+                    if (user.exp && user.exp < currentTime) {
+                        localStorage.removeItem('currentUser');
+                        showLoginForm();
+                    } else {
+                        currentUser = user;
+                        currentUserEmail = user.email || null;
+                        showAuthState();
+                    }
+                } else {
+                    showLoginForm();
+                }
+            } catch (error) {
+                console.error('Ошибка проверки авторизации:', error);
+                showLoginForm();
+            }
+        }
+
+        function showLoginForm() {
+            const formContainer = document.getElementById('loginFormContainer');
+            const loadingState = document.getElementById('loginLoadingState');
+            const authState = document.getElementById('loginAuthState');
+            const successState = document.getElementById('loginSuccessState');
+
+            if (loadingState) loadingState.classList.add('hidden');
+            if (authState) authState.classList.add('hidden');
+            if (successState) successState.classList.add('hidden');
+            if (formContainer) formContainer.classList.remove('hidden');
+        }
+
+        function showAuthState() {
+            const formContainer = document.getElementById('loginFormContainer');
+            const loadingState = document.getElementById('loginLoadingState');
+            const authState = document.getElementById('loginAuthState');
+            const successState = document.getElementById('loginSuccessState');
+
+            if (loadingState) loadingState.classList.add('hidden');
+            if (formContainer) formContainer.classList.add('hidden');
+            if (successState) successState.classList.add('hidden');
+            if (authState) authState.classList.remove('hidden');
+        }
+
+        function showSuccessState() {
+            const formContainer = document.getElementById('loginFormContainer');
+            const loadingState = document.getElementById('loginLoadingState');
+            const authState = document.getElementById('loginAuthState');
+            const successState = document.getElementById('loginSuccessState');
+
+            if (loadingState) loadingState.classList.add('hidden');
+            if (formContainer) formContainer.classList.add('hidden');
+            if (authState) authState.classList.add('hidden');
+            if (successState) successState.classList.remove('hidden');
+        }
+
+        function shouldUseMagicLinkProxy(error) {
+            if (!error) return false;
+
+            const message = (error.message || '').toLowerCase();
+
+            return error.name === 'TypeError'
+                || message.includes('failed to fetch')
+                || message.includes('networkerror')
+                || message.includes('supabase sdk')
+                || message.includes('supabase is not defined')
+                || message.includes('supabase не инициализирован')
+                || message.includes('fetch failed')
+                || message.includes('could not fetch')
+                || message.includes('network request failed');
+        }
+
+        async function sendMagicLinkViaProxy(email) {
+            const response = await fetch('/api/send-magic-link.js', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email,
+                    redirectTo: window.location.origin + '/pages/account.html'
+                })
+            });
+
+            let data = null;
+            try {
+                data = await response.json();
+            } catch (parseError) {
+                data = null;
+            }
+
+            if (!response.ok || !data?.success) {
+                const message = data?.error || data?.message || `Сервер вернул статус ${response.status}`;
+                throw new Error(message);
+            }
+
+            return data;
+        }
+
+        function initializeHeaderAuthState() {
+            try {
+                const savedUser = localStorage.getItem('currentUser');
+                if (savedUser) {
+                    const user = JSON.parse(savedUser);
+                    currentUser = user;
+                    currentUserEmail = user.email || null;
+                    loadSavedAvatar();
+                } else {
+                    resetProfileUI();
+                }
+            } catch (error) {
+                console.error('Ошибка проверки сохраненного пользователя:', error);
+                resetProfileUI();
+            }
+        }
+
+        function resetProfileUI() {
+            const profileBtn = document.getElementById('profileBtn');
+
+            if (profileBtn) {
+                const iconContainer = profileBtn.querySelector('div');
+                const icon = profileBtn.querySelector('i');
+
+                if (iconContainer) {
+                    iconContainer.className = 'w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center';
+                }
+                if (icon) {
+                    icon.className = 'fas fa-user text-white text-sm';
+                    icon.style.display = 'block';
+                }
+
+                const existingImg = iconContainer?.querySelector('img');
+                if (existingImg) {
+                    existingImg.remove();
+                }
+            }
+
+            updateProfileDropdown('');
+        }
+
+        function loadSavedAvatar() {
+            try {
+                const currentUserData = localStorage.getItem('currentUser');
+                if (!currentUserData) {
+                    resetProfileUI();
+                    return;
+                }
+
+                const savedAvatar = localStorage.getItem('selectedAvatar');
+                if (savedAvatar) {
+                    const profileBtn = document.getElementById('profileBtn');
+                    if (profileBtn) {
+                        updateAvatarButton(profileBtn, savedAvatar);
+                    }
+                    updateProfileDropdown(savedAvatar);
+                } else {
+                    resetProfileUI();
+                }
+            } catch (error) {
+                console.error('Ошибка загрузки аватара:', error);
+                resetProfileUI();
+            }
+        }
+
+        function updateAvatarButton(button, savedAvatar) {
+            const iconContainer = button.querySelector('div');
+            const icon = button.querySelector('i');
+
+            if (!iconContainer || !icon) return;
+
+            if (savedAvatar && savedAvatar.startsWith('icon-')) {
+                const iconIndex = parseInt(savedAvatar.split('-')[1], 10);
+                const iconClasses = [
+                    'fas fa-user', 'fas fa-user-tie', 'fas fa-user-graduate', 'fas fa-user-ninja',
+                    'fas fa-user-astronaut', 'fas fa-user-cowboy', 'fas fa-user-doctor', 'fas fa-user-nurse',
+                    'fas fa-user-secret', 'fas fa-user-tag', 'fas fa-user-check', 'fas fa-user-clock',
+                    'fas fa-heart', 'fas fa-star', 'fas fa-crown', 'fas fa-gem', 'fas fa-sparkles',
+                    'fas fa-fire', 'fas fa-leaf', 'fas fa-sun', 'fas fa-moon', 'fas fa-cloud',
+                    'fas fa-flower', 'fas fa-butterfly'
+                ];
+                const iconColors = [
+                    'bg-pink-500', 'bg-blue-500', 'bg-green-500', 'bg-purple-500',
+                    'bg-indigo-500', 'bg-yellow-500', 'bg-red-500', 'bg-teal-500',
+                    'bg-gray-500', 'bg-orange-500', 'bg-emerald-500', 'bg-cyan-500',
+                    'bg-rose-500', 'bg-amber-500', 'bg-yellow-500', 'bg-violet-500',
+                    'bg-sky-500', 'bg-orange-500', 'bg-green-500', 'bg-yellow-500',
+                    'bg-indigo-500', 'bg-blue-500', 'bg-pink-500', 'bg-purple-500'
+                ];
+
+                if (iconIndex < iconClasses.length) {
+                    iconContainer.className = `w-8 h-8 ${iconColors[iconIndex]} rounded-full flex items-center justify-center`;
+                    icon.className = `${iconClasses[iconIndex]} text-white text-sm`;
+                    icon.style.display = 'block';
+                }
+            } else if (savedAvatar) {
+                iconContainer.className = 'w-8 h-8 rounded-full flex items-center justify-center overflow-hidden';
+                icon.style.display = 'none';
+
+                const existingImg = iconContainer.querySelector('img');
+                if (existingImg) {
+                    existingImg.remove();
+                }
+
+                const img = document.createElement('img');
+                img.src = savedAvatar;
+                img.alt = 'Фото профиля';
+                img.className = 'w-full h-full object-cover';
+                iconContainer.appendChild(img);
+            }
+        }
+
+        function updateProfileDropdown(savedAvatar) {
+            const dropdown = document.getElementById('profileDropdown');
+            if (!dropdown) return;
+
+            const userAvatar = dropdown.querySelector('.w-12.h-12');
+            const userIcon = userAvatar?.querySelector('i');
+
+            if (!savedAvatar) {
+                if (userAvatar && userIcon) {
+                    userAvatar.className = 'w-12 h-12 bg-gradient-to-br from-pink-500 to-purple-600 rounded-xl flex items-center justify-center shadow-sm';
+                    userIcon.className = 'fas fa-user-circle text-white text-lg';
+                    userIcon.style.display = 'block';
+
+                    const existingImg = userAvatar.querySelector('img');
+                    if (existingImg) {
+                        existingImg.remove();
+                    }
+                }
+                return;
+            }
+
+            if (userAvatar && userIcon) {
+                if (savedAvatar.startsWith('icon-')) {
+                    const iconIndex = parseInt(savedAvatar.split('-')[1], 10);
+                    const iconClasses = [
+                        'fas fa-user', 'fas fa-user-tie', 'fas fa-user-graduate', 'fas fa-user-ninja',
+                        'fas fa-user-astronaut', 'fas fa-user-cowboy', 'fas fa-user-doctor', 'fas fa-user-nurse',
+                        'fas fa-user-secret', 'fas fa-user-tag', 'fas fa-user-check', 'fas fa-user-clock',
+                        'fas fa-heart', 'fas fa-star', 'fas fa-crown', 'fas fa-gem', 'fas fa-sparkles',
+                        'fas fa-fire', 'fas fa-leaf', 'fas fa-sun', 'fas fa-moon', 'fas fa-cloud',
+                        'fas fa-flower', 'fas fa-butterfly'
+                    ];
+                    const iconColors = [
+                        'bg-pink-500', 'bg-blue-500', 'bg-green-500', 'bg-purple-500',
+                        'bg-indigo-500', 'bg-yellow-500', 'bg-red-500', 'bg-teal-500',
+                        'bg-gray-500', 'bg-orange-500', 'bg-emerald-500', 'bg-cyan-500',
+                        'bg-rose-500', 'bg-amber-500', 'bg-yellow-500', 'bg-violet-500',
+                        'bg-sky-500', 'bg-orange-500', 'bg-green-500', 'bg-yellow-500',
+                        'bg-indigo-500', 'bg-blue-500', 'bg-pink-500', 'bg-purple-500'
+                    ];
+
+                    if (iconIndex < iconClasses.length) {
+                        userAvatar.className = `w-12 h-12 ${iconColors[iconIndex]} rounded-xl flex items-center justify-center shadow-sm`;
+                        userIcon.className = `${iconClasses[iconIndex]} text-white text-lg`;
+                        userIcon.style.display = 'block';
+
+                        const existingImg = userAvatar.querySelector('img');
+                        if (existingImg) {
+                            existingImg.remove();
+                        }
+                    }
+                } else {
+                    userAvatar.className = 'w-12 h-12 rounded-xl flex items-center justify-center overflow-hidden shadow-sm';
+                    userIcon.style.display = 'none';
+
+                    const existingImg = userAvatar.querySelector('img');
+                    if (existingImg) {
+                        existingImg.remove();
+                    }
+
+                    const img = document.createElement('img');
+                    img.src = savedAvatar;
+                    img.alt = 'Фото профиля';
+                    img.className = 'w-full h-full object-cover';
+                    userAvatar.appendChild(img);
+                }
+            }
+        }
+
+        function logoutUser() {
+            localStorage.removeItem('currentUser');
+            currentUser = null;
+            currentUserEmail = null;
+            showLoginForm();
+            resetProfileUI();
+        }
+
+        function testAccountPage() {
+            fetch('/working-account.html')
+                .then(response => {
+                    if (response.ok) {
+                        window.location.href = '/working-account.html';
+                        return null;
+                    }
+                    return fetch('/pages/account.html');
+                })
+                .then(response => {
+                    if (response && response.ok) {
+                        window.location.href = '/pages/account.html';
+                    } else if (response) {
+                        alert('Ошибка доступа к личному кабинету. Попробуйте позже.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка доступа к личному кабинету:', error);
+                    alert('Ошибка сети при доступе к личному кабинету: ' + error.message);
+                });
+        }
+
+        async function initSupabase() {
+            if (supabaseClient) return supabaseClient;
+
+            try {
+                if (typeof window.supabase === 'undefined') {
+                    await loadSupabaseSDK();
+                }
+
+                supabaseClient = window.supabase.createClient(
+                    'https://iaezefurqmmgubdgqakt.supabase.co',
+                    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlhZXplZnVycW1tZ3ViZGdxYWt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU5NTk3NjQsImV4cCI6MjA3MTUzNTc2NH0.-Puoiddwu_xIx9BaHM0BBfbsULdU0Ljzh6uQleVToBQ'
+                );
+
+                return supabaseClient;
+            } catch (error) {
+                console.error('Ошибка инициализации Supabase:', error);
+                throw error;
+            }
+        }
+
+        function loadSupabaseSDK() {
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/@supabase/supabase-js@2';
+                script.onload = resolve;
+                script.onerror = reject;
+                document.head.appendChild(script);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginForm = document.getElementById('loginForm');
+            if (loginForm) {
+                loginForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+
+                    const emailInput = document.getElementById('loginEmail');
+                    const submitBtn = document.getElementById('loginSubmitBtn');
+                    const btnText = document.getElementById('loginBtnText');
+                    const btnLoading = document.getElementById('loginBtnLoading');
+
+                    if (!emailInput) return;
+
+                    const email = emailInput.value.trim();
+
+                    try {
+                        if (submitBtn) submitBtn.disabled = true;
+                        if (btnText) btnText.classList.add('hidden');
+                        if (btnLoading) btnLoading.classList.remove('hidden');
+
+                        if (!email) {
+                            throw new Error('Введите email для отправки ссылки');
+                        }
+
+                        let sent = false;
+                        let directError = null;
+
+                        if (!supabaseClient) {
+                            try {
+                                await initSupabase();
+                            } catch (initError) {
+                                directError = initError;
+                                console.warn('Не удалось инициализировать Supabase, используем резервный API', initError);
+                            }
+                        }
+
+                        if (supabaseClient) {
+                            try {
+                                const { error } = await supabaseClient.auth.signInWithOtp({
+                                    email: email,
+                                    options: {
+                                        emailRedirectTo: window.location.origin + '/pages/account.html',
+                                        shouldCreateUser: true
+                                    }
+                                });
+
+                                if (error) {
+                                    throw error;
+                                }
+
+                                sent = true;
+                            } catch (supabaseError) {
+                                directError = supabaseError;
+                                console.warn('Ошибка прямой отправки Magic Link, пробуем резервный API', supabaseError);
+
+                                if (!shouldUseMagicLinkProxy(supabaseError)) {
+                                    throw supabaseError;
+                                }
+                            }
+                        } else if (directError && !shouldUseMagicLinkProxy(directError)) {
+                            throw directError;
+                        }
+
+                        if (!sent) {
+                            await sendMagicLinkViaProxy(email);
+                            sent = true;
+                        }
+
+                        if (!sent) {
+                            throw new Error('Не удалось отправить ссылку. Попробуйте позже.');
+                        }
+
+                        showSuccessState();
+                    } catch (error) {
+                        console.error('Ошибка отправки Magic Link:', error);
+                        alert('Ошибка отправки ссылки: ' + (error.message || 'Неизвестная ошибка'));
+                    } finally {
+                        if (submitBtn) submitBtn.disabled = false;
+                        if (btnText) btnText.classList.remove('hidden');
+                        if (btnLoading) btnLoading.classList.add('hidden');
+                    }
+                });
+            }
+
+            initializeHeaderAuthState();
+        });
+
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'selectedAvatar') {
+                loadSavedAvatar();
+            }
+        });
+
+        window.addEventListener('avatarUpdated', () => {
+            loadSavedAvatar();
+        });
+
+        document.addEventListener('click', (e) => {
+            const modal = document.getElementById('loginModal');
+            if (modal && e.target === modal) {
+                closeLoginModal();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeLoginModal();
+            }
+        });
+    </script>
+
 </body>
 </html>
