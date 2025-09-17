@@ -32,13 +32,40 @@ const mimeTypes = {
     '.otf': 'application/font-otf'
 };
 
+const ROOT_DIR = __dirname;
+const UPLOADS_DIR = path.join(ROOT_DIR, 'uploads', 'photos');
+
+function isPathInside(parent, target) {
+    const relative = path.relative(parent, target);
+    return relative === '' || (!relative.startsWith('..') && !path.isAbsolute(relative));
+}
+
+function resolveSafePath(requestPath) {
+    const relativePath = requestPath.replace(/^\/+/g, '');
+    const normalizedPath = path.normalize(relativePath);
+
+    if (normalizedPath.startsWith('..') || path.isAbsolute(normalizedPath)) {
+        return null;
+    }
+
+    return path.join(ROOT_DIR, normalizedPath);
+}
+
 // Создаем HTTP сервер
 const server = http.createServer((req, res) => {
     const parsedUrl = url.parse(req.url, true);
-    const pathname = parsedUrl.pathname;
-    
+    let pathname;
+
+    try {
+        pathname = decodeURIComponent(parsedUrl.pathname);
+    } catch (error) {
+        res.writeHead(400, { 'Content-Type': 'text/plain' });
+        res.end('Bad Request');
+        return;
+    }
+
     console.log(`${req.method} ${pathname}`);
-    
+
     // Обработка API запросов для портфолио
     if (pathname === '/api/portfolio-photos.js' || pathname === '/pages/api/portfolio-photos.js') {
         portfolioAPI.handleRequest(req, res);
@@ -62,10 +89,17 @@ const server = http.createServer((req, res) => {
         verifySmsCodeAPI.handleRequest(req, res);
         return;
     }
-    
+
     // Обработка статических файлов фотографий
     if (pathname.startsWith('/uploads/photos/')) {
-        const photoPath = path.join(__dirname, pathname);
+        const photoPath = resolveSafePath(pathname);
+
+        if (!photoPath || !isPathInside(UPLOADS_DIR, photoPath)) {
+            res.writeHead(403, { 'Content-Type': 'text/plain' });
+            res.end('Forbidden');
+            return;
+        }
+
         fs.readFile(photoPath, (error, content) => {
             if (error) {
                 res.writeHead(404, { 'Content-Type': 'text/plain' });
@@ -79,22 +113,27 @@ const server = http.createServer((req, res) => {
         });
         return;
     }
-    
+
     // Определяем путь к файлу
-    let filePath = decodeURIComponent(pathname);
-    
+    let requestedPath = pathname;
+
     // Если запрос к корню, показываем index.html
     if (pathname === '/') {
-        filePath = '/index.html';
+        requestedPath = '/index.html';
     }
-    
-    // Добавляем точку в начало пути для статических файлов
-    filePath = '.' + filePath;
-    
+
+    const filePath = resolveSafePath(requestedPath);
+
+    if (!filePath) {
+        res.writeHead(403, { 'Content-Type': 'text/plain' });
+        res.end('Forbidden');
+        return;
+    }
+
     // Получаем расширение файла
     const extname = path.extname(filePath).toLowerCase();
     const contentType = mimeTypes[extname] || 'application/octet-stream';
-    
+
     // Читаем файл
     fs.readFile(filePath, (error, content) => {
         if (error) {

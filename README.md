@@ -26,7 +26,7 @@ SvetSalonPro/
 ├── pages/
 │   └── account.html        # Страница личного кабинета
 ├── images/                 # Изображения сайта
-├── SUPABASE_SETUP.md       # Инструкция по настройке Supabase
+├── supabase-config.js      # Конфигурация Supabase
 └── README.md               # Этот файл
 ```
 
@@ -41,20 +41,25 @@ cd SvetSalonPro
 
 ### 2. Настройка Supabase
 
-1. Следуйте инструкции в [SUPABASE_SETUP.md](./SUPABASE_SETUP.md)
-2. Создайте проект в Supabase
-3. Настройте базу данных и таблицы
-4. Получите API ключи
+1. Создайте проект в Supabase
+2. Настройте базу данных и таблицы
+3. В разделе **Project Settings → API** получите URL проекта и публичный анонимный ключ
 
 ### 3. Обновление конфигурации
 
-В файле `pages/account.html` замените:
+Откройте файл `supabase-config.js` и обновите значения в объекте `SUPABASE_CONFIG`:
+
 ```javascript
-const SUPABASE_URL = 'YOUR_SUPABASE_URL';
-const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+const SUPABASE_CONFIG = {
+    url: 'https://your-project-id.supabase.co',
+    anonKey: 'YOUR_SUPABASE_ANON_KEY',
+    auth: {
+        redirectTo: 'https://ваш-домен/pages/account.html'
+    }
+};
 ```
 
-На ваши реальные значения из Supabase.
+Страница `pages/account.html` автоматически использует эту конфигурацию, поэтому после обновления файла дополнительные правки в HTML не требуются.
 
 ### 4. Развертывание на GitHub Pages
 
