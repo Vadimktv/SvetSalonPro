@@ -1845,6 +1845,8 @@
             return error.name === 'TypeError'
                 || message.includes('failed to fetch')
                 || message.includes('networkerror')
+                || message.includes('load failed')
+                || message.includes('loadfailed')
                 || message.includes('supabase sdk')
                 || message.includes('supabase is not defined')
                 || message.includes('supabase не инициализирован')
