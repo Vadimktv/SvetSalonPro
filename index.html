@@ -2080,8 +2080,8 @@
         <div class="container mx-auto px-4">
             <div class="flex items-center justify-between h-16">
                 <!-- Logo -->
-                <div class="flex items-center space-x-4">
-                    <div class="w-10 h-10 bg-gradient-to-br from-pink-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                <a href="index.html" class="flex items-center space-x-4 group" aria-label="Перейти на главную страницу">
+                    <div class="w-10 h-10 bg-gradient-to-br from-pink-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg transition-transform duration-200 group-hover:scale-105 group-hover:shadow-xl">
                         <i class="fas fa-spa text-white text-lg"></i>
                     </div>
                     <div>
@@ -2090,7 +2090,7 @@
                         </h1>
                         <p class="text-xs text-gray-500 -mt-1">Салон красоты</p>
                     </div>
-                </div>
+                </a>
 
                 <!-- Navigation -->
                 <nav class="hidden md:flex items-center space-x-8">
@@ -3721,8 +3721,11 @@
     <script>
     document.querySelectorAll('.logo-link').forEach(function(logo) {
       logo.addEventListener('click', function(e) {
-        e.preventDefault();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        const href = logo.getAttribute('href');
+        if (!href || href.trim() === '' || href === '#') {
+          e.preventDefault();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
       });
     });
     </script>
@@ -5759,7 +5762,7 @@
                                     class="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
                                 <i class="fas fa-user-circle mr-2"></i>Открыть личный кабинет
                             </button>
-                            <a href="working-account.html" 
+                            <a href="/working-account.html"
                                class="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-center block">
                                 <i class="fas fa-check-circle mr-2"></i>Рабочая версия
                             </a>
@@ -6092,7 +6095,7 @@
                 .then(response => {
                     if (response.ok) {
                         console.log('✅ Working account page is accessible');
-                        window.location.href = 'working-account.html';
+                        window.location.href = '/working-account.html';
                     } else {
                         // Если рабочая версия недоступна, пробуем основную
                         return fetch('/pages/account.html');
@@ -6101,7 +6104,7 @@
                 .then(response => {
                     if (response && response.ok) {
                         console.log('✅ Account page is accessible');
-                        window.location.href = 'pages/account.html';
+                        window.location.href = '/pages/account.html';
                     } else {
                         console.log('❌ Account page returned status:', response?.status);
                         alert('Ошибка доступа к личному кабинету. Попробуйте позже.');
