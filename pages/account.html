@@ -1837,52 +1837,186 @@
 
 
         // Handle login form submission
+        function shouldUseMagicLinkProxy(error) {
+            if (!error) return false;
+
+            const message = (error.message || '').toLowerCase();
+
+            return error.name === 'TypeError'
+                || message.includes('failed to fetch')
+                || message.includes('networkerror')
+                || message.includes('supabase sdk')
+                || message.includes('supabase is not defined')
+                || message.includes('supabase не инициализирован')
+                || message.includes('fetch failed')
+                || message.includes('could not fetch')
+                || message.includes('network request failed');
+        }
+
+        function getMagicLinkRedirectUrl() {
+            try {
+                const origin = window.location?.origin || 'https://www.svetsalonpro.ru';
+                return `${origin.replace(/\/$/, '')}/pages/account.html`;
+            } catch (error) {
+                return 'https://www.svetsalonpro.ru/pages/account.html';
+            }
+        }
+
+        function getMagicLinkProxyEndpoints() {
+            return [
+                '/api/send-magic-link',
+                '/pages/api/send-magic-link',
+                '/api/send-magic-link.js',
+                '/pages/api/send-magic-link.js'
+            ];
+        }
+
+        function shouldRetryMagicLinkProxy(error, statusCode) {
+            if (statusCode === 404 || statusCode === 405) {
+                return true;
+            }
+
+            if (!error) {
+                return false;
+            }
+
+            const message = (error.message || '').toLowerCase();
+
+            return error.name === 'TypeError'
+                || message.includes('failed to fetch')
+                || message.includes('networkerror')
+                || message.includes('fetch failed')
+                || message.includes('could not fetch')
+                || message.includes('network request failed');
+        }
+
+        async function sendMagicLinkViaProxy(email) {
+            const payload = JSON.stringify({
+                email,
+                redirectTo: getMagicLinkRedirectUrl()
+            });
+
+            const endpoints = getMagicLinkProxyEndpoints();
+            let lastError = null;
+
+            for (const endpoint of endpoints) {
+                try {
+                    const response = await fetch(endpoint, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: payload
+                    });
+
+                    let data = null;
+                    try {
+                        data = await response.json();
+                    } catch (parseError) {
+                        data = null;
+                    }
+
+                    if (response.ok && data?.success) {
+                        return data;
+                    }
+
+                    const message = data?.error || data?.message || `Сервер ${endpoint} вернул статус ${response.status}`;
+                    const error = new Error(message);
+                    error.status = response.status;
+                    error.data = data;
+
+                    if (shouldRetryMagicLinkProxy(error, response.status)) {
+                        lastError = error;
+                        continue;
+                    }
+
+                    throw error;
+                } catch (error) {
+                    lastError = error;
+
+                    if (shouldRetryMagicLinkProxy(error, error?.status)) {
+                        continue;
+                    }
+
+                    throw error;
+                }
+            }
+
+            throw lastError || new Error('Не удалось отправить ссылку. Попробуйте позже.');
+        }
+
         function setupLoginForm() {
             console.log('Настраиваем форму входа...');
-            
+
             const loginForm = document.getElementById('loginForm');
-            
+
             if (loginForm) {
                 loginForm.addEventListener('submit', async (e) => {
                     e.preventDefault();
                     console.log('Форма отправлена!');
-                    
-                    const email = document.getElementById('email').value;
+
+                    const emailInput = document.getElementById('email');
+                    const email = emailInput.value.trim();
                     const loginBtn = document.getElementById('loginBtn');
                     const loginBtnText = document.getElementById('loginBtnText');
                     const loginBtnLoading = document.getElementById('loginBtnLoading');
-                    
+
                     try {
                         console.log('Отправляем Magic Link на email:', email);
-                        
+
                         // Show loading state
                         loginBtn.disabled = true;
                         loginBtnText.classList.add('hidden');
                         loginBtnLoading.classList.remove('hidden');
-                        
-                        // Проверяем, что Supabase инициализирован
-                        const client = window.supabaseClient || supabaseClient;
-                        if (!client || !client.auth) {
-                            throw new Error('Supabase не инициализирован. Попробуйте обновить страницу.');
+
+                        if (!email) {
+                            throw new Error('Введите email для отправки ссылки.');
                         }
-                        
-                        // Отправляем Magic Link
-                        const { error } = await client.auth.signInWithOtp({
-                            email: email,
-                            options: {
-                                emailRedirectTo: 'https://www.svetsalonpro.ru/pages/account.html',
-                                shouldCreateUser: true
+
+                        let sent = false;
+                        const client = window.supabaseClient || supabaseClient;
+
+                        if (client && client.auth) {
+                            try {
+                                const { error } = await client.auth.signInWithOtp({
+                                    email: email,
+                                    options: {
+                                        emailRedirectTo: getMagicLinkRedirectUrl(),
+                                        shouldCreateUser: true
+                                    }
+                                });
+
+                                if (error) {
+                                    throw error;
+                                }
+
+                                sent = true;
+                            } catch (supabaseError) {
+                                console.warn('Ошибка прямой отправки Magic Link, пробуем резервный API', supabaseError);
+
+                                if (!shouldUseMagicLinkProxy(supabaseError)) {
+                                    throw supabaseError;
+                                }
                             }
-                        });
-                        
-                        if (error) throw error;
-                        
+                        } else {
+                            console.warn('Supabase клиент недоступен, используем резервный API для отправки Magic Link');
+                        }
+
+                        if (!sent) {
+                            await sendMagicLinkViaProxy(email);
+                            sent = true;
+                        }
+
+                        if (!sent) {
+                            throw new Error('Не удалось отправить ссылку. Попробуйте позже.');
+                        }
+
                         // Show success message
                         showNotification('success', 'Ссылка отправлена!', 'Ссылка для входа отправлена на ваш email!');
-                        
+
                     } catch (error) {
                         console.error('Magic Link error:', error);
-                        showNotification('error', 'Ошибка отправки', error.message);
+                        showNotification('error', 'Ошибка отправки', error.message || 'Не удалось отправить ссылку. Попробуйте позже.');
                     } finally {
                         // Reset button state
                         loginBtn.disabled = false;

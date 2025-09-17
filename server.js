@@ -12,6 +12,14 @@ const uploadPhotosAPI = require('./pages/api/upload-photos.js');
 // Импортируем API для SMS-кода
 const sendSmsCodeAPI = require('./pages/api/send-sms-code.js');
 const verifySmsCodeAPI = require('./pages/api/verify-sms-code.js');
+const sendMagicLinkAPI = require('./pages/api/send-magic-link.js');
+
+const MAGIC_LINK_PATHS = new Set([
+    '/api/send-magic-link',
+    '/api/send-magic-link.js',
+    '/pages/api/send-magic-link',
+    '/pages/api/send-magic-link.js'
+]);
 
 // MIME типы для статических файлов
 const mimeTypes = {
@@ -45,21 +53,27 @@ const server = http.createServer((req, res) => {
         return;
     }
     
-    // Обработка API запросов для загрузки фотографий
+    // Обработка API запросов на загрузку фотографий
     if (pathname === '/api/upload-photos.js' || pathname === '/pages/api/upload-photos.js') {
         uploadPhotosAPI.handleRequest(req, res);
         return;
     }
     
-    // Обработка API запросов для отправки SMS-кода
+    // Обработка API запросов на отправку SMS-кода
     if (pathname === '/api/send-sms-code.js' || pathname === '/pages/api/send-sms-code.js') {
         sendSmsCodeAPI.handleRequest(req, res);
         return;
     }
-    
-    // Обработка API запросов для проверки SMS-кода
+
+    // Обработка API запросов на проверку SMS-кода
     if (pathname === '/api/verify-sms-code.js' || pathname === '/pages/api/verify-sms-code.js') {
         verifySmsCodeAPI.handleRequest(req, res);
+        return;
+    }
+
+    // Обработка API запросов на отправку Magic Link через Supabase
+    if (MAGIC_LINK_PATHS.has(pathname)) {
+        sendMagicLinkAPI.handleRequest(req, res);
         return;
     }
     
