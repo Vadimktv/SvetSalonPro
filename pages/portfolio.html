@@ -6,6 +6,8 @@
     <title>Примеры работ - SvetSalonPro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="../images/ui/logo.png">
+    <link rel="shortcut icon" type="image/png" href="../images/ui/logo.png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
@@ -21,9 +23,14 @@
         /* Основные стили */
         .nav-link {
             position: relative;
-            transition: color 0.3s ease;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
         }
-        
+
+        .nav-link:hover {
+            color: #ec4899 !important;
+            text-shadow: 0 2px 8px rgba(236, 72, 153, 0.08);
+        }
+
         .nav-link::after {
             content: '';
             position: absolute;
@@ -31,12 +38,80 @@
             height: 2px;
             bottom: -4px;
             left: 0;
-            background-color: #ec4899;
+            background: linear-gradient(to right, #ec4899, #8b5cf6);
             transition: width 0.3s ease;
         }
-        
+
         .nav-link:hover::after {
             width: 100%;
+        }
+
+        /* Desktop header */
+        .profile-header {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+        }
+
+        .profile-header.scrolled {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        #profileBtn {
+            transition: all 0.3s ease;
+        }
+
+        #profileBtn:hover {
+            transform: scale(1.1);
+        }
+
+        #profileBtn:active {
+            transform: scale(0.95);
+        }
+
+        #profileBtn .w-8 {
+            transition: all 0.3s ease;
+        }
+
+        #profileBtn:hover .w-8 {
+            background-color: #ec4899 !important;
+            box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3);
+        }
+
+        .menu-icon-container {
+            position: relative;
+            width: 20px;
+            height: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .menu-line {
+            width: 100%;
+            height: 2px;
+            background-color: #374151;
+            border-radius: 1px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: center;
+        }
+
+        #iosMenuBtn.active .menu-line:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        #iosMenuBtn.active .menu-line:nth-child(2) {
+            opacity: 0;
+            transform: scaleX(0);
+        }
+
+        #iosMenuBtn.active .menu-line:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
+        #iosMenuBtn:hover .menu-line {
+            background-color: #ec4899;
         }
         
         .animate-on-scroll {
@@ -444,23 +519,143 @@
     </div>
 
     <!-- Header -->
-    <header class="fixed w-full bg-white/90 backdrop-blur-md shadow-sm z-40">
-        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <div class="flex items-center">
-                <a href="../index.html" class="text-2xl font-bold text-pink-600 hover:text-pink-700 transition-colors duration-200">
-                    SvetSalonPro
-                </a>
-            </div>
-            <nav class="hidden md:flex items-center space-x-8">
-                <a href="../index.html" class="nav-link text-gray-700 hover:text-pink-600 transition">Главная</a>
-                <a href="portfolio.html" class="nav-link text-pink-600 font-semibold">Примеры работ</a>
-                <a href="account.html" class="nav-link text-gray-700 hover:text-pink-600 transition">Личный кабинет</a>
-            </nav>
-            <div class="flex items-center space-x-4">
-                <!-- iOS Style Menu Button -->
-                <button id="iosMenuBtn" class="md:hidden w-10 h-10 rounded-full bg-gray-100/50 backdrop-blur-sm flex items-center justify-center hover:bg-gray-200/50 active:bg-gray-300/50 transition-all duration-200 transform hover:scale-105 active:scale-95 cursor-pointer">
-                    <i class="fas fa-bars text-gray-600 text-sm"></i>
-                </button>
+    <header class="profile-header fixed top-0 left-0 right-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-200/50 shadow-sm">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-4">
+                    <div class="w-10 h-10 bg-gradient-to-br from-pink-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                        <i class="fas fa-spa text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <a href="../index.html" class="flex flex-col">
+                            <span class="text-xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent leading-none">SvetSalonPro</span>
+                            <span class="text-xs text-gray-500 -mt-1">Салон красоты</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="../index.html#home" class="nav-link text-gray-700 hover:text-pink-600 font-medium transition-colors duration-200">
+                        <i class="fas fa-home mr-2"></i>Главная
+                    </a>
+                    <a href="../index.html#services" class="nav-link text-gray-700 hover:text-pink-600 font-medium transition-colors duration-200">
+                        <i class="fas fa-spa mr-2"></i>Услуги
+                    </a>
+                    <a href="portfolio.html" class="nav-link text-pink-600 font-semibold transition-colors duration-200">
+                        <i class="fas fa-images mr-2"></i>Портфолио
+                    </a>
+                    <a href="../index.html#masters" class="nav-link text-gray-700 hover:text-pink-600 font-medium transition-colors duration-200">
+                        <i class="fas fa-users mr-2"></i>Мастера
+                    </a>
+                    <a href="../index.html#contact" class="nav-link text-gray-700 hover:text-pink-600 font-medium transition-colors duration-200">
+                        <i class="fas fa-phone mr-2"></i>Контакты
+                    </a>
+                </nav>
+
+                <div class="flex items-center space-x-4">
+                    <!-- Quick Actions -->
+                    <div class="hidden sm:flex items-center space-x-3">
+                        <button onclick="window.location.href='../index.html#booking'"
+                                class="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                            <i class="fas fa-calendar-plus mr-2"></i>Записаться
+                        </button>
+                        <a href="https://t.me/SvetSalonPro" target="_blank"
+                           class="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                            <i class="fab fa-telegram text-lg"></i>
+                        </a>
+                    </div>
+
+                    <!-- Profile Button -->
+                    <div class="relative">
+                        <button id="profileBtn"
+                                class="flex items-center space-x-3 bg-white/90 backdrop-blur-sm border border-gray-200 hover:border-pink-300 rounded-xl px-4 py-2 transition-all duration-200 transform hover:scale-105 shadow-sm hover:shadow-md text-gray-700 focus:outline-none focus:ring-0 active:bg-gradient-to-r active:from-pink-500 active:to-purple-600 active:text-white">
+                            <div class="w-8 h-8 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center shadow-sm">
+                                <i class="fas fa-user text-white text-sm"></i>
+                            </div>
+                            <div class="hidden sm:block text-left">
+                                <div class="text-sm font-semibold text-gray-700">Профиль</div>
+                                <div class="text-xs text-gray-500">Войти в аккаунт</div>
+                            </div>
+                            <i class="fas fa-chevron-down text-gray-400 text-xs transition-transform duration-200"></i>
+                        </button>
+
+                        <!-- Profile Dropdown -->
+                        <div id="profileDropdown" class="fixed right-4 top-20 w-72 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 opacity-0 invisible transform scale-95 transition-all duration-300 z-[99999] overflow-hidden origin-top-right">
+                            <div class="absolute -top-2 right-6 w-4 h-4 bg-white/95 backdrop-blur-xl border-l border-t border-white/20 transform rotate-45"></div>
+
+                            <div class="p-3">
+                                <div class="mb-3">
+                                    <a href="account.html"
+                                       class="w-full flex items-center space-x-4 px-4 py-4 text-gray-700 hover:bg-gradient-to-r hover:from-pink-50 hover:to-purple-50 rounded-xl transition-all duration-200 group">
+                                        <div class="w-12 h-12 bg-gradient-to-br from-pink-500 to-purple-600 rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-200">
+                                            <i class="fas fa-user-circle text-white text-lg"></i>
+                                        </div>
+                                        <div class="flex-1 text-left">
+                                            <div class="font-bold text-gray-800 text-lg">Войти в личный кабинет</div>
+                                            <div class="text-sm text-gray-500">Управление профилем и записями</div>
+                                        </div>
+                                        <i class="fas fa-chevron-right text-gray-400 text-sm group-hover:text-pink-500 transition-colors duration-200"></i>
+                                    </a>
+                                </div>
+
+                                <div class="mb-3">
+                                    <a href="account.html"
+                                       class="w-full flex items-center space-x-4 px-4 py-4 text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 rounded-xl transition-all duration-200 group">
+                                        <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-200">
+                                            <i class="fas fa-user-plus text-white text-lg"></i>
+                                        </div>
+                                        <div class="flex-1 text-left">
+                                            <div class="font-bold text-gray-800 text-lg">Регистрация</div>
+                                            <div class="text-sm text-gray-500">Создать новый аккаунт</div>
+                                        </div>
+                                        <i class="fas fa-chevron-right text-gray-400 text-sm group-hover:text-blue-500 transition-colors duration-200"></i>
+                                    </a>
+                                </div>
+
+                                <div class="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent my-3"></div>
+
+                                <div class="mb-3">
+                                    <a href="https://t.me/SvetSalonPro" target="_blank"
+                                       class="flex items-center space-x-4 px-4 py-3 text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-cyan-50 rounded-xl transition-all duration-200 group">
+                                        <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-200">
+                                            <i class="fab fa-telegram text-white text-sm"></i>
+                                        </div>
+                                        <div class="flex-1">
+                                            <div class="font-semibold text-gray-800">Telegram</div>
+                                            <div class="text-xs text-gray-500">Связаться с нами</div>
+                                        </div>
+                                        <i class="fas fa-external-link-alt text-gray-400 text-xs group-hover:text-blue-500 transition-colors duration-200"></i>
+                                    </a>
+                                </div>
+
+                                <div>
+                                    <a href="https://wa.me/79282806294" target="_blank"
+                                       class="flex items-center space-x-4 px-4 py-3 text-gray-700 hover:bg-gradient-to-r hover:from-green-50 hover:to-emerald-50 rounded-xl transition-all duration-200 group">
+                                        <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-200">
+                                            <i class="fab fa-whatsapp text-white text-sm"></i>
+                                        </div>
+                                        <div class="flex-1">
+                                            <div class="font-semibold text-gray-800">WhatsApp</div>
+                                            <div class="text-xs text-gray-500">Написать в WhatsApp</div>
+                                        </div>
+                                        <i class="fas fa-external-link-alt text-gray-400 text-xs group-hover:text-green-500 transition-colors duration-200"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- iOS Style Menu Button -->
+                    <button id="iosMenuBtn" class="md:hidden w-10 h-10 rounded-full bg-gray-100/50 backdrop-blur-sm flex items-center justify-center hover:bg-gray-200/50 active:bg-gray-300/50 transition-all duration-200 transform hover:scale-105 active:scale-95 cursor-pointer">
+                        <div class="menu-icon-container">
+                            <div class="menu-line"></div>
+                            <div class="menu-line"></div>
+                            <div class="menu-line"></div>
+                        </div>
+                    </button>
+                </div>
             </div>
         </div>
     </header>
@@ -723,6 +918,131 @@
                 closeMenu();
             }
         });
+
+        // Header interactions
+        const profileHeader = document.querySelector('.profile-header');
+        const profileBtn = document.getElementById('profileBtn');
+        const profileDropdown = document.getElementById('profileDropdown');
+        let isProfileDropdownOpen = false;
+
+        const handleHeaderScroll = () => {
+            if (!profileHeader) return;
+            if (window.scrollY > 20) {
+                profileHeader.classList.add('scrolled');
+            } else {
+                profileHeader.classList.remove('scrolled');
+            }
+        };
+
+        handleHeaderScroll();
+        window.addEventListener('scroll', handleHeaderScroll);
+
+        const positionProfileDropdown = () => {
+            if (!profileBtn || !profileDropdown) return;
+            const buttonRect = profileBtn.getBoundingClientRect();
+            profileDropdown.style.top = `${buttonRect.bottom + 10}px`;
+            profileDropdown.style.right = `${window.innerWidth - buttonRect.right}px`;
+        };
+
+        const openProfileDropdown = () => {
+            if (!profileBtn || !profileDropdown) return;
+            positionProfileDropdown();
+            profileDropdown.classList.remove('invisible');
+            profileDropdown.style.transform = 'scale(1) translateY(0)';
+            profileDropdown.style.opacity = '1';
+
+            profileBtn.classList.remove('bg-white/90');
+            profileBtn.classList.add('bg-gradient-to-r', 'from-pink-500', 'to-purple-600', 'text-white');
+
+            const profileText = profileBtn.querySelector('.text-sm.font-semibold');
+            const profileSubtext = profileBtn.querySelector('.text-xs');
+            const chevronIcon = profileBtn.querySelector('.fa-chevron-down');
+
+            if (profileText) {
+                profileText.classList.remove('text-gray-700');
+                profileText.classList.add('text-white');
+            }
+
+            if (profileSubtext) {
+                profileSubtext.classList.remove('text-gray-500');
+                profileSubtext.classList.add('text-white/80');
+            }
+
+            if (chevronIcon) {
+                chevronIcon.classList.remove('text-gray-400');
+                chevronIcon.classList.add('text-white/80');
+                chevronIcon.style.transform = 'rotate(180deg)';
+            }
+
+            isProfileDropdownOpen = true;
+        };
+
+        const closeProfileDropdown = () => {
+            if (!profileBtn || !profileDropdown) return;
+            profileDropdown.style.transform = 'scale(0.95) translateY(-10px)';
+            profileDropdown.style.opacity = '0';
+            setTimeout(() => {
+                if (profileDropdown) {
+                    profileDropdown.classList.add('invisible');
+                }
+            }, 150);
+
+            profileBtn.classList.remove('bg-gradient-to-r', 'from-pink-500', 'to-purple-600', 'text-white');
+            profileBtn.classList.add('bg-white/90');
+
+            const profileText = profileBtn.querySelector('.text-sm.font-semibold');
+            const profileSubtext = profileBtn.querySelector('.text-xs');
+            const chevronIcon = profileBtn.querySelector('.fa-chevron-down');
+
+            if (profileText) {
+                profileText.classList.remove('text-white');
+                profileText.classList.add('text-gray-700');
+            }
+
+            if (profileSubtext) {
+                profileSubtext.classList.remove('text-white/80');
+                profileSubtext.classList.add('text-gray-500');
+            }
+
+            if (chevronIcon) {
+                chevronIcon.classList.remove('text-white/80');
+                chevronIcon.classList.add('text-gray-400');
+                chevronIcon.style.transform = 'rotate(0deg)';
+            }
+
+            isProfileDropdownOpen = false;
+        };
+
+        if (profileBtn && profileDropdown) {
+            profileBtn.addEventListener('click', (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+
+                if (isProfileDropdownOpen) {
+                    closeProfileDropdown();
+                } else {
+                    openProfileDropdown();
+                }
+            });
+
+            document.addEventListener('click', (event) => {
+                if (isProfileDropdownOpen && !profileDropdown.contains(event.target) && !profileBtn.contains(event.target)) {
+                    closeProfileDropdown();
+                }
+            });
+
+            window.addEventListener('resize', () => {
+                if (isProfileDropdownOpen) {
+                    positionProfileDropdown();
+                }
+            });
+
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' && isProfileDropdownOpen) {
+                    closeProfileDropdown();
+                }
+            });
+        }
 
         // Portfolio functionality
         let currentFilter = 'all';
