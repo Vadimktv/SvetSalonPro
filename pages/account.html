@@ -1840,19 +1840,81 @@
         function shouldUseMagicLinkProxy(error) {
             if (!error) return false;
 
-            const message = (error.message || '').toLowerCase();
+            const normalizedName = (error?.name || '').toLowerCase();
 
-            return error.name === 'TypeError'
-                || message.includes('failed to fetch')
-                || message.includes('networkerror')
-                || message.includes('load failed')
-                || message.includes('loadfailed')
-                || message.includes('supabase sdk')
-                || message.includes('supabase is not defined')
-                || message.includes('supabase не инициализирован')
-                || message.includes('fetch failed')
-                || message.includes('could not fetch')
-                || message.includes('network request failed');
+            const messageParts = [];
+
+            if (typeof error?.message === 'string') {
+                messageParts.push(error.message);
+            }
+
+            if (typeof error?.error_description === 'string') {
+                messageParts.push(error.error_description);
+            }
+
+            if (typeof error?.error === 'string') {
+                messageParts.push(error.error);
+            }
+
+            if (typeof error?.details === 'string') {
+                messageParts.push(error.details);
+            }
+
+            if (Array.isArray(error?.errors)) {
+                messageParts.push(error.errors.map(String).join(' '));
+            }
+
+            if (typeof error === 'string') {
+                messageParts.push(error);
+            } else if (error && typeof error.toString === 'function' && error.toString !== Object.prototype.toString) {
+                messageParts.push(error.toString());
+            }
+
+            const normalizedMessage = messageParts
+                .filter(Boolean)
+                .map((value) => value.toString().toLowerCase())
+                .join(' ');
+
+            const networkIndicators = [
+                'failed to fetch',
+                'fetch failed',
+                'networkerror',
+                'network error',
+                'network request failed',
+                'could not fetch',
+                'load failed',
+                'loadfailed',
+                'the request timed out',
+                'timed out',
+                'timeout',
+                'network connection was lost',
+                'internet connection appears to be offline',
+                'a server with the specified hostname could not be found',
+                'an ssl error has occurred',
+                'supabase sdk',
+                'supabase is not defined',
+                'supabase не инициализирован'
+            ];
+
+            if (
+                normalizedName.includes('typeerror') ||
+                normalizedName.includes('networkerror') ||
+                normalizedName.includes('domexception') ||
+                normalizedName.includes('aborterror')
+            ) {
+                return true;
+            }
+
+            return networkIndicators.some((indicator) => normalizedMessage.includes(indicator));
+        }
+
+        function getMagicLinkProxyCandidates() {
+            return Array.from(new Set([
+                '/api/send-magic-link',
+                '/api/send-magic-link.js',
+                '/pages/api/send-magic-link',
+                '/pages/api/send-magic-link.js'
+            ]));
         }
 
         function getMagicLinkRedirectUrl() {
@@ -1865,30 +1927,88 @@
         }
 
         async function sendMagicLinkViaProxy(email) {
-            const response = await fetch('/api/send-magic-link.js', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    email,
-                    redirectTo: getMagicLinkRedirectUrl()
-                })
-            });
+            const redirectTo = getMagicLinkRedirectUrl();
+            const endpoints = getMagicLinkProxyCandidates();
+            let lastError = null;
 
-            let data = null;
-            try {
-                data = await response.json();
-            } catch (parseError) {
-                data = null;
+            for (const endpoint of endpoints) {
+                try {
+                    const response = await fetch(endpoint, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            email,
+                            redirectTo
+                        })
+                    });
+
+                    const rawText = await response.text();
+                    let data = null;
+
+                    if (rawText) {
+                        try {
+                            data = JSON.parse(rawText);
+                        } catch (parseError) {
+                            data = null;
+                        }
+                    }
+
+                    if (response.ok && data?.success) {
+                        return data;
+                    }
+
+                    const message = data?.error
+                        || data?.message
+                        || (rawText && rawText.trim().length ? rawText : `Сервер вернул статус ${response.status}`);
+
+                    const error = new Error(message);
+                    error.status = response.status;
+                    error.endpoint = endpoint;
+
+                    if (response.status === 404 || response.status === 405) {
+                        console.warn(`Magic link proxy endpoint ${endpoint} вернул статус ${response.status}, пробуем следующий вариант...`);
+                        lastError = error;
+                        continue;
+                    }
+
+                    throw error;
+                } catch (proxyError) {
+                    const normalizedError = proxyError instanceof Error
+                        ? proxyError
+                        : new Error(proxyError?.message || String(proxyError));
+
+                    const name = (normalizedError?.name || '').toLowerCase();
+                    const message = (normalizedError?.message || '').toLowerCase();
+
+                    normalizedError.endpoint = endpoint;
+                    lastError = normalizedError;
+
+                    const isNetworkIssue =
+                        name.includes('typeerror') ||
+                        name.includes('networkerror') ||
+                        name.includes('domexception') ||
+                        name.includes('aborterror') ||
+                        message.includes('failed to fetch') ||
+                        message.includes('network error') ||
+                        message.includes('load failed') ||
+                        message.includes('network request failed');
+
+                    if (normalizedError?.status === 404 || normalizedError?.status === 405 || isNetworkIssue) {
+                        console.warn(`Ошибка при обращении к ${endpoint}, пробуем следующий маршрут...`, normalizedError);
+                        continue;
+                    }
+
+                    throw normalizedError;
+                }
             }
 
-            if (!response.ok || !data?.success) {
-                const message = data?.error || data?.message || `Сервер вернул статус ${response.status}`;
-                throw new Error(message);
+            if (lastError && lastError.message) {
+                throw new Error(`Не удалось отправить ссылку через резервный API: ${lastError.message}`);
             }
 
-            return data;
+            throw new Error('Не удалось отправить ссылку через резервный API. Попробуйте позже.');
         }
 
         function setupLoginForm() {
@@ -1920,6 +2040,7 @@
                         }
 
                         let sent = false;
+                        const redirectTo = getMagicLinkRedirectUrl();
                         const client = window.supabaseClient || supabaseClient;
 
                         if (client && client.auth) {
@@ -1927,7 +2048,7 @@
                                 const { error } = await client.auth.signInWithOtp({
                                     email: email,
                                     options: {
-                                        emailRedirectTo: 'https://www.svetsalonpro.ru/pages/account.html',
+                                        emailRedirectTo: redirectTo,
                                         shouldCreateUser: true
                                     }
                                 });
