@@ -2080,8 +2080,8 @@
         <div class="container mx-auto px-4">
             <div class="flex items-center justify-between h-16">
                 <!-- Logo -->
-                <div class="flex items-center space-x-4">
-                    <div class="w-10 h-10 bg-gradient-to-br from-pink-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                <a href="index.html" class="flex items-center space-x-4 group" aria-label="Перейти на главную страницу">
+                    <div class="w-10 h-10 bg-gradient-to-br from-pink-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg transition-transform duration-200 group-hover:scale-105 group-hover:shadow-xl">
                         <i class="fas fa-spa text-white text-lg"></i>
                     </div>
                     <div>
@@ -2090,7 +2090,7 @@
                         </h1>
                         <p class="text-xs text-gray-500 -mt-1">Салон красоты</p>
                     </div>
-                </div>
+                </a>
 
                 <!-- Navigation -->
                 <nav class="hidden md:flex items-center space-x-8">
@@ -3721,8 +3721,11 @@
     <script>
     document.querySelectorAll('.logo-link').forEach(function(logo) {
       logo.addEventListener('click', function(e) {
-        e.preventDefault();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        const href = logo.getAttribute('href');
+        if (!href || href.trim() === '' || href === '#') {
+          e.preventDefault();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
       });
     });
     </script>
