@@ -2,6 +2,8 @@
 const http = require('http');
 const smsStorage = require('./sms-storage.js');
 
+const ERROR_MESSAGE = 'Ошибка отправки SMS-кода';
+
 function handleRequest(req, res) {
     if (req.method !== 'POST') {
         res.writeHead(405, { 'Content-Type': 'application/json' });
@@ -101,9 +103,9 @@ function handleRequest(req, res) {
         } catch (error) {
             console.error('Error sending SMS code:', error);
             res.writeHead(500, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ 
-                error: 'Ошибка отправки SMS-кода',
-                details: error.message 
+            res.end(JSON.stringify({
+                error: ERROR_MESSAGE,
+                details: error.message
             }));
         }
     });

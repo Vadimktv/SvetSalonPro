@@ -51,6 +51,43 @@
             color: #0c5460;
             border: 1px solid #bee5eb;
         }
+        .pending {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+        .endpoint-list {
+            display: grid;
+            gap: 12px;
+            margin-top: 16px;
+        }
+        .endpoint-item {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 16px;
+        }
+        .endpoint-item h3 {
+            margin: 0 0 8px 0;
+            font-size: 16px;
+            color: #111827;
+        }
+        .endpoint-description {
+            margin: 0 0 12px 0;
+            color: #4b5563;
+            font-size: 14px;
+        }
+        .endpoint-item .status {
+            margin: 0;
+        }
+        .endpoint-meta {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #6b7280;
+        }
+        #logs {
+            white-space: pre-wrap;
+        }
     </style>
 </head>
 <body>
@@ -62,80 +99,297 @@
         </div>
         
         <h2>Проверка доступности:</h2>
-        <div id="status"></div>
+        <div id="status" class="status info">⏳ Проверка ещё не выполнялась</div>
         
         <h2>Ссылки для тестирования:</h2>
         <a href="pages/account.html" class="button">📱 Открыть личный кабинет</a>
         <a href="index.html" class="button">🏠 Вернуться на главную</a>
         
         <h2>Проверка сервера:</h2>
-        <div id="serverStatus"></div>
-        
+        <div id="serverStatus" class="status info">⏳ Проверка ещё не выполнялась</div>
+
+        <h2>Мониторинг API:</h2>
+        <div id="apiStatus" class="endpoint-list"></div>
+
         <h2>Логи:</h2>
-        <div id="logs" style="background: #f8f9fa; padding: 15px; border-radius: 8px; font-family: monospace; font-size: 12px; max-height: 300px; overflow-y: auto;"></div>
+        <div id="logs" style="background: #f8f9fa; padding: 15px; border-radius: 8px; font-family: monospace; font-size: 12px; max-height: 300px; overflow-y: auto; white-space: pre-wrap;"></div>
     </div>
 
     <script>
+        const monitorEmail = 'monitoring+healthcheck@svetsalonpro.ru';
+        const endpointStatusElements = new Map();
+        const endpointMetaElements = new Map();
+        const CHECK_INTERVAL = 30000;
+
+        const endpointChecks = [
+            {
+                id: 'portfolio',
+                name: 'GET /api/portfolio-photos.js',
+                description: 'Проверка выдачи списка фотографий портфолио',
+                method: 'GET',
+                url: '/api/portfolio-photos.js',
+                allowedStatuses: [200],
+                headers: { 'Accept': 'application/json' },
+                formatSuccess: ({ json }) => {
+                    if (json && typeof json === 'object') {
+                        const categories = Object.keys(json);
+                        if (categories.length) {
+                            return `API отвечает, категории: ${categories.join(', ')}`;
+                        }
+                        return 'API отвечает, но категории отсутствуют';
+                    }
+                    return 'API отвечает, но данные имеют неожиданный формат';
+                }
+            },
+            {
+                id: 'upload-photos',
+                name: 'GET /api/upload-photos.js',
+                description: 'Получение списка загруженных фотографий',
+                method: 'GET',
+                url: '/api/upload-photos.js',
+                allowedStatuses: [200],
+                headers: { 'Accept': 'application/json' },
+                formatSuccess: ({ json }) => {
+                    const count = json && Array.isArray(json.photos) ? json.photos.length : 0;
+                    return `API отвечает, записей: ${count}`;
+                }
+            },
+            {
+                id: 'send-sms',
+                name: 'POST /api/send-sms-code.js',
+                description: 'Отправка тестового SMS-кода на служебный email',
+                method: 'POST',
+                url: '/api/send-sms-code.js',
+                allowedStatuses: [200],
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: () => ({ email: monitorEmail }),
+                formatSuccess: ({ json }) => {
+                    if (json && json.success) {
+                        return 'Код отправлен успешно';
+                    }
+                    return 'Ответ 200, но флаг success отсутствует';
+                }
+            },
+            {
+                id: 'verify-sms',
+                name: 'POST /api/verify-sms-code.js',
+                description: 'Проверка обработки неверного SMS-кода',
+                method: 'POST',
+                url: '/api/verify-sms-code.js',
+                allowedStatuses: [200, 400],
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: () => ({ email: monitorEmail, code: '0000' }),
+                formatSuccess: ({ status, json }) => {
+                    if (status === 200) {
+                        return 'Код подтверждён сервером';
+                    }
+                    const errorText = json && json.error ? json.error : 'сервер сообщил об ошибке';
+                    return `Получена ожидаемая ошибка: ${errorText}`;
+                }
+            }
+        ];
+
+        let isCheckingEndpoints = false;
+
         function log(message) {
             const logsDiv = document.getElementById('logs');
             const timestamp = new Date().toLocaleTimeString();
-            logsDiv.innerHTML += `[${timestamp}] ${message}\n`;
+            logsDiv.textContent += `[${timestamp}] ${message}\n`;
             logsDiv.scrollTop = logsDiv.scrollHeight;
+        }
+
+        function setStatus(elementId, state, message) {
+            const element = document.getElementById(elementId);
+            if (!element) {
+                return;
+            }
+            element.className = `status ${state}`;
+            element.textContent = message;
+        }
+
+        function renderEndpointList() {
+            const container = document.getElementById('apiStatus');
+            container.innerHTML = '';
+
+            endpointChecks.forEach(endpoint => {
+                const item = document.createElement('div');
+                item.className = 'endpoint-item';
+
+                const title = document.createElement('h3');
+                title.textContent = endpoint.name;
+
+                const description = document.createElement('p');
+                description.className = 'endpoint-description';
+                description.textContent = endpoint.description;
+
+                const statusElement = document.createElement('div');
+                statusElement.className = 'status info';
+                statusElement.textContent = '⏳ Ожидание проверки...';
+
+                const metaElement = document.createElement('div');
+                metaElement.className = 'endpoint-meta';
+                metaElement.textContent = 'Проверка ещё не выполнялась';
+
+                item.appendChild(title);
+                item.appendChild(description);
+                item.appendChild(statusElement);
+                item.appendChild(metaElement);
+                container.appendChild(item);
+
+                endpointStatusElements.set(endpoint.id, statusElement);
+                endpointMetaElements.set(endpoint.id, metaElement);
+            });
+        }
+
+        function updateEndpointStatus(id, state, message, metaText) {
+            const statusElement = endpointStatusElements.get(id);
+            if (statusElement) {
+                statusElement.className = `status ${state}`;
+                statusElement.textContent = message;
+            }
+
+            const metaElement = endpointMetaElements.get(id);
+            if (metaElement && metaText) {
+                metaElement.textContent = metaText;
+            }
+        }
+
+        async function runEndpointCheck(endpoint) {
+            const startTime = new Date().toLocaleTimeString();
+            updateEndpointStatus(endpoint.id, 'pending', '⏳ Проверяем...', `Проверка запущена в ${startTime}`);
+            log(`Проверяем ${endpoint.name}...`);
+
+            try {
+                const headers = Object.assign({}, endpoint.headers || {});
+                headers['Cache-Control'] = 'no-cache';
+
+                const options = {
+                    method: endpoint.method,
+                    headers,
+                    cache: 'no-store'
+                };
+
+                const payload = typeof endpoint.body === 'function' ? endpoint.body() : endpoint.body;
+                if (payload) {
+                    options.body = JSON.stringify(payload);
+                }
+
+                const response = await fetch(endpoint.url, options);
+                const status = response.status;
+                const statusText = response.statusText;
+                const contentType = response.headers.get('content-type') || '';
+                const rawText = await response.text();
+
+                let parsedJson = null;
+                if (rawText && contentType.includes('application/json')) {
+                    try {
+                        parsedJson = JSON.parse(rawText);
+                    } catch (parseError) {
+                        log(`⚠️ ${endpoint.name}: не удалось разобрать JSON (${parseError.message})`);
+                    }
+                }
+
+                const context = { status, statusText, json: parsedJson, rawText };
+                const allowedStatuses = endpoint.allowedStatuses || [200];
+                const statusIsAllowed = allowedStatuses.includes(status);
+                const timestamp = new Date().toLocaleTimeString();
+                const meta = `HTTP ${status}${statusText ? ` ${statusText}` : ''} · ${timestamp}`;
+
+                if (statusIsAllowed) {
+                    const message = endpoint.formatSuccess ? endpoint.formatSuccess(context) : `Ответ ${status}`;
+                    updateEndpointStatus(endpoint.id, 'success', `✅ ${message}`, meta);
+                    log(`✅ ${endpoint.name}: ${message}`);
+                } else {
+                    const message = endpoint.formatError ? endpoint.formatError(context) : `Получен статус ${status}`;
+                    updateEndpointStatus(endpoint.id, 'error', `❌ ${message}`, meta);
+                    log(`❌ ${endpoint.name}: ${message}`);
+                    if (rawText) {
+                        log(`Ответ сервера: ${rawText.substring(0, 200)}`);
+                    }
+                }
+            } catch (error) {
+                const meta = `Последняя ошибка: ${new Date().toLocaleTimeString()}`;
+                updateEndpointStatus(endpoint.id, 'error', `❌ Ошибка запроса: ${error.message}`, meta);
+                log(`❌ ${endpoint.name}: ${error.message}`);
+            }
+        }
+
+        async function runEndpointChecks() {
+            if (isCheckingEndpoints) {
+                log('ℹ️ Пропускаем проверку API: предыдущая проверка ещё выполняется');
+                return;
+            }
+
+            isCheckingEndpoints = true;
+
+            try {
+                for (const endpoint of endpointChecks) {
+                    await runEndpointCheck(endpoint);
+                }
+            } finally {
+                isCheckingEndpoints = false;
+            }
         }
 
         function checkServer() {
             log('Проверяем сервер...');
-            
-            fetch('/pages/account.html')
+            setStatus('serverStatus', 'pending', '⏳ Проверяем ответ сервера...');
+
+            fetch('/pages/account.html', { cache: 'no-store' })
                 .then(response => {
                     if (response.ok) {
+                        setStatus('serverStatus', 'success', '✅ Сервер работает корректно');
                         log('✅ Сервер работает, страница account.html доступна');
-                        document.getElementById('serverStatus').innerHTML = 
-                            '<div class="status success">✅ Сервер работает корректно</div>';
                     } else {
+                        setStatus('serverStatus', 'error', '❌ Ошибка сервера');
                         log(`❌ Ошибка сервера: ${response.status} ${response.statusText}`);
-                        document.getElementById('serverStatus').innerHTML = 
-                            '<div class="status error">❌ Ошибка сервера</div>';
                     }
                 })
                 .catch(error => {
+                    setStatus('serverStatus', 'error', '❌ Ошибка сети');
                     log(`❌ Ошибка сети: ${error.message}`);
-                    document.getElementById('serverStatus').innerHTML = 
-                        '<div class="status error">❌ Ошибка сети</div>';
                 });
         }
 
         function checkPageLoad() {
             log('Проверяем загрузку страницы...');
-            
+            setStatus('status', 'pending', '⏳ Загружаем личный кабинет...');
+
             const iframe = document.createElement('iframe');
             iframe.style.display = 'none';
             iframe.src = 'pages/account.html';
-            
+            iframe.setAttribute('aria-hidden', 'true');
+
             iframe.onload = function() {
+                setStatus('status', 'success', '✅ Личный кабинет доступен');
                 log('✅ Страница account.html загрузилась успешно');
-                document.getElementById('status').innerHTML = 
-                    '<div class="status success">✅ Личный кабинет доступен</div>';
+                iframe.remove();
             };
-            
+
             iframe.onerror = function() {
+                setStatus('status', 'error', '❌ Ошибка загрузки личного кабинета');
                 log('❌ Ошибка загрузки страницы account.html');
-                document.getElementById('status').innerHTML = 
-                    '<div class="status error">❌ Ошибка загрузки личного кабинета</div>';
+                iframe.remove();
             };
-            
+
             document.body.appendChild(iframe);
         }
 
-        // Запускаем проверки при загрузке страницы
-        window.addEventListener('load', function() {
+        window.addEventListener('load', () => {
+            renderEndpointList();
             log('Страница загружена, начинаем тестирование...');
+            log(`Повторная проверка каждые ${CHECK_INTERVAL / 1000} секунд`);
+            setStatus('status', 'pending', '⏳ Готовим проверку личного кабинета...');
+            setStatus('serverStatus', 'pending', '⏳ Проверяем ответ сервера...');
             checkServer();
             setTimeout(checkPageLoad, 1000);
-        });
+            runEndpointChecks();
 
-        // Проверяем каждые 5 секунд
-        setInterval(checkServer, 5000);
+            setInterval(() => {
+                checkServer();
+                runEndpointChecks();
+            }, CHECK_INTERVAL);
+        });
     </script>
 </body>
 </html>
