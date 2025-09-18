@@ -92,7 +92,12 @@ const server = http.createServer((req, res) => {
     }
 
     // Обработка API запросов на отправку Magic Link через Supabase
-    if (pathname === '/api/send-magic-link.js' || pathname === '/pages/api/send-magic-link.js') {
+    if (
+        pathname === '/api/send-magic-link'
+        || pathname === '/api/send-magic-link.js'
+        || pathname === '/pages/api/send-magic-link'
+        || pathname === '/pages/api/send-magic-link.js'
+    ) {
         sendMagicLinkAPI.handleRequest(req, res);
         return;
     }
