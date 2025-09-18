@@ -3762,15 +3762,7 @@
     // Функция для автоматического выбора услуги при клике на кнопку в карточке
     function selectService(category, serviceValue) {
         console.log('selectService called:', category, serviceValue);
-        
-        // Прокручиваем к форме записи
-        const bookingSection = document.getElementById('booking');
-        if (bookingSection) {
-            bookingSection.scrollIntoView({ behavior: 'smooth' });
-        } else {
-            console.error('Booking section not found');
-        }
-        
+
         // Выбираем категорию услуг
         const categorySelect = document.getElementById('serviceCategory');
         if (categorySelect) {
@@ -3793,7 +3785,176 @@
                 console.error('Service select not found');
             }
             updateDebugInfo();
+            openServiceModal(category, serviceValue);
         }, 100);
+    }
+
+    function openServiceModal(category, serviceValue) {
+        const modal = document.getElementById('serviceModal');
+        const overlay = document.getElementById('serviceModalOverlay');
+        const card = document.getElementById('serviceModalCard');
+
+        if (!modal || !overlay || !card) {
+            console.error('Service modal elements not found');
+            return;
+        }
+
+        const categoryServices = services[category] || [];
+        const serviceData = categoryServices.find(service => service.value === serviceValue);
+
+        if (!serviceData) {
+            console.error('Service data not found for modal:', category, serviceValue);
+            return;
+        }
+
+        if (modal.classList.contains('hidden')) {
+            const activeElement = document.activeElement;
+            modal.__previousActiveElement = activeElement instanceof HTMLElement ? activeElement : null;
+        }
+
+        const nameElement = document.getElementById('serviceModalServiceName');
+        const priceElement = document.getElementById('serviceModalServicePrice');
+        const instructionsElement = document.getElementById('serviceModalInstructions');
+        const dialogueElement = document.getElementById('serviceModalDialogue');
+
+        const escapeHtml = (value) => String(value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+
+        if (nameElement) {
+            nameElement.textContent = serviceData.name;
+        }
+
+        if (priceElement) {
+            priceElement.textContent = serviceData.price;
+        }
+
+        const highlightElement = document.getElementById('selectedServiceHighlight');
+        let highlightText = '';
+
+        if (highlightElement) {
+            highlightText = highlightElement.textContent.replace(/\s+/g, ' ').trim();
+        }
+
+        if (!highlightText) {
+            highlightText = 'Мы уже заполнили форму и скоро свяжемся, чтобы уточнить детали вашего визита.';
+        }
+
+        const safeHighlight = escapeHtml(highlightText);
+        const safeServiceName = escapeHtml(serviceData.name);
+        const safeServicePrice = escapeHtml(serviceData.price);
+
+        if (dialogueElement) {
+            dialogueElement.innerHTML = `
+                <div class="flex items-start gap-3">
+                    <div class="w-10 h-10 rounded-2xl bg-white/20 flex items-center justify-center shadow-lg">
+                        <i class="fas fa-headset text-white"></i>
+                    </div>
+                    <div class="flex-1 bg-white/15 rounded-2xl px-4 py-3 text-left">
+                        <p class="text-xs uppercase tracking-wide text-white/70 mb-1">Администратор</p>
+                        <p class="text-sm leading-relaxed text-white/90">${safeHighlight}</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3 justify-end text-right">
+                    <div class="flex-1 bg-white/10 rounded-2xl px-4 py-3">
+                        <p class="text-xs uppercase tracking-wide text-white/70 mb-1">Вы</p>
+                        <p class="text-sm leading-relaxed text-white/90">Отлично! Запишите меня на «${safeServiceName}». Стоимость указана ${safeServicePrice}. Жду подтверждения времени.</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-2xl bg-white/20 flex items-center justify-center shadow-lg">
+                        <i class="fas fa-user text-white"></i>
+                    </div>
+                </div>
+            `;
+        }
+
+        if (instructionsElement) {
+            instructionsElement.textContent = `Оставьте удобный телефон и желаемую дату — мы оформим услугу «${serviceData.name}» и подтвердим время.`;
+        }
+
+        card.classList.remove('translate-y-0', 'scale-100', 'opacity-100');
+        card.classList.add('translate-y-6', 'scale-95', 'opacity-0');
+        overlay.classList.remove('opacity-100');
+        overlay.classList.add('opacity-0');
+
+        modal.classList.remove('hidden');
+        modal.setAttribute('aria-hidden', 'false');
+
+        const shouldLockScroll = !document.body.classList.contains('modal-open');
+        modal.dataset.scrollLocked = shouldLockScroll ? 'true' : 'false';
+
+        if (shouldLockScroll) {
+            if (typeof disableBodyScroll === 'function') {
+                disableBodyScroll();
+            } else {
+                document.body.classList.add('modal-open');
+            }
+        }
+
+        requestAnimationFrame(() => {
+            overlay.classList.remove('opacity-0');
+            overlay.classList.add('opacity-100');
+            card.classList.remove('translate-y-6', 'scale-95', 'opacity-0');
+            card.classList.add('translate-y-0', 'scale-100', 'opacity-100');
+            try {
+                card.focus({ preventScroll: true });
+            } catch (focusError) {
+                card.focus();
+            }
+        });
+    }
+
+    function closeServiceModal() {
+        const modal = document.getElementById('serviceModal');
+        const overlay = document.getElementById('serviceModalOverlay');
+        const card = document.getElementById('serviceModalCard');
+
+        if (!modal || modal.classList.contains('hidden')) {
+            return;
+        }
+
+        if (overlay) {
+            overlay.classList.remove('opacity-100');
+            overlay.classList.add('opacity-0');
+        }
+
+        if (card) {
+            card.classList.remove('translate-y-0', 'scale-100', 'opacity-100');
+            card.classList.add('translate-y-6', 'scale-95', 'opacity-0');
+        }
+
+        const shouldRestoreScroll = modal.dataset.scrollLocked === 'true';
+
+        setTimeout(() => {
+            modal.classList.add('hidden');
+            modal.setAttribute('aria-hidden', 'true');
+            if (overlay) {
+                overlay.classList.remove('opacity-0');
+            }
+            if (card) {
+                card.classList.remove('translate-y-6', 'scale-95', 'opacity-0');
+            }
+            const previousFocus = modal.__previousActiveElement;
+            if (previousFocus && typeof previousFocus.focus === 'function') {
+                try {
+                    previousFocus.focus();
+                } catch (focusError) {
+                    console.warn('Unable to restore focus after closing service modal:', focusError);
+                }
+            }
+            modal.__previousActiveElement = null;
+        }, 300);
+
+        if (shouldRestoreScroll) {
+            modal.dataset.scrollLocked = 'false';
+            if (typeof enableBodyScroll === 'function') {
+                enableBodyScroll();
+            } else {
+                document.body.classList.remove('modal-open');
+            }
+        }
     }
 
     // Функция для выбора мастера при клике на кнопку в карточке мастера
@@ -5347,6 +5508,62 @@
         </div>
     </div>
 
+    <!-- Модальное окно выбора услуги -->
+    <div id="serviceModal" class="fixed inset-0 z-[9998] hidden flex items-center justify-center px-4 py-6 sm:px-6" aria-hidden="true">
+        <div id="serviceModalOverlay" class="absolute inset-0 bg-gray-900/70 backdrop-blur-sm transition-opacity duration-300 opacity-0" onclick="closeServiceModal()" aria-hidden="true"></div>
+        <div id="serviceModalCard" role="dialog" aria-modal="true" aria-labelledby="serviceModalServiceName" tabindex="-1"
+             class="relative w-full max-w-lg bg-gradient-to-br from-pink-500 via-purple-600 to-pink-600 text-white rounded-3xl shadow-2xl p-6 sm:p-8 transform transition-all duration-300 opacity-0 translate-y-6 scale-95">
+            <button id="serviceModalCloseBtn"
+                    class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 transition-all duration-200 flex items-center justify-center shadow-lg"
+                    onclick="closeServiceModal()" aria-label="Закрыть окно">
+                <span class="text-2xl leading-none">&times;</span>
+            </button>
+
+            <div class="flex items-center gap-4 mb-6">
+                <div class="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center shadow-lg">
+                    <i class="fas fa-sparkles text-white text-2xl"></i>
+                </div>
+                <div>
+                    <p class="text-xs uppercase tracking-[0.35em] text-white/60">Вы выбрали услугу</p>
+                    <h3 id="serviceModalServiceName" class="text-2xl font-semibold text-white">—</h3>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between bg-white/10 rounded-2xl px-4 py-3 mb-6 shadow-inner">
+                <span class="text-sm uppercase tracking-wide text-white/70">Стоимость</span>
+                <span id="serviceModalServicePrice" class="text-xl font-semibold text-white">—</span>
+            </div>
+
+            <div id="serviceModalDialogue" class="space-y-4 mb-6">
+                <div class="flex items-start gap-3">
+                    <div class="w-10 h-10 rounded-2xl bg-white/20 flex items-center justify-center shadow-lg">
+                        <i class="fas fa-headset text-white"></i>
+                    </div>
+                    <div class="flex-1 bg-white/15 rounded-2xl px-4 py-3 text-left">
+                        <p class="text-xs uppercase tracking-wide text-white/70 mb-1">Администратор</p>
+                        <p class="text-sm leading-relaxed text-white/90">Мы уже заполнили форму и скоро свяжемся, чтобы уточнить детали вашего визита.</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3 justify-end text-right">
+                    <div class="flex-1 bg-white/10 rounded-2xl px-4 py-3">
+                        <p class="text-xs uppercase tracking-wide text-white/70 mb-1">Вы</p>
+                        <p class="text-sm leading-relaxed text-white/90">Отлично! Запишите меня на выбранную услугу. Жду подтверждения времени.</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-2xl bg-white/20 flex items-center justify-center shadow-lg">
+                        <i class="fas fa-user text-white"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white/10 rounded-2xl px-5 py-4 shadow-inner">
+                <p class="text-xs uppercase tracking-wide text-white/60 mb-2">Что дальше</p>
+                <p id="serviceModalInstructions" class="text-sm leading-relaxed text-white/90">
+                    Оставьте контакты, и администратор свяжется с вами для подтверждения записи.
+                </p>
+            </div>
+        </div>
+    </div>
+
     <!-- Модальное окно загрузки фотографий -->
     <div id="photoUploadModal" class="fixed inset-0 z-[9999] hidden">
         <!-- Затемнение фона -->
@@ -6162,6 +6379,7 @@
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closeLoginModal();
+                closeServiceModal();
             }
         });
     </script>
