@@ -124,7 +124,75 @@
         .form-select option:hover {
             background-color: #fdf2f8;
         }
-        
+
+        .booking-service-highlight {
+            opacity: 0;
+            transform: translateY(-12px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .booking-service-highlight.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .booking-service-icon-pop {
+            animation: bookingServiceIconPop 0.6s ease;
+        }
+
+        @keyframes bookingServiceIconPop {
+            0% {
+                transform: scale(0.6);
+                opacity: 0;
+            }
+            60% {
+                transform: scale(1.1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .booking-field-glow {
+            animation: bookingFieldGlow 1.8s ease;
+        }
+
+        @keyframes bookingFieldGlow {
+            0% {
+                box-shadow: 0 0 0 0 rgba(236, 72, 153, 0.0);
+            }
+            45% {
+                box-shadow: 0 0 0 6px rgba(236, 72, 153, 0.25);
+            }
+            75% {
+                box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.15);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(236, 72, 153, 0.0);
+            }
+        }
+
+        .booking-card-pulse {
+            animation: bookingCardPulse 0.8s ease;
+        }
+
+        @keyframes bookingCardPulse {
+            0% {
+                transform: scale(1);
+            }
+            35% {
+                transform: scale(1.01);
+            }
+            70% {
+                transform: scale(0.995);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
         /* Стили для прокрутки в модальном окне */
         #previewContainer {
             scrollbar-width: thin;
@@ -2375,7 +2443,7 @@
                         </div>
 
                         <!-- Main Booking Card -->
-                        <div class="bg-white/80 backdrop-blur-md rounded-3xl shadow-2xl border border-white/20 overflow-hidden">
+                        <div id="bookingCard" class="bg-white/80 backdrop-blur-md rounded-3xl shadow-2xl border border-white/20 overflow-hidden">
                             <div class="lg:flex">
                                 <!-- Left Side - Info -->
                                 <div class="lg:w-2/5 bg-gradient-to-br from-pink-500 via-purple-500 to-pink-600 text-white p-8 lg:p-12 relative overflow-hidden">
@@ -2449,6 +2517,36 @@
                                 <!-- Right Side - Form -->
                                 <div class="lg:w-3/5 p-8 lg:p-12">
                                     <form class="animate-on-scroll booking-form" id="bookingForm" onsubmit="handleFormSubmit(event)">
+                                        <div id="selectedServiceHighlight" class="booking-service-highlight hidden mb-8 p-6 bg-pink-50 border border-pink-200/70 rounded-2xl shadow-md" role="status" aria-live="polite">
+                                            <div class="flex items-start gap-4">
+                                                <div class="booking-service-icon w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500 to-purple-500 text-white flex items-center justify-center text-xl shadow-lg">
+                                                    <i class="fas fa-check-circle"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="text-lg font-semibold text-gray-900">
+                                                        Вы выбрали: <span id="selectedServiceName" class="text-pink-600"></span>
+                                                        <span id="selectedServicePrice" class="text-sm text-gray-500 font-medium ml-2 hidden"></span>
+                                                    </p>
+                                                    <p id="selectedServiceMessage" class="text-sm text-gray-700 mt-2 leading-relaxed">
+                                                        Теперь выберите удобные дату и время ниже, заполните контакты и нажмите «Записаться».
+                                                    </p>
+                                                    <ul class="mt-4 space-y-2 text-sm text-gray-600">
+                                                        <li class="flex items-center">
+                                                            <i class="fas fa-calendar-day text-pink-500 mr-2"></i>
+                                                            Укажите дату и время записи.
+                                                        </li>
+                                                        <li class="flex items-center">
+                                                            <i class="fas fa-user text-pink-500 mr-2"></i>
+                                                            Заполните ваши имя и телефон для связи.
+                                                        </li>
+                                                        <li class="flex items-center">
+                                                            <i class="fas fa-paper-plane text-pink-500 mr-2"></i>
+                                                            Нажмите «Записаться», чтобы отправить заявку.
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="grid md:grid-cols-2 gap-6 mb-6">
                                             <div>
                                                 <label for="name" class="block text-gray-700 font-semibold mb-3 text-sm uppercase tracking-wide">
@@ -2592,7 +2690,7 @@
                             <div class="text-2xl font-bold mb-3 bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">от 800 ₽</div>
                             <p class="text-gray-600 text-sm mb-4 leading-relaxed">Расслабляющие и оздоравливающие процедуры для волос и кожи головы.</p>
                             <div class="mt-auto w-full">
-                                <a href="#booking" onclick="selectService('hair', 'spa')" 
+                                <a href="#booking" onclick="selectService(event, 'hair', 'spa')" 
                                    class="block bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-102 shadow-lg hover:shadow-xl cursor-pointer">
                                     <i class="fas fa-calendar-plus mr-2"></i>Записаться
                                 </a>
@@ -2610,7 +2708,7 @@
                             <div class="text-2xl font-bold mb-3 bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">от 700 ₽</div>
                             <p class="text-gray-600 text-sm mb-4 leading-relaxed">Современные женские стрижки любой сложности с учетом ваших пожеланий.</p>
                             <div class="mt-auto w-full">
-                                <a href="#booking" onclick="selectService('hair', 'female_haircut')" 
+                                <a href="#booking" onclick="selectService(event, 'hair', 'female_haircut')" 
                                    class="block bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-102 shadow-lg hover:shadow-xl cursor-pointer">
                                     <i class="fas fa-calendar-plus mr-2"></i>Записаться
                                 </a>
@@ -2628,7 +2726,7 @@
                             <div class="text-2xl font-bold mb-3 bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">от 700 ₽</div>
                             <p class="text-gray-600 text-sm mb-4 leading-relaxed">Классические и современные мужские стрижки для любого стиля.</p>
                             <div class="mt-auto w-full">
-                                <a href="#booking" onclick="selectService('hair', 'male_haircut')" 
+                                <a href="#booking" onclick="selectService(event, 'hair', 'male_haircut')" 
                                    class="block bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl cursor-pointer">
                                     <i class="fas fa-calendar-plus mr-2"></i>Записаться
                                 </a>
@@ -2646,7 +2744,7 @@
                             <div class="text-2xl font-bold mb-3 bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">от 600 ₽</div>
                             <p class="text-gray-600 text-sm mb-4 leading-relaxed">Быстрая и аккуратная стрижка под машинку для мужчин и детей.</p>
                             <div class="mt-auto w-full">
-                                <a href="#booking" onclick="selectService('hair', 'machine_haircut')" 
+                                <a href="#booking" onclick="selectService(event, 'hair', 'machine_haircut')" 
                                    class="block bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl cursor-pointer">
                                     <i class="fas fa-calendar-plus mr-2"></i>Записаться
                                 </a>
@@ -2664,7 +2762,7 @@
                             <div class="text-2xl font-bold mb-3 bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">от 800 ₽</div>
                             <p class="text-gray-600 text-sm mb-4 leading-relaxed">Профессиональное окрашивание с использованием премиальных красок.</p>
                             <div class="mt-auto w-full">
-                                <a href="#booking" onclick="selectService('hair', 'hair_coloring')" 
+                                <a href="#booking" onclick="selectService(event, 'hair', 'hair_coloring')" 
                                    class="block bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl cursor-pointer">
                                     <i class="fas fa-calendar-plus mr-2"></i>Записаться
                                 </a>
@@ -2682,7 +2780,7 @@
                             <div class="text-2xl font-bold mb-3 bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">1200 ₽</div>
                             <p class="text-gray-600 text-sm mb-4 leading-relaxed">Мелирование для создания ярких и естественных акцентов в прическе.</p>
                             <div class="mt-auto w-full">
-                                <a href="#booking" onclick="selectService('hair', 'hair_highlighting')" 
+                                <a href="#booking" onclick="selectService(event, 'hair', 'hair_highlighting')" 
                                    class="block bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl cursor-pointer">
                                     <i class="fas fa-calendar-plus mr-2"></i>Записаться
                                 </a>
@@ -2700,7 +2798,7 @@
                             <div class="text-2xl font-bold mb-3 bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">1000 ₽</div>
                             <p class="text-gray-600 text-sm mb-4 leading-relaxed">Процедура для гладкости, блеска и защиты волос от повреждений.</p>
                             <div class="mt-auto w-full">
-                                <a href="#booking" onclick="selectService('hair', 'hair_laminating')" 
+                                <a href="#booking" onclick="selectService(event, 'hair', 'hair_laminating')" 
                                    class="block bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl cursor-pointer">
                                     <i class="fas fa-calendar-plus mr-2"></i>Записаться
                                 </a>
@@ -2718,7 +2816,7 @@
                             <div class="text-2xl font-bold mb-3 bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">от 2800 ₽</div>
                             <p class="text-gray-600 text-sm mb-4 leading-relaxed">Сложные техники окрашивания и подбор идеального оттенка.</p>
                             <div class="mt-auto w-full">
-                                <a href="#booking" onclick="selectService('hair', 'hair_coloristics')" 
+                                <a href="#booking" onclick="selectService(event, 'hair', 'hair_coloristics')" 
                                    class="block bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl cursor-pointer">
                                     <i class="fas fa-calendar-plus mr-2"></i>Записаться
                                 </a>
@@ -2737,7 +2835,7 @@
                             <div class="text-2xl font-bold mb-3 bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">1300 ₽</div>
                             <p class="text-gray-600 text-sm mb-4 leading-relaxed">Укрепление и восстановление структуры волос с помощью геля.</p>
                             <div class="mt-auto w-full">
-                                <a href="#booking" onclick="selectService('hair', 'hair_gel_strengthening')" 
+                                <a href="#booking" onclick="selectService(event, 'hair', 'hair_gel_strengthening')" 
                                    class="block bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl cursor-pointer">
                                     <i class="fas fa-calendar-plus mr-2"></i>Записаться
                                 </a>
@@ -2774,7 +2872,7 @@
                             <div class="text-2xl font-bold mb-3 bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">1500 ₽</div>
                             <p class="text-gray-600 text-sm mb-4 leading-relaxed">Комбинированный маникюр с укреплением ногтевой пластины для здоровых и красивых ногтей.</p>
                             <div class="mt-auto w-full">
-                                <a href="#booking" onclick="selectService('manicure', 'combined_manicure')" 
+                                <a href="#booking" onclick="selectService(event, 'manicure', 'combined_manicure')" 
                                    class="block bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-102 shadow-lg hover:shadow-xl cursor-pointer">
                                     <i class="fas fa-calendar-plus mr-2"></i>Записаться
                                 </a>
@@ -2793,7 +2891,7 @@
                             <div class="text-2xl font-bold mb-3 bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">700 ₽</div>
                             <p class="text-gray-600 text-sm mb-4 leading-relaxed">Классический маникюр с использованием профессиональных средств для ухода за ногтями.</p>
                             <div class="mt-auto w-full">
-                                <a href="#booking" onclick="selectService('manicure', 'classic_manicure')" 
+                                <a href="#booking" onclick="selectService(event, 'manicure', 'classic_manicure')" 
                                    class="block bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl cursor-pointer">
                                     <i class="fas fa-calendar-plus mr-2"></i>Записаться
                                 </a>
@@ -2812,7 +2910,7 @@
                             <div class="text-2xl font-bold mb-3 bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">300 ₽</div>
                             <p class="text-gray-600 text-sm mb-4 leading-relaxed">Профессиональный ремонт поврежденного ногтя с восстановлением его структуры.</p>
                             <div class="mt-auto w-full">
-                                <a href="#booking" onclick="selectService('manicure', 'nail_repair')" 
+                                <a href="#booking" onclick="selectService(event, 'manicure', 'nail_repair')" 
                                    class="block bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl cursor-pointer">
                                     <i class="fas fa-calendar-plus mr-2"></i>Записаться
                                 </a>
@@ -2831,7 +2929,7 @@
                             <div class="text-2xl font-bold mb-3 bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">800 ₽</div>
                             <p class="text-gray-600 text-sm mb-4 leading-relaxed">Укрепление ногтевой пластины с использованием профессиональных баз или биогеля.</p>
                             <div class="mt-auto w-full">
-                                <a href="#booking" onclick="selectService('manicure', 'nail_strengthening')" 
+                                <a href="#booking" onclick="selectService(event, 'manicure', 'nail_strengthening')" 
                                    class="block bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl cursor-pointer">
                                     <i class="fas fa-calendar-plus mr-2"></i>Записаться
                                 </a>
@@ -2850,7 +2948,7 @@
                             <div class="text-2xl font-bold mb-3 bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">400 ₽</div>
                             <p class="text-gray-600 text-sm mb-4 leading-relaxed">Безопасное снятие гель-лака или другого покрытия без повреждения ногтевой пластины.</p>
                             <div class="mt-auto w-full">
-                                <a href="#booking" onclick="selectService('manicure', 'coating_removal')" 
+                                <a href="#booking" onclick="selectService(event, 'manicure', 'coating_removal')" 
                                    class="block bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl cursor-pointer">
                                     <i class="fas fa-calendar-plus mr-2"></i>Записаться
                                 </a>
@@ -2887,7 +2985,7 @@
                             <div class="text-2xl font-bold mb-3 bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">500 ₽</div>
                             <p class="text-gray-600 text-sm mb-4 leading-relaxed">Профессиональная коррекция формы бровей с учетом особенностей лица и пожеланий клиента.</p>
                             <div class="mt-auto w-full">
-                                <a href="#booking" onclick="selectService('eyebrows', 'eyebrow_correction')" 
+                                <a href="#booking" onclick="selectService(event, 'eyebrows', 'eyebrow_correction')" 
                                    class="block bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-102 shadow-lg hover:shadow-xl cursor-pointer">
                                     <i class="fas fa-calendar-plus mr-2"></i>Записаться
                                 </a>
@@ -2906,7 +3004,7 @@
                             <div class="text-2xl font-bold mb-3 bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">400 ₽</div>
                             <p class="text-gray-600 text-sm mb-4 leading-relaxed">Окрашивание бровей профессиональными красками для придания им нужного оттенка и объема.</p>
                             <div class="mt-auto w-full">
-                                <a href="#booking" onclick="selectService('eyebrows', 'eyebrow_coloring')" 
+                                <a href="#booking" onclick="selectService(event, 'eyebrows', 'eyebrow_coloring')" 
                                    class="block bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-102 shadow-lg hover:shadow-xl cursor-pointer">
                                     <i class="fas fa-calendar-plus mr-2"></i>Записаться
                                 </a>
@@ -2925,7 +3023,7 @@
                             <div class="text-2xl font-bold mb-3 bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">800 ₽</div>
                             <p class="text-gray-600 text-sm mb-4 leading-relaxed">Ламинирование бровей для придания им идеальной формы, объема и блеска на 4-6 недель.</p>
                             <div class="mt-auto w-full">
-                                <a href="#booking" onclick="selectService('eyebrows', 'eyebrow_laminating')" 
+                                <a href="#booking" onclick="selectService(event, 'eyebrows', 'eyebrow_laminating')" 
                                    class="block bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-102 shadow-lg hover:shadow-xl cursor-pointer">
                                     <i class="fas fa-calendar-plus mr-2"></i>Записаться
                                 </a>
@@ -2944,7 +3042,7 @@
                             <div class="text-2xl font-bold mb-3 bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">700 ₽</div>
                             <p class="text-gray-600 text-sm mb-4 leading-relaxed">Комплексная услуга: коррекция формы + окрашивание бровей для идеального результата.</p>
                             <div class="mt-auto w-full">
-                                <a href="#booking" onclick="selectService('eyebrows', 'eyebrow_complex')" 
+                                <a href="#booking" onclick="selectService(event, 'eyebrows', 'eyebrow_complex')" 
                                    class="block bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-102 shadow-lg hover:shadow-xl cursor-pointer">
                                     <i class="fas fa-calendar-plus mr-2"></i>Записаться
                                 </a>
@@ -3760,40 +3858,119 @@
     };
 
     // Функция для автоматического выбора услуги при клике на кнопку в карточке
-    function selectService(category, serviceValue) {
+    function selectService(event, category, serviceValue) {
+        if (event && typeof event.preventDefault === 'function') {
+            event.preventDefault();
+        }
+
         console.log('selectService called:', category, serviceValue);
-        
-        // Прокручиваем к форме записи
+
         const bookingSection = document.getElementById('booking');
         if (bookingSection) {
             bookingSection.scrollIntoView({ behavior: 'smooth' });
         } else {
             console.error('Booking section not found');
         }
-        
-        // Выбираем категорию услуг
+
         const categorySelect = document.getElementById('serviceCategory');
         if (categorySelect) {
             categorySelect.value = category;
             console.log('Category selected:', category);
+            updateServiceOptions();
         } else {
             console.error('Category select not found');
         }
-        
-        // Обновляем список услуг
-        updateServiceOptions();
-        
-        // Выбираем конкретную услугу
-        setTimeout(() => {
-            const serviceSelect = document.getElementById('service');
-            if (serviceSelect) {
+
+        const serviceSelect = document.getElementById('service');
+        if (serviceSelect) {
+            const optionExists = Array.from(serviceSelect.options).some(option => option.value === serviceValue);
+            if (optionExists) {
                 serviceSelect.value = serviceValue;
                 console.log('Service selected:', serviceValue);
             } else {
-                console.error('Service select not found');
+                console.warn('Service option not found:', serviceValue);
             }
-            updateDebugInfo();
-        }, 100);
+        } else {
+            console.error('Service select not found');
+        }
+
+        updateDebugInfo();
+        showSelectedServiceHint(category, serviceValue);
+    }
+
+    function showSelectedServiceHint(category, serviceValue) {
+        const highlight = document.getElementById('selectedServiceHighlight');
+        const serviceNameEl = document.getElementById('selectedServiceName');
+        const servicePriceEl = document.getElementById('selectedServicePrice');
+        const messageEl = document.getElementById('selectedServiceMessage');
+
+        if (!highlight || !serviceNameEl) {
+            return;
+        }
+
+        const categoryServices = services[category] || [];
+        const selectedService = categoryServices.find(service => service.value === serviceValue);
+
+        if (selectedService) {
+            serviceNameEl.textContent = `«${selectedService.name}»`;
+            if (servicePriceEl) {
+                if (selectedService.price) {
+                    servicePriceEl.textContent = `— ${selectedService.price}`;
+                    servicePriceEl.classList.remove('hidden');
+                } else {
+                    servicePriceEl.textContent = '';
+                    servicePriceEl.classList.add('hidden');
+                }
+            }
+        } else {
+            serviceNameEl.textContent = 'Выбранная услуга';
+            if (servicePriceEl) {
+                servicePriceEl.textContent = '';
+                servicePriceEl.classList.add('hidden');
+            }
+        }
+
+        if (messageEl) {
+            messageEl.textContent = 'Теперь выберите удобные дату и время ниже, заполните контакты и нажмите «Записаться».';
+        }
+
+        highlight.classList.remove('hidden');
+        highlight.classList.remove('show');
+        void highlight.offsetWidth;
+        highlight.classList.add('show');
+
+        const icon = highlight.querySelector('.booking-service-icon');
+        if (icon) {
+            icon.classList.remove('booking-service-icon-pop');
+            void icon.offsetWidth;
+            icon.classList.add('booking-service-icon-pop');
+        }
+
+        const bookingCard = document.getElementById('bookingCard');
+        if (bookingCard) {
+            bookingCard.classList.remove('booking-card-pulse');
+            void bookingCard.offsetWidth;
+            bookingCard.classList.add('booking-card-pulse');
+            setTimeout(() => bookingCard.classList.remove('booking-card-pulse'), 800);
+        }
+
+        const categorySelect = document.getElementById('serviceCategory');
+        const serviceSelect = document.getElementById('service');
+        const dateInput = document.getElementById('date');
+        const timeInput = document.getElementById('time');
+
+        [categorySelect, serviceSelect, dateInput, timeInput].forEach(field => {
+            if (field) {
+                applyFieldGlow(field);
+            }
+        });
+    }
+
+    function applyFieldGlow(field) {
+        field.classList.remove('booking-field-glow');
+        void field.offsetWidth;
+        field.classList.add('booking-field-glow');
+        setTimeout(() => field.classList.remove('booking-field-glow'), 1800);
     }
 
     // Функция для выбора мастера при клике на кнопку в карточке мастера
@@ -3817,13 +3994,13 @@
         // Можно добавить логику для автоматического выбора услуг мастера
         if (masterName === 'Светлана') {
             // Светлана - парикмахерские услуги
-            selectService('hair', 'female_haircut');
+            selectService(null, 'hair', 'female_haircut');
         } else if (masterName === 'Анна') {
             // Анна - маникюр
-            selectService('manicure', 'classic_manicure');
+            selectService(null, 'manicure', 'classic_manicure');
         } else if (masterName === 'Виолетта') {
             // Виолетта - услуги бровей
-            selectService('eyebrows', 'eyebrow_correction');
+            selectService(null, 'eyebrows', 'eyebrow_correction');
         }
     }
 
