@@ -8,7 +8,6 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <title>SvetSalonPro - Салон красоты в Геленджике</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js" defer></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" type="image/png" href="images/ui/logo.png">
     <link rel="shortcut icon" type="image/png" href="images/ui/logo.png">
@@ -2471,88 +2470,6 @@
                                             </div>
                                         </div>
 
-                                        <div class="rounded-2xl border-2 border-pink-100 bg-pink-50/40 p-6 mb-6">
-                                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                                                <div>
-                                                    <h3 class="text-lg font-semibold text-gray-800 flex items-center">
-                                                        <i class="fas fa-route text-pink-500 mr-2"></i>
-                                                        Адрес и сумма заказа
-                                                    </h3>
-                                                    <p class="text-sm text-gray-600 mt-1">
-                                                        Заполните адрес вручную, голосом или по фотографии чека.
-                                                    </p>
-                                                </div>
-                                                <button type="button" id="voiceInputBtn"
-                                                        class="inline-flex items-center justify-center px-4 py-2 rounded-xl border border-pink-200 bg-white/80 text-pink-600 font-semibold shadow-sm hover:bg-pink-50 transition-colors duration-200">
-                                                    <i class="fas fa-microphone mr-2"></i>
-                                                    <span id="voiceInputLabel">Голосовой ввод</span>
-                                                </button>
-                                            </div>
-                                            <div id="voiceStatus" class="text-sm text-gray-500 mt-3">
-                                                Нажмите «Голосовой ввод», затем произнесите улицу, дом и сумму заказа.
-                                            </div>
-                                            <div id="voiceTranscript" class="hidden mt-3 text-sm text-gray-700 bg-white/70 border border-pink-100 rounded-xl px-4 py-3 leading-relaxed"></div>
-
-                                            <div class="grid md:grid-cols-2 gap-6 mt-6">
-                                                <div>
-                                                    <label for="street" class="block text-gray-700 font-semibold mb-3 text-sm uppercase tracking-wide">
-                                                        <i class="fas fa-road mr-2 text-pink-500"></i>Улица
-                                                    </label>
-                                                    <input type="text" id="street" name="street"
-                                                           class="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all duration-200 bg-white/80 backdrop-blur-sm"
-                                                           placeholder="Например, Ленина" required>
-                                                </div>
-                                                <div>
-                                                    <label for="houseNumber" class="block text-gray-700 font-semibold mb-3 text-sm uppercase tracking-wide">
-                                                        <i class="fas fa-building mr-2 text-pink-500"></i>Дом / корпус
-                                                    </label>
-                                                    <input type="text" id="houseNumber" name="houseNumber"
-                                                           class="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all duration-200 bg-white/80 backdrop-blur-sm"
-                                                           placeholder="Например, 15А" required>
-                                                </div>
-                                            </div>
-
-                                            <div class="grid md:grid-cols-2 gap-6 mt-6">
-                                                <div>
-                                                    <label for="orderAmount" class="block text-gray-700 font-semibold mb-3 text-sm uppercase tracking-wide">
-                                                        <i class="fas fa-ruble-sign mr-2 text-pink-500"></i>Сумма заказа (₽)
-                                                    </label>
-                                                    <input type="number" id="orderAmount" name="orderAmount" min="0" step="0.01" inputmode="decimal"
-                                                           class="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all duration-200 bg-white/80 backdrop-blur-sm"
-                                                           placeholder="Например, 1500" required>
-                                                </div>
-                                                <div>
-                                                    <div class="text-sm text-gray-600 bg-white/70 border border-pink-100 rounded-xl px-4 py-3 leading-relaxed h-full flex items-center">
-                                                        <i class="fas fa-lightbulb text-pink-500 mr-3"></i>
-                                                        Произнесите: «улица Ленина дом 15 сумма 1500 рублей» или загрузите фото чека — система заполнит поля автоматически.
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="mt-6 pt-6 border-t border-pink-100">
-                                                <label for="receiptInput" class="block text-gray-700 font-semibold mb-3 text-sm uppercase tracking-wide">
-                                                    <i class="fas fa-receipt mr-2 text-pink-500"></i>Фотография чека
-                                                </label>
-                                                <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-3 sm:space-y-0">
-                                                    <input type="file" id="receiptInput" accept="image/*"
-                                                           class="w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-pink-500 file:text-white hover:file:bg-pink-600 transition-colors duration-200">
-                                                    <button type="button" id="clearReceiptBtn"
-                                                            class="inline-flex items-center justify-center px-4 py-2 rounded-xl border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors duration-200">
-                                                        <i class="fas fa-times mr-2"></i>Очистить чек
-                                                    </button>
-                                                </div>
-                                                <p class="text-xs text-gray-500 mt-2">Поддерживаются форматы JPG, PNG, HEIC. Фото должно быть четким и с читаемым текстом.</p>
-                                                <div id="receiptStatus" class="text-sm text-gray-500 mt-3">Загрузите чек, чтобы распознать адрес и сумму автоматически.</div>
-                                                <div class="mt-4 grid md:grid-cols-2 gap-4">
-                                                    <div class="bg-white/70 border border-pink-100 rounded-xl p-3 flex items-center justify-center min-h-[160px]">
-                                                        <img id="receiptPreview" alt="Предпросмотр чека" class="hidden max-h-40 rounded-lg shadow-inner object-contain">
-                                                        <span id="receiptPreviewPlaceholder" class="text-sm text-gray-400 text-center">Предпросмотр выбранного чека появится здесь</span>
-                                                    </div>
-                                                    <pre id="receiptText" class="hidden bg-white/70 border border-pink-100 rounded-xl p-3 text-xs text-gray-700 max-h-40 overflow-y-auto whitespace-pre-wrap"></pre>
-                                                </div>
-                                            </div>
-                                        </div>
-
                                         <div class="grid md:grid-cols-2 gap-6 mb-6">
                                             <div>
                                                 <label for="date" class="block text-gray-700 font-semibold mb-3 text-sm uppercase tracking-wide">
@@ -3972,11 +3889,11 @@
     }
 
     // Функция для бронирования времени по категории
-    function bookTimeSlot(date, time, name, phone, service, serviceCategory, addressStreet = '', addressHouse = '', orderAmount = null, voiceTranscript = '', receiptTranscript = '') {
+    function bookTimeSlot(date, time, name, phone, service, serviceCategory) {
         if (!isTimeSlotAvailable(date, time, serviceCategory)) {
             return { success: false, message: 'Это время уже занято для данной категории услуг' };
         }
-
+        
         const bookedTimes = getBookedTimes();
         bookedTimes.push({
             date,
@@ -3985,11 +3902,6 @@
             phone,
             service,
             serviceCategory,
-            addressStreet,
-            addressHouse,
-            orderAmount,
-            voiceTranscript,
-            receiptTranscript,
             bookedAt: new Date().toISOString()
         });
         
@@ -4486,33 +4398,24 @@
         // Группируем по категориям
         const hairBookings = bookedTimes.filter(booking => booking.serviceCategory === 'hair');
         const manicureBookings = bookedTimes.filter(booking => booking.serviceCategory === 'manicure');
-        const eyebrowBookings = bookedTimes.filter(booking => booking.serviceCategory === 'eyebrows');
-
+        
         let message = '📅 Забронированное время:\n\n';
-
+        
         if (hairBookings.length > 0) {
             message += 'Парикмахерские услуги:\n';
             hairBookings.forEach(booking => {
-                message += formatBookingLine(booking);
+                message += `  ${booking.date} в ${booking.time} - ${booking.name} (${booking.service})\n`;
             });
             message += '\n';
         }
-
+        
         if (manicureBookings.length > 0) {
             message += 'Услуги маникюра:\n';
             manicureBookings.forEach(booking => {
-                message += formatBookingLine(booking);
-            });
-            message += '\n';
-        }
-
-        if (eyebrowBookings.length > 0) {
-            message += 'Услуги бровей:\n';
-            eyebrowBookings.forEach(booking => {
-                message += formatBookingLine(booking);
+                message += `  ${booking.date} в ${booking.time} - ${booking.name} (${booking.service})\n`;
             });
         }
-
+        
                     showNotification('info', 'Информация', message);
     }
 
@@ -4600,28 +4503,9 @@
             return;
         }
         
-        let csvContent = 'Дата,Время,Имя,Телефон,Категория,Услуга,Улица,Дом,Сумма,Голос,Чек\n';
+        let csvContent = 'Дата,Время,Имя,Телефон,Категория,Услуга\n';
         bookedTimes.forEach(booking => {
-            const amountValue = typeof booking.orderAmount === 'number' && !Number.isNaN(booking.orderAmount)
-                ? booking.orderAmount
-                : '';
-
-            const voiceNote = booking.voiceTranscript ? truncateText(booking.voiceTranscript, 200) : '';
-            const receiptNote = booking.receiptTranscript ? truncateText(booking.receiptTranscript, 200) : '';
-
-            csvContent += [
-                booking.date,
-                booking.time,
-                `"${escapeCsvValue(booking.name)}"`,
-                `"${escapeCsvValue(booking.phone)}"`,
-                `"${escapeCsvValue(booking.serviceCategory)}"`,
-                `"${escapeCsvValue(booking.service)}"`,
-                `"${escapeCsvValue(booking.addressStreet || '')}"`,
-                `"${escapeCsvValue(booking.addressHouse || '')}"`,
-                amountValue,
-                `"${escapeCsvValue(voiceNote)}"`,
-                `"${escapeCsvValue(receiptNote)}"`
-            ].join(',') + '\n';
+            csvContent += `${booking.date},${booking.time},"${booking.name}","${booking.phone}",${booking.serviceCategory},${booking.service}\n`;
         });
         
         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -4690,7 +4574,7 @@
     function preventBounce() {
         let startY = 0;
         let startScrollTop = 0;
-
+        
         // Предотвращаем отскок на touch устройствах
         document.addEventListener('touchstart', function(e) {
             startY = e.touches[0].pageY;
@@ -4722,716 +4606,61 @@
         }, { passive: false });
     }
 
-    // --- Автоматическое заполнение адреса и суммы ---
-    const recognitionState = {
-        voiceText: '',
-        receiptText: '',
-        parsedStreet: '',
-        parsedHouse: '',
-        parsedAmount: null
-    };
-    let speechRecognitionInstance = null;
-    let isVoiceListening = false;
-    let voiceStatusElement = null;
-    let voiceTranscriptElement = null;
-    let voiceButtonElement = null;
-    let receiptStatusElement = null;
-    let receiptTextElement = null;
-    let receiptPreviewElement = null;
-    let receiptPreviewPlaceholder = null;
-    let receiptPreviewUrl = null;
-
-    document.addEventListener('DOMContentLoaded', initializeOrderAutomation);
-
-    function initializeOrderAutomation() {
-        voiceButtonElement = document.getElementById('voiceInputBtn');
-        voiceStatusElement = document.getElementById('voiceStatus');
-        voiceTranscriptElement = document.getElementById('voiceTranscript');
-        receiptStatusElement = document.getElementById('receiptStatus');
-        receiptTextElement = document.getElementById('receiptText');
-        receiptPreviewElement = document.getElementById('receiptPreview');
-        receiptPreviewPlaceholder = document.getElementById('receiptPreviewPlaceholder');
-
-        if (voiceButtonElement) {
-            setupSpeechRecognition();
-            voiceButtonElement.addEventListener('click', toggleVoiceRecognition);
-        }
-
-        const receiptInput = document.getElementById('receiptInput');
-        if (receiptInput) {
-            receiptInput.addEventListener('change', handleReceiptSelection);
-        }
-
-        const clearReceiptBtn = document.getElementById('clearReceiptBtn');
-        if (clearReceiptBtn) {
-            clearReceiptBtn.addEventListener('click', (event) => {
-                event.preventDefault();
-                clearReceiptData();
-            });
-        }
-
-        if (voiceStatusElement) {
-            updateVoiceStatus('Нажмите «Голосовой ввод», затем произнесите улицу, дом и сумму заказа.', 'idle');
-        }
-        if (receiptStatusElement) {
-            updateReceiptStatus('Загрузите чек, чтобы распознать адрес и сумму автоматически.', 'idle');
-        }
-    }
-
-    function setupSpeechRecognition() {
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if (!SpeechRecognition) {
-            if (voiceButtonElement) {
-                voiceButtonElement.disabled = true;
-                voiceButtonElement.classList.add('opacity-60', 'cursor-not-allowed');
-            }
-            updateVoiceStatus('Голосовой ввод не поддерживается в вашем браузере. Заполните поля вручную.', 'warning');
-            return;
-        }
-
-        speechRecognitionInstance = new SpeechRecognition();
-        speechRecognitionInstance.lang = 'ru-RU';
-        speechRecognitionInstance.interimResults = false;
-        speechRecognitionInstance.maxAlternatives = 1;
-
-        speechRecognitionInstance.addEventListener('start', () => {
-            isVoiceListening = true;
-            updateVoiceButtonState(true);
-            updateVoiceStatus('Слушаю... Говорите адрес и сумму заказа.', 'listening');
-        });
-
-        speechRecognitionInstance.addEventListener('end', () => {
-            isVoiceListening = false;
-            updateVoiceButtonState(false);
-            if (voiceTranscriptElement && !voiceTranscriptElement.textContent.trim()) {
-                updateVoiceStatus('Голосовой ввод остановлен. Если данные не появились, попробуйте снова.', 'idle');
-            }
-        });
-
-        speechRecognitionInstance.addEventListener('result', (event) => {
-            const transcript = Array.from(event.results)
-                .map(result => result[0].transcript)
-                .join(' ')
-                .trim();
-
-            if (!transcript) {
-                updateVoiceStatus('Не удалось распознать речь. Повторите ещё раз.', 'warning');
-                return;
-            }
-
-            applyOrderDetails(parseOrderDetails(transcript), 'voice', transcript);
-        });
-
-        speechRecognitionInstance.addEventListener('error', (event) => {
-            console.error('Speech recognition error:', event);
-            updateVoiceStatus('Ошибка голосового ввода. Попробуйте ещё раз или заполните поля вручную.', 'error');
-            showNotification('Ошибка голосового ввода. Попробуйте снова.', 'error');
-            isVoiceListening = false;
-            updateVoiceButtonState(false);
-        });
-    }
-
-    function toggleVoiceRecognition() {
-        if (!speechRecognitionInstance) {
-            showNotification('Голосовой ввод недоступен в этом браузере.', 'warning');
-            return;
-        }
-
-        if (isVoiceListening) {
-            speechRecognitionInstance.stop();
-        } else {
-            try {
-                speechRecognitionInstance.start();
-            } catch (error) {
-                console.error('Speech recognition start error:', error);
-                updateVoiceStatus('Не удалось запустить распознавание. Попробуйте снова.', 'error');
-            }
-        }
-    }
-
-    function updateVoiceButtonState(listening) {
-        if (!voiceButtonElement) return;
-
-        const label = document.getElementById('voiceInputLabel');
-        const icon = voiceButtonElement.querySelector('i');
-
-        voiceButtonElement.classList.toggle('bg-pink-600', listening);
-        voiceButtonElement.classList.toggle('hover:bg-pink-700', listening);
-        voiceButtonElement.classList.toggle('text-white', listening);
-        voiceButtonElement.classList.toggle('bg-white/80', !listening);
-        voiceButtonElement.classList.toggle('hover:bg-pink-50', !listening);
-        voiceButtonElement.classList.toggle('text-pink-600', !listening);
-        voiceButtonElement.classList.toggle('animate-pulse', listening);
-
-        if (icon) {
-            icon.classList.toggle('fa-microphone', !listening);
-            icon.classList.toggle('fa-square', listening);
-        }
-
-        if (label) {
-            label.textContent = listening ? 'Остановить запись' : 'Голосовой ввод';
-        }
-    }
-
-    function updateVoiceStatus(message, state = 'idle') {
-        if (!voiceStatusElement) return;
-
-        const classes = ['text-gray-500', 'text-green-600', 'text-red-500', 'text-pink-600', 'text-amber-600'];
-        voiceStatusElement.classList.remove(...classes);
-
-        const map = {
-            idle: 'text-gray-500',
-            success: 'text-green-600',
-            listening: 'text-pink-600',
-            error: 'text-red-500',
-            warning: 'text-amber-600'
-        };
-
-        voiceStatusElement.classList.add(map[state] || 'text-gray-500');
-        voiceStatusElement.textContent = message;
-    }
-
-    function handleReceiptSelection(event) {
-        const file = event.target.files && event.target.files[0] ? event.target.files[0] : null;
-
-        if (!file) {
-            updateReceiptStatus('Файл не выбран.', 'idle');
-            return;
-        }
-
-        if (!file.type.startsWith('image/')) {
-            showNotification('Пожалуйста, выберите изображение чека.', 'warning');
-            event.target.value = '';
-            return;
-        }
-
-        recognitionState.receiptText = '';
-
-        if (receiptPreviewUrl) {
-            URL.revokeObjectURL(receiptPreviewUrl);
-            receiptPreviewUrl = null;
-        }
-
-        if (receiptPreviewElement) {
-            receiptPreviewUrl = URL.createObjectURL(file);
-            receiptPreviewElement.src = receiptPreviewUrl;
-            receiptPreviewElement.classList.remove('hidden');
-        }
-
-        if (receiptPreviewPlaceholder) {
-            receiptPreviewPlaceholder.classList.add('hidden');
-        }
-
-        if (receiptTextElement) {
-            receiptTextElement.textContent = '';
-            receiptTextElement.classList.add('hidden');
-        }
-
-        updateReceiptStatus('Фото загружено. Начинаю распознавание...', 'loading');
-        analyzeReceipt(file);
-    }
-
-    function clearReceiptData() {
-        const receiptInput = document.getElementById('receiptInput');
-        if (receiptInput) {
-            receiptInput.value = '';
-        }
-
-        recognitionState.receiptText = '';
-
-        if (receiptPreviewElement) {
-            receiptPreviewElement.src = '';
-            receiptPreviewElement.classList.add('hidden');
-        }
-
-        if (receiptPreviewPlaceholder) {
-            receiptPreviewPlaceholder.classList.remove('hidden');
-        }
-
-        if (receiptTextElement) {
-            receiptTextElement.textContent = '';
-            receiptTextElement.classList.add('hidden');
-        }
-
-        if (receiptStatusElement) {
-            updateReceiptStatus('Загрузите чек, чтобы распознать адрес и сумму автоматически.', 'idle');
-        }
-
-        if (receiptPreviewUrl) {
-            URL.revokeObjectURL(receiptPreviewUrl);
-            receiptPreviewUrl = null;
-        }
-    }
-
-    function updateReceiptStatus(message, state = 'idle') {
-        if (!receiptStatusElement) return;
-
-        const classes = ['text-gray-500', 'text-green-600', 'text-red-500', 'text-amber-600', 'text-pink-600'];
-        receiptStatusElement.classList.remove(...classes);
-
-        const map = {
-            idle: 'text-gray-500',
-            success: 'text-green-600',
-            error: 'text-red-500',
-            warning: 'text-amber-600',
-            loading: 'text-pink-600'
-        };
-
-        receiptStatusElement.classList.add(map[state] || 'text-gray-500');
-        receiptStatusElement.textContent = message;
-    }
-
-    async function analyzeReceipt(file) {
-        if (!window.Tesseract || !Tesseract.recognize) {
-            updateReceiptStatus('Распознавание недоступно. Проверьте подключение к интернету.', 'error');
-            showNotification('Распознавание чеков недоступно. Попробуйте позже.', 'error');
-            return;
-        }
-
-        try {
-            const { data } = await Tesseract.recognize(file, 'rus+eng', {
-                logger: info => {
-                    if (info.status === 'recognizing text') {
-                        updateReceiptStatus(`Распознаю текст: ${Math.round(info.progress * 100)}%`, 'loading');
-                    }
-                }
-            });
-
-            const text = data?.text ? data.text.trim() : '';
-
-            if (!text) {
-                updateReceiptStatus('Не удалось распознать текст на чеке. Попробуйте другое фото.', 'warning');
-                showNotification('Не удалось распознать текст на чеке.', 'info');
-                return;
-            }
-
-            applyOrderDetails(parseOrderDetails(text), 'receipt', text);
-        } catch (error) {
-            console.error('Receipt recognition error:', error);
-            updateReceiptStatus('Ошибка распознавания чека. Попробуйте ещё раз.', 'error');
-            showNotification('Ошибка распознавания чека. Попробуйте другое изображение.', 'error');
-        }
-    }
-
-    function parseOrderDetails(input) {
-        if (!input) {
-            return { street: '', houseNumber: '', orderAmount: null };
-        }
-
-        const normalized = input.replace(/ё/gi, 'е');
-        const lower = normalized.toLowerCase();
-        const tokens = lower.split(/\s+/).map(token => token.trim()).filter(Boolean);
-
-        const stopWords = new Set(['дом', 'д', 'д.', 'дом.', 'корпус', 'корп', 'к', 'к.', 'строение', 'стр', 'стр.', 'квартира', 'кв', 'кв.', 'сумма', 'итого', 'итог', 'стоимость', 'рублей', 'руб', 'руб.', 'р', 'номер', '№', 'к', 'по']);
-        const streetKeywords = new Set(['улица', 'ул', 'ул.', 'улице', 'улицы']);
-
-        let street = '';
-
-        for (let i = 0; i < tokens.length; i++) {
-            const base = tokens[i].replace(/[.,]/g, '');
-            if (streetKeywords.has(base)) {
-                const streetParts = [];
-                for (let j = i + 1; j < tokens.length; j++) {
-                    let candidate = tokens[j].replace(/[.,]/g, '');
-                    if (!candidate) continue;
-
-                    const cleaned = candidate.replace(/[^a-zа-яё0-9-]/g, '');
-                    if (!cleaned) continue;
-
-                    if (stopWords.has(cleaned) || /^\d+$/.test(cleaned)) {
-                        break;
-                    }
-
-                    streetParts.push(cleaned);
-                }
-
-                if (streetParts.length) {
-                    street = streetParts.join(' ');
-                }
-
-                break;
-            }
-        }
-
-        let houseNumber = '';
-        const houseKeywords = new Set(['дом', 'д', 'д.', 'дом.']);
-        const tokensCleaned = tokens.map(token => token.replace(/[,.;]/g, ''));
-
-        for (let i = 0; i < tokensCleaned.length; i++) {
-            const base = tokensCleaned[i];
-            if (houseKeywords.has(base)) {
-                for (let j = i + 1; j < tokensCleaned.length; j++) {
-                    const raw = tokensCleaned[j].replace(/[^0-9a-zа-я\/\-]/g, '');
-                    if (!raw) continue;
-
-                    if (/^\d+[a-zа-я]?$/i.test(raw) || /^\d+[\/\-]\d+$/i.test(raw) || /^\d+[a-zа-я]?\d*$/i.test(raw)) {
-                        houseNumber = raw.toUpperCase();
-
-                        const nextBase = tokensCleaned[j + 1];
-                        if (nextBase && ['корпус', 'корп', 'к', 'к.', 'строение', 'стр', 'стр.'].includes(nextBase)) {
-                            const corpRaw = (tokensCleaned[j + 2] || '').replace(/[^0-9a-zа-я\/\-]/g, '');
-                            if (corpRaw) {
-                                houseNumber += `, ${capitalizeWord(nextBase)} ${corpRaw.toUpperCase()}`;
-                            }
-                        }
-
-                        break;
-                    }
-
-                    if (['корпус', 'корп', 'к', 'к.', 'строение', 'стр', 'стр.'].includes(raw)) {
-                        continue;
-                    }
-
-                    if (stopWords.has(raw)) {
-                        break;
-                    }
-                }
-
-                if (houseNumber) {
-                    break;
-                }
-            }
-        }
-
-        let orderAmount = null;
-        const amountRegex = /(?:сумма|на сумму|итог(?:о)?|стоимость|к оплате|оплата|оплате|чек на)\s*(\d[\d\s.,]*)/i;
-        const amountMatch = normalized.match(amountRegex);
-        let amountCandidate = amountMatch ? amountMatch[1] : '';
-
-        if (!amountCandidate) {
-            const altMatch = normalized.match(/(\d[\d\s.,]*)(?=\s*(?:₽|руб(?:лей|ля|\.|)|р\b))/i);
-            if (altMatch) {
-                amountCandidate = altMatch[1];
-            }
-        }
-
-        if (amountCandidate) {
-            const cleanedAmount = amountCandidate.replace(/\s+/g, '').replace(',', '.');
-            const numeric = parseFloat(cleanedAmount);
-            if (!Number.isNaN(numeric)) {
-                orderAmount = numeric;
-            }
-        }
-
-        if (!street) {
-            const altStreet = normalized.match(/([а-яё\s-]+)\s+улица/i);
-            if (altStreet && altStreet[1]) {
-                street = altStreet[1].trim();
-            }
-        }
-
-        return {
-            street,
-            houseNumber,
-            orderAmount
-        };
-    }
-
-    function capitalizeWord(word) {
-        if (!word) return '';
-        const lower = word.toLowerCase();
-        return lower.charAt(0).toUpperCase() + lower.slice(1);
-    }
-
-    function capitalizeWords(text) {
-        return text
-            .split(/\s+/)
-            .filter(Boolean)
-            .map(capitalizeWord)
-            .join(' ');
-    }
-
-    function normalizeStreetName(value) {
-        if (!value) return '';
-        return value
-            .trim()
-            .split(/\s+/)
-            .filter(Boolean)
-            .map(capitalizeWord)
-            .join(' ');
-    }
-
-    function normalizeHouseNumber(value) {
-        if (!value) return '';
-
-        const parts = value.split(',').map(part => part.trim()).filter(Boolean);
-        if (parts.length === 0) return '';
-
-        const [main, ...rest] = parts;
-        const normalizedMain = main.toUpperCase();
-        const normalizedRest = rest.map(part => capitalizeWords(part));
-
-        return [normalizedMain, ...normalizedRest].join(', ');
-    }
-
-    function formatCurrency(value) {
-        const numeric = typeof value === 'number' ? value : parseFloat(String(value).replace(',', '.'));
-        if (Number.isNaN(numeric)) return '';
-
-        return new Intl.NumberFormat('ru-RU', {
-            style: 'currency',
-            currency: 'RUB',
-            minimumFractionDigits: numeric % 1 === 0 ? 0 : 2,
-            maximumFractionDigits: 2
-        }).format(numeric);
-    }
-
-    function truncateText(text, maxLength = 180) {
-        if (!text) return '';
-        return text.length > maxLength ? `${text.slice(0, maxLength)}…` : text;
-    }
-
-    function applyOrderDetails(details, source, rawText = '') {
-        if (!details) return;
-
-        const summary = [];
-        const streetInput = document.getElementById('street');
-        const houseInput = document.getElementById('houseNumber');
-        const amountInput = document.getElementById('orderAmount');
-
-        if (details.street) {
-            const formattedStreet = capitalizeWords(details.street);
-            if (streetInput) {
-                streetInput.value = formattedStreet;
-            }
-            summary.push(`улица ${formattedStreet}`);
-            recognitionState.parsedStreet = formattedStreet;
-        }
-
-        if (details.houseNumber) {
-            const formattedHouse = normalizeHouseNumber(details.houseNumber);
-            if (houseInput) {
-                houseInput.value = formattedHouse;
-            }
-            summary.push(`дом ${formattedHouse}`);
-            recognitionState.parsedHouse = formattedHouse;
-        }
-
-        if (typeof details.orderAmount === 'number' && !Number.isNaN(details.orderAmount)) {
-            if (amountInput) {
-                amountInput.value = details.orderAmount;
-            }
-            summary.push(`сумма ${formatCurrency(details.orderAmount)}`);
-            recognitionState.parsedAmount = details.orderAmount;
-        }
-
-        if (source === 'voice') {
-            if (rawText) {
-                recognitionState.voiceText = rawText.trim();
-                if (voiceTranscriptElement) {
-                    voiceTranscriptElement.textContent = rawText.trim();
-                    voiceTranscriptElement.classList.remove('hidden');
-                }
-            }
-
-            updateVoiceStatus(
-                summary.length
-                    ? `Заполнены поля: ${summary.join(', ')}`
-                    : 'Не удалось выделить адрес и сумму. Попробуйте повторить фразу или заполните поля вручную.',
-                summary.length ? 'success' : 'warning'
-            );
-        } else if (source === 'receipt') {
-            if (rawText) {
-                recognitionState.receiptText = rawText.trim();
-                if (receiptTextElement) {
-                    receiptTextElement.textContent = rawText.trim();
-                    receiptTextElement.classList.remove('hidden');
-                }
-            }
-
-            updateReceiptStatus(
-                summary.length
-                    ? `Данные из чека: ${summary.join(', ')}`
-                    : 'Не удалось автоматически определить адрес и сумму. Проверьте ввод вручную.',
-                summary.length ? 'success' : 'warning'
-            );
-        }
-
-        if (summary.length) {
-            showNotification(`${source === 'receipt' ? 'Данные из чека' : 'Голосовой ввод'}: ${summary.join(', ')}`, 'success');
-        }
-    }
-
-    function resetRecognitionState() {
-        recognitionState.voiceText = '';
-        recognitionState.receiptText = '';
-        recognitionState.parsedStreet = '';
-        recognitionState.parsedHouse = '';
-        recognitionState.parsedAmount = null;
-
-        if (voiceTranscriptElement) {
-            voiceTranscriptElement.textContent = '';
-            voiceTranscriptElement.classList.add('hidden');
-        }
-
-        updateVoiceButtonState(false);
-        updateVoiceStatus('Нажмите «Голосовой ввод», затем произнесите улицу, дом и сумму заказа.', 'idle');
-        clearReceiptData();
-    }
-
-    async function sendReceiptPhotoToTelegram(file, chatIds, caption, token) {
-        if (!file) return;
-
-        const url = `https://api.telegram.org/bot${token}/sendPhoto`;
-        const uploads = chatIds.map(async chatId => {
-            const formData = new FormData();
-            formData.append('chat_id', chatId);
-            if (caption) {
-                formData.append('caption', caption);
-            }
-            formData.append('photo', file, file.name || 'receipt.jpg');
-
-            const response = await fetch(url, {
-                method: 'POST',
-                body: formData
-            });
-
-            if (!response.ok) {
-                throw new Error('Telegram photo upload error');
-            }
-
-            return response.json();
-        });
-
-        await Promise.all(uploads);
-    }
-
-    function escapeCsvValue(value) {
-        if (value === undefined || value === null) {
-            return '';
-        }
-
-        return String(value).replace(/"/g, '""');
-    }
-
-    function formatBookingLine(booking) {
-        let line = `  ${booking.date} в ${booking.time} - ${booking.name} (${booking.service})\n`;
-
-        if (booking.addressStreet) {
-            const houseInfo = booking.addressHouse ? `, дом ${booking.addressHouse}` : '';
-            line += `     📍 ${booking.addressStreet}${houseInfo}\n`;
-        }
-
-        if (typeof booking.orderAmount === 'number' && !Number.isNaN(booking.orderAmount)) {
-            line += `     💰 ${formatCurrency(booking.orderAmount)}\n`;
-        }
-
-        if (booking.voiceTranscript) {
-            line += `     🎙 ${truncateText(booking.voiceTranscript, 120)}\n`;
-        }
-
-        if (booking.receiptTranscript) {
-            line += `     🧾 ${truncateText(booking.receiptTranscript, 120)}\n`;
-        }
-
-        return line;
-    }
-
     // Обработка отправки формы
     async function handleFormSubmit(event) {
         event.preventDefault();
-
+        
         const form = event.target;
         const submitButton = form.querySelector('button[type="submit"]');
         const originalText = submitButton.textContent;
-
+        
+        // Проверяем все поля формы
         const name = document.getElementById('name').value.trim();
         const phone = document.getElementById('phone').value.trim();
         const date = document.getElementById('date').value;
         const time = document.getElementById('time').value;
         const serviceCategory = document.getElementById('serviceCategory').value;
         const service = document.getElementById('service').value;
-        const streetRaw = document.getElementById('street').value.trim();
-        const houseRaw = document.getElementById('houseNumber').value.trim();
-        const orderAmountValue = document.getElementById('orderAmount').value.trim();
-        const receiptInput = document.getElementById('receiptInput');
-        const receiptFile = receiptInput && receiptInput.files && receiptInput.files[0] ? receiptInput.files[0] : null;
-
-        if (!name || !phone || !date || !time || !serviceCategory || !service || !streetRaw || !houseRaw || !orderAmountValue) {
-            showNotification('Пожалуйста, заполните все поля формы', 'warning');
+        
+        if (!name || !phone || !date || !time || !serviceCategory || !service) {
+            showNotification('warning', 'Внимание', 'Пожалуйста, заполните все поля формы');
             return;
         }
+        
 
-        const normalizedStreet = normalizeStreetName(streetRaw);
-        const normalizedHouse = normalizeHouseNumber(houseRaw);
-        const orderAmountNumber = parseFloat(orderAmountValue.replace(',', '.'));
-
-        if (Number.isNaN(orderAmountNumber) || orderAmountNumber <= 0) {
-            showNotification('Укажите корректную сумму заказа', 'warning');
-            return;
-        }
-
-        const streetInput = document.getElementById('street');
-        const houseInput = document.getElementById('houseNumber');
-        if (streetInput) {
-            streetInput.value = normalizedStreet;
-        }
-        if (houseInput) {
-            houseInput.value = normalizedHouse;
-        }
-
-        recognitionState.parsedStreet = normalizedStreet;
-        recognitionState.parsedHouse = normalizedHouse;
-        recognitionState.parsedAmount = orderAmountNumber;
-
+        
+        // Проверяем, что выбрана услуга
         const serviceSelect = document.getElementById('service');
         if (!serviceSelect.value) {
-            showNotification('Пожалуйста, выберите услугу', 'warning');
+            showNotification('warning', 'Внимание', 'Пожалуйста, выберите услугу');
             return;
         }
-
+        
+        // Блокируем кнопку и показываем загрузку
         submitButton.disabled = true;
         submitButton.textContent = 'Отправляем...';
-
+        
         try {
+            // Проверяем доступность времени
             if (!checkTimeAvailability(date, time, serviceCategory)) {
                 showNotification('Это время уже занято для данной категории услуг. Выберите другое время.', 'error');
                 return;
             }
 
-            const bookingResult = bookTimeSlot(
-                date,
-                time,
-                name,
-                phone,
-                service,
-                serviceCategory,
-                normalizedStreet,
-                normalizedHouse,
-                orderAmountNumber,
-                recognitionState.voiceText,
-                recognitionState.receiptText
-            );
-
+            // Бронируем время
+            const bookingResult = bookTimeSlot(date, time, name, phone, service, serviceCategory);
             if (!bookingResult.success) {
                 showNotification(bookingResult.message, 'error');
                 return;
             }
 
+            // Отправляем в Telegram
             const categoryEl = document.getElementById('serviceCategory');
             const serviceEl = document.getElementById('service');
             const categoryText = categoryEl.options[categoryEl.selectedIndex].text;
             const serviceText = serviceEl.options[serviceEl.selectedIndex].text;
 
-            const addressLine = `${normalizedStreet}, дом ${normalizedHouse}`;
-            const amountFormatted = formatCurrency(orderAmountNumber) || `${orderAmountNumber} ₽`;
-
-            let formattedMessage = `\nНовая запись через сайт SvetSalonPro:\n\n` +
-                `👤 Имя: ${name}\n` +
-                `📱 Телефон: ${phone}\n` +
-                `📅 Дата: ${date}\n` +
-                `🕐 Время: ${time}\n` +
-                `📋 Категория: ${categoryText}\n` +
-                `✨ Услуга: ${serviceText}\n` +
-                `📍 Адрес: ${addressLine}\n` +
-                `💰 Сумма заказа: ${amountFormatted}`;
-
-            if (recognitionState.voiceText) {
-                formattedMessage += `\n🎙 Голос: ${truncateText(recognitionState.voiceText, 200)}`;
-            }
-            if (recognitionState.receiptText) {
-                formattedMessage += `\n🧾 Чек: ${truncateText(recognitionState.receiptText, 200)}`;
-            }
+            const formattedMessage = `\nНовая запись через сайт SvetSalonPro:\n\n👤 Имя: ${name}\n📱 Телефон: ${phone}\n📅 Дата: ${date}\n🕐 Время: ${time}\n📋 Категория: ${categoryText}\n✨ Услуга: ${serviceText}`;
 
             const token = '7811248285:AAHfspwV_mA-PF298Bac28LBkEeehX_ql70';
             const chatIds = ['339033504','1366208620'];
@@ -5447,24 +4676,14 @@
                 throw new Error('Telegram API error');
             }
 
-            if (receiptFile) {
-                try {
-                    const caption = `🧾 Чек клиента ${name} на сумму ${amountFormatted}`;
-                    await sendReceiptPhotoToTelegram(receiptFile, chatIds, caption, token);
-                } catch (photoError) {
-                    console.error('Telegram photo upload error:', photoError);
-                    showNotification('Заявка отправлена, но не удалось отправить фото чека. Передайте его администратору вручную.', 'warning');
-                }
-            }
-
             showNotification('Заявка отправлена! Мы свяжемся с вами в ближайшее время.', 'success');
             form.reset();
             updateServiceOptions();
-            resetRecognitionState();
         } catch (error) {
             console.error('Ошибка при отправке формы:', error);
             showNotification('Произошла ошибка при отправке. Попробуйте позже.', 'error');
         } finally {
+            // Восстанавливаем кнопку
             submitButton.disabled = false;
             submitButton.textContent = originalText;
         }
@@ -5524,30 +4743,7 @@
         bookings.forEach((booking, index) => {
             message += `${index + 1}. ${booking.name} - ${booking.date} в ${booking.time}\n`;
             message += `   Услуга: ${booking.service}\n`;
-            message += `   Телефон: ${booking.phone}\n`;
-
-            const street = booking.addressStreet || booking.street || '';
-            const house = booking.addressHouse || booking.houseNumber || '';
-            if (street) {
-                const houseInfo = house ? `, дом ${house}` : '';
-                message += `   📍 ${street}${houseInfo}\n`;
-            }
-
-            const amountRaw = booking.orderAmount ?? booking.price ?? booking.amount;
-            const amountNumber = typeof amountRaw === 'number' ? amountRaw : parseFloat(amountRaw);
-            if (!Number.isNaN(amountNumber)) {
-                message += `   💰 ${formatCurrency(amountNumber)}\n`;
-            }
-
-            if (booking.voiceTranscript) {
-                message += `   🎙 ${truncateText(booking.voiceTranscript, 120)}\n`;
-            }
-
-            if (booking.receiptTranscript) {
-                message += `   🧾 ${truncateText(booking.receiptTranscript, 120)}\n`;
-            }
-
-            message += '\n';
+            message += `   Телефон: ${booking.phone}\n\n`;
         });
         
         alert(message);
