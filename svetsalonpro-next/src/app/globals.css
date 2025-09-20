@@ -1,0 +1,102 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import 'react-day-picker/dist/style.css';
+
+:root {
+  --background: 0 0% 100%;
+  --foreground: 224 71.4% 4.1%;
+  --muted: 210 40% 96.1%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  --accent: 340 100% 97%;
+  --accent-foreground: 336 77% 32%;
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 336 73% 51%;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5.5rem;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: linear-gradient(180deg, rgba(248, 250, 252, 0.9) 0%, rgba(255, 247, 250, 0.9) 100%);
+  color: rgb(17, 24, 39);
+  min-height: 100vh;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 20% 20%, rgba(236, 72, 153, 0.08), transparent 45%),
+    radial-gradient(circle at 80% 10%, rgba(147, 51, 234, 0.08), transparent 50%);
+  z-index: -1;
+}
+
+section {
+  position: relative;
+}
+
+.section-divider {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6rem;
+  height: 3px;
+  background: linear-gradient(90deg, rgba(236, 72, 153, 0), rgba(236, 72, 153, 0.8), rgba(236, 72, 153, 0));
+}
+
+.blur-accent {
+  position: absolute;
+  inset: auto;
+  width: clamp(120px, 20vw, 220px);
+  height: clamp(120px, 20vw, 220px);
+  filter: blur(80px);
+  opacity: 0.6;
+}
+
+.nav-link {
+  @apply text-sm font-medium tracking-wide text-neutral-600 transition-colors duration-200 hover:text-primary;
+}
+
+.glass-panel {
+  @apply rounded-3xl border border-white/60 bg-white/70 shadow-[0_20px_60px_-40px_rgba(15,23,42,0.45)] backdrop-blur-xl;
+}
+
+.card-hover {
+  @apply transition duration-300 ease-out hover:-translate-y-1 hover:shadow-floating;
+}
+
+.hero-gradient {
+  background: radial-gradient(circle at top left, rgba(236, 72, 153, 0.25), transparent 55%),
+    radial-gradient(circle at bottom right, rgba(79, 70, 229, 0.2), transparent 50%);
+}
+
+a {
+  @apply focus:outline-none focus-visible:ring focus-visible:ring-primary/60 focus-visible:ring-offset-2;
+}
+
+button,
+input,
+select,
+textarea {
+  @apply focus:outline-none focus-visible:ring focus-visible:ring-primary/60 focus-visible:ring-offset-2;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(148, 163, 184, 0.6);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: rgba(226, 232, 240, 0.4);
+}
