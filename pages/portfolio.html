@@ -486,7 +486,7 @@
     <div id="sideMenu" class="fixed inset-0 z-50 pointer-events-none">
         <!-- Backdrop -->
         <div id="menuBackdrop" class="absolute inset-0 bg-black/20 opacity-0 transition-all duration-250 ease-out pointer-events-none"></div>
-        
+
         <!-- Menu Container -->
         <div id="menuContainer" class="absolute top-24 right-4 h-auto max-h-[80vh] w-72 bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl transform scale-75 opacity-0 transition-all duration-250 ease-out border border-white/30">
             <!-- Menu Header -->
@@ -502,7 +502,7 @@
                     <i class="fas fa-times text-gray-600 text-sm"></i>
                 </button>
             </div>
-            
+
             <!-- Menu Content -->
             <div class="flex-1 overflow-y-auto">
                 <!-- Navigation Links -->
@@ -513,42 +513,35 @@
                         </div>
                         <span>Главная</span>
                     </a>
-                    
-                    <a href="../index.html#about" class="menu-item group">
-                        <div class="menu-icon">
-                            <i class="fas fa-info-circle"></i>
-                        </div>
-                        <span>О нас</span>
-                    </a>
-                    
+
                     <a href="../index.html#services" class="menu-item group">
                         <div class="menu-icon">
                             <i class="fas fa-spa"></i>
                         </div>
                         <span>Услуги</span>
                     </a>
-                    
+
+                    <a href="portfolio.html" class="menu-item group">
+                        <div class="menu-icon">
+                            <i class="fas fa-images"></i>
+                        </div>
+                        <span>Портфолио</span>
+                    </a>
+
                     <a href="../index.html#masters" class="menu-item group">
                         <div class="menu-icon">
                             <i class="fas fa-users"></i>
                         </div>
                         <span>Мастера</span>
                     </a>
-                    
-                    <a href="portfolio.html" class="menu-item group">
-                        <div class="menu-icon">
-                            <i class="fas fa-images"></i>
-                        </div>
-                        <span>Примеры работ</span>
-                    </a>
-                    
+
                     <a href="../index.html#contact" class="menu-item group">
                         <div class="menu-icon">
                             <i class="fas fa-phone"></i>
                         </div>
                         <span>Контакты</span>
                     </a>
-                    
+
                     <button type="button" onclick="openLoginModal()" class="menu-item group w-full text-left">
                         <div class="menu-icon">
                             <i class="fas fa-user"></i>
@@ -585,7 +578,7 @@
                     <a href="../index.html#services" class="nav-link text-gray-700 hover:text-pink-600 font-medium transition-colors duration-200">
                         <i class="fas fa-spa mr-2"></i>Услуги
                     </a>
-                    <a href="portfolio.html" class="nav-link text-pink-600 font-semibold transition-colors duration-200">
+                    <a href="portfolio.html" class="nav-link text-gray-700 hover:text-pink-600 font-medium transition-colors duration-200">
                         <i class="fas fa-images mr-2"></i>Портфолио
                     </a>
                     <a href="../index.html#masters" class="nav-link text-gray-700 hover:text-pink-600 font-medium transition-colors duration-200">
@@ -1001,84 +994,60 @@
         AOS.init();
 
         // Menu functionality
-        let isMenuOpen = false;
         const sideMenu = document.getElementById('sideMenu');
         const iosMenuBtn = document.getElementById('iosMenuBtn');
         const closeMenuBtn = document.getElementById('closeMenuBtn');
         const menuBackdrop = document.getElementById('menuBackdrop');
+        const menuContainer = document.getElementById('menuContainer');
 
-        // Haptic feedback function
-        function triggerHapticFeedback() {
-            if (navigator.vibrate) {
-                navigator.vibrate(10);
-            }
-            document.body.classList.add('haptic-feedback');
-            setTimeout(() => {
-                document.body.classList.remove('haptic-feedback');
-            }, 100);
-        }
+        function openSideMenu() {
+            if (sideMenu && menuBackdrop && menuContainer) {
+                sideMenu.classList.add('open');
+                document.body.classList.add('menu-open');
 
-        // Open menu function
-        function openMenu() {
-            if (isMenuOpen) return;
-            
-            triggerHapticFeedback();
-            isMenuOpen = true;
-            sideMenu.classList.add('open');
-            document.body.classList.add('menu-open');
-            iosMenuBtn.classList.add('active');
-            
-            setTimeout(() => {
-                sideMenu.style.pointerEvents = 'all';
-            }, 50);
-        }
-
-        // Close menu function
-        function closeMenu() {
-            if (!isMenuOpen) return;
-            
-            triggerHapticFeedback();
-            isMenuOpen = false;
-            sideMenu.classList.remove('open');
-            document.body.classList.remove('menu-open');
-            iosMenuBtn.classList.remove('active');
-            sideMenu.style.pointerEvents = 'none';
-        }
-
-        // Menu event listeners
-        if (iosMenuBtn) {
-            iosMenuBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                
-                if (isMenuOpen) {
-                    closeMenu();
-                } else {
-                    openMenu();
+                if (iosMenuBtn) {
+                    iosMenuBtn.classList.add('active');
                 }
-            });
+            }
+        }
+
+        function closeSideMenu() {
+            if (sideMenu && menuBackdrop && menuContainer) {
+                sideMenu.classList.remove('open');
+                document.body.classList.remove('menu-open');
+
+                if (iosMenuBtn) {
+                    iosMenuBtn.classList.remove('active');
+                }
+            }
+        }
+
+        if (iosMenuBtn) {
+            iosMenuBtn.addEventListener('click', openSideMenu);
         }
 
         if (closeMenuBtn) {
-            closeMenuBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                closeMenu();
-            });
+            closeMenuBtn.addEventListener('click', closeSideMenu);
         }
 
         if (menuBackdrop) {
-            menuBackdrop.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                closeMenu();
-            });
+            menuBackdrop.addEventListener('click', closeSideMenu);
         }
 
-        // Keyboard event listener for Escape key
+        const menuItems = document.querySelectorAll('.menu-item');
+        menuItems.forEach(item => {
+            item.addEventListener('click', () => {
+                if (item.getAttribute('onclick') && item.getAttribute('onclick').includes('openLoginModal')) {
+                    setTimeout(closeSideMenu, 100);
+                } else {
+                    closeSideMenu();
+                }
+            });
+        });
+
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && isMenuOpen) {
-                closeMenu();
+            if (e.key === 'Escape' && sideMenu && sideMenu.classList.contains('open')) {
+                closeSideMenu();
             }
         });
 
@@ -1519,52 +1488,6 @@
 
             // Load initial portfolio
             loadPortfolio();
-
-            // Menu item click handlers
-            const menuItems = document.querySelectorAll('.menu-item');
-            menuItems.forEach((item) => {
-                item.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    triggerHapticFeedback();
-
-                    // Add bubble animation
-                    item.classList.add('bubble-animation');
-                    setTimeout(() => {
-                        item.classList.remove('bubble-animation');
-                    }, 400);
-
-                    const hasLoginAction = item.getAttribute('onclick') && item.getAttribute('onclick').includes('openLoginModal');
-                    if (hasLoginAction) {
-                        closeMenu();
-                        setTimeout(() => {
-                            openLoginModal();
-                        }, 200);
-                        return;
-                    }
-
-                    // Get the href and navigate
-                    const href = item.getAttribute('href');
-                    if (href) {
-                        // Close menu immediately
-                        closeMenu();
-
-                        // Navigate after a short delay for haptic feedback
-                        setTimeout(() => {
-                            if (href.startsWith('#')) {
-                                // Smooth scroll to section
-                                const target = document.querySelector(href);
-                                if (target) {
-                                    target.scrollIntoView({ behavior: 'smooth' });
-                                }
-                            } else {
-                                // Navigate to page
-                                window.location.href = href;
-                            }
-                        }, 200);
-                    }
-                });
-            });
         });
 
         // Smooth scrolling for anchor links
