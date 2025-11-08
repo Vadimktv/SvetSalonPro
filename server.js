@@ -14,6 +14,9 @@ const sendSmsCodeAPI = require('./pages/api/send-sms-code.js');
 const verifySmsCodeAPI = require('./pages/api/verify-sms-code.js');
 const sendMagicLinkAPI = require('./pages/api/send-magic-link.js');
 
+// Импортируем API для генерации .ics файла
+const generateICSAPI = require('./pages/api/generate-ics.js');
+
 // MIME типы для статических файлов
 const mimeTypes = {
     '.html': 'text/html',
@@ -30,7 +33,8 @@ const mimeTypes = {
     '.woff2': 'application/font-woff2',
     '.ttf': 'application/font-ttf',
     '.eot': 'application/vnd.ms-fontobject',
-    '.otf': 'application/font-otf'
+    '.otf': 'application/font-otf',
+    '.ics': 'text/calendar'
 };
 
 const ROOT_DIR = __dirname;
@@ -94,6 +98,12 @@ const server = http.createServer((req, res) => {
     // Обработка API запросов на отправку Magic Link через Supabase
     if (pathname === '/api/send-magic-link.js' || pathname === '/pages/api/send-magic-link.js') {
         sendMagicLinkAPI.handleRequest(req, res);
+        return;
+    }
+
+    // Обработка API запросов на генерацию .ics файла
+    if (pathname === '/api/generate-ics.js' || pathname === '/pages/api/generate-ics.js') {
+        generateICSAPI.handleRequest(req, res);
         return;
     }
     

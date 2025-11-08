@@ -4664,11 +4664,42 @@
 
             const token = '7811248285:AAHfspwV_mA-PF298Bac28LBkEeehX_ql70';
             const chatIds = ['339033504','1366208620'];
-            const sendRequests = chatIds.map(cid => fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: cid, text: formattedMessage })
-            }));
+            
+            // Генерируем ссылки для календаря
+            const calendarTitle = `Запись: ${serviceText}`;
+            const calendarDescription = `Категория: ${categoryText}\nУслуга: ${serviceText}\nКлиент: ${name}\nТелефон: ${phone}\nСалон красоты SvetSalonPro`;
+            const googleCalendarLink = getGoogleCalendarLink(calendarTitle, calendarDescription, date, time);
+            const baseUrl = window.location.origin || 'https://svetsalonpro.ru';
+            const icsDownloadLink = `${baseUrl}/api/generate-ics.js?title=${encodeURIComponent(calendarTitle)}&description=${encodeURIComponent(calendarDescription)}&date=${date}&time=${time}`;
+            
+            // Создаем инлайн-кнопки для календаря
+            const calendarKeyboard = {
+                inline_keyboard: [
+                    [
+                        { text: '📅 Google Calendar', url: googleCalendarLink },
+                        { text: '📥 Скачать .ics', url: icsDownloadLink }
+                    ]
+                ]
+            };
+            
+            const sendRequests = chatIds.map(cid => {
+                // Для Светланы (1366208620) добавляем кнопки календаря
+                const isSvetlana = cid === '1366208620';
+                const messageData = {
+                    chat_id: cid,
+                    text: formattedMessage
+                };
+                
+                if (isSvetlana) {
+                    messageData.reply_markup = calendarKeyboard;
+                }
+                
+                return fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(messageData)
+                });
+            });
 
             const responses = await Promise.all(sendRequests);
             const allOk = responses.every(r => r.ok);

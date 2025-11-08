@@ -2691,16 +2691,41 @@
                 
                 console.log('Отправка в Telegram:', message);
                 
+                // Генерируем ссылки для календаря
+                const calendarTitle = `Запись: ${serviceName}`;
+                const calendarDescription = `Услуга: ${serviceName}\nЦена: ${price} ₽\nКлиент: ${userName}\nТелефон: ${userPhone}\nСалон красоты SvetSalonPro`;
+                const googleCalendarLink = getGoogleCalendarLink(calendarTitle, calendarDescription, date, time);
+                const baseUrl = window.location.origin || 'https://svetsalonpro.ru';
+                const icsDownloadLink = `${baseUrl}/api/generate-ics.js?title=${encodeURIComponent(calendarTitle)}&description=${encodeURIComponent(calendarDescription)}&date=${date}&time=${time}`;
+                
+                // Создаем инлайн-кнопки для календаря
+                const calendarKeyboard = {
+                    inline_keyboard: [
+                        [
+                            { text: '📅 Google Calendar', url: googleCalendarLink },
+                            { text: '📥 Скачать .ics', url: icsDownloadLink }
+                        ]
+                    ]
+                };
+                
                 chatIds.forEach(chatId => {
+                    // Для Светланы (1366208620) добавляем кнопки календаря
+                    const isSvetlana = chatId === "1366208620";
+                    const messageData = {
+                        chat_id: chatId,
+                        text: message
+                    };
+                    
+                    if (isSvetlana) {
+                        messageData.reply_markup = calendarKeyboard;
+                    }
+                    
                     fetch("https://api.telegram.org/bot7811248285:AAHfspwV_mA-PF298Bac28LBkEeehX_ql70/sendMessage", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"
                         },
-                        body: JSON.stringify({
-                            chat_id: chatId,
-                            text: message
-                        })
+                        body: JSON.stringify(messageData)
                     }).then(response => {
                         console.log('Telegram response:', response.status, response.statusText);
                         return response.json();
