@@ -2559,21 +2559,18 @@
                 </p>
             </div>
             
-            <!-- Разделитель: Парикмахерские услуги -->
-            <div class="flex items-center justify-center my-12 md:my-16 animate-on-scroll delay-200">
-                <div class="flex items-center space-x-4 w-full max-w-3xl">
-                    <div class="flex-1 h-px bg-gradient-to-r from-transparent via-pink-300 to-transparent"></div>
-                    <div class="flex items-center space-x-3 px-6 md:px-8 py-3 md:py-4 bg-gradient-to-r from-pink-50 to-purple-50 rounded-2xl border border-pink-200 shadow-lg">
-                        <i class="fas fa-cut text-pink-500 text-lg md:text-xl"></i>
-                        <span class="text-pink-600 font-bold text-base md:text-lg">Парикмахерские услуги</span>
-                        <i class="fas fa-cut text-purple-500 text-lg md:text-xl"></i>
-                    </div>
-                    <div class="flex-1 h-px bg-gradient-to-r from-transparent via-purple-300 to-transparent"></div>
-                </div>
+            <!-- Кнопка: Парикмахерские услуги -->
+            <div class="flex items-center justify-center my-8 md:my-12">
+                <button id="hairServicesBtn" onclick="toggleServices('hair')" 
+                        class="group flex items-center space-x-3 px-8 md:px-12 py-4 md:py-5 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold text-base md:text-lg rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl w-full max-w-3xl">
+                    <i class="fas fa-cut text-lg md:text-xl"></i>
+                    <span>Парикмахерские услуги</span>
+                    <i id="hairServicesIcon" class="fas fa-chevron-down ml-auto transition-transform duration-300"></i>
+                </button>
             </div>
             
             <!-- Парикмахерские услуги -->
-            <div class="mb-12 md:mb-20">
+            <div id="hairServices" class="mb-12 md:mb-20 hidden overflow-hidden transition-all duration-500 ease-in-out" style="max-height: 0; opacity: 0;">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 services-container">
                 <!-- SPA процедуры -->
                     <div class="service-card bg-white/80 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 flex flex-col items-center justify-center w-full max-w-sm h-auto min-h-80 mx-auto text-center" data-aos="zoom-in">
@@ -2741,21 +2738,18 @@
                 </div>
             </div>
             
-            <!-- Разделитель: Услуги маникюра -->
-            <div class="flex items-center justify-center my-12 md:my-16 animate-on-scroll delay-300">
-                <div class="flex items-center space-x-4 w-full max-w-3xl">
-                    <div class="flex-1 h-px bg-gradient-to-r from-transparent via-rose-300 to-transparent"></div>
-                    <div class="flex items-center space-x-3 px-6 md:px-8 py-3 md:py-4 bg-gradient-to-r from-rose-50 to-pink-50 rounded-2xl border border-rose-200 shadow-lg">
-                        <i class="fas fa-hand-sparkles text-rose-500 text-lg md:text-xl"></i>
-                        <span class="text-rose-600 font-bold text-base md:text-lg">Услуги маникюра</span>
-                        <i class="fas fa-hand-sparkles text-pink-500 text-lg md:text-xl"></i>
-                    </div>
-                    <div class="flex-1 h-px bg-gradient-to-r from-transparent via-pink-300 to-transparent"></div>
-                </div>
+            <!-- Кнопка: Услуги маникюра -->
+            <div class="flex items-center justify-center my-8 md:my-12">
+                <button id="manicureServicesBtn" onclick="toggleServices('manicure')" 
+                        class="group flex items-center space-x-3 px-8 md:px-12 py-4 md:py-5 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold text-base md:text-lg rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl w-full max-w-3xl">
+                    <i class="fas fa-hand-sparkles text-lg md:text-xl"></i>
+                    <span>Услуги маникюра</span>
+                    <i id="manicureServicesIcon" class="fas fa-chevron-down ml-auto transition-transform duration-300"></i>
+                </button>
             </div>
             
             <!-- Услуги маникюра -->
-            <div class="mb-12 md:mb-20">
+            <div id="manicureServices" class="mb-12 md:mb-20 hidden overflow-hidden transition-all duration-500 ease-in-out" style="max-height: 0; opacity: 0;">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 services-container">
                     <!-- Комбинированный маникюр -->
                     <div class="service-card bg-white/80 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 flex flex-col items-center justify-center w-full max-w-sm h-auto min-h-80 mx-auto text-center">
@@ -2854,21 +2848,18 @@
                 </div>
             </div>
             
-            <!-- Разделитель: Услуги бровей -->
-            <div class="flex items-center justify-center my-12 md:my-16 animate-on-scroll delay-300">
-                <div class="flex items-center space-x-4 w-full max-w-3xl">
-                    <div class="flex-1 h-px bg-gradient-to-r from-transparent via-emerald-300 to-transparent"></div>
-                    <div class="flex items-center space-x-3 px-6 md:px-8 py-3 md:py-4 bg-gradient-to-r from-emerald-50 to-teal-50 rounded-2xl border border-emerald-200 shadow-lg">
-                        <i class="fas fa-eye text-emerald-500 text-lg md:text-xl"></i>
-                        <span class="text-emerald-600 font-bold text-base md:text-lg">Услуги бровей</span>
-                        <i class="fas fa-eye text-teal-500 text-lg md:text-xl"></i>
-                    </div>
-                    <div class="flex-1 h-px bg-gradient-to-r from-transparent via-teal-300 to-transparent"></div>
-                </div>
+            <!-- Кнопка: Услуги бровей -->
+            <div class="flex items-center justify-center my-8 md:my-12">
+                <button id="eyebrowsServicesBtn" onclick="toggleServices('eyebrows')" 
+                        class="group flex items-center space-x-3 px-8 md:px-12 py-4 md:py-5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold text-base md:text-lg rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl w-full max-w-3xl">
+                    <i class="fas fa-eye text-lg md:text-xl"></i>
+                    <span>Услуги бровей</span>
+                    <i id="eyebrowsServicesIcon" class="fas fa-chevron-down ml-auto transition-transform duration-300"></i>
+                </button>
             </div>
             
             <!-- Услуги бровей -->
-            <div>
+            <div id="eyebrowsServices" class="hidden overflow-hidden transition-all duration-500 ease-in-out" style="max-height: 0; opacity: 0;">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 services-container">
                     <!-- Коррекция бровей -->
                     <div class="service-card bg-white/80 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 flex flex-col items-center justify-center w-full max-w-sm h-auto min-h-80 mx-auto text-center" data-aos="zoom-in">
@@ -3754,6 +3745,73 @@
     };
 
     // Функция для автоматического выбора услуги при клике на кнопку в карточке
+    // Функция для переключения видимости услуг
+    function toggleServices(category) {
+        const servicesMap = {
+            'hair': {
+                container: document.getElementById('hairServices'),
+                icon: document.getElementById('hairServicesIcon')
+            },
+            'manicure': {
+                container: document.getElementById('manicureServices'),
+                icon: document.getElementById('manicureServicesIcon')
+            },
+            'eyebrows': {
+                container: document.getElementById('eyebrowsServices'),
+                icon: document.getElementById('eyebrowsServicesIcon')
+            }
+        };
+
+        const service = servicesMap[category];
+        if (!service || !service.container) return;
+
+        const isHidden = service.container.classList.contains('hidden');
+        
+        if (isHidden) {
+            // Показываем услуги
+            service.container.classList.remove('hidden');
+            
+            // Получаем реальную высоту контента
+            const height = service.container.scrollHeight;
+            
+            // Устанавливаем начальные значения для анимации
+            service.container.style.maxHeight = '0';
+            service.container.style.opacity = '0';
+            
+            // Запускаем анимацию
+            requestAnimationFrame(() => {
+                service.container.style.maxHeight = height + 'px';
+                service.container.style.opacity = '1';
+            });
+            
+            // Поворачиваем иконку
+            if (service.icon) {
+                service.icon.style.transform = 'rotate(180deg)';
+            }
+        } else {
+            // Скрываем услуги
+            service.container.style.maxHeight = service.container.scrollHeight + 'px';
+            
+            // Принудительно пересчитываем для корректной анимации
+            requestAnimationFrame(() => {
+                service.container.style.maxHeight = '0';
+                service.container.style.opacity = '0';
+            });
+            
+            // Поворачиваем иконку обратно
+            if (service.icon) {
+                service.icon.style.transform = 'rotate(0deg)';
+            }
+            
+            // Скрываем после завершения анимации
+            setTimeout(() => {
+                service.container.classList.add('hidden');
+                service.container.style.maxHeight = '0';
+                service.container.style.opacity = '0';
+            }, 500);
+        }
+    }
+
     function selectService(category, serviceValue) {
         console.log('selectService called:', category, serviceValue);
         
