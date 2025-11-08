@@ -4676,7 +4676,8 @@
                 throw new Error('Telegram API error');
             }
 
-            showNotification('Заявка отправлена! Мы свяжемся с вами в ближайшее время.', 'success');
+            // Показываем уведомление с возможностью добавить в календарь
+            showBookingSuccessNotification(name, date, time, serviceText, categoryText);
             form.reset();
             updateServiceOptions();
         } catch (error) {
@@ -4686,6 +4687,213 @@
             // Восстанавливаем кнопку
             submitButton.disabled = false;
             submitButton.textContent = originalText;
+        }
+    }
+
+    // Функции для работы с календарем
+    function generateICSFile(title, description, startDate, startTime, duration = 60) {
+        // Парсим дату и время
+        const [year, month, day] = startDate.split('-');
+        const [hours, minutes] = startTime.split(':');
+        
+        // Создаем объект даты начала (локальное время)
+        const start = new Date(year, month - 1, day, hours, minutes);
+        // Создаем объект даты окончания (добавляем duration минут)
+        const end = new Date(start.getTime() + duration * 60000);
+        
+        // Форматируем даты для iCalendar (формат: YYYYMMDDTHHMMSS)
+        const formatDate = (date) => {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            const seconds = String(date.getSeconds()).padStart(2, '0');
+            return `${year}${month}${day}T${hours}${minutes}${seconds}`;
+        };
+        
+        const startFormatted = formatDate(start);
+        const endFormatted = formatDate(end);
+        const nowFormatted = formatDate(new Date());
+        
+        // Генерируем уникальный ID
+        const uid = `booking-${Date.now()}@svetsalonpro.ru`;
+        
+        // Адрес салона
+        const location = 'г. Геленджик, ул. Одесская, 3А, корпус 10';
+        
+        // Экранируем специальные символы для iCalendar
+        const escapeICS = (text) => {
+            return text.replace(/\\/g, '\\\\')
+                       .replace(/;/g, '\\;')
+                       .replace(/,/g, '\\,')
+                       .replace(/\n/g, '\\n');
+        };
+        
+        const safeTitle = escapeICS(title);
+        const safeDescription = escapeICS(description);
+        const safeLocation = escapeICS(location);
+        
+        // Создаем содержимое .ics файла
+        const icsContent = `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//SvetSalonPro//Booking System//RU
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:${uid}
+DTSTAMP:${nowFormatted}
+DTSTART:${startFormatted}
+DTEND:${endFormatted}
+SUMMARY:${safeTitle}
+DESCRIPTION:${safeDescription}
+LOCATION:${safeLocation}
+STATUS:CONFIRMED
+SEQUENCE:0
+END:VEVENT
+END:VCALENDAR`;
+        
+        return icsContent;
+    }
+    
+    function downloadICSFile(icsContent, filename) {
+        const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(link.href);
+    }
+    
+        function getGoogleCalendarLink(title, description, startDate, startTime, duration = 60) {
+            const [year, month, day] = startDate.split('-');
+            const [hours, minutes] = startTime.split(':');
+            const start = new Date(year, month - 1, day, hours, minutes);
+            const end = new Date(start.getTime() + duration * 60000);
+        
+        const formatGoogleDate = (date) => {
+            return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+        };
+        
+        const params = new URLSearchParams({
+            action: 'TEMPLATE',
+            text: title,
+            dates: `${formatGoogleDate(start)}/${formatGoogleDate(end)}`,
+            details: description,
+            location: 'г. Геленджик, ул. Одесская, 3А, корпус 10'
+        });
+        
+        return `https://calendar.google.com/calendar/render?${params.toString()}`;
+    }
+    
+        function getAppleCalendarLink(title, description, startDate, startTime, duration = 60) {
+            const [year, month, day] = startDate.split('-');
+            const [hours, minutes] = startTime.split(':');
+            const start = new Date(year, month - 1, day, hours, minutes);
+            const end = new Date(start.getTime() + duration * 60000);
+        
+        const formatAppleDate = (date) => {
+            return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+        };
+        
+        const params = new URLSearchParams({
+            title: title,
+            st: formatAppleDate(start),
+            et: formatAppleDate(end),
+            desc: description,
+            loc: 'г. Геленджик, ул. Одесская, 3А, корпус 10'
+        });
+        
+        return `webcal://p01-calendarws.icloud.com/ca/event?${params.toString()}`;
+    }
+    
+    function showBookingSuccessNotification(name, date, time, service, category) {
+        // Экранируем данные для безопасного использования в HTML
+        const safeDate = date.replace(/'/g, "\\'");
+        const safeTime = time.replace(/'/g, "\\'");
+        const safeService = service.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+        const safeCategory = category.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+        
+        // Создаем уведомление с кнопками для календаря
+        const notification = document.createElement('div');
+        notification.className = 'fixed top-4 right-4 bg-green-500 text-white rounded-lg shadow-lg z-50 max-w-sm p-4';
+        notification.style.position = 'fixed';
+        notification.style.top = '1rem';
+        notification.style.right = '1rem';
+        notification.style.zIndex = '9999';
+        
+        // Создаем структуру уведомления
+        const content = document.createElement('div');
+        content.innerHTML = `
+            <div class="mb-3">
+                <div class="flex items-center mb-2">
+                    <i class="fas fa-check-circle mr-2"></i>
+                    <span class="font-semibold">Заявка отправлена!</span>
+                </div>
+                <p class="text-sm">Мы свяжемся с вами в ближайшее время.</p>
+            </div>
+            <div class="border-t border-green-400 pt-3 mt-3">
+                <p class="text-sm mb-2 font-semibold">📅 Добавить в календарь:</p>
+                <div class="flex flex-wrap gap-2" id="calendarButtons"></div>
+            </div>
+            <button class="absolute top-2 right-2 text-white hover:text-green-100" id="closeNotification">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+        notification.appendChild(content);
+        
+        // Создаем кнопки для календаря
+        const buttonsContainer = notification.querySelector('#calendarButtons');
+        
+        const googleBtn = document.createElement('button');
+        googleBtn.className = 'bg-white text-green-600 px-3 py-1.5 rounded text-xs font-medium hover:bg-green-50 transition flex items-center';
+        googleBtn.innerHTML = '<i class="fab fa-google mr-1"></i> Google';
+        googleBtn.onclick = () => addToCalendar('google', date, time, service, category);
+        buttonsContainer.appendChild(googleBtn);
+        
+        const appleBtn = document.createElement('button');
+        appleBtn.className = 'bg-white text-green-600 px-3 py-1.5 rounded text-xs font-medium hover:bg-green-50 transition flex items-center';
+        appleBtn.innerHTML = '<i class="fab fa-apple mr-1"></i> Apple';
+        appleBtn.onclick = () => addToCalendar('apple', date, time, service, category);
+        buttonsContainer.appendChild(appleBtn);
+        
+        const icsBtn = document.createElement('button');
+        icsBtn.className = 'bg-white text-green-600 px-3 py-1.5 rounded text-xs font-medium hover:bg-green-50 transition flex items-center';
+        icsBtn.innerHTML = '<i class="fas fa-download mr-1"></i> Скачать';
+        icsBtn.onclick = () => addToCalendar('ics', date, time, service, category);
+        buttonsContainer.appendChild(icsBtn);
+        
+        // Кнопка закрытия
+        notification.querySelector('#closeNotification').onclick = () => notification.remove();
+        
+        document.body.appendChild(notification);
+        
+        // Автоматически скрываем через 10 секунд
+        setTimeout(() => {
+            if (notification.parentElement) {
+                notification.style.opacity = '0';
+                notification.style.transition = 'opacity 0.3s';
+                setTimeout(() => notification.remove(), 300);
+            }
+        }, 10000);
+    }
+    
+    function addToCalendar(type, date, time, service, category) {
+        const title = `Запись: ${service}`;
+        const description = `Категория: ${category}\nУслуга: ${service}\nСалон красоты SvetSalonPro`;
+        
+        if (type === 'google') {
+            const link = getGoogleCalendarLink(title, description, date, time);
+            window.open(link, '_blank');
+        } else if (type === 'apple') {
+            const link = getAppleCalendarLink(title, description, date, time);
+            window.location.href = link;
+        } else if (type === 'ics') {
+            const icsContent = generateICSFile(title, description, date, time);
+            const filename = `Запись_SvetSalonPro_${date}_${time.replace(':', '-')}.ics`;
+            downloadICSFile(icsContent, filename);
         }
     }
 
