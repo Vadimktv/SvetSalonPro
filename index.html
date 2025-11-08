@@ -2140,72 +2140,72 @@
                         </button>
 
                         <!-- Profile Dropdown - iOS Style -->
-                        <div id="profileDropdown" class="fixed right-4 top-20 w-72 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 opacity-0 invisible transform scale-95 transition-all duration-300 z-[99999] overflow-hidden origin-top-right">
+                        <div id="profileDropdown" class="fixed right-2 md:right-4 top-16 md:top-20 w-64 md:w-72 bg-white/95 backdrop-blur-xl rounded-xl md:rounded-2xl shadow-2xl border border-white/20 opacity-0 invisible transform scale-95 transition-all duration-300 z-[99999] overflow-hidden origin-top-right">
                             <!-- iOS Bubble Arrow -->
-                            <div class="absolute -top-2 right-6 w-4 h-4 bg-white/95 backdrop-blur-xl border-l border-t border-white/20 transform rotate-45"></div>
+                            <div class="absolute -top-2 right-4 md:right-6 w-4 h-4 bg-white/95 backdrop-blur-xl border-l border-t border-white/20 transform rotate-45"></div>
                             
                             <!-- Menu Items -->
-                            <div class="p-3">
+                            <div class="p-2 md:p-3">
                                 <!-- Personal Cabinet -->
-                                <div class="mb-3">
+                                <div class="mb-2 md:mb-3">
                                     <button onclick="openLoginModal()" 
-                                       class="w-full flex items-center space-x-4 px-4 py-4 text-gray-700 hover:bg-gradient-to-r hover:from-pink-50 hover:to-purple-50 rounded-xl transition-all duration-200 group">
-                                        <div class="w-12 h-12 bg-gradient-to-br from-pink-500 to-purple-600 rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-200">
-                                            <i class="fas fa-user-circle text-white text-lg"></i>
+                                       class="w-full flex items-center space-x-2 md:space-x-3 px-2 md:px-3 py-2 md:py-3 text-gray-700 hover:bg-gradient-to-r hover:from-pink-50 hover:to-purple-50 rounded-lg md:rounded-xl transition-all duration-200 group">
+                                        <div class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-pink-500 to-purple-600 rounded-lg md:rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-200 flex-shrink-0">
+                                            <i class="fas fa-user-circle text-white text-sm md:text-lg"></i>
                                         </div>
-                                        <div class="flex-1 text-left">
-                                            <div class="font-bold text-gray-800 text-lg">Войти в личный кабинет</div>
-                                            <div class="text-sm text-gray-500">Управление профилем и записями</div>
+                                        <div class="flex-1 text-left min-w-0">
+                                            <div class="font-bold text-gray-800 text-sm md:text-base lg:text-lg leading-tight">Войти в личный кабинет</div>
+                                            <div class="text-xs md:text-sm text-gray-500 leading-tight mt-0.5">Управление профилем и записями</div>
                                         </div>
-                                        <i class="fas fa-chevron-right text-gray-400 text-sm group-hover:text-pink-500 transition-colors duration-200"></i>
+                                        <i class="fas fa-chevron-right text-gray-400 text-xs md:text-sm group-hover:text-pink-500 transition-colors duration-200 flex-shrink-0 ml-1"></i>
                                     </button>
                                 </div>
                                 
                                 <!-- Registration -->
-                                <div class="mb-3">
+                                <div class="mb-2 md:mb-3">
                                     <button onclick="openLoginModal()" 
-                                       class="w-full flex items-center space-x-4 px-4 py-4 text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 rounded-xl transition-all duration-200 group">
-                                        <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-200">
-                                            <i class="fas fa-user-plus text-white text-lg"></i>
+                                       class="w-full flex items-center space-x-2 md:space-x-3 px-2 md:px-3 py-2 md:py-3 text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 rounded-lg md:rounded-xl transition-all duration-200 group">
+                                        <div class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg md:rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-200 flex-shrink-0">
+                                            <i class="fas fa-user-plus text-white text-sm md:text-lg"></i>
                                         </div>
-                                        <div class="flex-1 text-left">
-                                            <div class="font-bold text-gray-800 text-lg">Регистрация</div>
-                                            <div class="text-sm text-gray-500">Создать новый аккаунт</div>
+                                        <div class="flex-1 text-left min-w-0">
+                                            <div class="font-bold text-gray-800 text-sm md:text-base lg:text-lg leading-tight">Регистрация</div>
+                                            <div class="text-xs md:text-sm text-gray-500 leading-tight mt-0.5">Создать новый аккаунт</div>
                                         </div>
-                                        <i class="fas fa-chevron-right text-gray-400 text-sm group-hover:text-blue-500 transition-colors duration-200"></i>
+                                        <i class="fas fa-chevron-right text-gray-400 text-xs md:text-sm group-hover:text-blue-500 transition-colors duration-200 flex-shrink-0 ml-1"></i>
                                     </button>
                                 </div>
                                 
                                 <!-- Divider -->
-                                <div class="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent my-3"></div>
+                                <div class="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent my-2 md:my-3"></div>
                                 
                                 <!-- Social Links -->
-                                <div class="mb-3">
+                                <div class="mb-2 md:mb-3">
                                     <a href="https://t.me/SvetSalonPro" target="_blank" 
-                                       class="flex items-center space-x-4 px-4 py-3 text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-cyan-50 rounded-xl transition-all duration-200 group">
-                                        <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-200">
-                                            <i class="fab fa-telegram text-white text-sm"></i>
+                                       class="flex items-center space-x-2 md:space-x-3 px-2 md:px-3 py-2 md:py-3 text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-cyan-50 rounded-lg md:rounded-xl transition-all duration-200 group">
+                                        <div class="w-9 h-9 md:w-10 md:h-10 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-lg md:rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-200 flex-shrink-0">
+                                            <i class="fab fa-telegram text-white text-xs md:text-sm"></i>
                                         </div>
-                                        <div class="flex-1">
-                                            <div class="font-semibold text-gray-800">Telegram</div>
-                                            <div class="text-xs text-gray-500">Связаться с нами</div>
+                                        <div class="flex-1 min-w-0">
+                                            <div class="font-semibold text-gray-800 text-sm md:text-base leading-tight">Telegram</div>
+                                            <div class="text-xs text-gray-500 leading-tight mt-0.5">Связаться с нами</div>
                                         </div>
-                                        <i class="fas fa-external-link-alt text-gray-400 text-xs group-hover:text-blue-500 transition-colors duration-200"></i>
+                                        <i class="fas fa-external-link-alt text-gray-400 text-xs group-hover:text-blue-500 transition-colors duration-200 flex-shrink-0 ml-1"></i>
                                     </a>
                                 </div>
                                 
                                 <!-- WhatsApp -->
                                 <div>
                                     <a href="https://wa.me/79282806294" target="_blank" 
-                                       class="flex items-center space-x-4 px-4 py-3 text-gray-700 hover:bg-gradient-to-r hover:from-green-50 hover:to-emerald-50 rounded-xl transition-all duration-200 group">
-                                        <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-200">
-                                            <i class="fab fa-whatsapp text-white text-sm"></i>
+                                       class="flex items-center space-x-2 md:space-x-3 px-2 md:px-3 py-2 md:py-3 text-gray-700 hover:bg-gradient-to-r hover:from-green-50 hover:to-emerald-50 rounded-lg md:rounded-xl transition-all duration-200 group">
+                                        <div class="w-9 h-9 md:w-10 md:h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg md:rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-200 flex-shrink-0">
+                                            <i class="fab fa-whatsapp text-white text-xs md:text-sm"></i>
                                         </div>
-                                        <div class="flex-1">
-                                            <div class="font-semibold text-gray-800">WhatsApp</div>
-                                            <div class="text-xs text-gray-500">Написать в WhatsApp</div>
+                                        <div class="flex-1 min-w-0">
+                                            <div class="font-semibold text-gray-800 text-sm md:text-base leading-tight">WhatsApp</div>
+                                            <div class="text-xs text-gray-500 leading-tight mt-0.5">Написать в WhatsApp</div>
                                         </div>
-                                        <i class="fas fa-external-link-alt text-gray-400 text-xs group-hover:text-green-500 transition-colors duration-200"></i>
+                                        <i class="fas fa-external-link-alt text-gray-400 text-xs group-hover:text-green-500 transition-colors duration-200 flex-shrink-0 ml-1"></i>
                                     </a>
                                 </div>
                             </div>
