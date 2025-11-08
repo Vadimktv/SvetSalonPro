@@ -2719,16 +2719,15 @@
                 }
                 
                 chatIds.forEach(chatId => {
-                    // Для Светланы (1366208620) добавляем кнопки календаря
-                    const isSvetlana = chatId === "1366208620";
                     const messageData = {
                         chat_id: chatId,
                         text: message
                     };
                     
-                    if (isSvetlana && calendarKeyboard) {
+                    // Добавляем кнопки календаря для всех администраторов
+                    if (calendarKeyboard) {
                         messageData.reply_markup = calendarKeyboard;
-                        console.log('Отправка сообщения Светлане с кнопками:', JSON.stringify(messageData, null, 2));
+                        console.log(`Отправка сообщения ${chatId} с кнопками:`, JSON.stringify(messageData, null, 2));
                     }
                     
                     fetch("https://api.telegram.org/bot7811248285:AAHfspwV_mA-PF298Bac28LBkEeehX_ql70/sendMessage", {

@@ -4713,16 +4713,15 @@
             }
             
             const sendRequests = chatIds.map(cid => {
-                // Для Светланы (1366208620) добавляем кнопки календаря
-                const isSvetlana = cid === '1366208620';
                 const messageData = {
                     chat_id: cid,
                     text: formattedMessage
                 };
                 
-                if (isSvetlana && calendarKeyboard) {
+                // Добавляем кнопки календаря для всех администраторов
+                if (calendarKeyboard) {
                     messageData.reply_markup = calendarKeyboard;
-                    console.log('Отправка сообщения Светлане с кнопками:', JSON.stringify(messageData, null, 2));
+                    console.log(`Отправка сообщения ${cid} с кнопками:`, JSON.stringify(messageData, null, 2));
                 }
                 
                 return fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
