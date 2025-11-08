@@ -4691,18 +4691,17 @@
             
             let calendarKeyboard = null;
             try {
-                const googleCalendarLink = getGoogleCalendarLink(calendarTitle, calendarDescription, date, time);
-                const baseUrl = window.location.origin || 'https://svetsalonpro.ru';
-                const icsDownloadLink = `${baseUrl}/api/generate-ics.js?title=${encodeURIComponent(calendarTitle)}&description=${encodeURIComponent(calendarDescription)}&date=${date}&time=${time}`;
+                const yandexCalendarLink = getYandexCalendarLink(calendarTitle, calendarDescription, date, time);
+                const appleCalendarLink = getAppleCalendarLink(calendarTitle, calendarDescription, date, time);
                 
-                console.log('Ссылки для календаря:', { googleCalendarLink, icsDownloadLink });
+                console.log('Ссылки для календаря:', { yandexCalendarLink, appleCalendarLink });
                 
                 // Создаем инлайн-кнопки для календаря
                 calendarKeyboard = {
                     inline_keyboard: [
                         [
-                            { text: '📅 Google Calendar', url: googleCalendarLink },
-                            { text: '📥 Скачать .ics', url: icsDownloadLink }
+                            { text: '📅 Яндекс Календарь', url: yandexCalendarLink },
+                            { text: '🍎 Apple Календарь', url: appleCalendarLink }
                         ]
                     ]
                 };
@@ -4891,25 +4890,19 @@ END:VCALENDAR`;
         URL.revokeObjectURL(link.href);
     }
     
-    function getAppleCalendarLink(title, description, startDate, startTime, duration = 60) {
-        const [year, month, day] = startDate.split('-');
-        const [hours, minutes] = startTime.split(':');
-        const start = new Date(year, month - 1, day, hours, minutes);
-        const end = new Date(start.getTime() + duration * 60000);
+    function getYandexCalendarLink(title, description, startDate, startTime, duration = 60) {
+        // Генерируем .ics файл для Яндекс Календаря
+        const icsContent = generateICSFile(title, description, startDate, startTime, duration);
+        const baseUrl = window.location.origin || 'https://svetsalonpro.ru';
+        // Используем endpoint для генерации .ics файла
+        return `${baseUrl}/api/generate-ics.js?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}&date=${startDate}&time=${startTime}&duration=${duration}`;
+    }
     
-        const formatAppleDate = (date) => {
-            return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
-        };
-        
-        const params = new URLSearchParams({
-            title: title,
-            st: formatAppleDate(start),
-            et: formatAppleDate(end),
-            desc: description,
-            loc: 'г. Геленджик, ул. Одесская, 3А, корпус 10'
-        });
-        
-        return `webcal://p01-calendarws.icloud.com/ca/event?${params.toString()}`;
+    function getAppleCalendarLink(title, description, startDate, startTime, duration = 60) {
+        // Для Apple календаря используем прямой .ics файл
+        const baseUrl = window.location.origin || 'https://svetsalonpro.ru';
+        // iOS автоматически откроет .ics файл в календаре
+        return `${baseUrl}/api/generate-ics.js?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}&date=${startDate}&time=${startTime}&duration=${duration}`;
     }
     
     function showBookingSuccessNotification(name, date, time, service, category) {
