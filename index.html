@@ -4778,8 +4778,12 @@
                 // Не прерываем процесс, если не удалось добавить в Яндекс Календарь
             }
 
-            // Показываем уведомление с возможностью добавить в календарь
-            showBookingSuccessNotification(name, date, time, serviceText, categoryText);
+            // Показываем уведомление об успешной записи
+            showNotification('Заявка отправлена! Мы свяжемся с вами в ближайшее время.', 'success');
+            
+            // Показываем модальное окно для добавления в календарь
+            showCalendarModal(name, date, time, serviceText, categoryText);
+            
             form.reset();
             updateServiceOptions();
         } catch (error) {
@@ -4905,75 +4909,221 @@ END:VCALENDAR`;
         return `${baseUrl}/api/generate-ics.js?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}&date=${startDate}&time=${startTime}&duration=${duration}`;
     }
     
-    function showBookingSuccessNotification(name, date, time, service, category) {
-        // Экранируем данные для безопасного использования в HTML
-        const safeDate = date.replace(/'/g, "\\'");
-        const safeTime = time.replace(/'/g, "\\'");
-        const safeService = service.replace(/'/g, "\\'").replace(/"/g, '&quot;');
-        const safeCategory = category.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    // Определение типа устройства и календаря
+    function detectCalendarType() {
+        const userAgent = navigator.userAgent.toLowerCase();
+        const isIOS = /iphone|ipad|ipod/.test(userAgent);
+        const isAndroid = /android/.test(userAgent);
+        const isMac = /macintosh|mac os x/.test(userAgent);
         
-        // Создаем уведомление с кнопками для календаря
-        const notification = document.createElement('div');
-        notification.className = 'fixed top-4 right-4 bg-green-500 text-white rounded-lg shadow-lg z-50 max-w-sm p-4';
-        notification.style.position = 'fixed';
-        notification.style.top = '1rem';
-        notification.style.right = '1rem';
-        notification.style.zIndex = '9999';
+        // Проверяем, используется ли Яндекс браузер
+        const isYandexBrowser = /yabrowser/.test(userAgent);
         
-        // Создаем структуру уведомления
-        const content = document.createElement('div');
-        content.innerHTML = `
-            <div class="mb-3">
-                <div class="flex items-center mb-2">
-                    <i class="fas fa-check-circle mr-2"></i>
-                    <span class="font-semibold">Заявка отправлена!</span>
+        if (isIOS || isMac) {
+            return 'apple';
+        } else if (isYandexBrowser || userAgent.includes('yandex')) {
+            return 'yandex';
+        } else if (isAndroid) {
+            return 'google'; // Android обычно использует Google Calendar
+        } else {
+            return 'universal'; // Показываем все варианты
+        }
+    }
+    
+    // Показ модального окна для добавления в календарь
+    function showCalendarModal(name, date, time, service, category) {
+        // Создаем overlay
+        const overlay = document.createElement('div');
+        overlay.className = 'fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4';
+        overlay.id = 'calendarModalOverlay';
+        
+        // Определяем тип календаря
+        const calendarType = detectCalendarType();
+        
+        // Создаем модальное окно
+        const modal = document.createElement('div');
+        modal.className = 'bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto';
+        modal.style.zIndex = '10000';
+        
+        const title = `Запись: ${service}`;
+        const description = `Категория: ${category}\nУслуга: ${service}\nСалон красоты SvetSalonPro`;
+        
+        // Генерируем ссылки
+        const yandexLink = getYandexCalendarLink(title, description, date, time);
+        const appleLink = getAppleCalendarLink(title, description, date, time);
+        const googleLink = getGoogleCalendarLink(title, description, date, time);
+        const baseUrl = window.location.origin || 'https://svetsalonpro.ru';
+        const icsLink = `${baseUrl}/api/generate-ics.js?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}&date=${date}&time=${time}`;
+        
+        // Форматируем дату для отображения
+        const dateObj = new Date(date);
+        const formattedDate = dateObj.toLocaleDateString('ru-RU', { 
+            weekday: 'long', 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+        });
+        
+        modal.innerHTML = `
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-2xl font-bold text-gray-800">📅 Добавить в календарь</h3>
+                    <button id="closeCalendarModal" class="text-gray-400 hover:text-gray-600 transition">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
                 </div>
-                <p class="text-sm">Мы свяжемся с вами в ближайшее время.</p>
+                
+                <p class="text-gray-600 mb-6">
+                    Мы можем добавить запись в ваш календарь, чтобы вы не забыли о визите!
+                </p>
+                
+                <div class="bg-gradient-to-r from-pink-50 to-purple-50 rounded-lg p-4 mb-6">
+                    <div class="flex items-center mb-2">
+                        <i class="fas fa-calendar-check text-pink-600 mr-2"></i>
+                        <span class="font-semibold text-gray-800">Ваша запись:</span>
+                    </div>
+                    <div class="text-sm text-gray-700">
+                        <div><strong>Дата:</strong> ${formattedDate}</div>
+                        <div><strong>Время:</strong> ${time}</div>
+                        <div><strong>Услуга:</strong> ${service}</div>
+                    </div>
+                </div>
+                
+                <div class="space-y-3 mb-6" id="calendarButtons">
+                    ${calendarType === 'apple' || calendarType === 'universal' ? `
+                    <button onclick="addToUserCalendar('apple', '${date}', '${time}', '${service.replace(/'/g, "\\'")}', '${category.replace(/'/g, "\\'")}')" 
+                            class="w-full bg-black text-white px-4 py-3 rounded-lg font-medium hover:bg-gray-800 transition flex items-center justify-center">
+                        <i class="fab fa-apple mr-2 text-xl"></i>
+                        <span>Apple Календарь</span>
+                    </button>
+                    ` : ''}
+                    
+                    ${calendarType === 'yandex' || calendarType === 'universal' ? `
+                    <button onclick="addToUserCalendar('yandex', '${date}', '${time}', '${service.replace(/'/g, "\\'")}', '${category.replace(/'/g, "\\'")}')" 
+                            class="w-full bg-red-600 text-white px-4 py-3 rounded-lg font-medium hover:bg-red-700 transition flex items-center justify-center">
+                        <i class="fab fa-yandex mr-2 text-xl"></i>
+                        <span>Яндекс Календарь</span>
+                    </button>
+                    ` : ''}
+                    
+                    ${calendarType === 'google' || calendarType === 'universal' ? `
+                    <button onclick="addToUserCalendar('google', '${date}', '${time}', '${service.replace(/'/g, "\\'")}', '${category.replace(/'/g, "\\'")}')" 
+                            class="w-full bg-blue-600 text-white px-4 py-3 rounded-lg font-medium hover:bg-blue-700 transition flex items-center justify-center">
+                        <i class="fab fa-google mr-2 text-xl"></i>
+                        <span>Google Календарь</span>
+                    </button>
+                    ` : ''}
+                    
+                    <button onclick="addToUserCalendar('ics', '${date}', '${time}', '${service.replace(/'/g, "\\'")}', '${category.replace(/'/g, "\\'")}')" 
+                            class="w-full bg-gray-200 text-gray-800 px-4 py-3 rounded-lg font-medium hover:bg-gray-300 transition flex items-center justify-center">
+                        <i class="fas fa-download mr-2"></i>
+                        <span>Скачать файл (.ics)</span>
+                    </button>
+                </div>
+                
+                <div class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded mb-4">
+                    <div class="flex items-start">
+                        <i class="fas fa-info-circle text-blue-600 mr-2 mt-1"></i>
+                        <div class="text-sm text-blue-800">
+                            <p class="font-semibold mb-2">📋 Инструкция по добавлению:</p>
+                            <div class="space-y-2 text-xs">
+                                ${calendarType === 'apple' ? `
+                                <div class="bg-white p-2 rounded">
+                                    <strong>🍎 Apple Календарь:</strong><br>
+                                    1. Нажмите кнопку "Apple Календарь" выше<br>
+                                    2. Файл автоматически откроется в приложении Календарь<br>
+                                    3. Нажмите "Добавить" для подтверждения
+                                </div>
+                                ` : ''}
+                                
+                                ${calendarType === 'yandex' ? `
+                                <div class="bg-white p-2 rounded">
+                                    <strong>📅 Яндекс Календарь:</strong><br>
+                                    1. Нажмите кнопку "Яндекс Календарь" выше<br>
+                                    2. Файл скачается на ваше устройство<br>
+                                    3. Откройте calendar.yandex.ru в браузере<br>
+                                    4. Нажмите "Импорт" → выберите скачанный файл
+                                </div>
+                                ` : ''}
+                                
+                                ${calendarType === 'google' ? `
+                                <div class="bg-white p-2 rounded">
+                                    <strong>📅 Google Календарь:</strong><br>
+                                    1. Нажмите кнопку "Google Календарь" выше<br>
+                                    2. Откроется страница Google Calendar с заполненной формой<br>
+                                    3. Нажмите "Сохранить" для добавления события
+                                </div>
+                                ` : ''}
+                                
+                                ${calendarType === 'universal' ? `
+                                <div class="bg-white p-2 rounded">
+                                    <strong>📥 Универсальный способ:</strong><br>
+                                    1. Нажмите на нужный календарь выше<br>
+                                    2. Или скачайте файл (.ics) и импортируйте в любой календарь<br>
+                                    3. Большинство календарей поддерживают формат .ics
+                                </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button onclick="closeCalendarModal()" 
+                        class="w-full bg-gray-100 text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-200 transition">
+                    Пропустить
+                </button>
             </div>
-            <div class="border-t border-green-400 pt-3 mt-3">
-                <p class="text-sm mb-2 font-semibold">📅 Добавить в календарь:</p>
-                <div class="flex flex-wrap gap-2" id="calendarButtons"></div>
-            </div>
-            <button class="absolute top-2 right-2 text-white hover:text-green-100" id="closeNotification">
-                <i class="fas fa-times"></i>
-            </button>
         `;
-        notification.appendChild(content);
         
-        // Создаем кнопки для календаря
-        const buttonsContainer = notification.querySelector('#calendarButtons');
+        overlay.appendChild(modal);
+        document.body.appendChild(overlay);
         
-        const googleBtn = document.createElement('button');
-        googleBtn.className = 'bg-white text-green-600 px-3 py-1.5 rounded text-xs font-medium hover:bg-green-50 transition flex items-center';
-        googleBtn.innerHTML = '<i class="fab fa-google mr-1"></i> Google';
-        googleBtn.onclick = () => addToCalendar('google', date, time, service, category);
-        buttonsContainer.appendChild(googleBtn);
-        
-        const appleBtn = document.createElement('button');
-        appleBtn.className = 'bg-white text-green-600 px-3 py-1.5 rounded text-xs font-medium hover:bg-green-50 transition flex items-center';
-        appleBtn.innerHTML = '<i class="fab fa-apple mr-1"></i> Apple';
-        appleBtn.onclick = () => addToCalendar('apple', date, time, service, category);
-        buttonsContainer.appendChild(appleBtn);
-        
-        const icsBtn = document.createElement('button');
-        icsBtn.className = 'bg-white text-green-600 px-3 py-1.5 rounded text-xs font-medium hover:bg-green-50 transition flex items-center';
-        icsBtn.innerHTML = '<i class="fas fa-download mr-1"></i> Скачать';
-        icsBtn.onclick = () => addToCalendar('ics', date, time, service, category);
-        buttonsContainer.appendChild(icsBtn);
-        
-        // Кнопка закрытия
-        notification.querySelector('#closeNotification').onclick = () => notification.remove();
-        
-        document.body.appendChild(notification);
-        
-        // Автоматически скрываем через 10 секунд
-        setTimeout(() => {
-            if (notification.parentElement) {
-                notification.style.opacity = '0';
-                notification.style.transition = 'opacity 0.3s';
-                setTimeout(() => notification.remove(), 300);
+        // Закрытие по клику на overlay
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) {
+                closeCalendarModal();
             }
-        }, 10000);
+        });
+        
+        // Закрытие по кнопке
+        document.getElementById('closeCalendarModal').addEventListener('click', closeCalendarModal);
+    }
+    
+    function closeCalendarModal() {
+        const overlay = document.getElementById('calendarModalOverlay');
+        if (overlay) {
+            overlay.style.opacity = '0';
+            overlay.style.transition = 'opacity 0.3s';
+            setTimeout(() => overlay.remove(), 300);
+        }
+    }
+    
+    function addToUserCalendar(type, date, time, service, category) {
+        const title = `Запись: ${service}`;
+        const description = `Категория: ${category}\nУслуга: ${service}\nСалон красоты SvetSalonPro`;
+        
+        if (type === 'yandex') {
+            const link = getYandexCalendarLink(title, description, date, time);
+            window.open(link, '_blank');
+            showNotification('Файл скачан! Откройте Яндекс Календарь и импортируйте файл через меню "Импорт"', 'info');
+        } else if (type === 'apple') {
+            const link = getAppleCalendarLink(title, description, date, time);
+            // Для iOS/Mac открываем напрямую
+            window.location.href = link;
+        } else if (type === 'google') {
+            const link = getGoogleCalendarLink(title, description, date, time);
+            window.open(link, '_blank');
+        } else if (type === 'ics') {
+            const icsContent = generateICSFile(title, description, date, time);
+            const filename = `Запись_SvetSalonPro_${date}_${time.replace(':', '-')}.ics`;
+            downloadICSFile(icsContent, filename);
+            showNotification('Файл скачан! Импортируйте его в ваш календарь', 'success');
+        }
+        
+        // Закрываем модальное окно через небольшую задержку
+        setTimeout(() => {
+            closeCalendarModal();
+        }, 500);
     }
     
     function addToCalendar(type, date, time, service, category) {
@@ -4993,29 +5143,53 @@ END:VCALENDAR`;
         }
     }
 
-    // Функция показа уведомлений
+    // Функция показа уведомлений (вверху страницы)
     function showNotification(message, type = 'info') {
         // Создаем элемент уведомления
         const notification = document.createElement('div');
-        notification.className = `fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 max-w-sm ${
+        notification.className = `fixed top-4 left-1/2 transform -translate-x-1/2 p-4 rounded-lg shadow-lg z-50 max-w-md w-full mx-4 ${
             type === 'success' ? 'bg-green-500 text-white' : 
             type === 'error' ? 'bg-red-500 text-white' : 
+            type === 'warning' ? 'bg-yellow-500 text-white' :
             'bg-blue-500 text-white'
         }`;
-        notification.textContent = message;
+        
+        // Добавляем иконку в зависимости от типа
+        const icons = {
+            success: 'fa-check-circle',
+            error: 'fa-exclamation-circle',
+            warning: 'fa-exclamation-triangle',
+            info: 'fa-info-circle'
+        };
+        
+        notification.innerHTML = `
+            <div class="flex items-center">
+                <i class="fas ${icons[type] || icons.info} mr-3 text-xl"></i>
+                <span class="flex-1">${message}</span>
+                <button onclick="this.parentElement.parentElement.remove()" class="ml-3 hover:opacity-75">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        `;
         
         // Добавляем на страницу
         document.body.appendChild(notification);
         
+        // Анимация появления
+        setTimeout(() => {
+            notification.style.opacity = '1';
+            notification.style.transition = 'opacity 0.3s';
+        }, 10);
+        
         // Автоматически скрываем через 5 секунд
         setTimeout(() => {
-            notification.remove();
+            notification.style.opacity = '0';
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 300);
         }, 5000);
-        
-        // Возможность закрыть вручную
-        notification.addEventListener('click', () => {
-            notification.remove();
-        });
     }
 
     // Административные функции

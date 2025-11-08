@@ -2779,8 +2779,12 @@
                             }
                             
                             if (chatId === "339033504") {
-                                // Показываем уведомление с возможностью добавить в календарь
-                                showBookingSuccessNotificationWithCalendar(userName, date, time, serviceName, price);
+                                // Показываем уведомление об успешной записи
+                                showNotification('success', 'Запись отправлена!', 'Ожидайте подтверждения от администратора.');
+                                
+                                // Показываем модальное окно для добавления в календарь
+                                showCalendarModalAccount(userName, date, time, serviceName, price);
+                                
                                 document.getElementById('bookingModal').classList.add('hidden');
                                 e.target.reset();
                                 // Сбрасываем форму и показываем сетку услуг
@@ -2920,6 +2924,223 @@ END:VCALENDAR`;
             const baseUrl = window.location.origin || 'https://svetsalonpro.ru';
             // iOS автоматически откроет .ics файл в календаре
             return `${baseUrl}/api/generate-ics.js?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}&date=${startDate}&time=${startTime}&duration=${duration}`;
+        }
+        
+        // Определение типа устройства и календаря
+        function detectCalendarType() {
+            const userAgent = navigator.userAgent.toLowerCase();
+            const isIOS = /iphone|ipad|ipod/.test(userAgent);
+            const isAndroid = /android/.test(userAgent);
+            const isMac = /macintosh|mac os x/.test(userAgent);
+            
+            // Проверяем, используется ли Яндекс браузер
+            const isYandexBrowser = /yabrowser/.test(userAgent);
+            
+            if (isIOS || isMac) {
+                return 'apple';
+            } else if (isYandexBrowser || userAgent.includes('yandex')) {
+                return 'yandex';
+            } else if (isAndroid) {
+                return 'google'; // Android обычно использует Google Calendar
+            } else {
+                return 'universal'; // Показываем все варианты
+            }
+        }
+        
+        // Показ модального окна для добавления в календарь (для личного кабинета)
+        function showCalendarModalAccount(name, date, time, service, price) {
+            // Создаем overlay
+            const overlay = document.createElement('div');
+            overlay.className = 'fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4';
+            overlay.id = 'calendarModalOverlayAccount';
+            
+            // Определяем тип календаря
+            const calendarType = detectCalendarType();
+            
+            // Создаем модальное окно
+            const modal = document.createElement('div');
+            modal.className = 'bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto';
+            modal.style.zIndex = '10000';
+            
+            const title = `Запись: ${service}`;
+            const description = `Услуга: ${service}\nЦена: ${price} ₽\nСалон красоты SvetSalonPro`;
+            
+            // Генерируем ссылки
+            const yandexLink = getYandexCalendarLink(title, description, date, time);
+            const appleLink = getAppleCalendarLink(title, description, date, time);
+            const googleLink = getGoogleCalendarLink(title, description, date, time);
+            const baseUrl = window.location.origin || 'https://svetsalonpro.ru';
+            const icsLink = `${baseUrl}/api/generate-ics.js?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}&date=${date}&time=${time}`;
+            
+            // Форматируем дату для отображения
+            const dateObj = new Date(date);
+            const formattedDate = dateObj.toLocaleDateString('ru-RU', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            
+            modal.innerHTML = `
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-2xl font-bold text-gray-800">📅 Добавить в календарь</h3>
+                        <button id="closeCalendarModalAccount" class="text-gray-400 hover:text-gray-600 transition">
+                            <i class="fas fa-times text-xl"></i>
+                        </button>
+                    </div>
+                    
+                    <p class="text-gray-600 mb-6">
+                        Мы можем добавить запись в ваш календарь, чтобы вы не забыли о визите!
+                    </p>
+                    
+                    <div class="bg-gradient-to-r from-pink-50 to-purple-50 rounded-lg p-4 mb-6">
+                        <div class="flex items-center mb-2">
+                            <i class="fas fa-calendar-check text-pink-600 mr-2"></i>
+                            <span class="font-semibold text-gray-800">Ваша запись:</span>
+                        </div>
+                        <div class="text-sm text-gray-700">
+                            <div><strong>Дата:</strong> ${formattedDate}</div>
+                            <div><strong>Время:</strong> ${time}</div>
+                            <div><strong>Услуга:</strong> ${service}</div>
+                            <div><strong>Цена:</strong> ${price} ₽</div>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-3 mb-6" id="calendarButtons">
+                        ${calendarType === 'apple' || calendarType === 'universal' ? `
+                        <button onclick="addToUserCalendarAccount('apple', '${date}', '${time}', '${service.replace(/'/g, "\\'")}', '${price}')" 
+                                class="w-full bg-black text-white px-4 py-3 rounded-lg font-medium hover:bg-gray-800 transition flex items-center justify-center">
+                            <i class="fab fa-apple mr-2 text-xl"></i>
+                            <span>Apple Календарь</span>
+                        </button>
+                        ` : ''}
+                        
+                        ${calendarType === 'yandex' || calendarType === 'universal' ? `
+                        <button onclick="addToUserCalendarAccount('yandex', '${date}', '${time}', '${service.replace(/'/g, "\\'")}', '${price}')" 
+                                class="w-full bg-red-600 text-white px-4 py-3 rounded-lg font-medium hover:bg-red-700 transition flex items-center justify-center">
+                            <i class="fab fa-yandex mr-2 text-xl"></i>
+                            <span>Яндекс Календарь</span>
+                        </button>
+                        ` : ''}
+                        
+                        ${calendarType === 'google' || calendarType === 'universal' ? `
+                        <button onclick="addToUserCalendarAccount('google', '${date}', '${time}', '${service.replace(/'/g, "\\'")}', '${price}')" 
+                                class="w-full bg-blue-600 text-white px-4 py-3 rounded-lg font-medium hover:bg-blue-700 transition flex items-center justify-center">
+                            <i class="fab fa-google mr-2 text-xl"></i>
+                            <span>Google Календарь</span>
+                        </button>
+                        ` : ''}
+                        
+                        <button onclick="addToUserCalendarAccount('ics', '${date}', '${time}', '${service.replace(/'/g, "\\'")}', '${price}')" 
+                                class="w-full bg-gray-200 text-gray-800 px-4 py-3 rounded-lg font-medium hover:bg-gray-300 transition flex items-center justify-center">
+                            <i class="fas fa-download mr-2"></i>
+                            <span>Скачать файл (.ics)</span>
+                        </button>
+                    </div>
+                    
+                    <div class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded mb-4">
+                        <div class="flex items-start">
+                            <i class="fas fa-info-circle text-blue-600 mr-2 mt-1"></i>
+                            <div class="text-sm text-blue-800">
+                                <p class="font-semibold mb-2">📋 Инструкция по добавлению:</p>
+                                <div class="space-y-2 text-xs">
+                                    ${calendarType === 'apple' ? `
+                                    <div class="bg-white p-2 rounded">
+                                        <strong>🍎 Apple Календарь:</strong><br>
+                                        1. Нажмите кнопку "Apple Календарь" выше<br>
+                                        2. Файл автоматически откроется в приложении Календарь<br>
+                                        3. Нажмите "Добавить" для подтверждения
+                                    </div>
+                                    ` : ''}
+                                    
+                                    ${calendarType === 'yandex' ? `
+                                    <div class="bg-white p-2 rounded">
+                                        <strong>📅 Яндекс Календарь:</strong><br>
+                                        1. Нажмите кнопку "Яндекс Календарь" выше<br>
+                                        2. Файл скачается на ваше устройство<br>
+                                        3. Откройте calendar.yandex.ru в браузере<br>
+                                        4. Нажмите "Импорт" → выберите скачанный файл
+                                    </div>
+                                    ` : ''}
+                                    
+                                    ${calendarType === 'google' ? `
+                                    <div class="bg-white p-2 rounded">
+                                        <strong>📅 Google Календарь:</strong><br>
+                                        1. Нажмите кнопку "Google Календарь" выше<br>
+                                        2. Откроется страница Google Calendar с заполненной формой<br>
+                                        3. Нажмите "Сохранить" для добавления события
+                                    </div>
+                                    ` : ''}
+                                    
+                                    ${calendarType === 'universal' ? `
+                                    <div class="bg-white p-2 rounded">
+                                        <strong>📥 Универсальный способ:</strong><br>
+                                        1. Нажмите на нужный календарь выше<br>
+                                        2. Или скачайте файл (.ics) и импортируйте в любой календарь<br>
+                                        3. Большинство календарей поддерживают формат .ics
+                                    </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button onclick="closeCalendarModalAccount()" 
+                            class="w-full bg-gray-100 text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-200 transition">
+                        Пропустить
+                    </button>
+                </div>
+            `;
+            
+            overlay.appendChild(modal);
+            document.body.appendChild(overlay);
+            
+            // Закрытие по клику на overlay
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    closeCalendarModalAccount();
+                }
+            });
+            
+            // Закрытие по кнопке
+            document.getElementById('closeCalendarModalAccount').addEventListener('click', closeCalendarModalAccount);
+        }
+        
+        function closeCalendarModalAccount() {
+            const overlay = document.getElementById('calendarModalOverlayAccount');
+            if (overlay) {
+                overlay.style.opacity = '0';
+                overlay.style.transition = 'opacity 0.3s';
+                setTimeout(() => overlay.remove(), 300);
+            }
+        }
+        
+        function addToUserCalendarAccount(type, date, time, service, price) {
+            const title = `Запись: ${service}`;
+            const description = `Услуга: ${service}\nЦена: ${price} ₽\nСалон красоты SvetSalonPro`;
+            
+            if (type === 'yandex') {
+                const link = getYandexCalendarLink(title, description, date, time);
+                window.open(link, '_blank');
+                showNotification('info', 'Файл скачан!', 'Откройте Яндекс Календарь и импортируйте файл через меню "Импорт"');
+            } else if (type === 'apple') {
+                const link = getAppleCalendarLink(title, description, date, time);
+                window.location.href = link;
+            } else if (type === 'google') {
+                const link = getGoogleCalendarLink(title, description, date, time);
+                window.open(link, '_blank');
+            } else if (type === 'ics') {
+                const icsContent = generateICSFile(title, description, date, time);
+                const filename = `Запись_SvetSalonPro_${date}_${time.replace(':', '-')}.ics`;
+                downloadICSFile(icsContent, filename);
+                showNotification('success', 'Файл скачан!', 'Импортируйте его в ваш календарь');
+            }
+            
+            // Закрываем модальное окно через небольшую задержку
+            setTimeout(() => {
+                closeCalendarModalAccount();
+            }, 500);
         }
         
         function showBookingSuccessNotificationWithCalendar(name, date, time, service, price) {
