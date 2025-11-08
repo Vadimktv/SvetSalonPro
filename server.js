@@ -17,6 +17,9 @@ const sendMagicLinkAPI = require('./pages/api/send-magic-link.js');
 // Импортируем API для генерации .ics файла
 const generateICSAPI = require('./pages/api/generate-ics.js');
 
+// Импортируем API для работы с Яндекс Календарем
+const yandexCalendarAPI = require('./pages/api/yandex-calendar.js');
+
 // MIME типы для статических файлов
 const mimeTypes = {
     '.html': 'text/html',
@@ -104,6 +107,12 @@ const server = http.createServer((req, res) => {
     // Обработка API запросов на генерацию .ics файла
     if (pathname === '/api/generate-ics.js' || pathname === '/pages/api/generate-ics.js') {
         generateICSAPI.handleRequest(req, res);
+        return;
+    }
+
+    // Обработка API запросов для работы с Яндекс Календарем
+    if (pathname === '/api/yandex-calendar' || pathname === '/api/yandex-calendar.js' || pathname === '/pages/api/yandex-calendar.js') {
+        yandexCalendarAPI.handleRequest(req, res);
         return;
     }
     

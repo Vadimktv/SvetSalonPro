@@ -2747,8 +2747,39 @@
                             console.log('Сообщение отправлено успешно:', data);
                         }
                         return { response, data };
-                    }).then(({ response, data }) => {
+                    }).then(async ({ response, data }) => {
                         if (data.ok) {
+                            // Создаем событие в Яндекс Календаре Светланы
+                            try {
+                                const calendarTitle = `Запись: ${serviceName}`;
+                                const calendarDescription = `Услуга: ${serviceName}\nЦена: ${price} ₽\nКлиент: ${userName}\nТелефон: ${userPhone}\nСалон красоты SvetSalonPro`;
+                                
+                                const yandexResponse = await fetch('/api/yandex-calendar/create-event', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({
+                                        title: calendarTitle,
+                                        description: calendarDescription,
+                                        date: date,
+                                        time: time,
+                                        duration: 60
+                                    })
+                                });
+                                
+                                if (yandexResponse.ok) {
+                                    const yandexData = await yandexResponse.json();
+                                    if (yandexData.success) {
+                                        console.log('Событие успешно создано в Яндекс Календаре Светланы');
+                                    } else {
+                                        console.warn('Не удалось создать событие в Яндекс Календаре:', yandexData.message);
+                                    }
+                                }
+                            } catch (error) {
+                                console.warn('Ошибка при создании события в Яндекс Календаре:', error);
+                            }
+                            
                             if (chatId === "339033504") {
                                 // Показываем уведомление с возможностью добавить в календарь
                                 showBookingSuccessNotificationWithCalendar(userName, date, time, serviceName, price);

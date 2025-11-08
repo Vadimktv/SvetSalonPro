@@ -3909,10 +3909,29 @@
         return { success: true, message: 'Время успешно забронировано' };
     }
 
-    // Функция для проверки доступности выбранного времени
-    function checkTimeAvailability(date, time, serviceCategory) {
+    // Функция для проверки доступности выбранного времени (с проверкой Яндекс Календаря)
+    async function checkTimeAvailability(date, time, serviceCategory) {
+        // Сначала проверяем локальные записи
         const bookedTimes = getBookedTimesForDateAndCategory(date, serviceCategory);
-        return !bookedTimes.some(slot => slot.time === time);
+        if (bookedTimes.some(slot => slot.time === time)) {
+            return false;
+        }
+        
+        // Затем проверяем Яндекс Календарь
+        try {
+            const response = await fetch(`/api/yandex-calendar/check-time?date=${date}&time=${time}&duration=60`);
+            if (response.ok) {
+                const data = await response.json();
+                if (data.success && data.isBusy) {
+                    return false; // Время занято в Яндекс Календаре
+                }
+            }
+        } catch (error) {
+            console.warn('Не удалось проверить Яндекс Календарь:', error);
+            // В случае ошибки разрешаем запись (fallback)
+        }
+        
+        return true;
     }
 
     // Функция обновления отладочной информации
@@ -4641,9 +4660,10 @@
         submitButton.textContent = 'Отправляем...';
         
         try {
-            // Проверяем доступность времени
-            if (!checkTimeAvailability(date, time, serviceCategory)) {
-                showNotification('Это время уже занято для данной категории услуг. Выберите другое время.', 'error');
+            // Проверяем доступность времени (асинхронно)
+            const isAvailable = await checkTimeAvailability(date, time, serviceCategory);
+            if (!isAvailable) {
+                showNotification('Это время уже занято. Выберите другое время.', 'error');
                 return;
             }
 
@@ -4724,6 +4744,40 @@
             const allOk = responses.every(r => r.ok);
             if (!allOk) {
                 throw new Error('Telegram API error');
+            }
+
+            // Создаем событие в Яндекс Календаре Светланы
+            try {
+                const calendarTitle = `Запись: ${serviceText}`;
+                const calendarDescription = `Категория: ${categoryText}\nУслуга: ${serviceText}\nКлиент: ${name}\nТелефон: ${phone}\nСалон красоты SvetSalonPro`;
+                
+                const yandexResponse = await fetch('/api/yandex-calendar/create-event', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        title: calendarTitle,
+                        description: calendarDescription,
+                        date: date,
+                        time: time,
+                        duration: 60
+                    })
+                });
+                
+                if (yandexResponse.ok) {
+                    const yandexData = await yandexResponse.json();
+                    if (yandexData.success) {
+                        console.log('Событие успешно создано в Яндекс Календаре Светланы');
+                    } else {
+                        console.warn('Не удалось создать событие в Яндекс Календаре:', yandexData.message);
+                    }
+                } else {
+                    console.warn('Ошибка HTTP при создании события в Яндекс Календаре:', yandexResponse.status);
+                }
+            } catch (error) {
+                console.warn('Ошибка при создании события в Яндекс Календаре:', error);
+                // Не прерываем процесс, если не удалось добавить в Яндекс Календарь
             }
 
             // Показываем уведомление с возможностью добавить в календарь
