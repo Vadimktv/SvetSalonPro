@@ -2694,19 +2694,29 @@
                 // Генерируем ссылки для календаря
                 const calendarTitle = `Запись: ${serviceName}`;
                 const calendarDescription = `Услуга: ${serviceName}\nЦена: ${price} ₽\nКлиент: ${userName}\nТелефон: ${userPhone}\nСалон красоты SvetSalonPro`;
-                const googleCalendarLink = getGoogleCalendarLink(calendarTitle, calendarDescription, date, time);
-                const baseUrl = window.location.origin || 'https://svetsalonpro.ru';
-                const icsDownloadLink = `${baseUrl}/api/generate-ics.js?title=${encodeURIComponent(calendarTitle)}&description=${encodeURIComponent(calendarDescription)}&date=${date}&time=${time}`;
                 
-                // Создаем инлайн-кнопки для календаря
-                const calendarKeyboard = {
-                    inline_keyboard: [
-                        [
-                            { text: '📅 Google Calendar', url: googleCalendarLink },
-                            { text: '📥 Скачать .ics', url: icsDownloadLink }
+                let calendarKeyboard = null;
+                try {
+                    const googleCalendarLink = getGoogleCalendarLink(calendarTitle, calendarDescription, date, time);
+                    const baseUrl = window.location.origin || 'https://svetsalonpro.ru';
+                    const icsDownloadLink = `${baseUrl}/api/generate-ics.js?title=${encodeURIComponent(calendarTitle)}&description=${encodeURIComponent(calendarDescription)}&date=${date}&time=${time}`;
+                    
+                    console.log('Ссылки для календаря:', { googleCalendarLink, icsDownloadLink });
+                    
+                    // Создаем инлайн-кнопки для календаря
+                    calendarKeyboard = {
+                        inline_keyboard: [
+                            [
+                                { text: '📅 Google Calendar', url: googleCalendarLink },
+                                { text: '📥 Скачать .ics', url: icsDownloadLink }
+                            ]
                         ]
-                    ]
-                };
+                    };
+                    
+                    console.log('Клавиатура для календаря:', JSON.stringify(calendarKeyboard, null, 2));
+                } catch (error) {
+                    console.error('Ошибка при создании ссылок для календаря:', error);
+                }
                 
                 chatIds.forEach(chatId => {
                     // Для Светланы (1366208620) добавляем кнопки календаря
@@ -2716,8 +2726,9 @@
                         text: message
                     };
                     
-                    if (isSvetlana) {
+                    if (isSvetlana && calendarKeyboard) {
                         messageData.reply_markup = calendarKeyboard;
+                        console.log('Отправка сообщения Светлане с кнопками:', JSON.stringify(messageData, null, 2));
                     }
                     
                     fetch("https://api.telegram.org/bot7811248285:AAHfspwV_mA-PF298Bac28LBkEeehX_ql70/sendMessage", {
@@ -2726,11 +2737,17 @@
                             "Content-Type": "application/json"
                         },
                         body: JSON.stringify(messageData)
-                    }).then(response => {
+                    }).then(async response => {
+                        const data = await response.json();
                         console.log('Telegram response:', response.status, response.statusText);
-                        return response.json();
-                    }).then(data => {
                         console.log('Telegram data:', data);
+                        if (!response.ok) {
+                            console.error('Ошибка отправки в Telegram:', data);
+                        } else {
+                            console.log('Сообщение отправлено успешно:', data);
+                        }
+                        return { response, data };
+                    }).then(({ response, data }) => {
                         if (data.ok) {
                             if (chatId === "339033504") {
                                 // Показываем уведомление с возможностью добавить в календарь

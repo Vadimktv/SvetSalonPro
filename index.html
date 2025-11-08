@@ -4668,19 +4668,29 @@
             // Генерируем ссылки для календаря
             const calendarTitle = `Запись: ${serviceText}`;
             const calendarDescription = `Категория: ${categoryText}\nУслуга: ${serviceText}\nКлиент: ${name}\nТелефон: ${phone}\nСалон красоты SvetSalonPro`;
-            const googleCalendarLink = getGoogleCalendarLink(calendarTitle, calendarDescription, date, time);
-            const baseUrl = window.location.origin || 'https://svetsalonpro.ru';
-            const icsDownloadLink = `${baseUrl}/api/generate-ics.js?title=${encodeURIComponent(calendarTitle)}&description=${encodeURIComponent(calendarDescription)}&date=${date}&time=${time}`;
             
-            // Создаем инлайн-кнопки для календаря
-            const calendarKeyboard = {
-                inline_keyboard: [
-                    [
-                        { text: '📅 Google Calendar', url: googleCalendarLink },
-                        { text: '📥 Скачать .ics', url: icsDownloadLink }
+            let calendarKeyboard = null;
+            try {
+                const googleCalendarLink = getGoogleCalendarLink(calendarTitle, calendarDescription, date, time);
+                const baseUrl = window.location.origin || 'https://svetsalonpro.ru';
+                const icsDownloadLink = `${baseUrl}/api/generate-ics.js?title=${encodeURIComponent(calendarTitle)}&description=${encodeURIComponent(calendarDescription)}&date=${date}&time=${time}`;
+                
+                console.log('Ссылки для календаря:', { googleCalendarLink, icsDownloadLink });
+                
+                // Создаем инлайн-кнопки для календаря
+                calendarKeyboard = {
+                    inline_keyboard: [
+                        [
+                            { text: '📅 Google Calendar', url: googleCalendarLink },
+                            { text: '📥 Скачать .ics', url: icsDownloadLink }
+                        ]
                     ]
-                ]
-            };
+                };
+                
+                console.log('Клавиатура для календаря:', JSON.stringify(calendarKeyboard, null, 2));
+            } catch (error) {
+                console.error('Ошибка при создании ссылок для календаря:', error);
+            }
             
             const sendRequests = chatIds.map(cid => {
                 // Для Светланы (1366208620) добавляем кнопки календаря
@@ -4690,14 +4700,23 @@
                     text: formattedMessage
                 };
                 
-                if (isSvetlana) {
+                if (isSvetlana && calendarKeyboard) {
                     messageData.reply_markup = calendarKeyboard;
+                    console.log('Отправка сообщения Светлане с кнопками:', JSON.stringify(messageData, null, 2));
                 }
                 
                 return fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(messageData)
+                }).then(async response => {
+                    const data = await response.json();
+                    if (!response.ok) {
+                        console.error('Ошибка отправки в Telegram:', data);
+                    } else {
+                        console.log('Сообщение отправлено успешно:', data);
+                    }
+                    return response;
                 });
             });
 
@@ -4721,7 +4740,28 @@
         }
     }
 
-    // Функции для работы с календарем
+    // Функции для работы с календарем (должны быть определены до использования)
+    function getGoogleCalendarLink(title, description, startDate, startTime, duration = 60) {
+        const [year, month, day] = startDate.split('-');
+        const [hours, minutes] = startTime.split(':');
+        const start = new Date(year, month - 1, day, hours, minutes);
+        const end = new Date(start.getTime() + duration * 60000);
+    
+        const formatGoogleDate = (date) => {
+            return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+        };
+        
+        const params = new URLSearchParams({
+            action: 'TEMPLATE',
+            text: title,
+            dates: `${formatGoogleDate(start)}/${formatGoogleDate(end)}`,
+            details: description,
+            location: 'г. Геленджик, ул. Одесская, 3А, корпус 10'
+        });
+        
+        return `https://calendar.google.com/calendar/render?${params.toString()}`;
+    }
+    
     function generateICSFile(title, description, startDate, startTime, duration = 60) {
         // Парсим дату и время
         const [year, month, day] = startDate.split('-');
@@ -4798,33 +4838,12 @@ END:VCALENDAR`;
         URL.revokeObjectURL(link.href);
     }
     
-        function getGoogleCalendarLink(title, description, startDate, startTime, duration = 60) {
-            const [year, month, day] = startDate.split('-');
-            const [hours, minutes] = startTime.split(':');
-            const start = new Date(year, month - 1, day, hours, minutes);
-            const end = new Date(start.getTime() + duration * 60000);
-        
-        const formatGoogleDate = (date) => {
-            return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
-        };
-        
-        const params = new URLSearchParams({
-            action: 'TEMPLATE',
-            text: title,
-            dates: `${formatGoogleDate(start)}/${formatGoogleDate(end)}`,
-            details: description,
-            location: 'г. Геленджик, ул. Одесская, 3А, корпус 10'
-        });
-        
-        return `https://calendar.google.com/calendar/render?${params.toString()}`;
-    }
+    function getAppleCalendarLink(title, description, startDate, startTime, duration = 60) {
+        const [year, month, day] = startDate.split('-');
+        const [hours, minutes] = startTime.split(':');
+        const start = new Date(year, month - 1, day, hours, minutes);
+        const end = new Date(start.getTime() + duration * 60000);
     
-        function getAppleCalendarLink(title, description, startDate, startTime, duration = 60) {
-            const [year, month, day] = startDate.split('-');
-            const [hours, minutes] = startTime.split(':');
-            const start = new Date(year, month - 1, day, hours, minutes);
-            const end = new Date(start.getTime() + duration * 60000);
-        
         const formatAppleDate = (date) => {
             return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
         };
