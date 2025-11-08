@@ -4691,20 +4691,40 @@
             
             let calendarKeyboard = null;
             try {
-                const yandexCalendarLink = getYandexCalendarLink(calendarTitle, calendarDescription, date, time);
-                const appleCalendarLink = getAppleCalendarLink(calendarTitle, calendarDescription, date, time);
+                // Для Telegram используем прямые ссылки на скачивание .ics файла
+                // Генерируем .ics файл и создаем data URL
+                const icsContent = generateICSFile(calendarTitle, calendarDescription, date, time);
+                const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
                 
-                console.log('Ссылки для календаря:', { yandexCalendarLink, appleCalendarLink });
+                // Для Telegram кнопок нужно использовать прямые ссылки
+                // Создаем временный endpoint через data URL (не работает в Telegram)
+                // Вместо этого используем простой способ - кнопка будет открывать инструкцию
+                // Или создаем временный файл на клиенте
+                
+                // Для Telegram лучше использовать простую ссылку на скачивание
+                // Но так как это не работает напрямую, используем альтернативный подход
+                const baseUrl = window.location.origin || 'https://svetsalonpro.ru';
                 
                 // Создаем инлайн-кнопки для календаря
+                // В Telegram кнопки с URL должны вести на реальные ссылки
+                // Используем простые ссылки на календари
                 calendarKeyboard = {
                     inline_keyboard: [
                         [
-                            { text: '📅 Яндекс Календарь', url: yandexCalendarLink },
-                            { text: '🍎 Apple Календарь', url: appleCalendarLink }
+                            { 
+                                text: '📅 Яндекс Календарь', 
+                                url: 'https://calendar.yandex.ru/'
+                            },
+                            { 
+                                text: '🍎 Apple Календарь', 
+                                url: 'https://www.icloud.com/calendar/'
+                            }
                         ]
                     ]
                 };
+                
+                // Добавляем информацию о записи в сообщение для удобства
+                formattedMessage += `\n\n📅 Для добавления в календарь:\n1. Нажмите кнопку выше\n2. Или откройте календарь и создайте событие:\n   Дата: ${date}\n   Время: ${time}\n   Услуга: ${serviceText}`;
                 
                 console.log('Клавиатура для календаря:', JSON.stringify(calendarKeyboard, null, 2));
             } catch (error) {
@@ -4895,18 +4915,18 @@ END:VCALENDAR`;
     }
     
     function getYandexCalendarLink(title, description, startDate, startTime, duration = 60) {
-        // Генерируем .ics файл для Яндекс Календаря
+        // Для Яндекс Календаря генерируем .ics файл прямо в браузере
+        // Создаем data URL для скачивания
         const icsContent = generateICSFile(title, description, startDate, startTime, duration);
-        const baseUrl = window.location.origin || 'https://svetsalonpro.ru';
-        // Используем endpoint для генерации .ics файла
-        return `${baseUrl}/api/generate-ics.js?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}&date=${startDate}&time=${startTime}&duration=${duration}`;
+        const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+        return URL.createObjectURL(blob);
     }
     
     function getAppleCalendarLink(title, description, startDate, startTime, duration = 60) {
-        // Для Apple календаря используем прямой .ics файл
-        const baseUrl = window.location.origin || 'https://svetsalonpro.ru';
-        // iOS автоматически откроет .ics файл в календаре
-        return `${baseUrl}/api/generate-ics.js?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}&date=${startDate}&time=${startTime}&duration=${duration}`;
+        // Для Apple календаря генерируем .ics файл прямо в браузере
+        const icsContent = generateICSFile(title, description, startDate, startTime, duration);
+        const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+        return URL.createObjectURL(blob);
     }
     
     // Определение типа устройства и календаря
@@ -5101,21 +5121,24 @@ END:VCALENDAR`;
     function addToUserCalendar(type, date, time, service, category) {
         const title = `Запись: ${service}`;
         const description = `Категория: ${category}\nУслуга: ${service}\nСалон красоты SvetSalonPro`;
+        const filename = `Запись_SvetSalonPro_${date}_${time.replace(':', '-')}.ics`;
         
         if (type === 'yandex') {
-            const link = getYandexCalendarLink(title, description, date, time);
-            window.open(link, '_blank');
-            showNotification('Файл скачан! Откройте Яндекс Календарь и импортируйте файл через меню "Импорт"', 'info');
+            // Генерируем и скачиваем .ics файл
+            const icsContent = generateICSFile(title, description, date, time);
+            downloadICSFile(icsContent, filename);
+            showNotification('Файл скачан! Откройте Яндекс Календарь (calendar.yandex.ru) и импортируйте файл через меню "Импорт"', 'info');
         } else if (type === 'apple') {
-            const link = getAppleCalendarLink(title, description, date, time);
-            // Для iOS/Mac открываем напрямую
-            window.location.href = link;
+            // Для iOS/Mac генерируем и скачиваем .ics файл
+            const icsContent = generateICSFile(title, description, date, time);
+            downloadICSFile(icsContent, filename);
+            showNotification('Файл скачан! На iPhone/iPad файл откроется в приложении Календарь', 'success');
         } else if (type === 'google') {
             const link = getGoogleCalendarLink(title, description, date, time);
             window.open(link, '_blank');
+            showNotification('Открывается Google Календарь. Нажмите "Сохранить" для добавления события', 'info');
         } else if (type === 'ics') {
             const icsContent = generateICSFile(title, description, date, time);
-            const filename = `Запись_SvetSalonPro_${date}_${time.replace(':', '-')}.ics`;
             downloadICSFile(icsContent, filename);
             showNotification('Файл скачан! Импортируйте его в ваш календарь', 'success');
         }
@@ -5123,7 +5146,7 @@ END:VCALENDAR`;
         // Закрываем модальное окно через небольшую задержку
         setTimeout(() => {
             closeCalendarModal();
-        }, 500);
+        }, 1000);
     }
     
     function addToCalendar(type, date, time, service, category) {
