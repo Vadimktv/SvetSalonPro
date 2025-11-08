@@ -180,30 +180,81 @@
             text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
         }
 
-        .menu-item:hover {
-            background: linear-gradient(135deg, rgba(236, 72, 153, 0.1) 0%, rgba(236, 72, 153, 0.05) 100%);
-            transform: translateX(4px);
-            box-shadow: 0 4px 12px rgba(236, 72, 153, 0.15);
+        .menu-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(236, 72, 153, 0.08);
+            opacity: 0;
+            transition: all 0.3s ease;
+            border-radius: 16px;
+            transform: scale(0.8);
         }
-
+        
+        .menu-item:hover::before {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .menu-item:hover {
+            transform: translateX(8px);
+            color: #ec4899;
+        }
+        
+        .menu-item:active {
+            transform: translateX(8px) scale(0.95);
+        }
+        
+        .menu-item:active::before {
+            background: rgba(236, 72, 153, 0.12);
+            transform: scale(1.05);
+        }
+        
+        /* Menu Icons */
         .menu-icon {
-            width: 24px;
-            height: 24px;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: rgba(236, 72, 153, 0.08);
             display: flex;
             align-items: center;
             justify-content: center;
             margin-right: 12px;
-            border-radius: 8px;
-            background: linear-gradient(135deg, rgba(236, 72, 153, 0.1) 0%, rgba(236, 72, 153, 0.05) 100%);
-            color: #ec4899;
-            font-size: 14px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            flex-shrink: 0;
         }
-
+        
         .menu-item:hover .menu-icon {
-            background: linear-gradient(135deg, rgba(236, 72, 153, 0.2) 0%, rgba(236, 72, 153, 0.1) 100%);
+            background: rgba(236, 72, 153, 0.15);
+            transform: scale(1.05);
+        }
+        
+        .menu-item:active .menu-icon {
+            transform: scale(0.98);
+        }
+        
+        .menu-icon i {
+            font-size: 18px;
+            color: #ec4899;
+            transition: all 0.3s ease;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+        }
+        
+        .menu-item:hover .menu-icon i {
             transform: scale(1.1);
-            box-shadow: 0 4px 12px rgba(236, 72, 153, 0.2);
+        }
+        
+        .menu-item span {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .menu-item:hover span {
+            transform: translateX(2px);
+            color: #ec4899;
         }
 
         /* Bubble Animation */
@@ -402,30 +453,81 @@
             text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
         }
 
-        .menu-item:hover {
-            background: linear-gradient(135deg, rgba(236, 72, 153, 0.1) 0%, rgba(236, 72, 153, 0.05) 100%);
-            transform: translateX(4px);
-            box-shadow: 0 4px 12px rgba(236, 72, 153, 0.15);
+        .menu-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(236, 72, 153, 0.08);
+            opacity: 0;
+            transition: all 0.3s ease;
+            border-radius: 16px;
+            transform: scale(0.8);
         }
-
+        
+        .menu-item:hover::before {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .menu-item:hover {
+            transform: translateX(8px);
+            color: #ec4899;
+        }
+        
+        .menu-item:active {
+            transform: translateX(8px) scale(0.95);
+        }
+        
+        .menu-item:active::before {
+            background: rgba(236, 72, 153, 0.12);
+            transform: scale(1.05);
+        }
+        
+        /* Menu Icons */
         .menu-icon {
-            width: 24px;
-            height: 24px;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: rgba(236, 72, 153, 0.08);
             display: flex;
             align-items: center;
             justify-content: center;
             margin-right: 12px;
-            border-radius: 8px;
-            background: linear-gradient(135deg, rgba(236, 72, 153, 0.1) 0%, rgba(236, 72, 153, 0.05) 100%);
-            color: #ec4899;
-            font-size: 14px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            flex-shrink: 0;
         }
-
+        
         .menu-item:hover .menu-icon {
-            background: linear-gradient(135deg, rgba(236, 72, 153, 0.2) 0%, rgba(236, 72, 153, 0.1) 100%);
+            background: rgba(236, 72, 153, 0.15);
+            transform: scale(1.05);
+        }
+        
+        .menu-item:active .menu-icon {
+            transform: scale(0.98);
+        }
+        
+        .menu-icon i {
+            font-size: 18px;
+            color: #ec4899;
+            transition: all 0.3s ease;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+        }
+        
+        .menu-item:hover .menu-icon i {
             transform: scale(1.1);
-            box-shadow: 0 4px 12px rgba(236, 72, 153, 0.2);
+        }
+        
+        .menu-item span {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .menu-item:hover span {
+            transform: translateX(2px);
+            color: #ec4899;
         }
 
         /* Bubble Animation */
@@ -3976,130 +4078,69 @@ END:VCALENDAR`;
         });
 
         // Menu functionality
-        let isMenuOpen = false;
         const sideMenu = document.getElementById('sideMenu');
         const iosMenuBtn = document.getElementById('iosMenuBtn');
         const closeMenuBtn = document.getElementById('closeMenuBtn');
         const menuBackdrop = document.getElementById('menuBackdrop');
+        const menuContainer = document.getElementById('menuContainer');
 
-        // Haptic feedback function
-        function triggerHapticFeedback() {
-            if (navigator.vibrate) {
-                navigator.vibrate(10);
-            }
-            document.body.classList.add('haptic-feedback');
-            setTimeout(() => {
-                document.body.classList.remove('haptic-feedback');
-            }, 100);
-        }
-
-        // Open menu function
-        function openMenu() {
-            if (isMenuOpen) return;
-            
-            triggerHapticFeedback();
-            isMenuOpen = true;
-            sideMenu.classList.add('open');
-            document.body.classList.add('menu-open');
-            iosMenuBtn.classList.add('active');
-            
-            setTimeout(() => {
-                sideMenu.style.pointerEvents = 'all';
-            }, 50);
-        }
-
-        // Close menu function
-        function closeMenu() {
-            if (!isMenuOpen) return;
-            
-            triggerHapticFeedback();
-            isMenuOpen = false;
-            sideMenu.classList.remove('open');
-            document.body.classList.remove('menu-open');
-            iosMenuBtn.classList.remove('active');
-            sideMenu.style.pointerEvents = 'none';
-        }
-
-        // Event listeners
-        if (iosMenuBtn) {
-            iosMenuBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
+        // Open side menu
+        function openSideMenu() {
+            if (sideMenu && menuBackdrop && menuContainer) {
+                sideMenu.classList.add('open');
+                document.body.classList.add('menu-open');
                 
-                if (isMenuOpen) {
-                    closeMenu();
-                } else {
-                    openMenu();
+                // Add active state to menu button
+                if (iosMenuBtn) {
+                    iosMenuBtn.classList.add('active');
                 }
-            });
+            }
+        }
+
+        // Close side menu
+        function closeSideMenu() {
+            if (sideMenu && menuBackdrop && menuContainer) {
+                sideMenu.classList.remove('open');
+                document.body.classList.remove('menu-open');
+                
+                // Remove active state from menu button
+                if (iosMenuBtn) {
+                    iosMenuBtn.classList.remove('active');
+                }
+            }
+        }
+
+        // Event listeners for side menu
+        if (iosMenuBtn) {
+            iosMenuBtn.addEventListener('click', openSideMenu);
         }
 
         if (closeMenuBtn) {
-            closeMenuBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                closeMenu();
-            });
+            closeMenuBtn.addEventListener('click', closeSideMenu);
         }
 
         if (menuBackdrop) {
-            menuBackdrop.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                closeMenu();
-            });
+            menuBackdrop.addEventListener('click', closeSideMenu);
         }
 
-        // Menu item click handlers
-        function setupMenuHandlers() {
-            const menuItems = document.querySelectorAll('.menu-item');
-            
-            menuItems.forEach((item, index) => {
-                item.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    triggerHapticFeedback();
-                    
-                    // Add bubble animation
-                    item.classList.add('bubble-animation');
-                    setTimeout(() => {
-                        item.classList.remove('bubble-animation');
-                    }, 400);
-                    
-                    // Get the href and navigate
-                    const href = item.getAttribute('href');
-                    if (href) {
-                        // Close menu immediately
-                        closeMenu();
-                        
-                        // Navigate after a short delay for haptic feedback
-                        setTimeout(() => {
-                            if (href.startsWith('#')) {
-                                // Smooth scroll to section
-                                const target = document.querySelector(href);
-                                if (target) {
-                                    target.scrollIntoView({ behavior: 'smooth' });
-                                }
-                            } else {
-                                // Navigate to page
-                                window.location.href = href;
-                            }
-                        }, 200);
-                    }
-                });
+        // Close menu when clicking on menu items
+        const menuItems = document.querySelectorAll('.menu-item');
+        menuItems.forEach(item => {
+            item.addEventListener('click', () => {
+                // Don't close immediately for the login modal button
+                if (item.getAttribute('onclick') && item.getAttribute('onclick').includes('openLoginModal')) {
+                    setTimeout(closeSideMenu, 100);
+                } else {
+                    closeSideMenu();
+                }
             });
-        }
-
-        // Keyboard event listener for Escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && isMenuOpen) {
-                closeMenu();
-            }
         });
 
-        // Initialize menu handlers when DOM is loaded
-        document.addEventListener('DOMContentLoaded', () => {
-            setupMenuHandlers();
+        // Close menu on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && sideMenu && sideMenu.classList.contains('open')) {
+                closeSideMenu();
+            }
         });
 
         // Setup all event handlers
