@@ -371,25 +371,11 @@
         /* Исправления для мобильной версии */
         html, body {
             overflow-x: hidden;
-            overflow-y: auto !important;
+            overflow-y: auto;
             width: 100%;
             max-width: 100%;
             height: auto;
             min-height: 100vh;
-            -webkit-overflow-scrolling: touch;
-            touch-action: pan-y !important;
-        }
-        .reviewsViewport,
-        #reviewsViewport {
-            overflow: hidden;
-        }
-        .reviewsTrack,
-        #reviewsTrack {
-            touch-action: pan-x;
-            will-change: transform;
-        }
-        .review-slide {
-            touch-action: pan-x;
         }
         
         /* Убираем белый отступ внизу */
@@ -1919,25 +1905,7 @@
             transform: none !important;
             scale: 1 !important;
         }
-    
-        html, body {
-            overflow-x: hidden;
-            overflow-y: auto !important;
-            -webkit-overflow-scrolling: touch;
-            touch-action: pan-y !important;
-        }
-        .reviews-viewport, #reviewsViewport {
-            overflow: hidden;
-        }
-        .reviews-track, #reviewsTrack {
-            touch-action: pan-x;
-            will-change: transform;
-        }
-        .review-slide {
-            touch-action: pan-x;
-        }
-
-</style>
+    </style>
 </head>
 <body class="bg-gradient-to-br from-pink-50 via-white to-purple-50">
     <!-- Profile Header -->
@@ -4461,6 +4429,41 @@
     });
     
     // Функция для предотвращения отскока
+    function preventBounce() {
+        let startY = 0;
+        let startScrollTop = 0;
+        
+        // Предотвращаем отскок на touch устройствах
+        document.addEventListener('touchstart', function(e) {
+            startY = e.touches[0].pageY;
+            startScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        }, { passive: true });
+        
+        document.addEventListener('touchmove', function(e) {
+            const currentY = e.touches[0].pageY;
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            // Если пытаемся скроллить за пределы страницы, предотвращаем
+            if ((scrollTop <= 0 && currentY > startY) || 
+                (scrollTop + window.innerHeight >= document.documentElement.scrollHeight && currentY < startY)) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+        
+        // Убираем отскок на wheel событиях
+        document.addEventListener('wheel', function(e) {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight;
+            const clientHeight = document.documentElement.clientHeight;
+            
+            // Если пытаемся скроллить за пределы страницы, предотвращаем
+            if ((scrollTop <= 0 && e.deltaY < 0) || 
+                (scrollTop + clientHeight >= scrollHeight && e.deltaY > 0)) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+    }
+
     // Обработка отправки формы
     async function handleFormSubmit(event) {
         event.preventDefault();
@@ -5178,7 +5181,7 @@ END:VCALENDAR`;
                 // Предотвращаем прокрутку фона при прокрутке внутри модального окна
                 content.addEventListener('touchmove', function(e) {
                     e.stopPropagation();
-                }, { passive: true });
+                }, { passive: false });
                 
                 content.addEventListener('wheel', function(e) {
                     e.stopPropagation();
@@ -6290,35 +6293,18 @@ END:VCALENDAR`;
         nextBtn?.addEventListener('click', () => goTo(currentIndex + 1));
 
         let startX = 0;
-        let startY = 0;
         let isSwiping = false;
 
-        const getPoint = (evt) => {
-            if (evt.touches && evt.touches.length) {
-                return { x: evt.touches[0].clientX, y: evt.touches[0].clientY };
-            }
-            return { x: evt.clientX, y: evt.clientY };
-        };
-
-        const onPointerDown = (evt) => {
-            const point = getPoint(evt);
-            startX = point.x;
-            startY = point.y;
+        const onPointerDown = (x) => {
+            startX = x;
             isSwiping = true;
         };
 
-        const onPointerMove = (evt) => {
+        const onPointerMove = (x) => {
             if (!isSwiping) return;
-            const point = getPoint(evt);
-            const dx = point.x - startX;
-            const dy = point.y - startY;
-
-            if (Math.abs(dx) <= Math.abs(dy)) {
-                return;
-            }
-
-            if (Math.abs(dx) > 50) {
-                goTo(dx < 0 ? currentIndex + 1 : currentIndex - 1);
+            const diff = x - startX;
+            if (Math.abs(diff) > 50) {
+                goTo(diff < 0 ? currentIndex + 1 : currentIndex - 1);
                 isSwiping = false;
             }
         };
@@ -6327,11 +6313,11 @@ END:VCALENDAR`;
             isSwiping = false;
         };
 
-        viewport.addEventListener('touchstart', (e) => onPointerDown(e), { passive: true });
-        viewport.addEventListener('touchmove', (e) => onPointerMove(e), { passive: true });
+        viewport.addEventListener('touchstart', (e) => onPointerDown(e.touches[0].clientX), { passive: true });
+        viewport.addEventListener('touchmove', (e) => onPointerMove(e.touches[0].clientX), { passive: true });
         viewport.addEventListener('touchend', onPointerUp);
-        viewport.addEventListener('mousedown', onPointerDown);
-        viewport.addEventListener('mousemove', onPointerMove);
+        viewport.addEventListener('mousedown', (e) => { e.preventDefault(); onPointerDown(e.clientX); });
+        viewport.addEventListener('mousemove', (e) => onPointerMove(e.clientX));
         viewport.addEventListener('mouseup', onPointerUp);
         viewport.addEventListener('mouseleave', onPointerUp);
 
