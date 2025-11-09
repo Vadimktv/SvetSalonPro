@@ -376,7 +376,7 @@
             width: 100%;
             max-width: 100%;
             height: auto;
-            min-height: 100%;
+            min-height: 100vh;
         }
         
         /* Убираем белый отступ внизу */
@@ -6704,5 +6704,18 @@ END:VCALENDAR`;
             }
         });
     </script>
+
+    <script>
+        setInterval(() => {
+            const docEl = document.documentElement;
+            if (document.body.style.overflow === 'hidden') {
+                document.body.style.overflow = 'auto';
+            }
+            if (docEl && docEl.style.overflow === 'hidden') {
+                docEl.style.overflow = 'auto';
+            }
+        }, 1000);
+    </script>
+
 </body>
 </html>
