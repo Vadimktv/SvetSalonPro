@@ -212,7 +212,7 @@
             background: rgba(236, 72, 153, 0.12);
             transform: scale(1.05);
         }
-        
+
         /* Menu Icons */
         .menu-icon {
             width: 36px;
@@ -226,7 +226,7 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             flex-shrink: 0;
         }
-        
+
         .menu-item:hover .menu-icon {
             background: rgba(236, 72, 153, 0.15);
             transform: scale(1.05);
@@ -471,7 +471,7 @@
             opacity: 1;
             transform: scale(1);
         }
-        
+
         .menu-item:hover {
             transform: translateX(8px);
             color: #ec4899;
@@ -485,7 +485,7 @@
             background: rgba(236, 72, 153, 0.12);
             transform: scale(1.05);
         }
-        
+
         /* Menu Icons */
         .menu-icon {
             width: 36px;
@@ -499,7 +499,7 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             flex-shrink: 0;
         }
-        
+
         .menu-item:hover .menu-icon {
             background: rgba(236, 72, 153, 0.15);
             transform: scale(1.05);
@@ -4087,12 +4087,12 @@ END:VCALENDAR`;
         // Open side menu
         function openSideMenu() {
             if (sideMenu && menuBackdrop && menuContainer) {
-                sideMenu.classList.add('open');
-                document.body.classList.add('menu-open');
+            sideMenu.classList.add('open');
+            document.body.classList.add('menu-open');
                 
                 // Add active state to menu button
                 if (iosMenuBtn) {
-                    iosMenuBtn.classList.add('active');
+            iosMenuBtn.classList.add('active');
                 }
             }
         }
@@ -4100,12 +4100,12 @@ END:VCALENDAR`;
         // Close side menu
         function closeSideMenu() {
             if (sideMenu && menuBackdrop && menuContainer) {
-                sideMenu.classList.remove('open');
-                document.body.classList.remove('menu-open');
+            sideMenu.classList.remove('open');
+            document.body.classList.remove('menu-open');
                 
                 // Remove active state from menu button
                 if (iosMenuBtn) {
-                    iosMenuBtn.classList.remove('active');
+            iosMenuBtn.classList.remove('active');
                 }
             }
         }
@@ -4124,17 +4124,17 @@ END:VCALENDAR`;
         }
 
         // Close menu when clicking on menu items
-        const menuItems = document.querySelectorAll('.menu-item');
+            const menuItems = document.querySelectorAll('.menu-item');
         menuItems.forEach(item => {
             item.addEventListener('click', () => {
                 // Don't close immediately for the login modal button
                 if (item.getAttribute('onclick') && item.getAttribute('onclick').includes('openLoginModal')) {
                     setTimeout(closeSideMenu, 100);
-                } else {
+                            } else {
                     closeSideMenu();
-                }
+                    }
+                });
             });
-        });
 
         // Close menu on escape key
         document.addEventListener('keydown', (e) => {
