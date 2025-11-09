@@ -925,30 +925,6 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
-        /* Smooth Scrolling */
-        #menuContainer {
-            scrollbar-width: thin;
-            scrollbar-color: rgba(236, 72, 153, 0.3) transparent;
-            -webkit-overflow-scrolling: touch;
-        }
-        
-        #menuContainer::-webkit-scrollbar {
-            width: 4px;
-        }
-        
-        #menuContainer::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        
-        #menuContainer::-webkit-scrollbar-thumb {
-            background: rgba(236, 72, 153, 0.3);
-            border-radius: 2px;
-        }
-        
-        #menuContainer::-webkit-scrollbar-thumb:hover {
-            background: rgba(236, 72, 153, 0.5);
-        }
-        
         /* Touch improvements */
         .menu-item, #iosMenuBtn, #closeMenuBtn {
             -webkit-tap-highlight-color: transparent;
@@ -2305,7 +2281,7 @@
             </div>
             
             <!-- Menu Content -->
-            <div class="flex-1 overflow-y-auto">
+            <div class="flex-1">
                 <!-- Navigation Links -->
                 <div class="p-2 space-y-0.5">
                     <a href="#home" class="menu-item group">
@@ -2371,7 +2347,7 @@
                         </div>
 
                         <!-- Main Booking Card -->
-                        <div class="bg-white/80 backdrop-blur-md rounded-2xl md:rounded-3xl shadow-2xl border border-white/20 overflow-hidden">
+                        <div class="bg-white/80 backdrop-blur-md rounded-2xl md:rounded-3xl shadow-2xl border border-white/20">
                             <div class="lg:flex">
                                 <!-- Left Side - Form -->
                                 <div class="lg:w-3/5 p-4 md:p-6 lg:p-12">
