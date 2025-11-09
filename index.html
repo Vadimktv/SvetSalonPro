@@ -87,7 +87,7 @@
         
         /* Исправление проблемы с выходом кнопок за границы */
         .service-card {
-            overflow: hidden;
+            overflow: visible;
             position: relative;
         }
         
@@ -196,7 +196,7 @@
             filter: brightness(1) saturate(1);
             z-index: 1;
             position: relative;
-            overflow: hidden;
+            overflow: visible;
             background: rgba(255, 255, 255, 0.9);
             border: 1px solid rgba(255, 255, 255, 0.3);
         }
@@ -372,8 +372,11 @@
         /* Исправления для мобильной версии */
         html, body {
             overflow-x: hidden;
+            overflow-y: auto;
             width: 100%;
             max-width: 100%;
+            height: auto;
+            min-height: 100%;
         }
         
         /* Убираем белый отступ внизу */
@@ -2570,7 +2573,7 @@
             </div>
             
             <!-- Парикмахерские услуги -->
-            <div id="hairServices" class="mb-12 md:mb-20 hidden transition-all duration-500 ease-in-out" style="max-height: 0; opacity: 0; overflow: hidden;">
+            <div id="hairServices" class="mb-12 md:mb-20 hidden transition-all duration-500 ease-in-out" style="max-height: 0; opacity: 0;">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 services-container overflow-visible">
 
                 <!-- SPA процедуры -->
@@ -2739,7 +2742,7 @@
             </div>
             
             <!-- Услуги маникюра -->
-            <div id="manicureServices" class="mb-12 md:mb-20 hidden transition-all duration-500 ease-in-out" style="max-height: 0; opacity: 0; overflow: hidden;">
+            <div id="manicureServices" class="mb-12 md:mb-20 hidden transition-all duration-500 ease-in-out" style="max-height: 0; opacity: 0;">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 services-container overflow-visible">
 
                 <!-- Комбинированный маникюр -->
@@ -2840,7 +2843,7 @@
             </div>
             
             <!-- Услуги бровей -->
-            <div id="eyebrowsServices" class="hidden transition-all duration-500 ease-in-out" style="max-height: 0; opacity: 0; overflow: hidden;">
+            <div id="eyebrowsServices" class="hidden transition-all duration-500 ease-in-out" style="max-height: 0; opacity: 0;">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 services-container overflow-visible">
 
                 <!-- Коррекция бровей -->
@@ -3745,6 +3748,8 @@
         const isHidden = service.container.classList.contains('hidden');
         
         if (isHidden) {
+            document.body.style.overflow = 'auto';
+            document.documentElement.style.overflowY = 'auto';
             // Показываем услуги
             service.container.classList.remove('hidden');
             
@@ -3767,6 +3772,8 @@
                 service.icon.style.transform = 'rotate(180deg)';
             }
         } else {
+            document.body.style.overflow = 'auto';
+            document.documentElement.style.overflowY = 'auto';
             // Скрываем услуги
             service.container.style.maxHeight = service.container.scrollHeight + 'px';
             
