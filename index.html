@@ -4629,35 +4629,27 @@
     
     // Функция для предотвращения отскока
     function preventBounce() {
+        const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        if (!isTouchDevice) {
+            // На десктопах оставляем стандартное поведение колесика мыши,
+            // чтобы не блокировать прокрутку внутри форм и других блоков
+            return;
+        }
+
         let startY = 0;
-        let startScrollTop = 0;
-        
+
         // Предотвращаем отскок на touch устройствах
         document.addEventListener('touchstart', function(e) {
             startY = e.touches[0].pageY;
-            startScrollTop = window.pageYOffset || document.documentElement.scrollTop;
         }, { passive: true });
-        
+
         document.addEventListener('touchmove', function(e) {
             const currentY = e.touches[0].pageY;
             const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            
+
             // Если пытаемся скроллить за пределы страницы, предотвращаем
-            if ((scrollTop <= 0 && currentY > startY) || 
+            if ((scrollTop <= 0 && currentY > startY) ||
                 (scrollTop + window.innerHeight >= document.documentElement.scrollHeight && currentY < startY)) {
-                e.preventDefault();
-            }
-        }, { passive: false });
-        
-        // Убираем отскок на wheel событиях
-        document.addEventListener('wheel', function(e) {
-            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            const scrollHeight = document.documentElement.scrollHeight;
-            const clientHeight = document.documentElement.clientHeight;
-            
-            // Если пытаемся скроллить за пределы страницы, предотвращаем
-            if ((scrollTop <= 0 && e.deltaY < 0) || 
-                (scrollTop + clientHeight >= scrollHeight && e.deltaY > 0)) {
                 e.preventDefault();
             }
         }, { passive: false });
